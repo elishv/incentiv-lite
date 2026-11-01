@@ -1449,8 +1449,8 @@ class MMD_Frontend {
         $settings = MMD_Helpers::get_settings();
         $debug_enabled = isset($settings['debug_mode']) && ($settings['debug_mode'] === 'yes' || $settings['debug_mode'] === '1' || $settings['debug_mode'] === true);
 
-        // Only show debug panel if debug mode is enabled AND user is logged in
-        if (!$debug_enabled || !is_user_logged_in()) {
+        // Only show the debug panel if debug mode is on AND the user is a logged-in store manager.
+        if (!$debug_enabled || !MMD_Helpers::can_see_frontend_debug()) {
             return;
         }
 
@@ -1652,6 +1652,8 @@ class MMD_Frontend {
     }
 
     private function is_debug_enabled() {
+        // The debug panel (and its console lines) is for store managers only.
+        if (!MMD_Helpers::can_see_frontend_debug()) return false;
         if (defined('MMD_DEBUG_CART') && MMD_DEBUG_CART) return true;
         // Only store managers can switch the debug panel on from the URL; it is a read-only view toggle.
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -1664,7 +1666,7 @@ class MMD_Frontend {
      * Render visible debug panel showing exactly what's affecting prices
      */
     public function render_debug_panel() {
-        if (!WC()->cart) return;
+        if (!WC()->cart || !MMD_Helpers::can_see_frontend_debug()) return;
 
         global $wp_filter;
         $hooks_to_inspect = array(
@@ -3654,11 +3656,7 @@ class MMD_Frontend {
         // Provide display_modal_message stub if not defined (prevents JS errors from theme)
         if (typeof display_modal_message === 'undefined') {
             window.display_modal_message = function(message, type) {
-                // Fallback: show a simple notification or do nothing
-                // This prevents "display_modal_message is not defined" errors
-                if (typeof console !== 'undefined' && console.log) {
-                    console.log('MMD Modal Message:', message, type);
-                }
+                // Fallback: do nothing. This prevents "display_modal_message is not defined" errors.
             };
         }
 

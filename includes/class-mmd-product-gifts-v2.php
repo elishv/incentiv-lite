@@ -49,6 +49,10 @@ class MMD_Product_Gifts_V2 {
      * Whether gift debug mode is on (MMD_DEBUG or the gift styling setting).
      */
     private static function is_debug_enabled() {
+        // Console output is for store managers only, whatever the setting says.
+        if (!MMD_Helpers::can_see_frontend_debug()) {
+            return false;
+        }
         if (defined('MMD_DEBUG') && MMD_DEBUG) {
             return true;
         }
@@ -945,7 +949,7 @@ class MMD_Product_Gifts_V2 {
         wp_localize_script('mmd-gift-selection', 'mmdGiftData', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('mmd_gift_nonce'),
-            'debug' => MMD_Helpers::debug_enabled(),
+            'debug' => MMD_Helpers::debug_enabled() && MMD_Helpers::can_see_frontend_debug(),
         ));
 
         // Get styling options
@@ -5302,7 +5306,7 @@ class MMD_Product_Gifts_V2 {
                 }
             }
             $error_response = array('message' => $error_message);
-            if (MMD_Helpers::debug_enabled()) {
+            if (MMD_Helpers::debug_enabled() && MMD_Helpers::can_see_frontend_debug()) {
                 $error_response['debug'] = $debug;
             }
             wp_send_json_error($error_response);

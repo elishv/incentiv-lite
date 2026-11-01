@@ -21,6 +21,14 @@ class MMD_Helpers {
     }
 
     /**
+     * Front-end debug output (browser console lines, the cart debug panel) is only
+     * ever printed for a logged-in user who can manage WooCommerce, never for visitors.
+     */
+    public static function can_see_frontend_debug() {
+        return is_user_logged_in() && current_user_can('manage_woocommerce');
+    }
+
+    /**
      * Write a line to the PHP error log, only when debug_enabled().
      *
      * @param string $message Message.

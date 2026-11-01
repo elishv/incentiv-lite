@@ -190,7 +190,7 @@ class MMD_Gift_Selection_Widget extends \Elementor\Widget_Base {
             wp_localize_script('mmd-gift-selection', 'mmdGiftData', array(
                 'ajaxurl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('mmd_gift_nonce'),
-                'debug' => MMD_Helpers::debug_enabled(),
+                'debug' => MMD_Helpers::debug_enabled() && MMD_Helpers::can_see_frontend_debug(),
             ));
         }
     }
