@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Determine current page
-$current_page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
+$current_page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin view parameter.
 
 // Core tabs plus the ones add-ons register (filter `mmd_admin_tabs`).
 $tabs = MMD_Modules::admin_tabs();

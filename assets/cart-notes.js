@@ -37,10 +37,6 @@
                 cart_note: cartNote
             },
             success: function(response) {
-                // Optional: Show a subtle indicator that note was saved
-                if (response.success) {
-                    console.log('Cart note saved');
-                }
             }
         });
     }

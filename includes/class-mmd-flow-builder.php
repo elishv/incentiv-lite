@@ -111,6 +111,7 @@ class MMD_Flow_Builder {
         }
 
         $name = sanitize_text_field(isset($_POST['name']) ? wp_unslash($_POST['name']) : '');
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; every node field is sanitized (sanitize_text_field / intval / floatval) where it is read below.
         $nodes = json_decode(isset($_POST['nodes']) ? wp_unslash($_POST['nodes']) : '[]', true);
 
         if (!$name) {

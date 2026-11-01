@@ -190,22 +190,19 @@ class MMD_Frontend {
         }
 
         // Skip auto-apply during coupon removal requests
+        // Read-only checks of WooCommerce's own request (WooCommerce verifies its nonces).
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended
         if (
-            (isset($_REQUEST['wc-ajax']) && $_REQUEST['wc-ajax'] === 'remove_coupon') ||
-            (isset($_GET['remove_coupon']) && !empty($_GET['remove_coupon']))
+            (isset($_REQUEST['wc-ajax']) && 'remove_coupon' === sanitize_key(wp_unslash($_REQUEST['wc-ajax']))) ||
+            !empty($_GET['remove_coupon'])
         ) {
             return;
         }
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
         // Check for coupon in URL (supports multiple parameter names)
         $coupon_code = '';
-        if (isset($_GET['coupon-code'])) {
-            $coupon_code = sanitize_text_field($_GET['coupon-code']);
-        } elseif (isset($_GET['coupon_code'])) {
-            $coupon_code = sanitize_text_field($_GET['coupon_code']);
-        } elseif (isset($_GET['coupon'])) {
-            $coupon_code = sanitize_text_field($_GET['coupon']);
-        }
+        $coupon_code = self::get_url_coupon_param();
 
         if (empty($coupon_code)) {
             return;
@@ -305,13 +302,7 @@ class MMD_Frontend {
 
         // Check URL first, but respect removed flag
         $url_coupon = '';
-        if (isset($_GET['coupon-code'])) {
-            $url_coupon = strtolower(sanitize_text_field($_GET['coupon-code']));
-        } elseif (isset($_GET['coupon_code'])) {
-            $url_coupon = strtolower(sanitize_text_field($_GET['coupon_code']));
-        } elseif (isset($_GET['coupon'])) {
-            $url_coupon = strtolower(sanitize_text_field($_GET['coupon']));
-        }
+        $url_coupon = strtolower(self::get_url_coupon_param());
 
         // If URL coupon was explicitly removed, don't return it
         if (!empty($url_coupon) && $url_coupon !== $removed_coupon) {
@@ -442,13 +433,7 @@ class MMD_Frontend {
 
         // Check URL for coupon - but skip if it was explicitly removed
         $url_coupon = '';
-        if (isset($_GET['coupon-code'])) {
-            $url_coupon = strtolower(sanitize_text_field($_GET['coupon-code']));
-        } elseif (isset($_GET['coupon_code'])) {
-            $url_coupon = strtolower(sanitize_text_field($_GET['coupon_code']));
-        } elseif (isset($_GET['coupon'])) {
-            $url_coupon = strtolower(sanitize_text_field($_GET['coupon']));
-        }
+        $url_coupon = strtolower(self::get_url_coupon_param());
 
         // Only include URL coupon if it wasn't removed by user
         if (!empty($url_coupon) && $url_coupon !== $removed_coupon) {
@@ -481,7 +466,7 @@ class MMD_Frontend {
      */
     private function get_active_override_rules() {
         // Check if coupon is in URL - if so, don't use cache (state might have changed)
-        $coupon_in_url = isset($_GET['coupon-code']) || isset($_GET['coupon_code']) || isset($_GET['coupon']);
+        $coupon_in_url = isset($_GET['coupon-code']) || isset($_GET['coupon_code']) || isset($_GET['coupon']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Presence check only (public promotion link).
 
         if ($this->active_override_rules_cache !== null && !$coupon_in_url) {
             return $this->active_override_rules_cache;
@@ -639,7 +624,7 @@ class MMD_Frontend {
             || did_action('woocommerce_before_cart') > 0
             || did_action('woocommerce_before_checkout_form') > 0
             || did_action('woocommerce_review_order_before_cart_contents') > 0
-            || (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['wc-ajax']));
+            || (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['wc-ajax'])); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks whether this is a WooCommerce AJAX request.
 
         if (!$in_cart_context && (is_product() || is_shop() || is_product_category() || is_product_tag())) {
             $sale_price_html = $this->get_sale_price_html_for_product($product);
@@ -1648,9 +1633,29 @@ class MMD_Frontend {
     /**
      * Check if debug panel should be shown
      */
+    /**
+     * Coupon code from a shareable promotion link (?coupon-code=, ?coupon_code= or ?coupon=).
+     * These are public marketing links, so there is no nonce; the value is only a coupon code
+     * that WooCommerce validates before applying it.
+     *
+     * @return string Sanitized coupon code, or ''.
+     */
+    private static function get_url_coupon_param() {
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended
+        foreach (array('coupon-code', 'coupon_code', 'coupon') as $key) {
+            if (isset($_GET[$key])) {
+                return sanitize_text_field(wp_unslash($_GET[$key]));
+            }
+        }
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
+        return '';
+    }
+
     private function is_debug_enabled() {
         if (defined('MMD_DEBUG_CART') && MMD_DEBUG_CART) return true;
-        if (isset($_GET['mmd_debug']) && $_GET['mmd_debug'] == '1') return true;
+        // Only store managers can switch the debug panel on from the URL; it is a read-only view toggle.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if (isset($_GET['mmd_debug']) && '1' === sanitize_text_field(wp_unslash($_GET['mmd_debug'])) && current_user_can('manage_woocommerce')) return true;
         if (WC()->session && WC()->session->get('mmd_debug_enabled')) return true;
         return false;
     }

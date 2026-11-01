@@ -3,8 +3,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : 'list';
-$rule_set_id = isset($_GET['rule_set_id']) ? sanitize_text_field($_GET['rule_set_id']) : '';
+$action = isset($_GET['action']) ? sanitize_text_field(wp_unslash($_GET['action'])) : 'list'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin view parameter.
+$rule_set_id = isset($_GET['rule_set_id']) ? sanitize_text_field(wp_unslash($_GET['rule_set_id'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin view parameter.
 
 if ($action === 'edit' || $action === 'new') {
     // The edit template includes the wizard overlay markup itself; don't include it here too.

@@ -111,7 +111,7 @@ class MMD_Cart_Notes {
     public function ajax_save_cart_note() {
         check_ajax_referer('mmd_cart_notes_nonce', 'nonce');
 
-        $cart_note = isset($_POST['cart_note']) ? sanitize_textarea_field($_POST['cart_note']) : '';
+        $cart_note = isset($_POST['cart_note']) ? sanitize_textarea_field(wp_unslash($_POST['cart_note'])) : '';
 
         WC()->session->set('mmd_cart_note', $cart_note);
 

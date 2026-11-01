@@ -350,7 +350,7 @@ if (!defined('ABSPATH')) {
                                         type: 'POST',
                                         dataType: 'json',
                                         delay: 200,
-                                        data: function(p){ return { action: 'mmd_preview_products_search', search: p.term || '' }; },
+                                        data: function(p){ return { action: 'mmd_preview_products_search', nonce: '<?php echo esc_attr( wp_create_nonce('mmd_preview_products_search') ); ?>', search: p.term || '' }; },
                                         processResults: function(resp){
                                             if (!resp || !resp.success || !Array.isArray(resp.data)) return { results: [] };
                                             return { results: resp.data.map(function(p){ return { id: p.id, text: p.name + ' — ' + p.formatted_price }; }) };

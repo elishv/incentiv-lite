@@ -441,7 +441,7 @@ class MMD_Rule_Diagnostic {
         check_ajax_referer( 'mmd_rule_diagnostic', 'nonce' );
 
         $rule_set_id = isset( $_POST['rule_set_id'] ) ? sanitize_text_field( wp_unslash( $_POST['rule_set_id'] ) ) : '';
-        $product_id  = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;
+        $product_id  = isset( $_POST['product_id'] ) ? absint(wp_unslash($_POST['product_id'])) : 0;
         if ( empty( $rule_set_id ) || empty( $product_id ) ) {
             wp_send_json_error( array( 'message' => 'rule_set_id and product_id required' ), 400 );
         }

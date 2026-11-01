@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$period = isset($_GET['period']) ? intval($_GET['period']) : 30;
+$period = isset($_GET['period']) ? intval($_GET['period']) : 30; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin view parameter.
 if (!in_array($period, array(7, 30, 365), true)) {
     $period = 30;
 }

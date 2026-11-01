@@ -32,9 +32,8 @@ class MMD_Ajax {
     public function search_products() {
         // Allow multiple nonce names for flexibility
         $nonce_valid = false;
-        if (isset($_GET['nonce']) && wp_verify_nonce($_GET['nonce'], 'mmd_search_products')) {
-            $nonce_valid = true;
-        } elseif (isset($_GET['nonce']) && wp_verify_nonce($_GET['nonce'], 'mmd_gift_rules_nonce')) {
+        $nonce = isset($_GET['nonce']) ? sanitize_text_field(wp_unslash($_GET['nonce'])) : '';
+        if ($nonce && (wp_verify_nonce($nonce, 'mmd_search_products') || wp_verify_nonce($nonce, 'mmd_gift_rules_nonce'))) {
             $nonce_valid = true;
         }
 
@@ -43,8 +42,13 @@ class MMD_Ajax {
             return;
         }
 
-        $search_term = isset($_GET['q']) ? sanitize_text_field($_GET['q']) : '';
-        $include_variations = isset($_GET['include_variations']) ? $_GET['include_variations'] === '1' : true;
+        if (!current_user_can('manage_woocommerce')) {
+            wp_send_json_error('Unauthorized', 403);
+            return;
+        }
+
+        $search_term = isset($_GET['q']) ? sanitize_text_field(wp_unslash($_GET['q'])) : '';
+        $include_variations = isset($_GET['include_variations']) ? '1' === sanitize_text_field(wp_unslash($_GET['include_variations'])) : true;
 
         if (empty($search_term)) {
             wp_send_json_success(array());
@@ -215,7 +219,7 @@ class MMD_Ajax {
             return;
         }
 
-        $attribute_slug = isset($_POST['attribute_slug']) ? sanitize_text_field($_POST['attribute_slug']) : '';
+        $attribute_slug = isset($_POST['attribute_slug']) ? sanitize_text_field(wp_unslash($_POST['attribute_slug'])) : '';
 
         if (empty($attribute_slug)) {
             wp_send_json_error('No attribute specified');
@@ -314,7 +318,7 @@ class MMD_Ajax {
     public function get_products_by_categories() {
         // Verify nonce
         $nonce_valid = false;
-        if (isset($_POST['nonce']) && wp_verify_nonce($_POST['nonce'], 'mmd_search_products')) {
+        if (isset($_POST['nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'mmd_search_products')) {
             $nonce_valid = true;
         }
 
@@ -329,7 +333,7 @@ class MMD_Ajax {
         }
 
         $category_slugs = isset($_POST['categories']) && is_array($_POST['categories'])
-            ? array_map('sanitize_text_field', $_POST['categories'])
+            ? array_map('sanitize_text_field', wp_unslash($_POST['categories']))
             : array();
 
         if (empty($category_slugs)) {

@@ -83,7 +83,7 @@ $rule_set = wp_parse_args($rule_set, array(
 
     <?php
     // Include wizard for new rules (skip with skip_wizard=1 parameter)
-    if ($is_new && (!isset($_GET['skip_wizard']) || $_GET['skip_wizard'] !== '1')) {
+    if ($is_new && (!isset($_GET['skip_wizard']) || '1' !== sanitize_text_field(wp_unslash($_GET['skip_wizard'])))) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin view parameter.
         include dirname(__FILE__) . '/admin-gift-rule-wizard.php';
     }
 
@@ -1158,7 +1158,6 @@ $rule_set = wp_parse_args($rule_set, array(
 jQuery(document).ready(function($) {
     var ruleSet = <?php echo json_encode($rule_set); ?>;
 
-    console.log('MMD Gift Rules: Loaded rule set:', ruleSet);
 
     // ==========================================
     // GIFT RULE WIZARD
@@ -1322,11 +1321,9 @@ jQuery(document).ready(function($) {
 
     // Initialize UI based on saved values
     function initializeUI() {
-        console.log('MMD Gift Rules: Initializing UI');
 
         // Initialize selection method section
         var selectionMethod = ruleSet.selection_method || 'all';
-        console.log('MMD Gift Rules: selection_method =', selectionMethod);
         $('#category_section, #product_ids_section, #attribute_section').hide();
         if (selectionMethod === 'category') {
             $('#category_section').show();
@@ -1338,7 +1335,6 @@ jQuery(document).ready(function($) {
 
         // Initialize gift source section
         var giftSource = ruleSet.gift_source || 'specific';
-        console.log('MMD Gift Rules: gift_source =', giftSource);
         if (giftSource === 'specific') {
             $('#gift_products_row').show();
             $('#gift_category_section').hide();
@@ -1351,7 +1347,6 @@ jQuery(document).ready(function($) {
 
         // Initialize gift mode section
         var giftMode = ruleSet.gift_mode || 'product_page';
-        console.log('MMD Gift Rules: gift_mode =', giftMode);
         if (giftMode === 'cart_based') {
             $('#cart_gift_notice_row').show();
             $('#cart_gift_display_mode_row').show();
@@ -1362,7 +1357,6 @@ jQuery(document).ready(function($) {
 
         // Initialize gift attribute section
         var giftAttributeSlug = ruleSet.gift_attribute_slug || '';
-        console.log('MMD Gift Rules: gift_attribute_slug =', giftAttributeSlug);
         if (giftAttributeSlug) {
             $('#gift_attribute_values_row').show();
         } else {

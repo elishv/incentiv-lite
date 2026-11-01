@@ -17,14 +17,7 @@ class MMD_Gift_Rules {
     private $styling_option_name = 'mmd_gift_styling';
 
     private static function debug_log($message) {
-        if (defined('MMD_DEBUG') && MMD_DEBUG) {
-            error_log($message);
-            return;
-        }
-        $styling = get_option('mmd_gift_styling', array());
-        if (!empty($styling['debug_mode']) && $styling['debug_mode'] === 'yes') {
-            error_log($message);
-        }
+        MMD_Helpers::log($message);
     }
 
     public static function get_instance() {
@@ -80,10 +73,10 @@ class MMD_Gift_Rules {
 
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker');
-        wp_enqueue_style('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.css');
-        wp_enqueue_script('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'));
+        wp_enqueue_style('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.css', array(), '4.1.0');
+        wp_enqueue_script('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'), '4.1.0', true);
 
-        wp_enqueue_style('mmd-admin-style', plugins_url('assets/admin-style.css', dirname(__FILE__)));
+        wp_enqueue_style('mmd-admin-style', plugins_url('assets/admin-style.css', dirname(__FILE__)), array(), MMD_VERSION);
         wp_enqueue_script('mmd-admin-script', plugins_url('assets/admin-script.js', dirname(__FILE__)), array('jquery', 'select2', 'wp-color-picker', 'wp-i18n'), '1.0.0', true);
         wp_set_script_translations('mmd-admin-script', 'incentiv', MMD_PLUGIN_DIR . 'languages');
 
@@ -362,7 +355,8 @@ class MMD_Gift_Rules {
             return;
         }
 
-        $rule_set = isset($_POST['rule_set']) ? json_decode(stripslashes($_POST['rule_set']), true) : array();
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; the decoded rule is sanitized field by field in save_rule_set().
+        $rule_set = isset($_POST['rule_set']) ? json_decode(wp_unslash($_POST['rule_set']), true) : array();
         $is_draft = !empty($_POST['is_draft']);
 
         if (empty($rule_set) || !is_array($rule_set)) {
@@ -387,7 +381,7 @@ class MMD_Gift_Rules {
             }
         }
 
-        self::debug_log('MMD Gift Rules: Attempting to save rule: ' . print_r($rule_set, true));
+        self::debug_log('MMD Gift Rules: Attempting to save rule: ' . wp_json_encode($rule_set));
 
         $result = $this->save_rule_set($rule_set);
 
@@ -411,7 +405,7 @@ class MMD_Gift_Rules {
             return;
         }
 
-        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field($_POST['rule_id']) : '';
+        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field(wp_unslash($_POST['rule_id'])) : '';
 
         if (empty($rule_id)) {
             wp_send_json_error('Invalid rule ID');
@@ -438,7 +432,7 @@ class MMD_Gift_Rules {
             return;
         }
 
-        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field($_POST['rule_id']) : '';
+        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field(wp_unslash($_POST['rule_id'])) : '';
 
         if (empty($rule_id)) {
             wp_send_json_error('Invalid rule ID');
@@ -475,7 +469,8 @@ class MMD_Gift_Rules {
             return;
         }
 
-        $styling = isset($_POST['styling']) ? json_decode(stripslashes($_POST['styling']), true) : array();
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; every value is sanitized below before it is saved.
+        $styling = isset($_POST['styling']) ? json_decode(wp_unslash($_POST['styling']), true) : array();
 
         if (empty($styling) || !is_array($styling)) {
             wp_send_json_error('Invalid styling data');
@@ -548,8 +543,10 @@ class MMD_Gift_Rules {
      * Render admin page
      */
     public function render_admin_page() {
-        $action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : 'list';
-        $rule_id = isset($_GET['rule_id']) ? sanitize_text_field($_GET['rule_id']) : '';
+        // Read-only routing between admin views; saving and deleting go through nonce-checked AJAX handlers.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $action = isset($_GET['action']) ? sanitize_text_field(wp_unslash($_GET['action'])) : 'list';
+        $rule_id = isset($_GET['rule_id']) ? sanitize_text_field(wp_unslash($_GET['rule_id'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only routing.
 
         if ($action === 'edit' && !empty($rule_id)) {
             $this->render_edit_page($rule_id);

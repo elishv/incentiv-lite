@@ -29,8 +29,9 @@ class MMD_Admin {
      * Whether the current admin screen belongs to the plugin.
      */
     public static function is_plugin_screen($hook = '') {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only: which admin screen is open.
         if (!$hook && isset($_GET['page'])) {
-            $hook = sanitize_text_field($_GET['page']);
+            $hook = sanitize_text_field(wp_unslash($_GET['page'])); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only screen check.
         }
         if (!$hook) {
             return false;
@@ -272,8 +273,11 @@ class MMD_Admin {
             return;
         }
 
-        $action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : '';
-        $rule_set_id = isset($_GET['rule_set_id']) ? sanitize_text_field($_GET['rule_set_id']) : '';
+        // Each action below verifies its own nonce (check_admin_referer) before doing anything.
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended
+        $action = isset($_GET['action']) ? sanitize_text_field(wp_unslash($_GET['action'])) : '';
+        $rule_set_id = isset($_GET['rule_set_id']) ? sanitize_text_field(wp_unslash($_GET['rule_set_id'])) : '';
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
         // Handle save (publish)
         if (isset($_POST['mmd_save_rule_set']) && check_admin_referer('mmd_save_rule_set')) {
@@ -281,7 +285,7 @@ class MMD_Admin {
             $rule_set_data['status'] = 'active'; // publishing clears any draft flag
             MMD_Discount_Rules::save_rule_set($rule_set_data);
 
-            wp_redirect(add_query_arg(array(
+            wp_safe_redirect(add_query_arg(array(
                 'page' => 'mix-match-discounts',
                 'message' => 'saved'
             ), admin_url('admin.php')));
@@ -292,7 +296,7 @@ class MMD_Admin {
         if ($action === 'delete' && !empty($rule_set_id) && check_admin_referer('mmd_delete_rule')) {
             MMD_Discount_Rules::delete_rule_set($rule_set_id);
 
-            wp_redirect(add_query_arg(array(
+            wp_safe_redirect(add_query_arg(array(
                 'page' => 'mix-match-discounts',
                 'message' => 'deleted'
             ), admin_url('admin.php')));
@@ -303,7 +307,7 @@ class MMD_Admin {
         if ($action === 'duplicate' && !empty($rule_set_id) && check_admin_referer('mmd_duplicate_rule')) {
             MMD_Discount_Rules::duplicate_rule_set($rule_set_id);
 
-            wp_redirect(add_query_arg(array(
+            wp_safe_redirect(add_query_arg(array(
                 'page' => 'mix-match-discounts',
                 'message' => 'duplicated'
             ), admin_url('admin.php')));
@@ -508,6 +512,7 @@ class MMD_Admin {
      * Returns a list of products (id, name, price) for the preview modal.
      */
     public function ajax_preview_products_search() {
+        check_ajax_referer('mmd_preview_products_search', 'nonce');
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error('forbidden', 403);
         }
@@ -520,7 +525,7 @@ class MMD_Admin {
             'order' => 'ASC',
         );
 
-        $search = isset($_POST['search']) ? sanitize_text_field($_POST['search']) : '';
+        $search = isset($_POST['search']) ? sanitize_text_field(wp_unslash($_POST['search'])) : '';
         if ($search) {
             $args['s'] = $search;
         }
@@ -566,7 +571,7 @@ class MMD_Admin {
             wp_send_json_error(array('message' => 'forbidden'), 403);
         }
 
-        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field($_POST['rule_id']) : '';
+        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field(wp_unslash($_POST['rule_id'])) : '';
         if (!$rule_id) {
             wp_send_json_error(array('message' => 'missing rule id'));
         }
@@ -593,7 +598,7 @@ class MMD_Admin {
             wp_send_json_error(array('message' => 'Permission denied'));
         }
 
-        $example_key = isset($_POST['example']) ? sanitize_text_field($_POST['example']) : '';
+        $example_key = isset($_POST['example']) ? sanitize_text_field(wp_unslash($_POST['example'])) : '';
 
         if (empty($example_key)) {
             wp_send_json_error(array('message' => 'No example specified'));
@@ -828,8 +833,9 @@ class MMD_Admin {
         }
 
         // Show messages
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only notice after a redirect.
         if (isset($_GET['message'])) {
-            $message = sanitize_text_field($_GET['message']);
+            $message = sanitize_text_field(wp_unslash($_GET['message'])); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only notice; value is matched against a fixed list.
             $messages = array(
                 'saved' => __( 'The discount rule was saved.', 'incentiv' ),
                 'deleted' => __( 'The discount rule was deleted.', 'incentiv' ),

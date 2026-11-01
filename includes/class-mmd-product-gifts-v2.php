@@ -60,14 +60,7 @@ class MMD_Product_Gifts_V2 {
      * Log debug message only when debug mode is enabled
      */
     private static function debug_log($message) {
-        if (defined('MMD_DEBUG') && MMD_DEBUG) {
-            error_log($message);
-            return;
-        }
-        $styling = get_option('mmd_gift_styling', array());
-        if (!empty($styling['debug_mode']) && $styling['debug_mode'] === 'yes') {
-            error_log($message);
-        }
+        MMD_Helpers::log($message);
     }
 
     /**
@@ -782,7 +775,7 @@ class MMD_Product_Gifts_V2 {
      * Save meta box data
      */
     public function save_gift_meta_box($post_id, $post) {
-        if (!isset($_POST['mmd_gift_meta_box_v2_nonce']) || !wp_verify_nonce($_POST['mmd_gift_meta_box_v2_nonce'], 'mmd_gift_meta_box_v2')) {
+        if (!isset($_POST['mmd_gift_meta_box_v2_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mmd_gift_meta_box_v2_nonce'])), 'mmd_gift_meta_box_v2')) {
             return;
         }
 
@@ -797,22 +790,22 @@ class MMD_Product_Gifts_V2 {
         $enabled = isset($_POST['mmd_gift_enabled']) ? '1' : '0';
         update_post_meta($post_id, '_mmd_gift_enabled', $enabled);
 
-        $gift_type = isset($_POST['mmd_gift_type']) ? sanitize_text_field($_POST['mmd_gift_type']) : 'free';
+        $gift_type = isset($_POST['mmd_gift_type']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_type'])) : 'free';
         update_post_meta($post_id, '_mmd_gift_type', $gift_type);
 
         $gift_discount = isset($_POST['mmd_gift_discount']) ? floatval($_POST['mmd_gift_discount']) : 0;
         update_post_meta($post_id, '_mmd_gift_discount', $gift_discount);
 
         // Gift mode (product_page or cart_based)
-        $gift_mode = isset($_POST['mmd_gift_mode']) ? sanitize_text_field($_POST['mmd_gift_mode']) : 'product_page';
+        $gift_mode = isset($_POST['mmd_gift_mode']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_mode'])) : 'product_page';
         update_post_meta($post_id, '_mmd_gift_mode', $gift_mode);
 
         // Cart gift notice
-        $cart_gift_notice = isset($_POST['mmd_cart_gift_notice']) ? sanitize_text_field($_POST['mmd_cart_gift_notice']) : '';
+        $cart_gift_notice = isset($_POST['mmd_cart_gift_notice']) ? sanitize_text_field(wp_unslash($_POST['mmd_cart_gift_notice'])) : '';
         update_post_meta($post_id, '_mmd_cart_gift_notice', $cart_gift_notice);
 
         // Gift source (specific or category)
-        $gift_source = isset($_POST['mmd_gift_source']) ? sanitize_text_field($_POST['mmd_gift_source']) : 'specific';
+        $gift_source = isset($_POST['mmd_gift_source']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_source'])) : 'specific';
         update_post_meta($post_id, '_mmd_gift_source', $gift_source);
 
         $gift_products = isset($_POST['mmd_gift_products']) && is_array($_POST['mmd_gift_products'])
@@ -843,7 +836,7 @@ class MMD_Product_Gifts_V2 {
         update_post_meta($post_id, '_mmd_gift_excluded_products', $gift_excluded_products);
 
         // Gift attribute filter
-        $gift_attribute_slug = isset($_POST['mmd_gift_attribute_slug']) ? sanitize_text_field($_POST['mmd_gift_attribute_slug']) : '';
+        $gift_attribute_slug = isset($_POST['mmd_gift_attribute_slug']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_attribute_slug'])) : '';
         update_post_meta($post_id, '_mmd_gift_attribute_slug', $gift_attribute_slug);
 
         $gift_attribute_values = isset($_POST['mmd_gift_attribute_values']) && is_array($_POST['mmd_gift_attribute_values'])
@@ -851,7 +844,7 @@ class MMD_Product_Gifts_V2 {
             : array();
         update_post_meta($post_id, '_mmd_gift_attribute_values', $gift_attribute_values);
 
-        $gift_selection_type = isset($_POST['mmd_gift_selection_type']) ? sanitize_text_field($_POST['mmd_gift_selection_type']) : 'single';
+        $gift_selection_type = isset($_POST['mmd_gift_selection_type']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_selection_type'])) : 'single';
         update_post_meta($post_id, '_mmd_gift_selection_type', $gift_selection_type);
 
         $allow_quantity = isset($_POST['mmd_gift_allow_quantity']) && $_POST['mmd_gift_allow_quantity'] === 'yes' ? 'yes' : 'no';
@@ -952,6 +945,7 @@ class MMD_Product_Gifts_V2 {
         wp_localize_script('mmd-gift-selection', 'mmdGiftData', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('mmd_gift_nonce'),
+            'debug' => MMD_Helpers::debug_enabled(),
         ));
 
         // Get styling options
@@ -1262,9 +1256,9 @@ class MMD_Product_Gifts_V2 {
         $attribute_values = isset($rule['gift_attribute_values']) ? $rule['gift_attribute_values'] : array();
 
         self::debug_log('MMD get_gift_products_from_rule: category mode');
-        self::debug_log('MMD get_gift_products_from_rule: gift_categories=' . print_r($gift_categories, true));
+        self::debug_log('MMD get_gift_products_from_rule: gift_categories=' . wp_json_encode($gift_categories));
         self::debug_log('MMD get_gift_products_from_rule: attribute_slug=' . $attribute_slug);
-        self::debug_log('MMD get_gift_products_from_rule: attribute_values=' . print_r($attribute_values, true));
+        self::debug_log('MMD get_gift_products_from_rule: attribute_values=' . wp_json_encode($attribute_values));
 
         $products = $this->get_products_from_categories($gift_categories, $excluded_categories, $excluded_tags, $excluded_products, $attribute_slug, $attribute_values);
 
@@ -2465,7 +2459,6 @@ class MMD_Product_Gifts_V2 {
      */
     public function ajax_get_variations() {
         self::debug_log('MMD: ajax_get_variations called');
-        self::debug_log('MMD: POST data: ' . print_r($_POST, true));
 
         // Check nonce
         if (!check_ajax_referer('mmd_gift_nonce', 'nonce', false)) {
@@ -2512,17 +2505,22 @@ class MMD_Product_Gifts_V2 {
      * This ensures gift data is available even during AJAX add to cart
      */
     public function capture_ajax_gift_data($passed, $product_id, $quantity) {
+        // Runs inside WooCommerce's add-to-cart request (the product form posts to WooCommerce, which has no nonce, by design, so cached product pages keep working). Values are cast or sanitized where read.
+        // phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
         self::debug_log('MMD Gift: capture_ajax_gift_data called for product ' . $product_id);
         self::debug_log('MMD Gift: Is AJAX: ' . (defined('DOING_AJAX') && DOING_AJAX ? 'YES' : 'NO'));
 
         // Check all gift-related keys in the request
-        $gift_keys_found = array();
-        foreach (array_merge($_POST, $_REQUEST) as $key => $value) {
-            if (strpos($key, 'mmd_') === 0 || strpos($key, 'gift_') === 0) {
-                $gift_keys_found[$key] = is_array($value) ? 'Array' : substr($value, 0, 50);
+        if (MMD_Helpers::debug_enabled()) {
+            $gift_keys_found = array();
+            foreach (array_keys(array_merge($_POST, $_REQUEST)) as $key) {
+                $key = sanitize_key($key);
+                if (strpos($key, 'mmd_') === 0 || strpos($key, 'gift_') === 0) {
+                    $gift_keys_found[] = $key;
+                }
             }
+            self::debug_log('MMD Gift: Gift-related keys in request: ' . wp_json_encode($gift_keys_found));
         }
-        self::debug_log('MMD Gift: Gift-related keys in request: ' . print_r($gift_keys_found, true));
 
         // Check if this is an AJAX request
         if (defined('DOING_AJAX') && DOING_AJAX) {
@@ -2533,23 +2531,23 @@ class MMD_Product_Gifts_V2 {
 
             // Try to get gift product ID
             if (isset($_POST['mmd_selected_gift_product'])) {
-                $gift_product = sanitize_text_field($_POST['mmd_selected_gift_product']);
+                $gift_product = sanitize_text_field(wp_unslash($_POST['mmd_selected_gift_product']));
             } elseif (isset($_REQUEST['mmd_selected_gift_product'])) {
-                $gift_product = sanitize_text_field($_REQUEST['mmd_selected_gift_product']);
+                $gift_product = sanitize_text_field(wp_unslash($_REQUEST['mmd_selected_gift_product']));
             }
 
             // Try to get gift variation ID
             if (isset($_POST['mmd_selected_gift_variation'])) {
-                $gift_variation = sanitize_text_field($_POST['mmd_selected_gift_variation']);
+                $gift_variation = sanitize_text_field(wp_unslash($_POST['mmd_selected_gift_variation']));
             } elseif (isset($_REQUEST['mmd_selected_gift_variation'])) {
-                $gift_variation = sanitize_text_field($_REQUEST['mmd_selected_gift_variation']);
+                $gift_variation = sanitize_text_field(wp_unslash($_REQUEST['mmd_selected_gift_variation']));
             }
 
             // Try to get gift attributes JSON
             if (isset($_POST['mmd_selected_gift_attributes'])) {
-                $gift_attributes = sanitize_text_field($_POST['mmd_selected_gift_attributes']);
+                $gift_attributes = sanitize_text_field(wp_unslash($_POST['mmd_selected_gift_attributes']));
             } elseif (isset($_REQUEST['mmd_selected_gift_attributes'])) {
-                $gift_attributes = sanitize_text_field($_REQUEST['mmd_selected_gift_attributes']);
+                $gift_attributes = sanitize_text_field(wp_unslash($_REQUEST['mmd_selected_gift_attributes']));
             }
 
             if (!empty($gift_product)) {
@@ -2573,6 +2571,7 @@ class MMD_Product_Gifts_V2 {
         }
 
         return $passed;
+        // phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
     }
 
     /**
@@ -2609,6 +2608,8 @@ class MMD_Product_Gifts_V2 {
      * For AJAX scenarios, the chained ajax_add_gift_to_cart method handles it
      */
     public function handle_gift_selection($cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data) {
+        // Runs inside WooCommerce's add-to-cart request (the product form posts to WooCommerce, which has no nonce, by design, so cached product pages keep working). Values are cast or sanitized where read.
+        // phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
         // Skip if this item IS a gift (prevent recursion)
         if (isset($cart_item_data['mmd_is_gift']) || isset($cart_item_data['mmd_cart_based_gift'])) {
             return;
@@ -2645,11 +2646,12 @@ class MMD_Product_Gifts_V2 {
 
         if ($selection_type === 'multiple') {
             // Handle multiple gift selection
-            $selected_gifts = isset($_POST['mmd_selected_gift_products']) && is_array($_POST['mmd_selected_gift_products'])
-                ? $_POST['mmd_selected_gift_products']
-                : array();
+            $selected_gifts = array();
+            if (isset($_POST['mmd_selected_gift_products']) && is_array($_POST['mmd_selected_gift_products'])) {
+                $selected_gifts = wp_unslash($_POST['mmd_selected_gift_products']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each entry's product_id/variation_id go through intval() and its URL-encoded attributes JSON is decoded and validated below.
+            }
 
-            self::debug_log('MMD Gift: Multiple selection - gifts: ' . print_r($selected_gifts, true));
+            self::debug_log('MMD Gift: Multiple selection - gifts: ' . wp_json_encode($selected_gifts));
 
             if (empty($selected_gifts)) {
                 self::debug_log('MMD Gift: No gifts selected in multiple mode');
@@ -2675,7 +2677,7 @@ class MMD_Product_Gifts_V2 {
                     if (is_array($decoded)) {
                         // Attribute values are already decoded in JS, use them as-is
                         $gift_attributes = $decoded;
-                        self::debug_log('MMD Gift: Parsed gift attributes: ' . print_r($gift_attributes, true));
+                        self::debug_log('MMD Gift: Parsed gift attributes: ' . wp_json_encode($gift_attributes));
                     }
                 }
 
@@ -2706,9 +2708,9 @@ class MMD_Product_Gifts_V2 {
                         }
                     }
 
-                    self::debug_log('MMD Gift: Selected attributes from frontend: ' . print_r($gift_attributes, true));
-                    self::debug_log('MMD Gift: Variation product attributes: ' . print_r($variation_product->get_variation_attributes(), true));
-                    self::debug_log('MMD Gift: Merged attributes for cart: ' . print_r($variation_attributes, true));
+                    self::debug_log('MMD Gift: Selected attributes from frontend: ' . wp_json_encode($gift_attributes));
+                    self::debug_log('MMD Gift: Variation product attributes: ' . wp_json_encode($variation_product->get_variation_attributes()));
+                    self::debug_log('MMD Gift: Merged attributes for cart: ' . wp_json_encode($variation_attributes));
 
                     $result = WC()->cart->add_to_cart(
                         $variation_product->get_parent_id(),
@@ -2727,7 +2729,8 @@ class MMD_Product_Gifts_V2 {
             // Handle single gift selection
             $selected_gift = isset($_POST['mmd_selected_gift_product']) ? intval($_POST['mmd_selected_gift_product']) : 0;
             $selected_variation = isset($_POST['mmd_selected_gift_variation']) ? intval($_POST['mmd_selected_gift_variation']) : 0;
-            $selected_attributes_json = isset($_POST['mmd_selected_gift_attributes']) ? $_POST['mmd_selected_gift_attributes'] : '';
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; decoded and validated against the product's attributes below.
+            $selected_attributes_json = isset($_POST['mmd_selected_gift_attributes']) ? wp_unslash($_POST['mmd_selected_gift_attributes']) : '';
 
             self::debug_log('MMD Gift: Single selection - product: ' . $selected_gift . ', variation: ' . $selected_variation);
             self::debug_log('MMD Gift: Attributes JSON: ' . $selected_attributes_json);
@@ -2751,7 +2754,7 @@ class MMD_Product_Gifts_V2 {
                 if (is_array($decoded)) {
                     // Attribute values are already decoded in JS, use them as-is
                     $selected_attributes = $decoded;
-                    self::debug_log('MMD Gift: Successfully parsed attributes: ' . print_r($selected_attributes, true));
+                    self::debug_log('MMD Gift: Successfully parsed attributes: ' . wp_json_encode($selected_attributes));
                 } else {
                     self::debug_log('MMD Gift: ERROR - Failed to JSON-decode attributes.');
                     self::debug_log('MMD Gift: - Raw JSON: ' . $selected_attributes_json);
@@ -2784,31 +2787,32 @@ class MMD_Product_Gifts_V2 {
                 // with the actual selected values from the frontend to pass WooCommerce validation
                 $variation_attributes = $variation_product->get_variation_attributes();
 
-                self::debug_log('MMD Gift: BEFORE MERGE - Selected attributes from frontend: ' . print_r($selected_attributes, true));
-                self::debug_log('MMD Gift: BEFORE MERGE - Variation product attributes: ' . print_r($variation_attributes, true));
+                self::debug_log('MMD Gift: BEFORE MERGE - Selected attributes from frontend: ' . wp_json_encode($selected_attributes));
+                self::debug_log('MMD Gift: BEFORE MERGE - Variation product attributes: ' . wp_json_encode($variation_attributes));
                 self::debug_log('MMD Gift: BEFORE MERGE - Count of selected attributes: ' . count($selected_attributes));
 
                 // Check if selected_attributes is empty
-                if (empty($selected_attributes)) {
+                if (empty($selected_attributes) && MMD_Helpers::debug_enabled()) {
                     self::debug_log('MMD Gift: WARNING - Selected attributes is EMPTY! This will cause validation failure.');
                     self::debug_log('MMD Gift: Checking if attributes are in POST with different keys...');
 
                     // Check for attributes with 'gift_' prefix
-                    foreach ($_POST as $key => $value) {
+                    foreach (array_keys($_POST) as $key) {
+                        $key = sanitize_key($key);
                         if (strpos($key, 'gift_attribute_') === 0 || strpos($key, 'gift_attr') === 0) {
-                            self::debug_log('MMD Gift: Found POST key: ' . $key . ' = ' . $value);
+                            self::debug_log('MMD Gift: Found POST key: ' . $key);
                         }
                     }
 
                     // Try to reconstruct attributes from variation if possible
                     // This is a fallback - ideally we should have the selected attributes
                     $all_post_attrs = array();
-                    foreach ($_POST as $key => $value) {
-                        if (strpos($key, 'attribute_') === 0) {
-                            $all_post_attrs[$key] = $value;
+                    foreach (wp_unslash($_POST) as $key => $value) {
+                        if (strpos($key, 'attribute_') === 0 && is_scalar($value)) {
+                            $all_post_attrs[sanitize_key($key)] = sanitize_text_field($value);
                         }
                     }
-                    self::debug_log('MMD Gift: All attribute_* keys in POST: ' . print_r($all_post_attrs, true));
+                    self::debug_log('MMD Gift: All attribute_* keys in POST: ' . wp_json_encode($all_post_attrs));
                 }
 
                 // Merge with selected attributes - selected attributes take precedence for empty variation attributes
@@ -2823,7 +2827,7 @@ class MMD_Product_Gifts_V2 {
                 }
 
                 self::debug_log('MMD Gift: AFTER MERGE - Adding variation to cart - Parent: ' . $variation_product->get_parent_id() . ', Variation: ' . $selected_variation);
-                self::debug_log('MMD Gift: AFTER MERGE - Final merged attributes for cart: ' . print_r($variation_attributes, true));
+                self::debug_log('MMD Gift: AFTER MERGE - Final merged attributes for cart: ' . wp_json_encode($variation_attributes));
 
                 // Check if any required attributes are still empty
                 $has_empty_attrs = false;
@@ -2893,6 +2897,7 @@ class MMD_Product_Gifts_V2 {
         }
 
         self::debug_log('===== MMD Gift: handle_gift_selection END (completed) =====');
+        // phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
     }
 
     /**
@@ -3087,11 +3092,8 @@ class MMD_Product_Gifts_V2 {
      * This is called AFTER the main product has been added to cart
      */
     public function ajax_add_gift_to_cart() {
-        // Create custom debug file for detailed logging
-        $debug_file = MMD_PLUGIN_DIR . 'debug-gift-ajax.log';
-        $log = function($message) use ($debug_file) {
-            $timestamp = gmdate('Y-m-d H:i:s');
-            file_put_contents($debug_file, "[$timestamp] $message\n", FILE_APPEND);
+        // Debug lines go to the PHP error log only with WP_DEBUG and INCENTIV_DEBUG on.
+        $log = function($message) {
             self::debug_log($message);
         };
 
@@ -3109,11 +3111,12 @@ class MMD_Product_Gifts_V2 {
             $parent_product_id = isset($_POST['parent_product_id']) ? intval($_POST['parent_product_id']) : 0;
             $gift_product_id = isset($_POST['gift_product_id']) ? intval($_POST['gift_product_id']) : 0;
             $gift_variation_id = isset($_POST['gift_variation_id']) ? intval($_POST['gift_variation_id']) : 0;
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; decoded and validated against the variation's attributes below.
             $gift_attributes_json = isset($_POST['gift_attributes']) ? wp_unslash($_POST['gift_attributes']) : '';
 
             // Fallback to the standard field name used elsewhere if the dedicated one is missing
             if (empty($gift_attributes_json) && isset($_POST['mmd_selected_gift_attributes'])) {
-                $gift_attributes_json = wp_unslash($_POST['mmd_selected_gift_attributes']);
+                $gift_attributes_json = wp_unslash($_POST['mmd_selected_gift_attributes']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; validated below.
                 $log('MMD Gift AJAX: gift_attributes missing, using mmd_selected_gift_attributes fallback');
             }
 
@@ -3172,7 +3175,7 @@ class MMD_Product_Gifts_V2 {
 
                 if (is_array($decoded)) {
                     $gift_attributes = $decoded;
-                    $log('MMD Gift AJAX: Parsed attributes: ' . print_r($gift_attributes, true));
+                    $log('MMD Gift AJAX: Parsed attributes: ' . wp_json_encode($gift_attributes));
                     $log('MMD Gift AJAX: Raw JSON received: ' . $gift_attributes_json);
                 } else {
                     $log('MMD Gift AJAX: Failed to parse attributes JSON');
@@ -3204,8 +3207,8 @@ class MMD_Product_Gifts_V2 {
                 // Get variation attributes from the product (these keys might be encoded!)
                 $original_variation_attributes = $variation_product->get_variation_attributes();
 
-                $log('MMD Gift AJAX: Original variation attributes (from product): ' . print_r($original_variation_attributes, true));
-                $log('MMD Gift AJAX: Gift attributes to merge (from user): ' . print_r($gift_attributes, true));
+                $log('MMD Gift AJAX: Original variation attributes (from product): ' . wp_json_encode($original_variation_attributes));
+                $log('MMD Gift AJAX: Gift attributes to merge (from user): ' . wp_json_encode($gift_attributes));
 
                 // Create a mapping of decoded keys to original (potentially encoded) keys
                 // We need to pass the KEYS exactly as they appear in $original_variation_attributes for WooCommerce to validate them
@@ -3247,7 +3250,7 @@ class MMD_Product_Gifts_V2 {
                     }
                 }
 
-                $log('MMD Gift AJAX: Final attributes for add_to_cart: ' . print_r($final_variation_attributes, true));
+                $log('MMD Gift AJAX: Final attributes for add_to_cart: ' . wp_json_encode($final_variation_attributes));
 
                 // Validate variation using WooCommerce's validation
                 try {
@@ -3269,7 +3272,7 @@ class MMD_Product_Gifts_V2 {
                     $log('MMD Gift AJAX: Parameter 1 (parent_id): ' . $variation_product->get_parent_id());
                     $log('MMD Gift AJAX: Parameter 2 (quantity): ' . $quantity);
                     $log('MMD Gift AJAX: Parameter 3 (variation_id): ' . $gift_variation_id);
-                    $log('MMD Gift AJAX: Parameter 4 (variation_attributes): ' . print_r($final_variation_attributes, true));
+                    $log('MMD Gift AJAX: Parameter 4 (variation_attributes): ' . wp_json_encode($final_variation_attributes));
 
                     // Add to cart with error handling
                     $cart_item_key = WC()->cart->add_to_cart(
@@ -3284,7 +3287,7 @@ class MMD_Product_Gifts_V2 {
                     if (!$cart_item_key) {
                         $notices = wc_get_notices('error');
                         $log('MMD Gift AJAX: ❌ WooCommerce add_to_cart FAILED - returned false');
-                        $log('MMD Gift AJAX: WooCommerce error notices: ' . print_r($notices, true));
+                        $log('MMD Gift AJAX: WooCommerce error notices: ' . wp_json_encode($notices));
 
                         // Clear notices to prevent them showing to user
                         wc_clear_notices();
@@ -4673,12 +4676,10 @@ class MMD_Product_Gifts_V2 {
                         $form.append('<input type="hidden" name="mmd_selected_gift_attributes" id="mmd_selected_gift_attributes" value="">');
                     }
 
-                    console.log('MMD: Gift selection injected via', insertTargets[i].sel, insertTargets[i].method);
                     return;
                 }
             }
 
-            console.log('MMD: Could not find suitable injection target for gift selection');
         });
         </script>
         <?php
@@ -5068,9 +5069,9 @@ class MMD_Product_Gifts_V2 {
         $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
         $variation_id = isset($_POST['variation_id']) ? intval($_POST['variation_id']) : 0;
         $trigger_product_id = isset($_POST['trigger_product_id']) ? intval($_POST['trigger_product_id']) : 0;
-        $gift_type = isset($_POST['gift_type']) ? sanitize_text_field($_POST['gift_type']) : 'free';
+        $gift_type = isset($_POST['gift_type']) ? sanitize_text_field(wp_unslash($_POST['gift_type'])) : 'free';
         $gift_discount = isset($_POST['gift_discount']) ? floatval($_POST['gift_discount']) : 0;
-        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field($_POST['rule_id']) : '';
+        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field(wp_unslash($_POST['rule_id'])) : '';
 
         // Attributes the client picked (visible dropdowns + pre-selected from
         // the rule). Keys are full WC attribute keys, e.g. attribute_pa_weight.
@@ -5084,8 +5085,10 @@ class MMD_Product_Gifts_V2 {
         // We accept the value as-is (forced to string + invalid-UTF8 check)
         // and let WC handle whatever sanitization it needs.
         $client_attrs = array();
-        if (isset($_POST['attributes']) && is_array($_POST['attributes'])) {
-            foreach ($_POST['attributes'] as $k => $v) {
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- See above: keys/values are checked with wp_check_invalid_utf8() and WooCommerce validates them as attribute slugs.
+        $posted_attrs = isset($_POST['attributes']) && is_array($_POST['attributes']) ? wp_unslash($_POST['attributes']) : array();
+        if ($posted_attrs) {
+            foreach ($posted_attrs as $k => $v) {
                 if (!is_scalar($k) || !is_scalar($v)) continue;
                 $clean_key = wp_check_invalid_utf8((string) $k);
                 $clean_val = wp_check_invalid_utf8((string) $v);
@@ -5122,14 +5125,11 @@ class MMD_Product_Gifts_V2 {
                 return;
             }
 
-            $dbg_file = MMD_PLUGIN_DIR . 'debug-cart-gift.log';
-            $dbg = function ($label, $data = null) use ($dbg_file) {
-                $line = '[' . gmdate('Y-m-d H:i:s') . '] ' . $label;
-                if ($data !== null) $line .= ' ' . print_r($data, true);
-                @file_put_contents($dbg_file, $line . "\n", FILE_APPEND);
+            // Debug lines go to the PHP error log only with WP_DEBUG and INCENTIV_DEBUG on.
+            $dbg = function ($label, $data = null) {
+                MMD_Helpers::log($label, $data);
             };
             $dbg('=== ajax_add_cart_gift START ===');
-            $dbg('POST attributes', isset($_POST['attributes']) ? $_POST['attributes'] : '(none)');
             $dbg('client_attrs (sanitized)', $client_attrs);
             $dbg('variation_id', $variation_id);
 
@@ -5301,7 +5301,11 @@ class MMD_Product_Gifts_V2 {
                     }
                 }
             }
-            wp_send_json_error(array('message' => $error_message, 'debug' => $debug));
+            $error_response = array('message' => $error_message);
+            if (MMD_Helpers::debug_enabled()) {
+                $error_response['debug'] = $debug;
+            }
+            wp_send_json_error($error_response);
             return;
         }
 
@@ -5323,7 +5327,7 @@ class MMD_Product_Gifts_V2 {
             wp_send_json_error(array('message' => 'Cart unavailable'));
         }
 
-        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field($_POST['rule_id']) : '';
+        $rule_id = isset($_POST['rule_id']) ? sanitize_text_field(wp_unslash($_POST['rule_id'])) : '';
 
         $removed = 0;
         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {

@@ -8,6 +8,33 @@ if (!defined('ABSPATH')) {
 }
 
 class MMD_Helpers {
+
+    /**
+     * Debug logging is off unless the site sets WP_DEBUG and INCENTIV_DEBUG
+     * (or the older MMD_DEBUG) to true in wp-config.php.
+     */
+    public static function debug_enabled() {
+        if (!defined('WP_DEBUG') || !WP_DEBUG) {
+            return false;
+        }
+        return (defined('INCENTIV_DEBUG') && INCENTIV_DEBUG) || (defined('MMD_DEBUG') && MMD_DEBUG);
+    }
+
+    /**
+     * Write a line to the PHP error log, only when debug_enabled().
+     *
+     * @param string $message Message.
+     * @param mixed  $data    Optional data, JSON-encoded.
+     */
+    public static function log($message, $data = null) {
+        if (!self::debug_enabled()) {
+            return;
+        }
+        if (null !== $data) {
+            $message .= ' ' . wp_json_encode($data);
+        }
+        error_log('[Incentiv] ' . $message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Only runs with WP_DEBUG and INCENTIV_DEBUG on.
+    }
     
     /**
      * Get plugin settings

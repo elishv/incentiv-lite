@@ -214,7 +214,7 @@ class MMD_Product_Gifts {
      */
     public function save_gift_meta_box($post_id, $post) {
         // Security checks
-        if (!isset($_POST['mmd_gift_meta_box_nonce']) || !wp_verify_nonce($_POST['mmd_gift_meta_box_nonce'], 'mmd_gift_meta_box')) {
+        if (!isset($_POST['mmd_gift_meta_box_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mmd_gift_meta_box_nonce'])), 'mmd_gift_meta_box')) {
             return;
         }
 
@@ -231,7 +231,7 @@ class MMD_Product_Gifts {
         update_post_meta($post_id, '_mmd_gift_enabled', $enabled);
 
         // Save gift type
-        $gift_type = isset($_POST['mmd_gift_type']) ? sanitize_text_field($_POST['mmd_gift_type']) : 'free';
+        $gift_type = isset($_POST['mmd_gift_type']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_type'])) : 'free';
         update_post_meta($post_id, '_mmd_gift_type', $gift_type);
 
         // Save discount amount

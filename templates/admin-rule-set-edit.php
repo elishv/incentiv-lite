@@ -3,7 +3,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$rule_set_id = isset($_GET['rule_set_id']) ? sanitize_text_field($_GET['rule_set_id']) : '';
+$rule_set_id = isset($_GET['rule_set_id']) ? sanitize_text_field(wp_unslash($_GET['rule_set_id'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin view parameter.
 $is_new = empty($rule_set_id);
 
 $default_fields = array(
@@ -1895,7 +1895,8 @@ $attributes = wc_get_attribute_taxonomies();
                     method: 'POST',
                     dataType: 'json',
                     data: {
-                        action: 'mmd_preview_products_search'
+                        action: 'mmd_preview_products_search',
+                        nonce: '<?php echo esc_attr( wp_create_nonce('mmd_preview_products_search') ); ?>'
                     },
                     success: function(resp) {
                         if (resp && resp.success && Array.isArray(resp.data)) {
