@@ -1,0 +1,6285 @@
+# Copyright (C) 2026 Eli Shvarzman
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Incentiv – Advanced Promotions for WooCommerce 2.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/incentiv\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-01T13:51:42+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: incentiv\n"
+
+#. Plugin Name of the plugin
+#: incentiv.php
+msgid "Incentiv – Advanced Promotions for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: incentiv.php
+msgid "https://a-in.co.il/plugins/incentiv/"
+msgstr ""
+
+#. Description of the plugin
+#: incentiv.php
+msgid "Incentiv is a promotions engine for WooCommerce: quantity and mix & match discounts, automatic gifts and BOGO, margin guards and a visual flow builder. Every reason to buy more."
+msgstr ""
+
+#. Author of the plugin
+#: incentiv.php
+msgid "Eli Shvarzman"
+msgstr ""
+
+#. Author URI of the plugin
+#: incentiv.php
+msgid "https://a-in.co.il/"
+msgstr ""
+
+#: incentiv.php:79
+msgid "Mix & Match Quantity Discounts"
+msgstr ""
+
+#: incentiv.php:79
+msgid "Requires the WooCommerce plugin to be installed and active."
+msgstr ""
+
+#: incentiv.php:145
+#: includes/widgets/cart-gift-selection-widget.php:37
+#: assets/flow-builder.js:159
+msgid "Settings"
+msgstr ""
+
+#: incentiv.php:150
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: incentiv.php:191
+#: includes/class-mmd-discount-rules.php:77
+#: includes/class-mmd-frontend.php:872
+#: includes/class-mmd-frontend.php:3351
+#: includes/class-mmd-helpers.php:29
+#: templates/admin-rule-set-edit.php:31
+#: templates/admin-rule-set-edit.php:599
+#: templates/admin-storefront.php:32
+msgid "☕ Buy more and save!"
+msgstr ""
+
+#: incentiv.php:194
+#: includes/class-mmd-helpers.php:32
+#: templates/admin-storefront.php:63
+msgid "☕ Quantity discount"
+msgstr ""
+
+#: includes/class-mmd-admin.php:63
+msgid "Powered by"
+msgstr ""
+
+#: includes/class-mmd-admin.php:63
+msgid "· Every reason to buy more ·"
+msgstr ""
+
+#. translators: Plugin brand name, used as the admin page title. Keep it as is unless the brand has a localized name.
+#. translators: Plugin brand name in the admin menu. Keep it as is unless the brand has a localized name.
+#: includes/class-mmd-admin.php:79
+#: includes/class-mmd-admin.php:81
+msgctxt "admin menu label (brand name)"
+msgid "Incentiv"
+msgstr ""
+
+#: includes/class-mmd-admin.php:92
+#: includes/class-mmd-admin.php:93
+#: templates/admin-dashboard.php:140
+msgid "Quantity discounts"
+msgstr ""
+
+#: includes/class-mmd-admin.php:102
+#: includes/class-mmd-admin.php:103
+#: includes/class-mmd-modules.php:109
+#: templates/admin-dashboard.php:75
+msgid "Dashboard"
+msgstr ""
+
+#: includes/class-mmd-admin.php:116
+#: includes/class-mmd-admin.php:117
+#: includes/class-mmd-modules.php:114
+#: templates/admin-storefront.php:181
+msgid "Customer view"
+msgstr ""
+
+#: includes/class-mmd-admin.php:130
+#: includes/class-mmd-admin.php:131
+#: includes/class-mmd-modules.php:113
+msgid "Documentation"
+msgstr ""
+
+#: includes/class-mmd-admin.php:349
+msgid "Buy a quantity, get a percentage off"
+msgstr ""
+
+#: includes/class-mmd-admin.php:350
+msgid "From a set quantity, the cheapest item gets a percentage off."
+msgstr ""
+
+#: includes/class-mmd-admin.php:352
+#: includes/class-mmd-admin.php:361
+msgid "From quantity"
+msgstr ""
+
+#: includes/class-mmd-admin.php:353
+#: includes/class-mmd-admin.php:369
+#: includes/class-mmd-admin.php:378
+msgid "Discount percentage"
+msgstr ""
+
+#: includes/class-mmd-admin.php:358
+msgid "Cheapest is free"
+msgstr ""
+
+#: includes/class-mmd-admin.php:359
+msgid "When customers buy the quantity you set, the cheapest item is free."
+msgstr ""
+
+#: includes/class-mmd-admin.php:366
+msgid "Store-wide discount"
+msgstr ""
+
+#: includes/class-mmd-admin.php:367
+msgid "A percentage off all participating products, regardless of quantity."
+msgstr ""
+
+#: includes/class-mmd-admin.php:374
+msgid "Over an amount: discount"
+msgstr ""
+
+#: includes/class-mmd-admin.php:375
+msgid "When the cart total passes a threshold you set, a percentage discount is applied."
+msgstr ""
+
+#: includes/class-mmd-admin.php:377
+msgid "Minimum cart total"
+msgstr ""
+
+#: includes/class-mmd-admin.php:474
+msgid "Unknown template"
+msgstr ""
+
+#: includes/class-mmd-admin.php:494
+msgid "No discount set"
+msgstr ""
+
+#: includes/class-mmd-admin.php:605
+msgid "Rule imported successfully"
+msgstr ""
+
+#: includes/class-mmd-admin.php:607
+msgid "Failed to import rule"
+msgstr ""
+
+#: includes/class-mmd-admin.php:782
+#: includes/class-mmd-frontend.php:961
+#: templates/admin-rule-set-edit.php:49
+#: templates/admin-rule-set-edit.php:934
+#: templates/admin-rule-set-edit.php:2674
+#: templates/admin-storefront.php:35
+#: assets/admin-ui.js:422
+msgid "Promotion"
+msgstr ""
+
+#: includes/class-mmd-admin.php:834
+msgid "The discount rule was saved."
+msgstr ""
+
+#: includes/class-mmd-admin.php:835
+msgid "The discount rule was deleted."
+msgstr ""
+
+#: includes/class-mmd-admin.php:836
+msgid "The discount rule was duplicated."
+msgstr ""
+
+#: includes/class-mmd-admin.php:837
+msgid "The example rule was imported."
+msgstr ""
+
+#: includes/class-mmd-ajax.php:186
+msgid "Out of stock"
+msgstr ""
+
+#: includes/class-mmd-ajax.php:188
+msgid "In stock"
+msgstr ""
+
+#: includes/class-mmd-ajax.php:199
+msgid "None of the selected products is a variable product"
+msgstr ""
+
+#: includes/class-mmd-cart-notes.php:80
+#: templates/admin-gift-styling.php:340
+msgid "Order note"
+msgstr ""
+
+#: includes/class-mmd-cart-notes.php:81
+msgid "Add a special note to your order (optional)"
+msgstr ""
+
+#: includes/class-mmd-cart-notes.php:86
+msgid "For example: please add an extra straw, or: this is a gift, please wrap it nicely..."
+msgstr ""
+
+#: includes/class-mmd-cart-notes.php:143
+#: includes/class-mmd-cart-notes.php:166
+msgid "📝 Customer note"
+msgstr ""
+
+#: includes/class-mmd-cart-notes.php:161
+msgid "📝 Customer note:"
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:36
+msgid "Discount line in the cart (default)"
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:37
+msgid "The discount is shown as a separate line in the cart totals and is not split across products."
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:40
+msgid "Proportional to product value"
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:41
+msgid "The discount is split across the participating products in proportion to each line's value. Recommended for refunds and accurate reports."
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:44
+msgid "Evenly across lines"
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:45
+msgid "Every participating product line gets the same discount amount."
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:48
+msgid "Evenly across units"
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:49
+msgid "Every participating unit gets the same discount amount."
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:52
+msgid "Concentrated on the target product"
+msgstr ""
+
+#: includes/class-mmd-discount-allocator.php:53
+msgid "The whole discount is attributed to the cheapest or most expensive product, according to the \"Apply discount to\" setting."
+msgstr ""
+
+#: includes/class-mmd-discount-rules.php:51
+msgid "Default quantity discounts"
+msgstr ""
+
+#: includes/class-mmd-discount-rules.php:78
+#: templates/admin-rule-set-edit.php:32
+#: templates/admin-rule-set-edit.php:609
+msgid "Buy more and get a special discount!"
+msgstr ""
+
+#: includes/class-mmd-discount-rules.php:158
+#: includes/class-mmd-gift-rules.php:456
+msgid "(copy)"
+msgstr ""
+
+#: includes/class-mmd-elementor-widget.php:24
+msgid "Incentiv"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:20
+msgid "Buy 3 get 30% off"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:22
+msgid "30% off the cheapest item when buying 3 items from the same category"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:26
+msgid "Buy 3 Get 30% Off"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:47
+msgid "Buy 3 and Save!"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:48
+msgid "Buy 3 items and get 30% off the cheapest one!"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:69
+msgid "Tiered quantity discounts"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:71
+msgid "The discount grows with the quantity: 10% for 2, 20% for 3, 30% for 4, free for 5"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:75
+msgid "Tiered Volume Discount"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:99
+msgid "Volume Discounts!"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:100
+msgid "Buy more, save more! 2=10%, 3=20%, 4=30%, 5=FREE"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:121
+msgid "Buy 1 get 1 at 50% off"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:123
+msgid "Buy one item and get the second at half price"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:127
+msgid "BOGO 50% Off"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:148
+msgid "BOGO Deal!"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:149
+msgid "Buy one, get the second at 50% off!"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:170
+msgid "Fixed discount for buying in quantity"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:172
+msgid "A fixed amount off: 10 ₪ for 2 items, 25 ₪ for 3, 50 ₪ for 5"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:176
+msgid "Fixed Bulk Discount"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:199
+msgid "Bulk Savings!"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:200
+msgid "Buy in bulk and save! 2 items=$10 off, 3=$25, 5=$50"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:221
+msgid "VIP discount with a coupon"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:223
+msgid "An exclusive 40% discount that is only activated with a VIP coupon code"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:227
+msgid "VIP Coupon 40% Off"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:248
+msgid "VIP Exclusive!"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:249
+msgid "Use coupon VIP40 and get 40% off when buying 2+!"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:270
+#: templates/admin-gift-rule-edit.php:1033
+#: templates/admin-rule-set-edit.php:465
+msgid "Buy 4 get 1 free"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:272
+msgid "Buy 5 items and get the cheapest one free (100% off)"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:276
+msgid "Buy 4 Get 1 Free"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:297
+msgid "Buy 4 Get 1 Free!"
+msgstr ""
+
+#: includes/class-mmd-example-rules.php:298
+msgid "Add 5 items to your cart and get the cheapest one for free!"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:34
+#: includes/class-mmd-flow-builder.php:35
+#: includes/class-mmd-modules.php:111
+msgid "Flows"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:117
+msgid "Please give the flow a name"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:120
+msgid "The flow is empty. Add at least one step"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:177
+msgid "Add at least one action: a discount or a gift"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:228
+msgid "(gift)"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:245
+msgid "You have a gift! Choose a product from the list 🎁"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:301
+#: templates/admin-documentation.php:140
+#: templates/admin-gift-rule-edit.php:161
+#: templates/admin-gift-rule-edit.php:2134
+#: templates/admin-gift-rules-list.php:18
+#: templates/admin-page.php:59
+#: templates/admin-rule-set-edit.php:238
+#: templates/admin-rule-set-edit.php:1800
+#: templates/admin-rule-sets.php:54
+#: assets/admin-script.js:141
+#: assets/admin-script.js:175
+msgid "All products"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:302
+#: assets/admin-script.js:175
+msgid "Selected categories"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:303
+#: templates/admin-gift-rule-edit.php:2134
+#: templates/admin-rule-set-edit.php:1800
+#: templates/admin-rule-sets.php:56
+#: assets/admin-script.js:175
+msgid "Selected products"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:304
+#: templates/admin-documentation.php:155
+#: templates/admin-gift-rule-edit.php:164
+#: templates/admin-gift-rule-edit.php:2134
+#: templates/admin-page.php:62
+#: templates/admin-rule-set-edit.php:241
+#: templates/admin-rule-set-edit.php:1800
+#: templates/admin-rule-sets.php:57
+#: assets/admin-script.js:175
+msgid "By attribute"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:317
+msgid "Customer adds"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:317
+#: includes/class-mmd-product-gifts-v2.php:4411
+#: assets/flow-builder.js:112
+msgid "+ items"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:320
+#: includes/class-mmd-flow-builder.php:349
+msgid "Cart over"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:320
+#: includes/class-mmd-flow-builder.php:349
+msgid "Threshold"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:323
+#: includes/class-mmd-flow-builder.php:354
+msgid "Enters code"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:323
+#: includes/class-mmd-flow-builder.php:354
+#: includes/class-mmd-flow-builder.php:360
+#: assets/flow-builder.js:22
+#: assets/flow-builder.js:34
+msgid "Customer interaction"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:330
+msgid "Cheapest is free! 🎁"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:331
+#: templates/admin-rule-set-edit.php:2124
+msgid "% off"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:331
+#: includes/class-mmd-frontend.php:2522
+#: includes/class-mmd-product-gifts-v2.php:4393
+#: includes/widgets/gift-notice-widget.php:44
+#: templates/admin-flows.php:100
+#: templates/admin-gift-rule-edit.php:1053
+#: templates/admin-gift-rule-edit.php:1548
+#: templates/admin-gift-rule-edit.php:1598
+#: templates/admin-page.php:199
+#: templates/admin-rule-set-edit.php:505
+#: templates/admin-rule-set-edit.php:2399
+#: templates/admin-rule-set-edit.php:2433
+#: templates/admin-rule-set-edit.php:2663
+#: assets/admin-script.js:34
+#: assets/admin-script.js:264
+#: assets/flow-builder.js:30
+msgid "Discount"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:332
+msgid "on all items"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:332
+msgid "on the cheapest item"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:351
+msgid "Customer buys a participating product"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:358
+msgid "Gift added automatically 🎁"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:358
+#: templates/admin-gift-rule-edit.php:485
+#: assets/flow-builder.js:124
+msgctxt "flow"
+msgid "Gift products"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:358
+#: includes/class-mmd-product-gifts-v2.php:385
+#: templates/admin-documentation.php:145
+#: templates/admin-gift-rule-edit.php:162
+#: templates/admin-gift-rule-edit.php:476
+#: templates/admin-gift-rule-edit.php:2134
+#: templates/admin-gift-rule-edit.php:2135
+#: templates/admin-page.php:60
+#: templates/admin-rule-set-edit.php:239
+#: templates/admin-rule-set-edit.php:1800
+#: templates/admin-rule-sets.php:55
+msgid "By categories"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:360
+#: assets/flow-builder.js:34
+msgid "Customer chooses a gift"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:361
+msgid "The gift is added for free 🎁"
+msgstr ""
+
+#: includes/class-mmd-flow-builder.php:361
+#: assets/flow-builder.js:122
+msgid "Products to choose from"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:248
+msgid "Coupon added - the discount will apply in the cart"
+msgstr ""
+
+#. translators: %s: coupon code
+#: includes/class-mmd-frontend.php:251
+#, php-format
+msgid "Coupon %s added - the discount will apply in the cart"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:813
+#: includes/class-mmd-frontend.php:846
+#: includes/class-mmd-frontend.php:3259
+#: includes/class-mmd-frontend.php:3261
+#: includes/class-mmd-product-gifts-v2.php:1643
+#: includes/class-mmd-product-gifts-v2.php:1645
+#: includes/class-mmd-product-gifts-v2.php:3447
+#: includes/class-mmd-product-gifts-v2.php:3449
+#: includes/class-mmd-product-gifts-v2.php:3511
+#: includes/class-mmd-product-gifts-v2.php:3513
+#: includes/class-mmd-product-gifts-v2.php:3545
+#: includes/class-mmd-product-gifts-v2.php:3547
+#: includes/class-mmd-product-gifts-v2.php:3580
+#: includes/class-mmd-product-gifts-v2.php:3582
+#: includes/class-mmd-product-gifts-v2.php:4430
+#: includes/class-mmd-product-gifts-v2.php:4432
+#: includes/class-mmd-product-gifts-v2.php:4726
+#: includes/class-mmd-product-gifts-v2.php:4728
+#: includes/class-mmd-product-gifts-v2.php:5483
+#: includes/class-mmd-product-gifts-v2.php:5485
+#: includes/class-mmd-product-gifts.php:459
+#: includes/class-mmd-product-gifts.php:461
+#: includes/widgets/gift-notice-widget.php:310
+#: includes/widgets/gift-notice-widget.php:312
+msgid "A discount of"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:813
+#: includes/class-mmd-frontend.php:846
+msgid "is live!"
+msgstr ""
+
+#. translators: 1: rule name, 2: discount amount included in this line.
+#: includes/class-mmd-frontend.php:1906
+#, php-format
+msgid "%1$s: %2$s off"
+msgstr ""
+
+#. translators: %s: discounted unit price.
+#: includes/class-mmd-frontend.php:1915
+#: includes/class-mmd-frontend.php:1923
+#, php-format
+msgid "One item at %s"
+msgstr ""
+
+#. translators: 1: number of items, 2: discounted unit price.
+#: includes/class-mmd-frontend.php:1918
+#, php-format
+msgid "%1$d items at %2$s each"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:2117
+msgid "This coupon cannot be combined with the current coupon."
+msgstr ""
+
+#: includes/class-mmd-frontend.php:2561
+msgid "Already included in the product prices"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3246
+msgid "📊 Buy more, save more"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3255
+#: assets/admin-ui.js:383
+msgid "Cheapest is free! 🎉"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3258
+#: templates/admin-storefront.php:165
+msgid "· You save"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3269
+#: includes/class-mmd-frontend.php:3424
+#: templates/admin-storefront.php:159
+#: templates/admin-storefront.php:162
+#: templates/admin-storefront.php:165
+#: assets/admin-ui.js:412
+msgid "units"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3422
+#: includes/class-mmd-frontend.php:3424
+msgid "Add"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3422
+msgid "more unit and the cheapest is"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3422
+msgid "more units and the cheapest is"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3422
+#: includes/class-mmd-product-gifts-v2.php:4403
+#: includes/class-mmd-product-gifts-v2.php:4999
+#: templates/admin-storefront.php:277
+msgid "Free!"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3424
+msgid "1 more unit"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3424
+msgid "to reach the next discount tier!"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3428
+msgid "🎉 You've reached the highest discount tier!"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3442
+#: templates/admin-storefront.php:286
+msgid "pcs ·"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3442
+#: includes/class-mmd-helpers.php:69
+#: templates/admin-storefront.php:286
+#: assets/admin-script.js:184
+msgid "Free"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3460
+msgid "Discount on all products in the promotion"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3463
+msgid "* The discount applies to all matching products in the cart."
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3467
+#: templates/admin-rule-set-edit.php:2121
+msgid "the cheapest"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3467
+#: templates/admin-rule-set-edit.php:2121
+msgid "the most expensive"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3471
+msgid "• Buy"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3471
+msgid "items, get"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3471
+msgid "off the"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3474
+msgid "* You can mix different products. The discount applies to the item that is"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3540
+msgid "You saved"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:3698
+#: includes/class-mmd-frontend.php:3701
+#: templates/admin-rule-set-edit.php:1480
+#: templates/admin-rule-set-edit.php:1993
+msgid "Savings"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4190
+msgid "🔧 Debug info (admins only):"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4192
+msgid "Selection method:"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4193
+msgid "Apply to:"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4194
+msgid "Number of discount tiers:"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4196
+msgid "Products in cart:"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4210
+msgid "| Qty:"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4211
+msgid "| Price:"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4212
+msgid "Eligible:"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4212
+msgid "Yes ✓"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4212
+msgid "No ✗"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4218
+msgid "Attributes:"
+msgstr ""
+
+#: includes/class-mmd-frontend.php:4228
+msgid "Categories:"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:56
+#: includes/class-mmd-gift-rules.php:57
+#: templates/admin-gift-rules-list.php:36
+msgid "Gift management"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:65
+#: includes/class-mmd-gift-rules.php:66
+msgid "Gift design"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:192
+#: includes/class-mmd-product-gifts-v2.php:1661
+#: includes/widgets/gift-selection-widget.php:202
+#: templates/admin-gift-styling.php:32
+#: templates/admin-gift-styling.php:326
+#: templates/admin-gift-styling.php:402
+msgid "🎁 Choose your gift!"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:193
+#: includes/class-mmd-product-gifts-v2.php:1662
+#: templates/admin-gift-styling.php:40
+msgid "Buy this product and get {gift_type} on {selection_type}:"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:194
+#: includes/class-mmd-product-gifts-v2.php:2989
+#: templates/admin-gift-styling.php:51
+#: templates/admin-storefront.php:258
+msgid "🎁 Gift"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:379
+msgid "Untitled draft"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:538
+msgid "Rest of the world -"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:600
+#: includes/class-mmd-product-gifts-v2.php:264
+#: includes/class-mmd-product-gifts-v2.php:3504
+#: includes/class-mmd-product-gifts-v2.php:3537
+#: templates/admin-gift-rule-edit.php:18
+msgid "You have a gift! Add a product from the participating categories to get a discount"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:622
+#: includes/class-mmd-product-gifts-v2.php:5502
+#: templates/admin-gift-rule-edit.php:49
+#: templates/admin-gift-rule-edit.php:972
+#: templates/admin-gift-rule-edit.php:1931
+msgid "View products"
+msgstr ""
+
+#: includes/class-mmd-gift-rules.php:628
+#: includes/class-mmd-product-gifts-v2.php:4361
+#: includes/class-mmd-product-gifts-v2.php:4470
+#: templates/admin-gift-rule-edit.php:55
+#: templates/admin-gift-rule-edit.php:1098
+#: templates/admin-gift-rule-edit.php:1937
+msgid "💰 Buy in quantity and save!"
+msgstr ""
+
+#: includes/class-mmd-modules.php:110
+#: templates/admin-page.php:181
+#: templates/admin-rule-set-edit.php:452
+#: templates/admin-rule-set-edit.php:1637
+#: templates/admin-rule-set-edit.php:1761
+#: templates/admin-rule-sets.php:74
+msgid "Discount rules"
+msgstr ""
+
+#: includes/class-mmd-modules.php:112
+msgid "Gifts"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:214
+msgid "🎁 Gift and discounted product settings"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:299
+msgid "⚙️ Set up a gift or discounted product for this product"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:308
+msgid "Enable gifts/discounts for this product"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:310
+msgid "When a customer buys this product, they can choose a gift or a discounted product from the list you set"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:314
+msgid "Choose a benefit type"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:319
+#: includes/class-mmd-product-gifts-v2.php:1641
+#: includes/class-mmd-product-gifts-v2.php:3445
+#: includes/class-mmd-product-gifts-v2.php:3509
+#: includes/class-mmd-product-gifts-v2.php:3543
+#: includes/class-mmd-product-gifts-v2.php:3578
+#: includes/class-mmd-product-gifts-v2.php:4428
+#: includes/class-mmd-product-gifts-v2.php:4724
+#: includes/class-mmd-product-gifts-v2.php:5481
+#: includes/class-mmd-product-gifts.php:457
+#: includes/widgets/gift-notice-widget.php:308
+#: templates/admin-gift-rule-edit.php:349
+#: templates/admin-gift-rule-edit.php:1180
+#: templates/admin-gift-rule-edit.php:2132
+#: templates/admin-gift-rules-list.php:25
+msgid "Free gift"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:320
+msgid "The customer gets a product at no charge"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:325
+#: includes/class-mmd-product-gifts.php:109
+#: templates/admin-gift-rule-edit.php:358
+#: templates/admin-gift-rule-edit.php:1181
+#: templates/admin-gift-rule-edit.php:2132
+#: templates/admin-gift-rules-list.php:26
+msgid "Percentage discount"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:326
+msgid "A percentage off the product"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:331
+#: templates/admin-gift-rule-edit.php:367
+#: templates/admin-gift-rule-edit.php:2132
+#: templates/admin-gift-rules-list.php:27
+msgid "Fixed discount"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:332
+msgid "A fixed amount in shekels"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:338
+msgid "Discount rate"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:340
+msgid "Enter a discount percentage (50 = 50%) or a fixed amount in shekels"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:345
+#: templates/admin-gift-rule-edit.php:388
+msgid "How the gift is given"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:350
+#: templates/admin-gift-rule-edit.php:396
+msgid "On the product page"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:351
+msgid "The customer chooses a gift on the product page"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:357
+#: templates/admin-gift-rule-edit.php:405
+msgid "Gift in the cart"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:358
+msgid "The customer adds a product from the store and the discount is applied automatically"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:366
+#: templates/admin-gift-rule-edit.php:416
+#: templates/admin-rule-set-edit.php:1444
+#: templates/admin-rule-set-edit.php:1821
+#: templates/admin-storefront.php:328
+msgid "Cart message"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:368
+msgid "A message shown to the customer in the cart when they qualify for a gift"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:373
+#: templates/admin-gift-rule-edit.php:471
+msgid "Gift product source"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:378
+#: templates/admin-gift-rule-edit.php:475
+#: templates/admin-gift-rule-edit.php:2135
+#: templates/admin-gift-rules-list.php:19
+msgid "Specific products"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:379
+msgid "Choose specific products as gifts"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:386
+msgid "The customer chooses from categories"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:394
+msgid "Choose products available as a gift/discount"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:407
+msgid "For variable products, the customer chooses the variation they want."
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:412
+msgid "🏷️ Gift categories"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:422
+msgid "No product categories available"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:425
+msgid "The customer can choose one product from all products in these categories"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:429
+msgid "🔍 Filter by attribute (optional):"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:431
+#: templates/admin-gift-rule-edit.php:532
+msgid "-- No attribute filter --"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:438
+msgid "Choose an attribute to filter the gift products by (for example: weight, size)"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:442
+msgid "Attribute values for gifts:"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:446
+#: templates/admin-gift-rule-edit.php:551
+msgid "Choose which attribute values are available as gifts (for example: only 100 g)"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:452
+msgid "🚫 Exclude products from gifts"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:453
+#: templates/admin-gift-rule-edit.php:622
+msgid "Set which products are not available as gifts even though they are in the selected categories"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:456
+msgid "Exclude categories:"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:470
+msgid "Exclude tags:"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:480
+#: templates/admin-gift-rule-edit.php:655
+msgid "No product tags available"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:486
+msgid "Exclude specific products:"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:501
+#: templates/admin-gift-rule-edit.php:681
+msgid "Search and select specific products or variations that will not be available as gifts"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:506
+#: templates/admin-gift-rule-edit.php:862
+msgid "Selection type"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:511
+msgid "Single product selection"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:512
+msgid "The customer can choose only one product"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:518
+msgid "Multiple selection"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:519
+msgid "The customer can choose several products"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:523
+msgid "Choose whether the customer can pick only one product or several products from the list"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:529
+#: templates/admin-gift-rule-edit.php:875
+msgid "Allow quantity selection"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:531
+msgid "When enabled, the customer can choose a quantity for each gift product"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:535
+#: templates/admin-gift-rule-edit.php:888
+msgid "Maximum quantity"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:537
+msgid "The maximum quantity the customer can choose for each gift product (1-100)"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:543
+#: includes/class-mmd-product-gifts.php:140
+msgid "Limit to specific variations of the gift products"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:545
+msgid "Tick this option to choose manually which variations are available as gifts. If unticked, all variations are available."
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:549
+msgid "🎯 Choose allowed variations"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:551
+#: includes/class-mmd-product-gifts-v2.php:743
+#: includes/class-mmd-product-gifts.php:147
+#: includes/class-mmd-product-gifts.php:182
+msgid "Select a variable product above to show its variations"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:556
+msgid "💡 How does it work?"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:558
+msgid "The customer sees the available products on the product page"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:559
+msgid "They choose one product, and if it is variable, the variation they want"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:560
+msgid "The chosen product is added to the cart automatically with the configured discount"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:561
+msgid "The gift is shown in the cart, the mini cart and the checkout page"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:698
+msgid "Search products to exclude..."
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:757
+msgid "Loading variations..."
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:763
+#: templates/admin-gift-rule-edit.php:2044
+#: templates/admin-gift-styling.php:499
+#: templates/admin-rule-set-edit.php:1965
+msgid "Error:"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:767
+msgid "Error loading variations"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:906
+#: includes/class-mmd-product-gifts.php:292
+msgid "Search products..."
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1648
+msgid "one or more products of your choice"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1648
+msgid "a product of your choice"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1651
+msgctxt "gift box subtitle"
+msgid "a free gift"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1691
+#: includes/class-mmd-product-gifts-v2.php:2049
+msgid "&laquo; Previous"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1692
+#: includes/class-mmd-product-gifts-v2.php:2050
+msgid "Page"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1692
+#: includes/class-mmd-product-gifts-v2.php:2050
+#: templates/admin-gift-rule-edit.php:2179
+#: templates/admin-rule-set-edit.php:782
+#: templates/admin-rule-set-edit.php:1855
+#: assets/gift-selection.js:882
+#: assets/gift-selection.js:925
+msgid "of"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1693
+#: includes/class-mmd-product-gifts-v2.php:2051
+msgid "Next &raquo;"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1874
+#: includes/class-mmd-product-gifts-v2.php:1934
+#: includes/class-mmd-product-gifts-v2.php:2012
+msgid "Decrease quantity"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1885
+#: includes/class-mmd-product-gifts-v2.php:1944
+#: includes/class-mmd-product-gifts-v2.php:2021
+msgid "Increase quantity"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1889
+#: includes/class-mmd-product-gifts-v2.php:1950
+#: includes/class-mmd-product-gifts-v2.php:2027
+msgid "Choose quantity"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:1921
+#: includes/class-mmd-product-gifts-v2.php:1956
+#: includes/class-mmd-product-gifts-v2.php:2031
+#: includes/class-mmd-product-gifts-v2.php:2035
+#: includes/class-mmd-product-gifts-v2.php:5022
+#: templates/admin-gift-rule-edit.php:1141
+#: templates/admin-gift-rules-list.php:152
+#: templates/admin-gift-styling.php:330
+#: templates/admin-gift-styling.php:334
+#: templates/admin-storefront.php:317
+#: assets/gift-selection.js:327
+#: assets/gift-selection.js:332
+#: assets/gift-selection.js:361
+#: assets/gift-selection.js:407
+#: assets/gift-selection.js:424
+#: assets/gift-selection.js:440
+#: assets/gift-selection.js:457
+#: assets/gift-selection.js:755
+msgid "Choose"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:2957
+#: includes/class-mmd-product-gifts-v2.php:2995
+#: includes/class-mmd-product-gifts.php:489
+msgid "🎁 Free gift"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:2959
+#: includes/class-mmd-product-gifts.php:491
+#: includes/class-mmd-product-gifts.php:493
+msgid "🎁 Discounted product"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:2997
+#: includes/class-mmd-product-gifts-v2.php:2999
+msgid "🎁 Discount"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:3011
+msgid "Switch gift"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:3026
+#: includes/class-mmd-product-gifts.php:512
+msgid "This product is a gift and cannot be removed manually"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:3456
+#: includes/class-mmd-product-gifts-v2.php:4734
+msgid "✅ Your gift was added to the cart! ("
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:3589
+msgid "Gift added!"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:3664
+msgid "You have a gift! Choose a product"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:3817
+#: includes/class-mmd-product-gifts-v2.php:3851
+msgid "You have a gift! Add a product from the participating categories"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4373
+msgid "on all products"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4375
+msgid "on the cheapest one"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4377
+msgid "on the most expensive"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4392
+#: templates/admin-gift-rule-edit.php:1226
+#: templates/admin-page.php:194
+#: templates/admin-rule-set-edit.php:500
+#: templates/admin-rule-set-edit.php:1477
+#: templates/admin-rule-set-edit.php:1990
+#: templates/admin-rule-set-edit.php:2396
+#: templates/admin-rule-set-edit.php:2432
+#: templates/admin-rule-set-edit.php:2662
+#: assets/admin-script.js:32
+msgid "Quantity"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4394
+msgctxt "label"
+msgid "Applies to"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4437
+msgid "🎁 Plus:"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4437
+msgid "on a selected product!"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4505
+msgid "✅ Active discount:"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4505
+msgid "items in cart)"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4511
+msgid "⬆️ Add"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4511
+msgid "more items to get"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4511
+msgid "off!"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4735
+msgctxt "picker"
+msgid "Switch gift"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4756
+msgid "Choose a gift"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4780
+msgid "Choose one or more:"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:4780
+msgid "Choose one product:"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5041
+#: includes/widgets/cart-gift-selection-widget.php:66
+msgid "Add to cart"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5117
+#: includes/class-mmd-product-gifts-v2.php:5121
+msgid "The selected variation is not available"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5156
+msgid "Parent product not found"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5264
+msgid "The product is not available"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5273
+msgctxt "server"
+msgid "Error adding the gift to the cart"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5309
+msgid "The gift was added to the cart!"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5346
+msgid "No gift to remove"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5350
+msgid "Gift removed"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5518
+msgid "Selected products come with a free gift!"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5523
+#: includes/widgets/cart-gift-selection-widget.php:30
+#: includes/widgets/gift-notice-widget.php:44
+#: includes/widgets/gift-selection-widget.php:31
+#: templates/admin-gift-styling.php:404
+msgid "Gift"
+msgstr ""
+
+#: includes/class-mmd-product-gifts-v2.php:5526
+msgid "Buy now"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:46
+msgid "🎁 Gifts/discounts for this product"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:100
+msgctxt "classic"
+msgid "Enable gifts/discounts for this product"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:102
+msgid "When a customer buys this product, the products selected below are added automatically"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:106
+msgid "Benefit type"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:108
+msgid "Free product (gift)"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:110
+#: templates/admin-documentation.php:181
+#: templates/admin-gift-rule-edit.php:368
+msgid "Fixed amount discount"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:115
+msgctxt "classic"
+msgid "Discount rate"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:117
+msgid "Discount percentage (for example: 50 for 50%) or a fixed amount in shekels"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:121
+msgid "Choose products for the benefit"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:134
+msgid "Type to search for products. You can choose several products."
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:145
+msgid "Choose allowed variations"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:474
+msgid "🎁 A special gift!"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:475
+#: includes/widgets/gift-notice-widget.php:323
+#: includes/widgets/gift-notice-widget.php:356
+msgid "Buy this product and get"
+msgstr ""
+
+#: includes/class-mmd-product-gifts.php:475
+#: includes/widgets/gift-notice-widget.php:323
+msgid "on:"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:22
+msgid "MMD Rule Banner"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:40
+msgid "Banner"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:45
+msgid "-- First matching rule --"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:57
+#: templates/admin-dashboard.php:255
+msgid "Rule"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:61
+msgid "Leave blank to show the first rule that matches the current product."
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:65
+msgid "Product ID (optional)"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:68
+msgid "Override the current product. Leave blank to use the product on the page."
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:72
+msgid "Editor placeholder"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:78
+msgid "Show placeholder in Elementor editor"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:81
+msgid "Useful when previewing the widget on a page that has no qualifying product."
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:88
+#: includes/widgets/gift-notice-widget.php:118
+msgid "Style"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:93
+msgid "Alignment"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:96
+msgid "Left"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:97
+msgid "Center"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:98
+msgid "Right"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:107
+msgid "Max Width"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:121
+msgid "Border Radius"
+msgstr ""
+
+#: includes/class-mmd-rule-banner-elementor-widget.php:148
+msgid "MMD Rule Banner — no matching rule has a banner for this context. Configure a banner image on a rule, or assign this widget to a product page."
+msgstr ""
+
+#: includes/widgets/cart-gift-selection-widget.php:18
+msgid "Cart gift selection"
+msgstr ""
+
+#: includes/widgets/cart-gift-selection-widget.php:30
+msgid "Cart"
+msgstr ""
+
+#: includes/widgets/cart-gift-selection-widget.php:47
+msgid "This widget automatically shows the interactive gift selection when the customer qualifies for a gift under the rules you set."
+msgstr ""
+
+#: includes/widgets/cart-gift-selection-widget.php:48
+msgid "You can place this widget on any page: cart, checkout or a custom page."
+msgstr ""
+
+#: includes/widgets/cart-gift-selection-widget.php:60
+#: includes/widgets/cart-gift-selection-widget.php:80
+#: includes/widgets/gift-selection-widget.php:160
+msgid "🎁 Gift selection in the cart"
+msgstr ""
+
+#: includes/widgets/cart-gift-selection-widget.php:61
+#: includes/widgets/cart-gift-selection-widget.php:81
+msgid "When the customer qualifies for a gift, an interactive product selector is shown here"
+msgstr ""
+
+#: includes/widgets/cart-gift-selection-widget.php:65
+#: templates/admin-storefront.php:101
+msgid "Sample product"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:23
+msgid "Product gift notice"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:55
+#: includes/widgets/gift-selection-widget.php:39
+msgid "Content"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:63
+msgid "Title"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:65
+msgid "🎁 Special gift!"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:66
+msgid "Enter a title..."
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:73
+msgid "Show product names"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:75
+#: includes/widgets/gift-notice-widget.php:87
+#: includes/widgets/gift-selection-widget.php:64
+msgid "Yes"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:76
+#: includes/widgets/gift-notice-widget.php:88
+#: includes/widgets/gift-selection-widget.php:65
+#: templates/admin-rule-set-edit.php:1818
+msgid "No"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:85
+msgid "Show product images"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:100
+msgid "Display position"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:104
+msgid "Custom position"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:105
+msgid "Before the add to cart button"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:106
+#: templates/admin-gift-styling.php:186
+msgid "After the add to cart button"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:107
+msgid "Before the product short description"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:126
+msgid "Background type"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:130
+msgid "Solid color"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:131
+msgid "Gradient"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:139
+msgid "Background color"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:151
+msgid "Gradient color 1"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:163
+msgid "Gradient color 2"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:175
+msgid "Text color"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:185
+msgid "Typography - title"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:194
+msgid "Typography - content"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:202
+msgid "Border radius"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:222
+#: templates/admin-gift-styling.php:105
+#: templates/admin-gift-styling.php:261
+msgid "Padding"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:239
+msgid "Shadow"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:260
+msgid "A gift notice will be shown here on the product page"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:272
+msgid "This product has no gift set up. Enable gifts on the product edit page."
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:391
+msgid "Buy this product and get a free gift on the selected products!"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:393
+msgid "Buy this product and get a free gift!"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:19
+msgid "Interactive gift selection"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:31
+msgid "Selection"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:47
+msgid "Display context"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:51
+msgid "Automatic (detect page)"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:52
+msgid "Product page"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:53
+msgid "Cart / Checkout"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:55
+msgid "Automatic detects the page type and shows the selection accordingly"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:62
+msgid "Show title"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:74
+msgid "Custom title"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:77
+msgid "Leave empty for the default title"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:141
+msgid "The gift selection will be shown here on the product page"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:161
+msgid "The interactive gift selection will be shown here when the customer qualifies for a gift"
+msgstr ""
+
+#: includes/widgets/gift-selection-widget.php:205
+msgid "The interactive gift selection will be shown here"
+msgstr ""
+
+#: templates/admin-dashboard.php:21
+msgid "Last 7 days"
+msgstr ""
+
+#: templates/admin-dashboard.php:21
+msgid "Last 30 days"
+msgstr ""
+
+#: templates/admin-dashboard.php:21
+msgid "Last year"
+msgstr ""
+
+#: templates/admin-dashboard.php:76
+msgid "Discount performance overview &middot;"
+msgstr ""
+
+#: templates/admin-dashboard.php:79
+msgid "30 days"
+msgstr ""
+
+#: templates/admin-dashboard.php:79
+msgid "7 days"
+msgstr ""
+
+#: templates/admin-dashboard.php:79
+msgid "Year"
+msgstr ""
+
+#: templates/admin-dashboard.php:94
+msgid "Sales attributed to discounts"
+msgstr ""
+
+#: templates/admin-dashboard.php:102
+msgid "Gifts redeemed"
+msgstr ""
+
+#: templates/admin-dashboard.php:110
+msgid "Conversion rate to orders with a discount"
+msgstr ""
+
+#: templates/admin-dashboard.php:118
+msgid "Average cart with a discount"
+msgstr ""
+
+#: templates/admin-dashboard.php:124
+msgid "There is no order data for this period yet. As soon as orders with discounts come in, the dashboard fills up with real data."
+msgstr ""
+
+#: templates/admin-dashboard.php:126
+msgid "Create your first discount rule"
+msgstr ""
+
+#: templates/admin-dashboard.php:136
+msgid "Sales from discounts over time"
+msgstr ""
+
+#: templates/admin-dashboard.php:137
+msgid "Revenue driven by discounts"
+msgstr ""
+
+#: templates/admin-dashboard.php:141
+msgid "Gifts and promotions"
+msgstr ""
+
+#: templates/admin-dashboard.php:167
+msgid "Discount type breakdown"
+msgstr ""
+
+#: templates/admin-dashboard.php:168
+msgid "Breakdown by benefit type"
+msgstr ""
+
+#: templates/admin-dashboard.php:189
+msgid "Quantity discount"
+msgstr ""
+
+#: templates/admin-dashboard.php:193
+#: assets/admin-script.js:98
+msgid "Buy and get a gift"
+msgstr ""
+
+#: templates/admin-dashboard.php:198
+msgid "Special events"
+msgstr ""
+
+#: templates/admin-dashboard.php:209
+msgid "Discount funnel"
+msgstr ""
+
+#: templates/admin-dashboard.php:210
+msgid "Based on orders"
+msgstr ""
+
+#: templates/admin-dashboard.php:214
+msgid "Orders in the period"
+msgstr ""
+
+#: templates/admin-dashboard.php:221
+msgid "Contained participating products"
+msgstr ""
+
+#: templates/admin-dashboard.php:228
+msgid "Redeemed a discount"
+msgstr ""
+
+#: templates/admin-dashboard.php:235
+msgid "Included a gift 🎁"
+msgstr ""
+
+#: templates/admin-dashboard.php:246
+msgid "Top rules"
+msgstr ""
+
+#: templates/admin-dashboard.php:247
+msgid "The best-performing rules"
+msgstr ""
+
+#: templates/admin-dashboard.php:249
+msgid "Show all →"
+msgstr ""
+
+#: templates/admin-dashboard.php:252
+msgid "There is no performance data for rules in this period yet."
+msgstr ""
+
+#: templates/admin-dashboard.php:255
+msgid "Sales"
+msgstr ""
+
+#: templates/admin-dashboard.php:255
+msgid "Trend"
+msgstr ""
+
+#: templates/admin-dashboard.php:271
+msgid "New"
+msgstr ""
+
+#: templates/admin-dashboard.php:291
+msgid "* The data is based on the"
+msgstr ""
+
+#: templates/admin-dashboard.php:291
+msgid "most recent orders in the period."
+msgstr ""
+
+#: templates/admin-documentation.php:20
+msgid "Let's get started"
+msgstr ""
+
+#: templates/admin-documentation.php:21
+msgid "4 steps to your first quantity discount &middot; Get started in minutes"
+msgstr ""
+
+#: templates/admin-documentation.php:30
+msgid "Install &amp; activate"
+msgstr ""
+
+#: templates/admin-documentation.php:31
+msgid "The plugin requires WooCommerce 4.0+. You've activated it, so this step is done."
+msgstr ""
+
+#: templates/admin-documentation.php:37
+msgid "Create your first rule"
+msgstr ""
+
+#. translators: %s: URL of the new-rule wizard.
+#: templates/admin-documentation.php:40
+#, php-format
+msgid "Use the <a href=\"%s\">wizard</a> or import a ready-made template in one click."
+msgstr ""
+
+#: templates/admin-documentation.php:46
+msgid "Customise messages and design"
+msgstr ""
+
+#. translators: %s: URL of the Customer view screen.
+#: templates/admin-documentation.php:49
+#, php-format
+msgid "Set colours, texts and banners in <a href=\"%s\">Customer view</a>."
+msgstr ""
+
+#: templates/admin-documentation.php:55
+msgid "Track it on the dashboard"
+msgstr ""
+
+#. translators: %s: URL of the dashboard.
+#: templates/admin-documentation.php:58
+#, php-format
+msgid "Analyse performance, redemptions and conversion funnels on <a href=\"%s\">the dashboard</a>."
+msgstr ""
+
+#: templates/admin-documentation.php:65
+msgid "Frequently asked questions"
+msgstr ""
+
+#: templates/admin-documentation.php:67
+msgid "How do I set up \"buy 3, get one free\"?"
+msgstr ""
+
+#: templates/admin-documentation.php:68
+msgid "Set a discount tier with a quantity of 3 and a 100% discount. The plugin applies the discount to the cheapest item in the cart."
+msgstr ""
+
+#: templates/admin-documentation.php:71
+msgid "Can customers mix different products?"
+msgstr ""
+
+#: templates/admin-documentation.php:72
+msgid "Yes! That's exactly what Mix &amp; Match is: choose the \"Categories\" method and customers can mix any product from the included categories to reach the qualifying quantity."
+msgstr ""
+
+#: templates/admin-documentation.php:75
+msgid "Does it support Hebrew and RTL?"
+msgstr ""
+
+#: templates/admin-documentation.php:76
+msgid "Yes. The admin and storefront are built RTL-first and a Hebrew translation is included. On stores with VAT-inclusive prices, discounts stay exact on those prices."
+msgstr ""
+
+#: templates/admin-documentation.php:79
+msgid "How do I track discount performance?"
+msgstr ""
+
+#: templates/admin-documentation.php:80
+msgid "The new dashboard shows sales attributed to discounts, redeemed gifts, conversion rates and top rules, all from your real order data."
+msgstr ""
+
+#: templates/admin-documentation.php:91
+msgid "Hebrew"
+msgstr ""
+
+#: templates/admin-documentation.php:100
+msgid "User guide: Incentiv"
+msgstr ""
+
+#: templates/admin-documentation.php:101
+msgid "This plugin lets you create advanced quantity discount rules for your WooCommerce store. It supports many scenarios such as \"buy 3 get a discount\", BOGO, tiered discounts and more."
+msgstr ""
+
+#: templates/admin-documentation.php:105
+msgid "1. Quick start"
+msgstr ""
+
+#: templates/admin-documentation.php:107
+msgid "Go to the <strong>\"Quantity discounts\"</strong> menu in the admin sidebar."
+msgstr ""
+
+#: templates/admin-documentation.php:108
+msgid "Click <strong>\"Add new rule\"</strong> or use the <strong>creation wizard</strong> for guided setup."
+msgstr ""
+
+#: templates/admin-documentation.php:109
+msgid "Alternatively, import one of the <strong>ready-made example rules</strong> with one click."
+msgstr ""
+
+#: templates/admin-documentation.php:110
+msgid "Set the rule name, choose products and set the discount tiers."
+msgstr ""
+
+#: templates/admin-documentation.php:111
+msgid "Save, and the discount starts working immediately!"
+msgstr ""
+
+#: templates/admin-documentation.php:116
+msgid "2. Using the rule wizard"
+msgstr ""
+
+#: templates/admin-documentation.php:117
+msgid "The wizard guides you step by step through creating a discount rule:"
+msgstr ""
+
+#: templates/admin-documentation.php:119
+msgid "<strong>Step 1 - Basic settings:</strong> name the rule, enable it, and choose which item the discount applies to (the cheapest or the most expensive)."
+msgstr ""
+
+#: templates/admin-documentation.php:120
+msgid "<strong>Step 2 - Product selection:</strong> choose how to identify eligible products: all products, by category, by product ID, or by attribute."
+msgstr ""
+
+#: templates/admin-documentation.php:121
+msgid "<strong>Step 3 - Discount tiers:</strong> set the discount tiers: how many items must be bought and what percentage/amount to give."
+msgstr ""
+
+#: templates/admin-documentation.php:122
+msgid "<strong>Step 4 - Messages:</strong> set messages shown to customers on the product page and in the cart."
+msgstr ""
+
+#: templates/admin-documentation.php:123
+msgid "<strong>Step 5 - Conditions:</strong> add advanced conditions such as a minimum cart total, user role, scheduling and usage limits."
+msgstr ""
+
+#: templates/admin-documentation.php:125
+msgid "To start the wizard, click <strong>\"Create with wizard\"</strong> on the rules list page."
+msgstr ""
+
+#: templates/admin-documentation.php:129
+msgid "3. Product selection methods"
+msgstr ""
+
+#: templates/admin-documentation.php:133
+msgid "Method"
+msgstr ""
+
+#: templates/admin-documentation.php:134
+#: templates/admin-documentation.php:169
+msgid "Description"
+msgstr ""
+
+#: templates/admin-documentation.php:135
+msgid "When to use"
+msgstr ""
+
+#: templates/admin-documentation.php:141
+msgid "The discount applies to all products in the store"
+msgstr ""
+
+#: templates/admin-documentation.php:142
+msgid "When you want a general store-wide promotion"
+msgstr ""
+
+#: templates/admin-documentation.php:146
+msgid "The discount applies only to products from selected categories"
+msgstr ""
+
+#: templates/admin-documentation.php:147
+msgid "When you want a promotion on a specific group of products"
+msgstr ""
+
+#: templates/admin-documentation.php:150
+#: templates/admin-gift-rule-edit.php:163
+#: templates/admin-page.php:61
+#: templates/admin-rule-set-edit.php:240
+msgid "By product IDs"
+msgstr ""
+
+#: templates/admin-documentation.php:151
+msgid "The discount applies to specific selected products"
+msgstr ""
+
+#: templates/admin-documentation.php:152
+msgid "When you want a promotion on certain products only"
+msgstr ""
+
+#: templates/admin-documentation.php:156
+msgid "The discount applies to products with certain attribute values (such as colour, size)"
+msgstr ""
+
+#: templates/admin-documentation.php:157
+msgid "When you want a promotion on specific variations"
+msgstr ""
+
+#: templates/admin-documentation.php:164
+msgid "4. Discount types"
+msgstr ""
+
+#: templates/admin-documentation.php:168
+#: templates/admin-page.php:204
+#: templates/admin-rule-set-edit.php:510
+#: templates/admin-rule-set-edit.php:2402
+#: templates/admin-rule-set-edit.php:2434
+#: templates/admin-rule-set-edit.php:2664
+#: assets/admin-script.js:36
+#: assets/admin-script.js:179
+#: assets/admin-script.js:265
+msgid "Type"
+msgstr ""
+
+#: templates/admin-documentation.php:170
+msgid "Example"
+msgstr ""
+
+#: templates/admin-documentation.php:175
+#: templates/admin-gift-rule-edit.php:1059
+#: templates/admin-gift-rule-edit.php:1552
+#: templates/admin-gift-rule-edit.php:1602
+#: templates/admin-page.php:206
+#: templates/admin-rule-set-edit.php:512
+#: templates/admin-rule-set-edit.php:2404
+#: templates/admin-rule-set-edit.php:2434
+#: templates/admin-rule-set-edit.php:2664
+#: assets/admin-script.js:38
+#: assets/flow-builder.js:98
+msgid "Percentage (%)"
+msgstr ""
+
+#: templates/admin-documentation.php:176
+msgid "A percentage off the price"
+msgstr ""
+
+#: templates/admin-documentation.php:177
+msgid "30% off = an item at 100 ₪ becomes 70 ₪"
+msgstr ""
+
+#: templates/admin-documentation.php:180
+msgid "Fixed amount"
+msgstr ""
+
+#: templates/admin-documentation.php:182
+msgid "20 ₪ off = an item at 100 ₪ becomes 80 ₪"
+msgstr ""
+
+#: templates/admin-documentation.php:186
+msgid "<strong>Tip:</strong> use 100% to give an item for free (like \"buy 4 get 1 free\")."
+msgstr ""
+
+#: templates/admin-documentation.php:190
+msgid "5. Advanced settings"
+msgstr ""
+
+#: templates/admin-documentation.php:191
+#: templates/admin-gift-rule-edit.php:794
+#: templates/admin-rule-set-edit.php:1818
+msgid "Coupon requirement"
+msgstr ""
+
+#: templates/admin-documentation.php:192
+msgid "You can make a discount apply only when the customer enters a specific coupon code. Useful for VIP or exclusive promotions."
+msgstr ""
+
+#: templates/admin-documentation.php:194
+#: templates/admin-gift-rule-edit.php:733
+#: templates/admin-rule-set-edit.php:686
+#: templates/admin-rule-set-edit.php:1662
+#: templates/admin-rule-set-edit.php:1763
+msgid "Cart total conditions"
+msgstr ""
+
+#: templates/admin-documentation.php:195
+msgid "Set a minimum and/or maximum cart total for the discount to be active."
+msgstr ""
+
+#: templates/admin-documentation.php:197
+msgid "User role limits"
+msgstr ""
+
+#: templates/admin-documentation.php:198
+msgid "You can limit a discount to certain roles (for example, wholesale customers only)."
+msgstr ""
+
+#: templates/admin-documentation.php:200
+#: templates/admin-gift-rule-edit.php:835
+#: templates/admin-rule-set-edit.php:1820
+msgid "Scheduling"
+msgstr ""
+
+#: templates/admin-documentation.php:201
+msgid "Set start and end dates for the discount. Perfect for holiday or end-of-season sales."
+msgstr ""
+
+#: templates/admin-documentation.php:203
+#: templates/admin-rule-set-edit.php:887
+#: templates/admin-rule-set-edit.php:1677
+#: templates/admin-rule-set-edit.php:1763
+msgid "Usage limits"
+msgstr ""
+
+#: templates/admin-documentation.php:204
+msgid "Limit how many times the discount can be used, in total and/or per customer."
+msgstr ""
+
+#: templates/admin-documentation.php:206
+#: templates/admin-rule-set-edit.php:667
+#: templates/admin-rule-set-edit.php:1657
+#: templates/admin-rule-set-edit.php:1763
+msgid "Shipping method condition"
+msgstr ""
+
+#: templates/admin-documentation.php:207
+msgid "Activate a discount only when the customer chooses a specific shipping method."
+msgstr ""
+
+#: templates/admin-documentation.php:211
+msgid "6. Ready-made example rules"
+msgstr ""
+
+#: templates/admin-documentation.php:212
+msgid "The plugin includes several ready-to-use example rules:"
+msgstr ""
+
+#: templates/admin-documentation.php:214
+msgid "<strong>Buy 3 get 30% off</strong> - a simple quantity discount"
+msgstr ""
+
+#: templates/admin-documentation.php:215
+msgid "<strong>Tiered discounts</strong> - the discount grows with the quantity (10%, 20%, 30%, free)"
+msgstr ""
+
+#: templates/admin-documentation.php:216
+msgid "- buy 1 get 1 at half price"
+msgstr ""
+
+#: templates/admin-documentation.php:217
+msgid "<strong>Fixed discount</strong> - a fixed amount by quantity"
+msgstr ""
+
+#: templates/admin-documentation.php:218
+msgid "<strong>VIP coupon discount</strong> - an exclusive discount with a coupon code"
+msgstr ""
+
+#: templates/admin-documentation.php:219
+msgid "<strong>Buy 4 get 1 free</strong> - the fifth item is free"
+msgstr ""
+
+#: templates/admin-documentation.php:221
+msgid "To import, go to the <strong>\"Discount rules\"</strong> page and click <strong>\"Import rule\"</strong> next to the example you want."
+msgstr ""
+
+#: templates/admin-documentation.php:225
+msgid "7. FAQ"
+msgstr ""
+
+#: templates/admin-documentation.php:227
+msgid "What happens when a product matches several rules?"
+msgstr ""
+
+#: templates/admin-documentation.php:228
+msgid "The first matching rule found applies. You can set \"Override other discounts\" so that a specific rule wins over the others."
+msgstr ""
+
+#: templates/admin-documentation.php:230
+msgid "Does the discount apply to products that are already on sale?"
+msgstr ""
+
+#: templates/admin-documentation.php:231
+msgid "Yes, the discount is calculated on the product's current price (including the sale price if there is one)."
+msgstr ""
+
+#: templates/admin-documentation.php:233
+msgid "How do I know the discount is working?"
+msgstr ""
+
+#: templates/admin-documentation.php:234
+msgid "Add products to the cart and check. The discount message appears on the product page and in the cart. The discount appears as a negative \"fee\" line in the cart."
+msgstr ""
+
+#: templates/admin-documentation.php:236
+msgid "Can I set different discounts for different categories?"
+msgstr ""
+
+#: templates/admin-documentation.php:237
+msgid "Yes! Create a separate rule for each category with different discount tiers."
+msgstr ""
+
+#: templates/admin-example-rules.php:16
+msgid "Start from a ready-made template"
+msgstr ""
+
+#: templates/admin-example-rules.php:17
+msgid "Import a ready-made example rule in one click. You can customize it after importing."
+msgstr ""
+
+#: templates/admin-example-rules.php:40
+msgid "Import rule"
+msgstr ""
+
+#: templates/admin-flows.php:29
+msgid "Promotion flows"
+msgstr ""
+
+#: templates/admin-flows.php:30
+msgid "See and build the customer's discount journey, step by step"
+msgstr ""
+
+#: templates/admin-flows.php:33
+msgid "New flow"
+msgstr ""
+
+#: templates/admin-flows.php:40
+msgid "No flows yet. Create your first flow in the builder below, or start from a discount rule."
+msgstr ""
+
+#: templates/admin-flows.php:48
+#: templates/admin-gift-rule-edit.php:2139
+#: templates/admin-gift-rules-list.php:100
+#: templates/admin-rule-set-edit.php:1406
+#: templates/admin-rule-set-edit.php:1813
+#: templates/admin-rule-sets.php:61
+#: assets/admin-ui.js:181
+msgid "Active"
+msgstr ""
+
+#: templates/admin-flows.php:50
+#: templates/admin-gift-rule-edit.php:2139
+#: templates/admin-gift-rules-list.php:102
+#: templates/admin-rule-set-edit.php:1813
+#: templates/admin-rule-sets.php:63
+#: assets/admin-ui.js:181
+msgid "Disabled"
+msgstr ""
+
+#: templates/admin-flows.php:54
+#: templates/admin-gift-rule-edit.php:2153
+#: templates/admin-gift-rules-list.php:105
+#: templates/admin-rule-set-edit.php:1829
+#: templates/admin-rule-sets.php:198
+msgid "Edit"
+msgstr ""
+
+#: templates/admin-flows.php:59
+#: templates/admin-flows.php:112
+#: assets/flow-builder.js:65
+#: assets/flow-builder.js:137
+msgid "Customer"
+msgstr ""
+
+#: templates/admin-flows.php:59
+#: templates/admin-flows.php:112
+#: assets/flow-builder.js:137
+msgid "In the store"
+msgstr ""
+
+#: templates/admin-flows.php:74
+#: assets/flow-builder.js:142
+msgid "A fuller cart"
+msgstr ""
+
+#: templates/admin-flows.php:74
+#: templates/admin-nav-tabs.php:28
+#: assets/flow-builder.js:143
+msgid "Every reason to buy more"
+msgstr ""
+
+#: templates/admin-flows.php:86
+msgid "Flow builder"
+msgstr ""
+
+#: templates/admin-flows.php:89
+msgid "Build the customer journey from steps: triggers (what the customer does), interactions and actions (what they get). When you're done, Incentiv creates the rules, gifts and coupon automatically."
+msgstr ""
+
+#: templates/admin-flows.php:94
+msgid "Triggers"
+msgstr ""
+
+#: templates/admin-flows.php:95
+msgid "Product quantity"
+msgstr ""
+
+#: templates/admin-flows.php:96
+#: templates/admin-rule-set-edit.php:1819
+#: assets/flow-builder.js:18
+msgid "Cart total"
+msgstr ""
+
+#: templates/admin-flows.php:97
+#: assets/flow-builder.js:116
+msgid "Coupon code"
+msgstr ""
+
+#: templates/admin-flows.php:98
+#: assets/flow-builder.js:26
+msgid "Customer type"
+msgstr ""
+
+#: templates/admin-flows.php:99
+#: templates/admin-rule-sets.php:118
+msgid "Actions"
+msgstr ""
+
+#: templates/admin-flows.php:101
+msgid "Gift chosen by the customer"
+msgstr ""
+
+#: templates/admin-flows.php:102
+#: templates/admin-gift-rules-list.php:81
+#: assets/flow-builder.js:38
+msgid "Automatic gift"
+msgstr ""
+
+#: templates/admin-flows.php:105
+msgid "<strong>Tip:</strong> add two or more actions to split the flow into parallel paths (for example: a discount <em>and</em> a gift, or different discount tiers). The canvas scrolls sideways and down; drag the bottom corner to make it bigger."
+msgstr ""
+
+#: templates/admin-flows.php:114
+#: assets/flow-builder.js:169
+msgid "Add steps from the palette above ↑"
+msgstr ""
+
+#: templates/admin-flows.php:121
+msgid "Step settings"
+msgstr ""
+
+#: templates/admin-flows.php:123
+#: templates/admin-rule-set-edit.php:1467
+#: templates/admin-rule-set-edit.php:1506
+#: templates/admin-rule-sets.php:242
+msgid "Close"
+msgstr ""
+
+#: templates/admin-flows.php:131
+msgid "Flow name"
+msgstr ""
+
+#: templates/admin-flows.php:132
+msgid "e.g. Buy 3 coffees, the cheapest is free + a gift"
+msgstr ""
+
+#: templates/admin-flows.php:135
+msgid "Create flow"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:77
+#: templates/admin-rule-set-edit.php:95
+msgid "Back to list"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:79
+#: templates/admin-gift-rule-edit.php:1136
+#: templates/admin-gift-rules-list.php:47
+msgid "New gift rule"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:79
+msgid "Edit gift rule &middot;"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:92
+#: templates/admin-gift-rules-list.php:11
+#: templates/admin-storefront.php:57
+msgctxt "rule"
+msgid "🎁 Choose your gift!"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:109
+#: templates/admin-gift-rule-edit.php:2100
+#: templates/admin-rule-set-edit.php:130
+#: templates/admin-rule-set-edit.php:1627
+#: templates/admin-rule-set-edit.php:1759
+msgid "Basic settings"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:114
+msgid "Rule name *"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:118
+msgid "A descriptive name for the gift rule (internal use only)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:124
+msgid "Enable this rule"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:131
+msgid "Turn off to disable the rule temporarily without deleting it"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:137
+msgid "Override product settings"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:144
+msgid "If enabled, this rule overrides the gift settings of individual products"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:152
+#: templates/admin-gift-rule-edit.php:2100
+#: templates/admin-page.php:50
+#: templates/admin-rule-set-edit.php:229
+#: templates/admin-rule-set-edit.php:1632
+#: templates/admin-rule-set-edit.php:1759
+msgid "Product selection"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:157
+#: templates/admin-page.php:55
+#: templates/admin-rule-set-edit.php:234
+#: templates/admin-rule-set-edit.php:1815
+#: templates/admin-rule-sets.php:118
+msgid "Selection method"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:166
+msgid "Choose how to identify products that get gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:173
+#: templates/admin-gift-rules-list.php:20
+#: templates/admin-page.php:71
+#: templates/admin-rule-set-edit.php:250
+#: templates/admin-rule-set-edit.php:1816
+#: assets/admin-script.js:142
+#: assets/flow-builder.js:112
+msgid "Categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:177
+#: templates/admin-page.php:75
+#: templates/admin-rule-set-edit.php:254
+msgid "Included categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:188
+msgid "Choose categories that are eligible for gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:194
+#: templates/admin-page.php:92
+#: templates/admin-rule-set-edit.php:271
+msgid "Excluded categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:205
+msgid "Choose categories that are not eligible for gifts (overrides included)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:211
+#: templates/admin-rule-set-edit.php:288
+msgid "Products/variations excluded from the categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:228
+msgid "Search and select specific products or variations that are not eligible for gifts, even if they are in included categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:236
+#: templates/admin-page.php:111
+#: templates/admin-rule-set-edit.php:356
+msgid "Product IDs"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:240
+#: templates/admin-rule-set-edit.php:360
+msgid "Included products/variations"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:257
+msgid "Search and select specific products or variations that are eligible for gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:263
+msgid "Excluded products/variations"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:280
+msgid "Search and select specific products or variations that are not eligible for gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:288
+#: templates/admin-gift-rule-edit.php:292
+#: templates/admin-gift-rule-edit.php:569
+#: templates/admin-gift-rule-edit.php:1771
+#: templates/admin-page.php:141
+#: templates/admin-rule-set-edit.php:412
+#: assets/admin-script.js:144
+msgid "Attribute"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:296
+#: templates/admin-gift-rule-edit.php:571
+#: templates/admin-gift-rule-edit.php:1765
+msgid "-- Choose an attribute --"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:303
+msgid "Choose an attribute to filter by"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:309
+msgid "Attribute values"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:315
+msgid "Choose values that are eligible for gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:321
+msgid "Excluded attribute values"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:327
+msgid "Choose values that are not eligible for gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:336
+#: templates/admin-gift-rule-edit.php:2101
+msgid "Gift settings"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:341
+#: templates/admin-gift-rule-edit.php:1224
+msgctxt "summary"
+msgid "Gift type"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:350
+msgid "The product will be completely free"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:359
+msgctxt "gift"
+msgid "A percentage off the price"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:377
+msgid "Discount amount"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:382
+#: templates/admin-gift-rule-edit.php:1473
+msgid "Enter a discount percentage (0-100)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:397
+msgid "The customer chooses a gift on the product page before adding to the cart"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:406
+msgid "The customer adds a product from the store and the gift is applied automatically in the cart"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:410
+msgid "Choose how the customer gets the gift"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:420
+msgid "A message shown to the customer in the cart when they qualify for a gift. The customer can add a product from the participating categories/products."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:426
+msgid "Cart selection display"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:430
+msgid "Inline on the page"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:431
+msgid "Popup (modal)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:434
+msgid "The gift selection is shown directly on the cart/checkout page"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:435
+msgid "The customer clicks a \"Choose a gift\" button and sees a popup with the selection"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:442
+msgid "Show gift selection on the product page"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:447
+msgid "Show the gift selection window on the product page"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:449
+msgid "When disabled, the customer won't see the gift list on the product page. Useful when you want customers to add regular products from the store."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:455
+msgid "Gift limit"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:459
+msgid "One gift per cart"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:460
+msgid "A gift for each qualifying product"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:461
+#: templates/admin-gift-rule-edit.php:2146
+#: templates/admin-rule-set-edit.php:1819
+msgid "Unlimited"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:464
+msgid "<strong>One gift per cart:</strong> the customer gets only one gift, no matter how many qualifying products are in the cart<br> <strong>A gift for each qualifying product:</strong> the customer gets a gift for each qualifying product (2 products = 2 gifts)<br> <strong>Unlimited:</strong> every matching product in the cart gets the discount"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:478
+msgid "Choose whether to set specific gift products or allow a choice from categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:500
+msgid "Search and select products to offer as gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:507
+msgid "Gift selection by categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:511
+msgctxt "rule"
+msgid "Gift categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:522
+msgid "Choose categories: the customer can choose one product from all products in these categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:528
+msgid "Filter by main attribute"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:539
+msgid "Choose a main attribute to filter the gift products by (for example: weight)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:545
+msgid "Attribute values for gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:558
+msgid "Additional filter attributes"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:580
+#: templates/admin-gift-rule-edit.php:1773
+msgid "Values"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:586
+#: templates/admin-gift-rule-edit.php:1064
+#: templates/admin-gift-rule-edit.php:1554
+#: templates/admin-gift-rule-edit.php:1604
+#: templates/admin-gift-rule-edit.php:1775
+#: templates/admin-page.php:211
+#: templates/admin-rule-set-edit.php:517
+#: templates/admin-rule-set-edit.php:1994
+#: templates/admin-rule-set-edit.php:2407
+#: templates/admin-rule-set-edit.php:2435
+#: templates/admin-rule-set-edit.php:2665
+#: assets/admin-script.js:40
+#: assets/flow-builder.js:158
+msgid "Remove"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:595
+msgid "Add another attribute"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:597
+msgid "You can filter by several attributes at once (for example: weight=250g and grind=espresso)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:605
+msgid "📊 Limit the products to choose from"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:609
+msgid "Maximum number of products to show"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:613
+msgid "The maximum number of products shown to the customer to choose from (0 = unlimited). With a long list, pagination appears"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:621
+msgid "Filter and exclude products"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:626
+msgid "Exclude categories"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:637
+msgid "Products in these categories won't be available as gifts (overrides included categories)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:643
+msgid "Exclude tags"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:658
+msgid "Products with these tags won't be available as gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:664
+msgid "Exclude specific products"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:689
+#: templates/admin-rule-set-edit.php:641
+#: templates/admin-rule-set-edit.php:1652
+#: templates/admin-rule-set-edit.php:1765
+msgid "Custom messages"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:693
+#: templates/admin-rule-set-edit.php:646
+msgid "Cart page message"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:697
+msgid "A custom message shown on the cart page when the gift rule is active. Leave empty to use the default message. Supports basic HTML."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:702
+#: templates/admin-rule-set-edit.php:655
+msgid "Checkout page message"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:706
+msgid "A custom message shown on the checkout page when the gift rule is active. Leave empty to use the default message. Supports basic HTML."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:714
+msgid "🚚 Shipping method condition"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:718
+#: templates/admin-rule-set-edit.php:672
+msgid "Limit to a shipping method"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:722
+#: templates/admin-gift-rule-edit.php:1428
+#: templates/admin-rule-set-edit.php:676
+#: templates/admin-rule-set-edit.php:2350
+msgid "No limit - all shipping methods"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:723
+msgid "Loading shipping methods..."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:725
+msgid "Choose a specific shipping method: the gift is only available when the customer chooses this shipping method. Leave empty to enable it for all shipping methods."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:737
+#: templates/admin-rule-set-edit.php:691
+msgctxt "gift"
+msgid "Minimum cart total"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:741
+msgid "The minimum cart total required before the gift is available. Leave empty for no limit."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:746
+#: templates/admin-rule-set-edit.php:700
+msgid "Maximum cart total"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:750
+msgid "The cart total above which the gift isn't available. Leave empty for no limit."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:755
+msgid "Minimum quantity to qualify"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:759
+msgid "The minimum quantity of matching products in the cart to get the gift (useful for BOGO). Leave empty for no limit."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:767
+#: templates/admin-rule-set-edit.php:721
+#: templates/admin-rule-set-edit.php:1667
+#: templates/admin-rule-set-edit.php:1763
+msgid "User role conditions"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:771
+#: templates/admin-rule-set-edit.php:726
+msgid "Limit to user roles"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:786
+msgid "Choose the user roles the gift is available to. Leave empty to enable it for everyone."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:798
+msgid "Show the gift only with a coupon"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:803
+msgid "The gift is shown only when one of the required coupons is applied in the cart"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:810
+#: templates/admin-rule-set-edit.php:553
+msgid "Coupon codes"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:820
+msgid "Separate the coupons with commas. The gift is shown if at least one of the coupons is applied."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:839
+msgid "Start date"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:843
+msgid "The date and time when the gift becomes available. Leave empty to start immediately."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:848
+msgid "End date"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:852
+msgid "The date and time when the gift stops being available. Leave empty for no limit."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:866
+msgid "Choose one gift"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:867
+msgid "Choose several gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:869
+msgid "Whether the customer can choose one gift or several gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:882
+msgid "Let customers choose how many units of each gift"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:892
+msgid "Maximum quantity per gift (1-100)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:898
+msgid "Total gifts allowed"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:902
+msgid "Total gift units allowed (0 = unlimited; otherwise exactly this number must be chosen)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:910
+#: templates/admin-gift-rule-edit.php:2101
+msgid "Default variations"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:911
+msgid "Set a default variation for each variable product. The customer can change the selection."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:917
+#: templates/admin-gift-rule-edit.php:2102
+msgid "Promo message"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:918
+msgid "Set a promo message shown to customers on the site to promote the gift."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:922
+msgid "Enable promo message"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:929
+msgid "Show a promo message on the site to let customers know about the available gift"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:934
+msgid "Promo message text"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:937
+msgid "Buy selected products and get"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:939
+#: templates/admin-gift-styling.php:42
+msgid "Merge tags"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:941
+msgid "Click \"Merge tags\" to insert dynamic values. Leave empty for automatic text."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:946
+msgid "Pages to show on"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:950
+msgid "All pages"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:951
+msgid "Shop only"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:952
+msgid "Product pages only"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:953
+msgid "Shop + products"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:954
+msgid "Cart + checkout"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:960
+msgid "Link"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:964
+msgid "An optional link to a relevant page (product category, promotion, etc.)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:969
+msgid "Link text"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:980
+msgid "Combined quantity discount (optional)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:981
+msgid "Add quantity discounts on top of the gift: the customer gets both a discount and a gift in the same rule. <br> <em>The quantity discounts apply to the products matched by this rule, and the gift is given in addition.</em>"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:985
+msgid "Enable combined quantity discount"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:992
+msgid "When enabled, the customer gets both a quantity discount on the products and the gift"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1002
+#: templates/admin-rule-set-edit.php:172
+#: templates/admin-rule-set-edit.php:1814
+msgid "Discount mode"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1006
+msgid "By quantity (buy X, get a discount on an item)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1007
+msgid "Global (a discount on all matching products)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1010
+msgid "<strong>By quantity:</strong> the discount applies to one item only (the cheapest/most expensive) when the customer buys a minimum quantity.<br> <strong>Global:</strong> the discount applies to all matching products in the cart."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1016
+#: templates/admin-page.php:35
+#: templates/admin-rule-set-edit.php:187
+msgid "Apply discount to"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1020
+msgid "The cheapest product"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1021
+msgid "The most expensive product"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1022
+msgid "All matching products"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1030
+msgid "Quick fill:"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1032
+#: templates/admin-rule-set-edit.php:464
+msgid "Buy 1 get 1 free"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1034
+#: templates/admin-rule-set-edit.php:466
+msgid "Tiered discounts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1035
+#: templates/admin-rule-set-edit.php:467
+msgid "Buy 3 get 30%"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1049
+#: templates/admin-gift-rule-edit.php:1546
+#: templates/admin-gift-rule-edit.php:1596
+msgctxt "tier"
+msgid "Minimum quantity"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1057
+#: templates/admin-gift-rule-edit.php:1550
+#: templates/admin-gift-rule-edit.php:1600
+msgctxt "tier"
+msgid "Discount type"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1060
+#: templates/admin-gift-rule-edit.php:1553
+#: templates/admin-gift-rule-edit.php:1603
+#: templates/admin-page.php:207
+#: templates/admin-rule-set-edit.php:513
+#: templates/admin-rule-set-edit.php:2405
+#: templates/admin-rule-set-edit.php:2434
+#: templates/admin-rule-set-edit.php:2664
+#: assets/admin-script.js:39
+#: assets/flow-builder.js:98
+msgid "Fixed amount (₪)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1072
+msgid "Add discount row"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1075
+msgid "Set different discounts for different quantities. The highest matching discount applies.<br> <em>Example: buy 2 get 10% off, buy 3 get 20% off, buy 5 get 1 free (100%)</em>"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1083
+msgid "Show discount message"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1090
+msgid "Show a message about the quantity discount on the product page and in the cart"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1095
+#: templates/admin-page.php:241
+msgctxt "gift"
+msgid "Message title"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1103
+#: templates/admin-page.php:260
+msgctxt "gift"
+msgid "Message colour"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1117
+#: templates/admin-gift-rule-wizard.php:35
+#: templates/admin-rule-set-edit.php:1451
+#: templates/admin-rule-wizard.php:35
+msgid "Previous"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1119
+#: templates/admin-gift-rule-wizard.php:39
+#: templates/admin-rule-set-edit.php:1453
+msgid "Next"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1122
+#: templates/admin-rule-set-edit.php:1456
+#: templates/admin-rule-set-edit.php:2786
+msgid "Save draft"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1124
+msgid "Publish gift"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1124
+msgid "Save gift"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1126
+#: templates/admin-rule-set-edit.php:1458
+#: templates/admin-rule-sets.php:288
+msgid "Cancel"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1133
+msgid "Preview &middot; Live"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1140
+#: templates/admin-storefront.php:149
+msgid "Ceramic mug"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1145
+#: templates/admin-gift-rules-list.php:156
+#: templates/admin-gift-styling.php:329
+#: templates/admin-storefront.php:150
+msgid "Thermal jug 500 ml"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1146
+#: templates/admin-gift-rules-list.php:157
+#: templates/admin-storefront.php:315
+msgid "Selected ✓"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1151
+msgid "Edit the widget design"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1180
+msgid "The selected item is added to the cart at no cost (100% off)."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1181
+msgid "The selected item gets a percentage discount you set."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1182
+msgid "Price / fixed discount"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1182
+msgid "A fixed shekel amount off the selected item."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1185
+#: templates/admin-gift-rules-list.php:81
+#: templates/admin-gift-rules-list.php:129
+msgid "Customer choice"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1185
+msgid "The customer chooses the gift from a list on the product page."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1186
+#: templates/admin-gift-rules-list.php:134
+msgid "Automatic"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1186
+msgid "The gift is added to the cart automatically when the condition is met."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1192
+msgid "What does the gift include?"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1192
+msgid "Name the rule and choose the gift type."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1193
+#: templates/admin-gift-rule-edit.php:2138
+#: templates/admin-rule-set-edit.php:1812
+#: templates/admin-rule-sets.php:118
+#: templates/admin-rule-sets.php:259
+#: assets/admin-script.js:137
+#: assets/admin-ui.js:322
+msgid "Rule name"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1194
+msgid "e.g. A gift over ₪200"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1195
+#: templates/admin-gift-rule-edit.php:2141
+#: templates/admin-gift-rule-wizard.php:23
+#: assets/admin-ui.js:320
+msgid "Gift type"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1201
+#: assets/flow-builder.js:97
+msgid "Discount size"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1203
+msgid "How is the gift given?"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1203
+msgid "Choose how the customer gets the gift."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1211
+msgid "When is the gift triggered?"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1211
+msgid "Set threshold conditions (leave empty for no condition)."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1213
+msgctxt "gift"
+msgid "Minimum cart total (₪)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1213
+#: templates/admin-gift-rule-edit.php:1214
+#: templates/admin-gift-rule-edit.php:1226
+#: templates/admin-gift-rule-edit.php:2144
+#: templates/admin-gift-rule-edit.php:2145
+msgid "None"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1214
+msgid "Minimum number of items"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1216
+msgid "You choose the gift products themselves in the form after the wizard (\"Gift setup\" step)."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1220
+#: templates/admin-gift-rule-wizard.php:26
+#: templates/admin-rule-wizard.php:26
+msgid "Summary"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1220
+msgid "Check and click \"Create gift\" to fill in the form."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1223
+#: assets/admin-script.js:178
+msgid "Name"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1223
+#: templates/admin-gift-rule-edit.php:2138
+#: templates/admin-rule-set-edit.php:1812
+#: assets/admin-script.js:178
+msgid "(no name)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1225
+#: templates/admin-gift-rule-edit.php:2142
+#: templates/admin-gift-rule-wizard.php:24
+msgid "How it's given"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1226
+msgid "Condition"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1226
+msgid "Cart ₪"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1226
+msgid "and up"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1228
+msgid "All set! Next, choose the gift products in the form."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1244
+msgid "Gift rule wizard"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1476
+msgid "Enter a fixed discount amount"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1532
+msgid "In global mode, the discount applies to <strong>all</strong> matching products in the cart. You can add rows with a quantity to increase the discount."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1535
+msgid "Set different discounts for different quantities. The highest matching discount applies.<br><em>Example: buy 2 get 10% off, buy 3 get 20% off, buy 5 get 1 free (100%)</em>"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1636
+#: templates/admin-rule-set-edit.php:2470
+msgid "Search products or variations..."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1674
+msgid "No default (the customer chooses)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1682
+msgid "This variation will be preselected"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1774
+#: templates/admin-gift-rule-edit.php:1790
+#: templates/admin-page.php:145
+#: templates/admin-rule-set-edit.php:416
+msgid "Choose an attribute..."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:1794
+msgid "Loading..."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2033
+#: templates/admin-gift-styling.php:449
+msgid "Saving..."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2045
+#: templates/admin-gift-rule-edit.php:2052
+msgid "➕ Create gift rule"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2045
+#: templates/admin-gift-rule-edit.php:2052
+msgid "💾 Save changes"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2051
+msgid "Server error:"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2063
+#: templates/admin-rule-set-edit.php:2814
+msgid "Saving…"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2069
+#: templates/admin-gift-rule-edit.php:2085
+#: templates/admin-rule-set-edit.php:2823
+#: templates/admin-rule-set-edit.php:2842
+msgid "Save failed"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2083
+#: templates/admin-rule-set-edit.php:2840
+msgid "Draft saved"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2100
+#: templates/admin-rule-set-edit.php:1758
+msgid "Details and products"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2101
+msgid "Gift setup"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2102
+msgid "Promo and discount"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2102
+msgid "Combined quantity discount"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2103
+#: templates/admin-rule-set-edit.php:1766
+msgid "Summary and save"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2123
+msgid "Gift summary"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2125
+msgid "Check that everything is right, then save. You can go back to any step by clicking its number above."
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2133
+msgid "Customer choice (on the product page)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2133
+msgid "Automatic gift (in the cart)"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2139
+#: templates/admin-rule-set-edit.php:1813
+#: templates/admin-rule-sets.php:118
+msgid "Status"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2140
+msgid "Qualifying products"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2143
+msgctxt "summary"
+msgid "Gift source"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2144
+msgid "Min. cart total"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2145
+msgid "Min. qualifying qty"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2146
+msgid "Max. gifts"
+msgstr ""
+
+#: templates/admin-gift-rule-edit.php:2179
+#: templates/admin-rule-set-edit.php:1855
+msgid "Step"
+msgstr ""
+
+#: templates/admin-gift-rule-wizard.php:15
+#: templates/admin-rule-wizard.php:15
+msgid "Close wizard"
+msgstr ""
+
+#: templates/admin-gift-rule-wizard.php:19
+msgid "Gift rule wizard &middot; Create a gift rule step by step"
+msgstr ""
+
+#: templates/admin-gift-rule-wizard.php:25
+#: templates/admin-rule-set-edit.php:1762
+msgid "Conditions"
+msgstr ""
+
+#: templates/admin-gift-rule-wizard.php:42
+msgid "Finish and go to the form"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:21
+msgid "Product attributes"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:37
+msgid "Buy-and-get gift"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:41
+#: templates/admin-gift-styling.php:14
+msgid "Design settings"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:44
+#: templates/admin-rule-set-edit.php:115
+#: templates/admin-rule-sets.php:82
+msgid "Wizard"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:58
+msgid "No gift rules found. Create your first rule to get started!"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:60
+msgid "Add gift rule"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:74
+msgid "Available gift products"
+msgstr ""
+
+#. translators: %d: number of gift categories.
+#: templates/admin-gift-rules-list.php:78
+#, php-format
+msgid "Gifts from %d categories"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:91
+#: templates/admin-rule-set-edit.php:2123
+msgid "Mode:"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:98
+#: templates/admin-rule-sets.php:64
+msgid "Draft"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:109
+#: templates/admin-rule-sets.php:202
+msgid "Duplicate"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:113
+#: templates/admin-rule-sets.php:206
+msgid "Delete"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:125
+msgid "Gift award mode"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:130
+msgid "The customer chooses from a list"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:135
+msgid "Added to the cart automatically"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:138
+msgid "The mode is chosen when editing each gift rule."
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:144
+msgid "Widget design &middot; Live styling"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:147
+#: templates/admin-storefront.php:58
+msgid "Add one product at no cost"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:151
+msgid "Printed ceramic mug"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:162
+msgid "Widget background colour"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:178
+msgid "Apply background colour"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:184
+msgid "Saved"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:186
+msgid "All design settings"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:233
+msgid "Are you sure you want to delete this rule?"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:254
+msgid "Error deleting the rule:"
+msgstr ""
+
+#: templates/admin-gift-rules-list.php:279
+msgid "Error duplicating the rule:"
+msgstr ""
+
+#: templates/admin-gift-styling.php:15
+msgid "← Back to list"
+msgstr ""
+
+#: templates/admin-gift-styling.php:17
+msgid "Customise how the gift selection box and cart notes look. The preview on the side updates instantly with every change."
+msgstr ""
+
+#: templates/admin-gift-styling.php:26
+msgid "Gift selection box design"
+msgstr ""
+
+#: templates/admin-gift-styling.php:30
+msgid "Title text"
+msgstr ""
+
+#: templates/admin-gift-styling.php:33
+msgid "The title shown in the gift selection box"
+msgstr ""
+
+#: templates/admin-gift-styling.php:38
+msgid "Subtitle text"
+msgstr ""
+
+#: templates/admin-gift-styling.php:44
+msgid "The subtitle under the title. Click \"Merge tags\" to insert dynamic values such as the gift type or the selection type."
+msgstr ""
+
+#: templates/admin-gift-styling.php:49
+msgid "Gift badge text"
+msgstr ""
+
+#: templates/admin-gift-styling.php:52
+msgid "The text shown on the gift badge in the cart and at checkout"
+msgstr ""
+
+#: templates/admin-gift-styling.php:57
+msgid "Background colour 1"
+msgstr ""
+
+#: templates/admin-gift-styling.php:60
+msgid "First colour of the background gradient"
+msgstr ""
+
+#: templates/admin-gift-styling.php:65
+msgid "Background colour 2"
+msgstr ""
+
+#: templates/admin-gift-styling.php:68
+msgid "Second colour of the background gradient"
+msgstr ""
+
+#: templates/admin-gift-styling.php:73
+#: templates/admin-gift-styling.php:213
+msgid "Text colour"
+msgstr ""
+
+#: templates/admin-gift-styling.php:76
+msgid "The text colour in the gift box"
+msgstr ""
+
+#: templates/admin-gift-styling.php:81
+msgid "Title size"
+msgstr ""
+
+#: templates/admin-gift-styling.php:84
+msgid "Title font size (12-48)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:89
+msgid "Subtitle size"
+msgstr ""
+
+#: templates/admin-gift-styling.php:92
+msgid "Subtitle font size (10-32)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:97
+#: templates/admin-gift-styling.php:253
+msgid "Corner radius"
+msgstr ""
+
+#: templates/admin-gift-styling.php:100
+#: templates/admin-gift-styling.php:256
+msgid "Corner radius (0-50)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:108
+msgid "The box's inner spacing (padding)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:113
+msgid "Margin"
+msgstr ""
+
+#: templates/admin-gift-styling.php:116
+msgid "The outer spacing (margin) around the box"
+msgstr ""
+
+#: templates/admin-gift-styling.php:121
+msgid "Border width"
+msgstr ""
+
+#: templates/admin-gift-styling.php:124
+msgid "Border width (0 = no border)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:129
+msgid "Border colour"
+msgstr ""
+
+#: templates/admin-gift-styling.php:132
+msgid "Border colour (if set)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:137
+msgctxt "style"
+msgid "Shadow"
+msgstr ""
+
+#: templates/admin-gift-styling.php:140
+msgid "No shadow"
+msgstr ""
+
+#: templates/admin-gift-styling.php:141
+msgid "Small shadow"
+msgstr ""
+
+#: templates/admin-gift-styling.php:142
+msgid "Medium shadow"
+msgstr ""
+
+#: templates/admin-gift-styling.php:143
+msgid "Large shadow"
+msgstr ""
+
+#: templates/admin-gift-styling.php:145
+msgid "Add a shadow to the box"
+msgstr ""
+
+#: templates/admin-gift-styling.php:150
+msgid "Button background colour"
+msgstr ""
+
+#: templates/admin-gift-styling.php:153
+msgid "Background colour of the \"Choose\" button"
+msgstr ""
+
+#: templates/admin-gift-styling.php:158
+msgid "Button text colour"
+msgstr ""
+
+#: templates/admin-gift-styling.php:161
+msgid "Text colour of the \"Choose\" button"
+msgstr ""
+
+#: templates/admin-gift-styling.php:166
+msgid "Button background colour (hover)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:169
+msgid "Background colour on mouse hover"
+msgstr ""
+
+#: templates/admin-gift-styling.php:174
+msgid "Button text colour (hover)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:177
+msgid "Text colour on mouse hover"
+msgstr ""
+
+#: templates/admin-gift-styling.php:182
+msgid "Position on the product page"
+msgstr ""
+
+#: templates/admin-gift-styling.php:185
+msgid "Before the add to cart button (default)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:187
+msgid "Inside the product summary (middle)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:188
+msgid "After the product summary"
+msgstr ""
+
+#: templates/admin-gift-styling.php:189
+msgid "After the product meta (categories/tags)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:190
+msgid "Before the tabs (description/additional information)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:191
+msgid "Only in the Elementor widget (no WooCommerce hook)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:193
+msgid "Where the gift selection box is shown on the product page. Change it if the position doesn't suit your theme."
+msgstr ""
+
+#: templates/admin-gift-styling.php:201
+msgid "Cart notes design"
+msgstr ""
+
+#: templates/admin-gift-styling.php:205
+msgid "Background colour"
+msgstr ""
+
+#: templates/admin-gift-styling.php:208
+msgid "Background colour of the note field"
+msgstr ""
+
+#: templates/admin-gift-styling.php:216
+msgid "Text colour of the note field"
+msgstr ""
+
+#: templates/admin-gift-styling.php:221
+msgid "Label text size"
+msgstr ""
+
+#: templates/admin-gift-styling.php:224
+msgid "Label font size (10-32)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:229
+msgid "Field text size"
+msgstr ""
+
+#: templates/admin-gift-styling.php:232
+msgid "Font size inside the field (10-28)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:237
+msgctxt "note"
+msgid "Border colour"
+msgstr ""
+
+#: templates/admin-gift-styling.php:240
+msgid "The border colour around the field"
+msgstr ""
+
+#: templates/admin-gift-styling.php:245
+msgctxt "note"
+msgid "Border width"
+msgstr ""
+
+#: templates/admin-gift-styling.php:248
+msgid "Border width (0-10)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:264
+msgid "The field's inner spacing"
+msgstr ""
+
+#: templates/admin-gift-styling.php:269
+msgid "Placeholder colour"
+msgstr ""
+
+#: templates/admin-gift-styling.php:272
+msgid "The placeholder text colour"
+msgstr ""
+
+#: templates/admin-gift-styling.php:277
+msgid "Border colour (focus)"
+msgstr ""
+
+#: templates/admin-gift-styling.php:280
+msgid "The border colour when the field is active"
+msgstr ""
+
+#: templates/admin-gift-styling.php:288
+msgid "Developer Settings"
+msgstr ""
+
+#: templates/admin-gift-styling.php:292
+#: templates/admin-page.php:294
+msgid "Debug mode"
+msgstr ""
+
+#: templates/admin-gift-styling.php:296
+msgid "Enable verbose error logging"
+msgstr ""
+
+#: templates/admin-gift-styling.php:298
+msgid "When enabled, the plugin writes detailed debug messages to the error log. Disable on production sites."
+msgstr ""
+
+#: templates/admin-gift-styling.php:310
+msgid "Preview"
+msgstr ""
+
+#: templates/admin-gift-styling.php:315
+msgid "Product page · gift box"
+msgstr ""
+
+#: templates/admin-gift-styling.php:320
+msgid "Elegant ceramic mug"
+msgstr ""
+
+#: templates/admin-gift-styling.php:327
+msgid "Buy this product and get a gift on a product of your choice:"
+msgstr ""
+
+#: templates/admin-gift-styling.php:333
+msgid "Wooden coaster set"
+msgstr ""
+
+#: templates/admin-gift-styling.php:338
+msgid "Cart · order note"
+msgstr ""
+
+#: templates/admin-gift-styling.php:341
+msgid "Add a special note to your order..."
+msgstr ""
+
+#: templates/admin-gift-styling.php:346
+#: templates/admin-gift-styling.php:496
+#: templates/admin-gift-styling.php:500
+#: templates/admin-gift-styling.php:505
+msgid "Save design"
+msgstr ""
+
+#: templates/admin-gift-styling.php:347
+msgid "Reset"
+msgstr ""
+
+#: templates/admin-gift-styling.php:405
+msgid "of your choice"
+msgstr ""
+
+#: templates/admin-gift-styling.php:494
+msgid "✓ Saved!"
+msgstr ""
+
+#: templates/admin-gift-styling.php:504
+msgid "Network error while saving"
+msgstr ""
+
+#: templates/admin-gift-styling.php:512
+msgid "Reset all settings to the defaults?"
+msgstr ""
+
+#: templates/admin-nav-tabs.php:34
+msgid "Search rules, gifts…"
+msgstr ""
+
+#: templates/admin-nav-tabs.php:37
+msgid "New rule &middot; wizard"
+msgstr ""
+
+#: templates/admin-page.php:8
+msgid "Quantity discount settings - Mix & Match"
+msgstr ""
+
+#: templates/admin-page.php:17
+msgid "General settings"
+msgstr ""
+
+#: templates/admin-page.php:22
+msgid "Enable quantity discounts"
+msgstr ""
+
+#: templates/admin-page.php:29
+msgid "Enable or disable the quantity discount system"
+msgstr ""
+
+#: templates/admin-page.php:39
+#: templates/admin-rule-set-edit.php:191
+#: assets/flow-builder.js:99
+msgid "The cheapest item"
+msgstr ""
+
+#: templates/admin-page.php:40
+#: templates/admin-rule-set-edit.php:192
+msgid "The most expensive item"
+msgstr ""
+
+#: templates/admin-page.php:42
+msgid "Choose which item the discount applies to"
+msgstr ""
+
+#: templates/admin-page.php:64
+#: templates/admin-rule-set-edit.php:243
+msgid "Choose how to identify products eligible for the discount"
+msgstr ""
+
+#: templates/admin-page.php:86
+#: templates/admin-rule-set-edit.php:265
+msgid "Choose categories that are eligible for the discount"
+msgstr ""
+
+#: templates/admin-page.php:103
+#: templates/admin-rule-set-edit.php:282
+msgid "Choose categories that are not eligible for the discount (overrides included)"
+msgstr ""
+
+#: templates/admin-page.php:115
+msgid "Included products"
+msgstr ""
+
+#: templates/admin-page.php:119
+msgid "Enter comma-separated product IDs (for example: 123,456,789)"
+msgstr ""
+
+#: templates/admin-page.php:125
+msgctxt "settings"
+msgid "Excluded products"
+msgstr ""
+
+#: templates/admin-page.php:129
+msgid "Enter comma-separated product IDs that are not eligible for the discount"
+msgstr ""
+
+#: templates/admin-page.php:137
+#: templates/admin-rule-set-edit.php:408
+msgid "Attributes"
+msgstr ""
+
+#: templates/admin-page.php:152
+#: templates/admin-rule-set-edit.php:423
+msgctxt "settings"
+msgid "Choose an attribute to filter by"
+msgstr ""
+
+#: templates/admin-page.php:158
+#: templates/admin-rule-set-edit.php:429
+msgid "Included attribute values"
+msgstr ""
+
+#: templates/admin-page.php:162
+#: templates/admin-rule-set-edit.php:433
+msgid "Enter comma-separated values (for example: 1-kg,2-kg or 1kg,2kg)"
+msgstr ""
+
+#: templates/admin-page.php:168
+#: templates/admin-rule-set-edit.php:439
+msgctxt "settings"
+msgid "Excluded attribute values"
+msgstr ""
+
+#: templates/admin-page.php:172
+#: templates/admin-rule-set-edit.php:443
+msgid "Enter values that are not eligible for the discount (overrides included)"
+msgstr ""
+
+#: templates/admin-page.php:217
+#: templates/admin-rule-set-edit.php:523
+msgid "Add discount tier"
+msgstr ""
+
+#: templates/admin-page.php:218
+#: templates/admin-rule-set-edit.php:528
+#: templates/admin-rule-set-edit.php:2374
+msgid "Set different discounts for different quantities. The highest matching discount applies."
+msgstr ""
+
+#: templates/admin-page.php:223
+#: templates/admin-rule-set-edit.php:578
+#: templates/admin-rule-set-edit.php:1647
+#: templates/admin-rule-set-edit.php:1765
+msgid "Customer messages"
+msgstr ""
+
+#: templates/admin-page.php:228
+msgid "Show message"
+msgstr ""
+
+#: templates/admin-page.php:235
+msgid "Show a discount message on the cart and checkout pages"
+msgstr ""
+
+#: templates/admin-page.php:250
+msgctxt "settings"
+msgid "Message content"
+msgstr ""
+
+#: templates/admin-page.php:254
+msgid "Leave empty for automatic content based on the discount tiers. HTML is allowed."
+msgstr ""
+
+#: templates/admin-page.php:269
+msgid "Discount label"
+msgstr ""
+
+#: templates/admin-page.php:273
+msgid "The text shown in the cart for the discount"
+msgstr ""
+
+#: templates/admin-page.php:279
+msgid "Show in mini cart"
+msgstr ""
+
+#: templates/admin-page.php:286
+msgid "Show the discount in the mini cart"
+msgstr ""
+
+#: templates/admin-page.php:299
+msgid "Enable debug mode"
+msgstr ""
+
+#: templates/admin-page.php:306
+msgid "Show technical information on the cart page (admins only)"
+msgstr ""
+
+#: templates/admin-page.php:314
+msgid "Globally exclude products from any gift"
+msgstr ""
+
+#: templates/admin-page.php:318
+msgid "Products excluded from all gifts"
+msgstr ""
+
+#: templates/admin-page.php:337
+msgid "Any product selected here is never offered as a gift option, no matter which gift rule runs, which coupon is active, or which category it comes from."
+msgstr ""
+
+#: templates/admin-page.php:345
+msgctxt "global exclusions"
+msgid "Search products to exclude..."
+msgstr ""
+
+#: templates/admin-page.php:371
+msgctxt "gifts"
+msgid "Save settings"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:83
+msgid "Rule not found"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:97
+msgid "New discount rule"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:97
+msgid "Edit rule &middot;"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:118
+msgid "Test on products"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:135
+msgctxt "discount"
+msgid "Rule name *"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:139
+msgid "A descriptive name for the discount rule (internal use only)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:145
+msgid "Discount label in the cart"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:150
+msgid "e.g. Summer sale"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:152
+msgid "The text shown to the customer on the discount line in the cart and at checkout, exactly as you type it here. Leave empty to use the rule name."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:159
+msgctxt "discount"
+msgid "Enable this rule"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:166
+msgctxt "discount"
+msgid "Turn off to disable the rule temporarily without deleting it"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:176
+msgid "Quantity-based (Buy X, get discount on 1 item)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:177
+msgid "Global (Discount on ALL matching products)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:180
+msgid "<strong>By quantity:</strong> the customer needs to buy a certain quantity to get a discount on one item (the cheapest/most expensive).<br> <strong>Global discount:</strong> the discount applies to <em>all</em> matching products in the cart, regardless of quantity. Perfect for category discounts such as \"15% off all shoes\"."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:194
+msgid "Choose which item the discount applies to (only relevant in \"By quantity\" mode)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:199
+msgid "Split the discount across products"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:220
+msgid "Sets how the final discount amount is attributed to products. This affects the product line display, partial refunds and the profitability reports. The split always adds up exactly to the discount amount."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:305
+msgid "<strong>New!</strong> Search and select specific products or variations that are not eligible for the discount, even if they are in included categories"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:311
+msgid "Limit to specific variations"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:318
+msgid "Enable to choose only specific variations from the selected categories"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:324
+msgid "Included variations"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:329
+msgid "Loading products from the categories..."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:345
+msgid "Choose specific variations from the selected categories that are eligible for the discount"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:347
+msgid "Load products from the categories"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:377
+msgid "Search and select specific products or variations that are eligible for the discount"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:383
+msgctxt "discount"
+msgid "Excluded products/variations"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:400
+msgid "Search and select specific products or variations that are not eligible for the discount"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:457
+msgid "Set how many items must be bought and what the discount is. The discount applies to the price and doesn't add gifts."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:462
+#: templates/admin-rule-set-edit.php:479
+msgid "Quick fill"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:474
+msgid "Set the discount that applies to <strong>all</strong> matching products in the cart. You can also add tiered discounts by quantity."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:480
+msgid "5% off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:481
+msgid "10% off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:482
+msgid "15% off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:483
+msgid "20% off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:484
+msgid "25% off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:485
+msgid "50% off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:526
+#: templates/admin-rule-set-edit.php:2368
+msgid "In global mode, the first discount applies to all products. You can add more tiers with a quantity to increase the discount (for example: buy 3+ get 20% instead of 15%)."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:535
+#: templates/admin-rule-set-edit.php:1642
+#: templates/admin-rule-set-edit.php:1761
+msgid "Coupon settings"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:540
+msgid "Requires a coupon"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:547
+msgid "Enable if the discount should only apply when a specific coupon is entered"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:557
+msgid "Enter comma-separated coupon codes. The discount applies when one of the coupons is applied in the cart."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:563
+msgid "Cancel other discounts"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:570
+msgid "When this rule is active, it cancels other quantity discounts on the qualifying products. This discount will be the only one that applies."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:583
+msgid "Show a message to the customer"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:590
+msgid "Show a discount message on the product page"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:596
+msgid "Message title"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:600
+msgid "The title shown in the customer message"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:606
+msgid "Message content"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:610
+msgid "The message content shown to the customer. Supports basic HTML."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:616
+msgid "Message background colour"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:620
+msgid "Choose a background colour for the message"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:626
+msgctxt "rule"
+msgid "Show in the mini cart"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:633
+msgid "Show the discount in the mini cart as well"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:650
+msgid "A custom message shown on the cart page when the discount rule is active and applied to products in the cart. Leave empty if no extra message is needed. Supports basic HTML."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:659
+msgid "A custom message shown on the checkout page when the discount rule is active and applied to products in the cart. Leave empty if no extra message is needed. Supports basic HTML."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:678
+msgid "Choose a specific shipping method: the discount is only available when the customer chooses this shipping method. Leave empty to enable it for all shipping methods."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:695
+msgid "The minimum cart total required before the discount applies (excluding VAT). Leave empty for no limit."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:704
+msgid "The cart total above which the discount doesn't apply. Leave empty for no limit."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:709
+msgid "Minimum quantity in the cart"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:713
+msgid "The minimum quantity of matching products in the cart required to activate the discount (0 = no limit). Useful for BOGO and similar deals."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:741
+msgid "Choose the user roles the discount applies to. Leave empty to apply it to everyone. Hold Ctrl to select several roles."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:754
+#: templates/admin-rule-set-edit.php:1763
+msgid "Profit guards and caps"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:757
+msgid "The safety layer that makes aggressive promotions sustainable. Leave empty for no limit."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:762
+msgid "Maximum discount per cart"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:766
+msgid "The cap on the discount the rule can give in one cart: as an amount, as a percentage of the cart, or both (the lower one wins)."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:770
+msgid "Campaign budget (₪)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:781
+msgid "Used up"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:786
+msgid "The rule was paused automatically: the budget has been used up."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:789
+msgid "When the total discount the rule has given reaches the budget, the rule is paused automatically."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:793
+msgid "Profit floor per item (%)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:797
+msgid "The discount won't take an item below this profit margin. Calculated against the product cost ("
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:797
+msgid "or a Cost of Goods plugin). An item without cost data isn't limited."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:802
+msgid "Product and category exclusions"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:805
+msgid "Exclusions are set in the <strong>Details and products</strong> step. That's where you can exclude specific products and categories from the rule."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:814
+#: templates/admin-rule-set-edit.php:1672
+#: templates/admin-rule-set-edit.php:1763
+msgid "Discount scheduling"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:819
+msgid "Time zone"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:827
+msgid "Israel (Asia/Jerusalem)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:840
+msgid "Common"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:845
+msgid "All time zones"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:857
+msgid "Current time in the selected time zone:"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:859
+msgid "Choose the time zone used for the start and end dates."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:866
+msgid "Start date and time"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:870
+msgid "The date and time the discount starts (in the selected time zone). Leave empty to make it active immediately."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:875
+msgid "End date and time"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:879
+msgid "The date and time the discount stops (in the selected time zone). Leave empty to keep it active with no end."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:892
+msgctxt "rule"
+msgid "Total usage limit"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:896
+msgid "The maximum number of times the discount can be applied in total. Leave empty for no limit."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:901
+msgid "Usage limit per customer"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:905
+msgid "The maximum number of times each customer can use the discount. Leave empty for no limit."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:913
+#: templates/admin-rule-set-edit.php:1682
+#: templates/admin-rule-set-edit.php:1765
+msgid "Discount badge"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:918
+msgid "Show a discount badge on the product"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:925
+msgid "Show a badge on the product image when it belongs to an active discount rule"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:931
+msgctxt "rule"
+msgid "Badge text"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:935
+msgid "The text shown on the badge. For example: \"Sale\", \"Discount\", \"SALE\", \"BOGO\""
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:941
+msgid "Badge background colour"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:946
+msgid "Background / text colour"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:948
+msgid "Choose a background colour and a text colour for the badge"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:954
+msgid "Where to show the badge"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:959
+msgctxt "badge"
+msgid "On the product page"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:963
+msgid "On the category/shop page"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:965
+msgid "Choose where to show the discount badge"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:973
+#: templates/admin-rule-set-edit.php:1687
+#: templates/admin-rule-set-edit.php:1765
+msgid "Sale price display"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:978
+msgid "Show sale price"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:985
+msgid "Show the regular price struck through + the discounted price on the product (like a regular WooCommerce sale)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:991
+msgid "Where to show"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:995
+msgid "Everywhere"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:996
+msgid "Product page only"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:997
+msgid "Shop &amp; Archive Only"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1004
+msgid "Which discount tier to show"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1008
+msgid "First tier (lowest discount)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1009
+msgid "Last tier (highest discount)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1011
+msgid "Choose which discount tier is shown as the sale price. Only relevant for rules with several tiers"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1017
+msgid "Show discount in cart"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1025
+msgid "When off (default): cart items, the mini cart and checkout show the regular price. The discount is only shown as a \"You saved\" / \"Discount\" line in the cart totals."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1035
+#: templates/admin-rule-set-edit.php:1692
+#: templates/admin-rule-set-edit.php:1765
+msgid "Display banner"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1037
+msgid "A banner image shown for products that match this rule. It can be shown with a shortcode"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1037
+msgid "on the product page, or with an Elementor widget."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1043
+msgid "Banner image"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1053
+msgid "Choose image"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1054
+msgctxt "banner"
+msgid "Remove"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1061
+msgid "or paste a URL"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1064
+msgid "Used as a fallback if no image is chosen"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1069
+#: templates/admin-rule-set-edit.php:1320
+msgid "Link (optional)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1072
+msgid "If set, clicking the banner leads to this URL"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1077
+msgid "Shortcode"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1080
+msgid "Place the shortcode on a product page. It shows the banner of the first rule that matches the current product."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1082
+msgid "Also available:"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1082
+msgid "— shows the banner of this specific rule."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1096
+msgid "Choose a banner image"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1097
+msgid "Use image"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1132
+#: templates/admin-rule-set-edit.php:1697
+#: templates/admin-rule-set-edit.php:1765
+msgid "Site-wide message"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1133
+msgid "When several rules have a site-wide message, the messages rotate automatically in a carousel"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1138
+msgid "Show message on the site"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1145
+msgid "Show a message bar (banner) to all visitors when the discount rule is active"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1151
+msgid "Message text"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1154
+#: templates/admin-rule-set-edit.php:1251
+#: templates/admin-rule-set-edit.php:2683
+msgid "🔥 Special offer! Buy 3 and get 30% off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1155
+msgid "The text shown in the message bar. Use emoji to grab attention"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1161
+msgid "Icon"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1165
+msgid "Click to pick an icon"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1166
+msgid "Clear icon"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1175
+msgid "Search..."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1179
+msgid "Recommended for promotions"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1189
+msgid "Faces"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1199
+msgid "Arrows"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1209
+msgid "Symbols"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1238
+msgid "Choose an emoji or a Dashicons icon to show before the text"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1244
+msgid "Message colours"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1249
+msgid "Background / text"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1258
+msgid "Position"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1262
+msgid "Sticky Top Bar"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1263
+msgid "Sticky Bottom Bar"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1264
+msgid "Below Header (inline)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1265
+msgid "Above Footer (inline)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1266
+msgid "Floating Bottom-Left"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1267
+msgid "Floating Bottom-Right"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1274
+msgid "Mobile position"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1278
+msgid "Same as Desktop"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1279
+msgid "Sticky Top"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1280
+msgid "Sticky Bottom"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1281
+msgid "Below Header (inline, mobile)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1282
+msgid "Hidden on Mobile"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1284
+msgid "A different position on mobile devices. For example, floating in a corner doesn't always look good on mobile"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1290
+msgid "Design"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1294
+msgid "Standard Bar"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1295
+msgid "Slim Bar"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1296
+msgid "Bold Bar"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1297
+msgctxt "style"
+msgid "Gradient"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1298
+msgid "Scrolling Marquee"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1300
+msgid "With the \"Scrolling Marquee\" style, the text scrolls continuously from side to side"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1306
+msgid "Scroll direction"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1310
+msgid "Right to Left (RTL)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1311
+msgid "Left to Right (LTR)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1312
+msgid "Alternating (Bounce)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1314
+msgid "The direction the text moves in the \"Scrolling Marquee\" style"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1324
+msgid "To the shop →"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1325
+msgid "Add a button/link to the message (optional). First line: URL, second line: button text"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1331
+msgid "Show on pages"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1335
+msgid "All Pages"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1336
+msgid "Shop & Categories Only"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1337
+msgid "Product Pages Only"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1338
+msgid "Shop & Product Pages"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1339
+msgid "Homepage Only"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1340
+msgid "Everywhere except Checkout"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1347
+msgid "Rotation speed"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1350
+msgid "seconds"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1351
+msgid "How many seconds each message is shown before moving to the next one (when several messages are active)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1357
+msgid "Dismissible"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1364
+msgid "Let visitors close the message"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1370
+msgid "Show again after closing"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1374
+msgid "Unlimited - always reappear"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1375
+msgid "Once only - never show again"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1376
+msgid "Up to 2 times"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1377
+msgid "Up to 3 times"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1378
+msgid "Up to 5 times"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1379
+msgid "Up to 10 times"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1381
+msgid "How many times the message reappears after the visitor closes it"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1389
+#: templates/admin-rule-set-edit.php:1702
+#: templates/admin-rule-set-edit.php:1767
+msgid "Exclude based on other rules"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1394
+msgid "Don't apply this rule to products that get a discount from:"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1406
+msgid "Not active"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1411
+msgid "Choose other discount rules. If a product already gets a discount from one of the selected rules, this rule doesn't apply to it."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1412
+msgid "Example: set a discount for the whole category, but exclude products that already get a discount from another specific rule."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1424
+msgid "Live preview"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1429
+msgid "Quantity deal"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1432
+#: assets/admin-ui.js:392
+msgid "My rule"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1436
+#: templates/admin-storefront.php:222
+msgctxt "preview"
+msgid "Buy more, save more"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1457
+msgid "Publish rule"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1466
+msgid "Rule preview"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1472
+msgid "Choose one or more products to see how the rule affects them in the cart (before saving)."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1476
+#: templates/admin-rule-set-edit.php:1989
+msgid "Product"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1478
+#: templates/admin-rule-set-edit.php:1991
+msgid "Unit price"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1479
+msgid "Price after discount"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1486
+msgid "No products selected yet. Click \"Add product\" to start."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1491
+msgctxt "preview"
+msgid "Total"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1500
+msgid "Add product"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1628
+msgid "What is this?"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1629
+msgid "Set the rule name (so you can recognise it easily) and the discount mode: <strong>Quantity</strong> (a discount on one item out of X) or <strong>Global</strong> (a discount on all matching items)."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1633
+msgid "How do I choose products?"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1634
+msgid "The rule applies only to the products you choose here. You can choose by <strong>category</strong> (easy to maintain), <strong>specific products</strong> (full control) or <strong>attribute</strong> (for example \"Weight = 1 kg\")."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1638
+msgid "How do I build discount tiers?"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1639
+msgid "Add a row for each tier: quantity = minimum items, discount = % or a fixed ₪ amount. For example: 3 → 30%, 4 → 50%, 5 → free. <strong>Tip:</strong> in Quantity mode + \"on the cheapest\", the discount applies to one item only (the cheapest of the matching items)."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1643
+msgid "When should I use a coupon?"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1644
+msgid "Enable \"Requires a coupon\" so the rule only works after the customer enters a coupon code. Useful for targeted campaigns, clubs or exclusive discounts."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1648
+msgid "What does the customer see?"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1649
+msgid "The message appears on the product/category page to encourage adding to the cart. Use a short title (\"☕ Buy 3 and save!\") and content that briefly explains the offer."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1653
+msgid "Customise the cart and checkout"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1654
+msgid "If you want a different message in the cart than at checkout (for example: \"One more item for a bigger discount!\" in the cart, \"You're close to free shipping!\" at checkout), set them here."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1658
+msgid "When should I limit by shipping?"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1659
+msgid "If the rule should only apply with a certain shipping method (for example \"30% off for local pickup only\"), choose the relevant shipping methods. Leave empty to apply to all of them."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1663
+msgid "Discount by cart total"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1664
+msgid "Set a minimum and/or maximum cart total for the rule to apply. Useful for campaigns such as \"10% off over 300₪\"."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1668
+msgid "Limit to customer groups"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1669
+msgid "The rule only works for users in the roles you choose (for example \"Wholesale\", \"VIP\"). If you leave it empty, the rule applies to all users and guests."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1673
+msgid "Automatic scheduling"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1674
+msgid "Set a start and end date and time. The rule switches on and off automatically. <strong>Tip:</strong> the time zone comes from the WordPress settings. Leave empty to keep the rule always active."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1678
+msgid "Limits on the number of uses"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1679
+msgid "<strong>Total:</strong> how many times in total the rule can run before it switches off. <strong>Per user:</strong> how many times the same customer can trigger the rule. Useful for single-use coupons or limited campaigns."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1683
+msgid "Visual badge"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1684
+msgid "A small, colourful badge on the product image in the category and on the product page (\"30% off!\", \"Sale!\", etc.). It catches the eye and increases conversions."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1688
+msgid "Struck-through price + price after discount"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1689
+msgid "Shows the price in the WooCommerce sale format ("
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1689
+msgid "Regular price"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1689
+msgid "price after discount) on your products. <strong>Important:</strong> \"Show discount in cart\" controls whether this also appears in the cart/mini cart (off = only a message at the bottom of the cart)."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1693
+msgid "A visual banner on the product page"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1694
+msgid "Upload a banner image shown to the customer on the product page. Use the shortcode"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1694
+msgid "anywhere, or the Elementor widget."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1698
+msgid "A message for the whole site"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1699
+msgid "A floating message (at the top or bottom of the page) shown to everyone while the rule is active. Useful for big announcements such as \"30% off all weekend!\"."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1703
+msgid "When to exclude rules"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1704
+msgid "If a rule clashes with another rule (for example one for a narrow promotion and one for a broad promotion), choose here the rules that stop this rule from running <em>when</em> they are active."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1760
+#: templates/admin-rule-set-edit.php:1817
+msgctxt "step"
+msgid "Discount tiers"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1762
+msgid "Conditions and audiences"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1763
+msgid "Target audiences and segmentation"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1764
+msgid "Messages and display"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1790
+msgid "Rule summary"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1792
+msgctxt "rule"
+msgid "Check that everything is right, then save. You can go back to any step by clicking its number above."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1799
+msgid "Global: on all items"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1799
+msgid "Tiered: by quantity"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1809
+msgid "No end"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1818
+msgid "Yes ·"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1820
+msgid "Always active"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1821
+msgid "On"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1821
+msgid "Off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1905
+msgid "Invalid response from the server"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1910
+msgid "AJAX error:"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1910
+#: templates/admin-rule-sets.php:125
+msgid "Unknown"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1969
+#: templates/admin-rule-set-edit.php:1979
+msgid "— Choose a product —"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1989
+msgid "— Loading products —"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:1992
+msgid "After discount"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2002
+msgid "Products could not be loaded"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2011
+msgid "No products selected yet."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2060
+msgid "No discount tiers are set. Add at least one tier in the \"Discounts\" tab."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2067
+msgid "The rule won't apply: minimum quantity required"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2067
+msgid "items, selected"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2077
+msgid "The rule won't apply: at least"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2077
+msgid "items are needed. Currently there are"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2112
+msgid "₪ (1 item)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2120
+msgid "Global (on all items)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2121
+msgid "Quantity ("
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2123
+msgid ". Active tier:"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2123
+msgid "+ items ="
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2124
+msgid "₪ off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2159
+#: templates/admin-storefront.php:357
+msgctxt "preview"
+msgid "You saved"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2159
+msgid "Total to pay:"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2172
+msgid "Rule diagnostics tool"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2173
+msgid "A developer tool. Only enable it to troubleshoot problems."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2175
+msgid "Turn the diagnostics tool on/off"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2181
+msgid "If the rule causes a critical error on the site, click \"Run diagnostics\" to get a JSON with all the relevant information, and paste it when you report the problem."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2183
+msgid "Run diagnostics"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2184
+msgid "Copy JSON"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2189
+msgid "Test against a specific product"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2191
+msgid "Product ID"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2192
+msgid "Test product"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2194
+msgid "Enter a product ID to see whether the rule applies to it and what its price is."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2230
+msgid "Summary:"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2445
+msgid "There must be at least one discount tier"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2477
+msgid "Choose variations from the categories..."
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2555
+#: templates/admin-rule-set-edit.php:2569
+msgid "(out of stock)"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2586
+msgid "Error loading products"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2595
+msgid "Please choose categories first"
+msgstr ""
+
+#: templates/admin-rule-set-edit.php:2620
+msgid "Choose rules to exclude..."
+msgstr ""
+
+#: templates/admin-rule-sets.php:62
+msgid "Scheduled"
+msgstr ""
+
+#: templates/admin-rule-sets.php:75
+msgid "Rules &middot;"
+msgstr ""
+
+#: templates/admin-rule-sets.php:75
+msgid "active"
+msgstr ""
+
+#: templates/admin-rule-sets.php:79
+#: templates/admin-rule-sets.php:239
+msgid "Quick create"
+msgstr ""
+
+#: templates/admin-rule-sets.php:85
+msgid "New rule"
+msgstr ""
+
+#: templates/admin-rule-sets.php:92
+msgid "No discount rules found. Create your first rule!"
+msgstr ""
+
+#: templates/admin-rule-sets.php:95
+msgid "Create a rule with the wizard"
+msgstr ""
+
+#: templates/admin-rule-sets.php:98
+msgid "Create a rule manually"
+msgstr ""
+
+#: templates/admin-rule-sets.php:106
+msgid "All &middot;"
+msgstr ""
+
+#: templates/admin-rule-sets.php:107
+msgid "Active &middot;"
+msgstr ""
+
+#: templates/admin-rule-sets.php:108
+msgid "Disabled &middot;"
+msgstr ""
+
+#: templates/admin-rule-sets.php:109
+msgid "Scheduled &middot;"
+msgstr ""
+
+#: templates/admin-rule-sets.php:111
+msgid "Drafts &middot;"
+msgstr ""
+
+#: templates/admin-rule-sets.php:118
+#: assets/admin-script.js:181
+msgid "Tiers"
+msgstr ""
+
+#: templates/admin-rule-sets.php:118
+msgid "Performance"
+msgstr ""
+
+#: templates/admin-rule-sets.php:140
+msgid "Scheduled ·"
+msgstr ""
+
+#: templates/admin-rule-sets.php:140
+msgid "j M"
+msgstr ""
+
+#: templates/admin-rule-sets.php:179
+msgid "Uses"
+msgstr ""
+
+#: templates/admin-rule-sets.php:193
+#: assets/admin-ui.js:170
+msgid "Pause"
+msgstr ""
+
+#: templates/admin-rule-sets.php:193
+#: assets/admin-ui.js:170
+msgid "Activate"
+msgstr ""
+
+#: templates/admin-rule-sets.php:208
+msgctxt "list"
+msgid "Are you sure you want to delete this rule?"
+msgstr ""
+
+#: templates/admin-rule-sets.php:221
+msgid "Tips"
+msgstr ""
+
+#: templates/admin-rule-sets.php:223
+msgid "Each discount rule works independently. You can set different rules for different products or categories"
+msgstr ""
+
+#: templates/admin-rule-sets.php:224
+msgid "If a product meets the conditions of several rules, the first rule found applies"
+msgstr ""
+
+#: templates/admin-rule-sets.php:225
+msgid "Use the duplicate option to create similar rules quickly"
+msgstr ""
+
+#: templates/admin-rule-sets.php:226
+msgid "You can combine included categories with excluding specific products from those categories"
+msgstr ""
+
+#: templates/admin-rule-sets.php:227
+msgid "<strong>New:</strong> the dashboard shows the real performance of every rule. Track sales in real time"
+msgstr ""
+
+#: templates/admin-rule-sets.php:240
+msgid "Choose a template, fill in a number or two, and the rule is live."
+msgstr ""
+
+#: templates/admin-rule-sets.php:282
+msgid "The rule is created for all products and is active immediately. You can narrow it to categories, add conditions or change the discount split when editing."
+msgstr ""
+
+#: templates/admin-rule-sets.php:289
+#: templates/admin-rule-wizard.php:42
+msgid "Create rule"
+msgstr ""
+
+#: templates/admin-rule-sets.php:329
+msgid "Creating…"
+msgstr ""
+
+#: templates/admin-rule-sets.php:335
+msgid "Created!"
+msgstr ""
+
+#: templates/admin-rule-sets.php:339
+#: templates/admin-rule-sets.php:344
+msgid "Creation failed"
+msgstr ""
+
+#: templates/admin-rule-wizard.php:19
+msgid "Create a discount rule step by step"
+msgstr ""
+
+#: templates/admin-rule-wizard.php:23
+#: assets/flow-builder.js:98
+msgid "Discount type"
+msgstr ""
+
+#: templates/admin-rule-wizard.php:24
+#: assets/admin-script.js:143
+msgid "Products"
+msgstr ""
+
+#: templates/admin-rule-wizard.php:25
+msgid "Discount tiers"
+msgstr ""
+
+#: templates/admin-rule-wizard.php:39
+msgid "Continue"
+msgstr ""
+
+#: templates/admin-storefront.php:31
+msgid "Example discount rule"
+msgstr ""
+
+#: templates/admin-storefront.php:33
+msgid "Buy one more unit and get the cheapest item free!"
+msgstr ""
+
+#: templates/admin-storefront.php:52
+msgid "Free shipping over ₪250 · Buy in quantity and the cheapest is free! 🎉"
+msgstr ""
+
+#: templates/admin-storefront.php:159
+#: assets/admin-ui.js:382
+msgid "A discount of ₪"
+msgstr ""
+
+#: templates/admin-storefront.php:159
+msgid "· on the cheapest"
+msgstr ""
+
+#: templates/admin-storefront.php:162
+msgid "Free! · 100% savings 🎉"
+msgstr ""
+
+#: templates/admin-storefront.php:182
+msgid "This is how customers see the discounts"
+msgstr ""
+
+#: templates/admin-storefront.php:182
+msgid "· Based on the rule \""
+msgstr ""
+
+#: templates/admin-storefront.php:182
+msgid "· Sample view (no active rule)"
+msgstr ""
+
+#: templates/admin-storefront.php:191
+msgid "Site-wide promo bar"
+msgstr ""
+
+#: templates/admin-storefront.php:198
+msgid "Product page &middot; tier table"
+msgstr ""
+
+#: templates/admin-storefront.php:213
+msgid "per unit"
+msgstr ""
+
+#: templates/admin-storefront.php:216
+msgid "To"
+msgstr ""
+
+#: templates/admin-storefront.php:216
+msgid "% quantity discount"
+msgstr ""
+
+#: templates/admin-storefront.php:238
+msgid "Product cards &middot; discount badge"
+msgstr ""
+
+#: templates/admin-storefront.php:242
+msgid "Espresso blend"
+msgstr ""
+
+#: templates/admin-storefront.php:243
+msgid "Tasting pack"
+msgstr ""
+
+#: templates/admin-storefront.php:272
+msgid "Cart &middot; progress to the next tier"
+msgstr ""
+
+#: templates/admin-storefront.php:277
+msgid "One more unit and the cheapest is"
+msgstr ""
+
+#: templates/admin-storefront.php:279
+msgid "One more unit to the next discount tier!"
+msgstr ""
+
+#: templates/admin-storefront.php:295
+msgid "Gift picker"
+msgstr ""
+
+#: templates/admin-storefront.php:313
+msgid "Selected ·"
+msgstr ""
+
+#: templates/admin-storefront.php:313
+msgid "Value"
+msgstr ""
+
+#: templates/admin-storefront.php:326
+msgid "Cart notice"
+msgstr ""
+
+#: templates/admin-storefront.php:337
+msgid "Mini cart"
+msgstr ""
+
+#: assets/admin-autosave.js:132
+msgid "less than a minute"
+msgstr ""
+
+#: assets/admin-autosave.js:132
+msgid "a minute"
+msgstr ""
+
+#: assets/admin-autosave.js:132
+msgid "minutes"
+msgstr ""
+
+#: assets/admin-autosave.js:137
+msgid "An unsaved draft was found (from"
+msgstr ""
+
+#: assets/admin-autosave.js:137
+msgid "ago). Restore your work?"
+msgstr ""
+
+#: assets/admin-autosave.js:138
+msgid "Restore"
+msgstr ""
+
+#: assets/admin-autosave.js:139
+msgid "Dismiss"
+msgstr ""
+
+#: assets/admin-script.js:48
+msgid "Are you sure you want to remove this rule?"
+msgstr ""
+
+#: assets/admin-script.js:67
+msgid "Every discount tier needs both a quantity and a discount amount."
+msgstr ""
+
+#: assets/admin-script.js:97
+msgid "Tiered quantity discount"
+msgstr ""
+
+#: assets/admin-script.js:97
+msgid "The more customers buy, the bigger the discount. 3+ = 30%, 5+ = free."
+msgstr ""
+
+#: assets/admin-script.js:98
+msgid "The cheapest item is free (100% off) from a set quantity."
+msgstr ""
+
+#: assets/admin-script.js:99
+msgid "Global discount"
+msgstr ""
+
+#: assets/admin-script.js:99
+msgid "A fixed percentage off every matching item in the cart."
+msgstr ""
+
+#: assets/admin-script.js:100
+msgid "Limited-time sale"
+msgstr ""
+
+#: assets/admin-script.js:100
+msgid "A tiered discount with a schedule. Set the dates in the form."
+msgstr ""
+
+#: assets/admin-script.js:115
+#: assets/admin-script.js:263
+msgid "Quantity ≥"
+msgstr ""
+
+#: assets/admin-script.js:116
+msgid "Discount %"
+msgstr ""
+
+#: assets/admin-script.js:124
+msgid "What kind of discount do you want to create?"
+msgstr ""
+
+#: assets/admin-script.js:124
+msgid "Choose the template that best fits your promotion."
+msgstr ""
+
+#: assets/admin-script.js:136
+msgid "Rule name and product selection"
+msgstr ""
+
+#: assets/admin-script.js:136
+msgid "How will you recognise this rule, and which products does it apply to?"
+msgstr ""
+
+#: assets/admin-script.js:138
+msgid "e.g. Buy 3 coffees, the cheapest is free"
+msgstr ""
+
+#: assets/admin-script.js:139
+msgid "Product selection method"
+msgstr ""
+
+#: assets/admin-script.js:152
+msgid "Select categories"
+msgstr ""
+
+#: assets/admin-script.js:160
+msgid "You will finish the exact product or attribute selection in the form after the wizard."
+msgstr ""
+
+#: assets/admin-script.js:164
+msgid "How big is the discount?"
+msgstr ""
+
+#: assets/admin-script.js:164
+msgid "The discount applies to every matching item in the cart."
+msgstr ""
+
+#: assets/admin-script.js:167
+msgid "Set the discount tiers"
+msgstr ""
+
+#: assets/admin-script.js:167
+msgid "How many units earn how much discount? The discount applies to the cheapest item. 100% = free."
+msgstr ""
+
+#: assets/admin-script.js:171
+msgctxt "rule"
+msgid "Add tier"
+msgstr ""
+
+#: assets/admin-script.js:176
+msgid "Almost done: final review"
+msgstr ""
+
+#: assets/admin-script.js:176
+msgid "Check the details and click \"Create rule\" to fill in the form."
+msgstr ""
+
+#: assets/admin-script.js:180
+#: assets/flow-builder.js:99
+msgid "Applies to"
+msgstr ""
+
+#: assets/admin-script.js:187
+msgid "All set! Clicking \"Create rule\" fills in the form with your settings. There you can fine-tune messages, design and conditions, and then save."
+msgstr ""
+
+#: assets/admin-script.js:200
+msgid "Discount rule wizard"
+msgstr ""
+
+#: assets/admin-script.js:265
+msgid "Percentage %"
+msgstr ""
+
+#: assets/admin-script.js:265
+msgid "Fixed amount ₪"
+msgstr ""
+
+#: assets/admin-script.js:387
+msgid "Import this example rule?"
+msgstr ""
+
+#: assets/admin-script.js:391
+msgid "Importing..."
+msgstr ""
+
+#: assets/admin-script.js:403
+msgid "Imported!"
+msgstr ""
+
+#: assets/admin-script.js:409
+#: assets/admin-script.js:414
+msgid "Error - Try again"
+msgstr ""
+
+#: assets/admin-ui.js:234
+#, js-format
+msgid "Card %d"
+msgstr ""
+
+#. translators: %d: number of cards in this step.
+#: assets/admin-ui.js:243
+#, js-format
+msgid "%d cards"
+msgstr ""
+
+#. translators: 1: current card number, 2: number of cards in this step.
+#: assets/admin-ui.js:245
+#, js-format
+msgid "Card %1$d of %2$d"
+msgstr ""
+
+#: assets/admin-ui.js:252
+msgid "Skip to the next card"
+msgstr ""
+
+#: assets/admin-ui.js:252
+msgid "Skip"
+msgstr ""
+
+#: assets/admin-ui.js:253
+msgid "Show all cards together"
+msgstr ""
+
+#: assets/admin-ui.js:253
+msgid "Show all"
+msgstr ""
+
+#: assets/admin-ui.js:321
+msgid "Selection type (product/variation)"
+msgstr ""
+
+#: assets/admin-ui.js:382
+#: assets/flow-builder.js:120
+msgid "on the cheapest"
+msgstr ""
+
+#. translators: %s: discount percentage.
+#: assets/admin-ui.js:385
+#, js-format
+msgid "the cheapest at %s%% off"
+msgstr ""
+
+#: assets/admin-ui.js:436
+msgid "Buy"
+msgstr ""
+
+#: assets/admin-ui.js:436
+msgid "units and get"
+msgstr ""
+
+#: assets/admin-ui.js:443
+msgid "Buy more, save more!"
+msgstr ""
+
+#: assets/flow-builder.js:14
+msgid "Customer adds a quantity"
+msgstr ""
+
+#: assets/flow-builder.js:14
+#: assets/flow-builder.js:18
+#: assets/flow-builder.js:26
+msgid "Trigger"
+msgstr ""
+
+#: assets/flow-builder.js:22
+msgid "Customer enters a code"
+msgstr ""
+
+#: assets/flow-builder.js:30
+#: assets/flow-builder.js:38
+msgid "Action"
+msgstr ""
+
+#: assets/flow-builder.js:66
+msgid "Subscriber"
+msgstr ""
+
+#: assets/flow-builder.js:87
+msgid "Minimum product quantity (≥)"
+msgstr ""
+
+#: assets/flow-builder.js:88
+msgid "Participating categories (empty = whole store)"
+msgstr ""
+
+#: assets/flow-builder.js:90
+msgid "Minimum cart total (₪)"
+msgstr ""
+
+#: assets/flow-builder.js:92
+msgid "Coupon code the customer enters"
+msgstr ""
+
+#: assets/flow-builder.js:94
+msgid "User roles (empty = all customers)"
+msgstr ""
+
+#: assets/flow-builder.js:96
+msgid "From a quantity of"
+msgstr ""
+
+#: assets/flow-builder.js:99
+msgid "All participating items"
+msgstr ""
+
+#: assets/flow-builder.js:102
+msgid "Gift products"
+msgstr ""
+
+#: assets/flow-builder.js:103
+msgid "Maximum number of gifts"
+msgstr ""
+
+#: assets/flow-builder.js:112
+msgid "· Whole store"
+msgstr ""
+
+#: assets/flow-builder.js:114
+msgid "Cart over ₪"
+msgstr ""
+
+#: assets/flow-builder.js:116
+msgid "Code"
+msgstr ""
+
+#: assets/flow-builder.js:118
+msgid "Roles"
+msgstr ""
+
+#: assets/flow-builder.js:118
+msgid "All customers"
+msgstr ""
+
+#: assets/flow-builder.js:120
+msgid "on everything"
+msgstr ""
+
+#: assets/flow-builder.js:122
+msgid "Choose from a list"
+msgstr ""
+
+#: assets/flow-builder.js:124
+msgid "Added automatically"
+msgstr ""
+
+#: assets/flow-builder.js:148
+msgid "Split paths"
+msgstr ""
+
+#: assets/flow-builder.js:149
+msgid "Parallel paths"
+msgstr ""
+
+#: assets/flow-builder.js:187
+msgid "Path"
+msgstr ""
+
+#: assets/flow-builder.js:214
+msgid "Settings ·"
+msgstr ""
+
+#: assets/flow-builder.js:287
+msgid "Please give the flow a name."
+msgstr ""
+
+#: assets/flow-builder.js:291
+msgid "The flow is empty. Add steps from the palette."
+msgstr ""
+
+#: assets/flow-builder.js:304
+msgid "Error creating the flow"
+msgstr ""
+
+#: assets/flow-builder.js:309
+msgid "Edit the discount rule"
+msgstr ""
+
+#: assets/flow-builder.js:310
+msgid "Edit the gift rule"
+msgstr ""
+
+#: assets/flow-builder.js:311
+msgid "Auto-apply link"
+msgstr ""
+
+#: assets/flow-builder.js:314
+msgid "🎉 Flow created!"
+msgstr ""
+
+#: assets/flow-builder.js:315
+msgid "Incentiv created everything for you. The flow is already live in your store."
+msgstr ""
+
+#: assets/flow-builder.js:324
+msgid "Connection error. Please try again."
+msgstr ""
+
+#: assets/gift-selection.js:91
+msgid "Selected"
+msgstr ""
+
+#: assets/gift-selection.js:169
+#: assets/gift-selection.js:225
+msgid "You can choose up to"
+msgstr ""
+
+#: assets/gift-selection.js:169
+#: assets/gift-selection.js:225
+msgid "gifts in total. Remaining:"
+msgstr ""
+
+#: assets/gift-selection.js:169
+#: assets/gift-selection.js:225
+msgid "units."
+msgstr ""
+
+#: assets/gift-selection.js:179
+#: assets/gift-selection.js:228
+msgid "You have reached the gift limit ("
+msgstr ""
+
+#: assets/gift-selection.js:256
+msgid "Please select a variation first"
+msgstr ""
+
+#: assets/gift-selection.js:349
+#: assets/gift-selection.js:366
+#: assets/gift-selection.js:415
+#: assets/gift-selection.js:432
+#: assets/gift-selection.js:448
+#: assets/gift-selection.js:465
+#: assets/gift-selection.js:622
+#: assets/gift-selection.js:772
+#: assets/gift-selection.js:789
+msgid "✓ Selected"
+msgstr ""
+
+#: assets/gift-selection.js:498
+#: assets/gift-selection.js:509
+msgid "No options are available for this product"
+msgstr ""
+
+#: assets/gift-selection.js:558
+msgid "Choose..."
+msgstr ""
+
+#: assets/gift-selection.js:625
+#: assets/gift-selection.js:806
+#: assets/gift-selection.js:811
+msgid "Confirm"
+msgstr ""
+
+#: assets/gift-selection.js:733
+msgid "This combination is not available"
+msgstr ""
+
+#: assets/gift-selection.js:738
+msgid "This variation is out of stock"
+msgstr ""
+
+#: assets/gift-selection.js:872
+#: assets/gift-selection.js:914
+msgid "Please choose a gift before adding to cart"
+msgstr ""
+
+#: assets/gift-selection.js:882
+#: assets/gift-selection.js:925
+msgid "Please choose"
+msgstr ""
+
+#: assets/gift-selection.js:882
+#: assets/gift-selection.js:925
+msgid "gifts. Selected:"
+msgstr ""
+
+#: assets/gift-selection.js:887
+#: assets/gift-selection.js:931
+msgid "Too many gifts selected ("
+msgstr ""
+
+#: assets/gift-selection.js:887
+#: assets/gift-selection.js:931
+msgid "). The maximum is"
+msgstr ""
+
+#: assets/gift-selection.js:1387
+#: assets/gift-selection.js:1397
+msgid "Error adding gift"
+msgstr ""
+
+#: assets/gift-selection.js:1387
+msgid "to cart:"
+msgstr ""
+
+#: assets/gift-selection.js:1387
+#: assets/gift-selection.js:1454
+msgid "Unknown error"
+msgstr ""
+
+#: assets/gift-selection.js:1397
+msgid "to cart."
+msgstr ""
+
+#: assets/gift-selection.js:1454
+msgid "Error adding the gift to the cart:"
+msgstr ""
+
+#: assets/gift-selection.js:1463
+msgid "Error adding the gift to the cart. Please try again or contact support."
+msgstr ""
+
+#: assets/gift-selection.js:1684
+msgid "No matching variation found. Try a different combination."
+msgstr ""
+
+#: assets/gift-selection.js:1702
+msgid "Adding..."
+msgstr ""
+
+#: assets/gift-selection.js:1757
+msgid "Error adding the gift"
+msgstr ""
+
+#: assets/gift-selection.js:1776
+msgid "Connection error. Try again."
+msgstr ""
+
+#: assets/gift-selection.js:1789
+msgid "Removing..."
+msgstr ""
+
+#: assets/gift-selection.js:1805
+msgid "Error"
+msgstr ""
+
+#: assets/gift-selection.js:1810
+msgid "Connection error"
+msgstr ""

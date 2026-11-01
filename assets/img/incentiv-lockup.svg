@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80" role="img" aria-label="Incentiv">
+  <path d="M36 6 C39.2 26 49 35.8 69 39 C49 42.2 39.2 52 36 72 C32.8 52 23 42.2 3 39 C23 35.8 32.8 26 36 6 Z" fill="#7C3AED"/>
+  <circle cx="58" cy="60" r="11" fill="#F5C451"/>
+  <path d="M58 55 v10 M53 60 h10" stroke="#0E1220" stroke-width="3.6" stroke-linecap="round"/>
+  <text x="84" y="54" font-family="Sora, Assistant, sans-serif" font-size="40" font-weight="800" fill="#0E1220" letter-spacing="-1">Incentiv<tspan fill="#F5C451">.</tspan></text>
+</svg>

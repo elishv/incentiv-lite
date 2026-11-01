@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Incentiv icon - A-in plugin family</title>
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#171C30"/>
+      <stop offset="1" stop-color="#0E1220"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.6">
+      <stop offset="0" stop-color="#A78BFA" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#A78BFA" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g id="background">
+    <rect width="256" height="256" rx="56" fill="url(#tile)"/>
+    <rect width="256" height="256" rx="56" fill="url(#glow)"/>
+    <rect x="1.5" y="1.5" width="253" height="253" rx="54.5" fill="none" stroke="#A78BFA" stroke-opacity="0.28" stroke-width="3"/>
+  </g>
+  <g id="pictogram">
+      <g id="incentiv-mark" transform="scale(2.56)">
+        <g id="sparkle"><path d="M47 12 C50.5 34 61 44.5 83 48 C61 51.5 50.5 62 47 84 C43.5 62 33 51.5 11 48 C33 44.5 43.5 34 47 12 Z" fill="#FFFFFF"/></g>
+        <g id="plus"><circle cx="70" cy="70" r="13.5" fill="#F5C451"/>
+        <path d="M70 63.5 v13 M63.5 70 h13" stroke="#0E1220" stroke-width="4.6" stroke-linecap="round"/></g>
+      </g>
+  </g>
+</svg>
