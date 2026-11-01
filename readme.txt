@@ -1,5 +1,5 @@
 === Incentiv – Advanced Promotions for WooCommerce ===
-Contributors: elishvarzman
+Contributors: elis85
 Donate link: https://a-in.co.il/plugins/incentiv/
 Tags: discounts, quantity discounts, gifts, promotions
 Requires at least: 6.0
