@@ -73,8 +73,8 @@ class MMD_Gift_Rules {
 
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker');
-        wp_enqueue_style('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.css', array(), '4.1.0');
-        wp_enqueue_script('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'), '4.1.0', true);
+        wp_enqueue_style('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.css', array(), '4.0.13');
+        wp_enqueue_script('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'), '4.0.13', true);
 
         wp_enqueue_style('mmd-admin-style', plugins_url('assets/admin-style.css', dirname(__FILE__)), array(), MMD_VERSION);
         wp_enqueue_script('mmd-admin-script', plugins_url('assets/admin-script.js', dirname(__FILE__)), array('jquery', 'select2', 'wp-color-picker', 'wp-i18n'), '1.0.0', true);
