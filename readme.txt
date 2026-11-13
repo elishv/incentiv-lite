@@ -78,7 +78,7 @@ Incentiv does not contact any external service.
 
 == Third-party libraries ==
 
-* Select2 4.1.0 (MIT), `assets/vendor/select2/`. Source: https://github.com/select2/select2
+* Select2 4.0.13 (MIT), `assets/vendor/select2/`. Source: https://github.com/select2/select2
 * jQuery UI 1.13.2 base theme CSS (MIT), `assets/vendor/jquery-ui/`. Source: https://github.com/jquery/jquery-ui
 * Fonts: Assistant and Sora (SIL Open Font License 1.1), Material Symbols Rounded (Apache License 2.0), `assets/vendor/fonts/`.
 
