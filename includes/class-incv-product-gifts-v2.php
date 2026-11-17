@@ -77,19 +77,10 @@ class INCV_Product_Gifts_V2 {
         return self::$instance;
     }
 
-    public function __construct() {
-        // Add meta box to product pages
-        add_action('add_meta_boxes', array($this, 'add_gift_meta_box'));
-
-        // Save meta box data
-        add_action('save_post_product', array($this, 'save_gift_meta_box'), 10, 2);
-
-        // Enqueue admin scripts
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
-
-        // Frontend hooks
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_scripts'));
-        // Display gift selection on product page - configurable hook location
+    /**
+     * Hook the gift selection box into the product page location chosen in the styling settings.
+     */
+    public function register_gift_display_hook() {
         $gift_display_hook = 'woocommerce_after_add_to_cart_button';
         $gift_display_priority = 10;
         if (class_exists('INCV_Gift_Rules')) {
@@ -126,6 +117,23 @@ class INCV_Product_Gifts_V2 {
         if ($gift_display_hook) {
             add_action($gift_display_hook, array($this, 'display_gift_selection'), $gift_display_priority);
         }
+    }
+
+    public function __construct() {
+        // Add meta box to product pages
+        add_action('add_meta_boxes', array($this, 'add_gift_meta_box'));
+
+        // Save meta box data
+        add_action('save_post_product', array($this, 'save_gift_meta_box'), 10, 2);
+
+        // Enqueue admin scripts
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
+
+        // Frontend hooks
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_scripts'));
+        // Display gift selection on product page - configurable hook location.
+        // Resolved on init: the styling defaults contain translated strings.
+        add_action('init', array($this, 'register_gift_display_hook'), 5);
         // Also hook into Unico Elementor add-to-cart widget (displays after the add-to-cart button)
         add_action('unico_after_add_to_cart_form', array($this, 'display_gift_selection_for_widget'));
         add_action('woocommerce_add_to_cart', array($this, 'handle_gift_selection'), 10, 6);
