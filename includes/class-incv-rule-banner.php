@@ -1,9 +1,9 @@
 <?php
 /**
- * MMD Rule Banner — display rule banners on product pages.
+ * Incentiv Rule Banner — display rule banners on product pages.
  * Provides:
  *   - get_banner_html_for_product($product_id, $rule_id = '')
- *   - [mmd_rule_banner] shortcode
+ *   - [incv_rule_banner] shortcode
  *   - Elementor widget registration
  */
 
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Rule_Banner {
+class INCV_Rule_Banner {
 
     private static $instance = null;
 
@@ -21,7 +21,7 @@ class MMD_Rule_Banner {
     }
 
     private function __construct() {
-        add_shortcode('mmd_rule_banner', array($this, 'shortcode'));
+        add_shortcode('incv_rule_banner', array($this, 'shortcode'));
 
         // Elementor widget registration (only if Elementor is loaded)
         add_action('elementor/widgets/register', array($this, 'register_elementor_widget'));
@@ -37,7 +37,7 @@ class MMD_Rule_Banner {
      * @return array|null The matching rule set, or null if none.
      */
     public function find_matching_rule($product_id = 0, $rule_id = '') {
-        if (!class_exists('MMD_Discount_Rules')) return null;
+        if (!class_exists('INCV_Discount_Rules')) return null;
 
         if (!$product_id) {
             global $product;
@@ -46,10 +46,10 @@ class MMD_Rule_Banner {
             }
         }
 
-        $product = $product_id ? wc_get_product($product_id) : null;
+        $product = $product_id ? wc_get_product($product_id) : null; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's own global $product, set for the current product as WooCommerce templates expect.
         if (!$product) return null;
 
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
         if (empty($rule_sets)) return null;
 
         // Build a cart_item-like array so the qualifying check works
@@ -61,11 +61,11 @@ class MMD_Rule_Banner {
             'data' => $product,
         );
 
-        $qualifying = MMD_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
+        $qualifying = INCV_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
 
         foreach ($qualifying as $rule_set) {
             if (!empty($rule_set['enabled']) && $rule_set['enabled'] !== 'yes') continue;
-            if (!MMD_Discount_Rules::is_rule_in_schedule_public($rule_set)) continue;
+            if (!INCV_Discount_Rules::is_rule_in_schedule_public($rule_set)) continue;
 
             // If a specific rule_id was requested, only that one matches
             if ($rule_id !== '' && (!isset($rule_set['id']) || $rule_set['id'] !== $rule_id)) continue;
@@ -112,30 +112,30 @@ class MMD_Rule_Banner {
         $link = isset($rule_set['banner_link_url']) ? trim($rule_set['banner_link_url']) : '';
 
         $img = sprintf(
-            '<img src="%s" alt="%s" class="mmd-rule-banner-image" style="max-width:100%%;height:auto;display:block;">',
+            '<img src="%s" alt="%s" class="incv-rule-banner-image" style="max-width:100%%;height:auto;display:block;">',
             esc_url($image_url),
             esc_attr($alt)
         );
 
         if ($link) {
             $img = sprintf(
-                '<a href="%s" class="mmd-rule-banner-link">%s</a>',
+                '<a href="%s" class="incv-rule-banner-link">%s</a>',
                 esc_url($link),
                 $img
             );
         }
 
-        return '<div class="mmd-rule-banner" data-rule-id="' . esc_attr(isset($rule_set['id']) ? $rule_set['id'] : '') . '">' . $img . '</div>';
+        return '<div class="incv-rule-banner" data-rule-id="' . esc_attr(isset($rule_set['id']) ? $rule_set['id'] : '') . '">' . $img . '</div>';
     }
 
     /**
-     * Shortcode: [mmd_rule_banner] or [mmd_rule_banner rule_id="abc" product_id="123"]
+     * Shortcode: [incv_rule_banner] or [incv_rule_banner rule_id="abc" product_id="123"]
      */
     public function shortcode($atts) {
         $atts = shortcode_atts(array(
             'rule_id' => '',
             'product_id' => 0,
-        ), $atts, 'mmd_rule_banner');
+        ), $atts, 'incv_rule_banner');
 
         return $this->get_banner_html_for_product(intval($atts['product_id']), $atts['rule_id']);
     }
@@ -146,12 +146,12 @@ class MMD_Rule_Banner {
     public function register_elementor_widget($widgets_manager) {
         if (!did_action('elementor/loaded')) return;
 
-        require_once MMD_PLUGIN_DIR . 'includes/class-mmd-rule-banner-elementor-widget.php';
+        require_once INCV_PLUGIN_DIR . 'includes/class-incv-rule-banner-elementor-widget.php';
 
-        if (class_exists('MMD_Rule_Banner_Elementor_Widget') && $widgets_manager && method_exists($widgets_manager, 'register')) {
-            $widgets_manager->register(new MMD_Rule_Banner_Elementor_Widget());
-        } elseif (class_exists('MMD_Rule_Banner_Elementor_Widget') && $widgets_manager && method_exists($widgets_manager, 'register_widget_type')) {
-            $widgets_manager->register_widget_type(new MMD_Rule_Banner_Elementor_Widget());
+        if (class_exists('INCV_Rule_Banner_Elementor_Widget') && $widgets_manager && method_exists($widgets_manager, 'register')) {
+            $widgets_manager->register(new INCV_Rule_Banner_Elementor_Widget());
+        } elseif (class_exists('INCV_Rule_Banner_Elementor_Widget') && $widgets_manager && method_exists($widgets_manager, 'register_widget_type')) {
+            $widgets_manager->register_widget_type(new INCV_Rule_Banner_Elementor_Widget());
         }
     }
 }

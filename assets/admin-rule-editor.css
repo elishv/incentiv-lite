@@ -1,0 +1,102 @@
+/* Incentiv rule set editor (was inline in templates/admin-rule-set-edit.php). Scoped to the editor wrap. */
+/* Step visibility */
+.incv-rule-set-editor .incv-card[data-incv-step]:not(.is-step-active) { display: none; }
+/* ---- INCV Rule Toolbar ---- */
+.incv-rule-set-editor .incv-rule-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid var(--incv-border);
+    border-radius: var(--incv-radius-md);
+    position: sticky;
+    top: 32px;
+    z-index: 10;
+    box-shadow: var(--incv-shadow-sm);
+}
+.incv-rule-set-editor .incv-rule-toolbar-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.incv-rule-set-editor .incv-rule-toolbar-actions .button .dashicons { font-size: 16px; width: 16px; height: 16px; vertical-align: middle; }
+.incv-rule-set-editor .incv-rule-toolbar-jump { display: flex; gap: 8px; align-items: center; }
+.incv-rule-set-editor .incv-rule-toolbar-jump label { color: var(--incv-text-muted); font-size: 12.5px; font-weight: 600; }
+.incv-rule-set-editor .incv-rule-toolbar-jump select { min-width: 200px; }
+/* ---- Collapsible Cards ---- */
+.incv-rule-set-editor .incv-card { padding: 0 !important; overflow: hidden; transition: box-shadow 0.15s ease; }
+.incv-rule-set-editor .incv-card:hover { box-shadow: var(--incv-shadow-md); }
+.incv-rule-set-editor .incv-card-title {
+    user-select: none;
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    margin: 0 !important;
+    padding: 16px 20px !important;
+    background: #fff;
+    border-bottom: 1px solid transparent;
+    position: relative;
+    font-size: 15px;
+    font-weight: 700;
+}
+.incv-rule-set-editor .incv-card.is-open .incv-card-title { border-bottom-color: var(--incv-border-light); }
+.incv-rule-set-editor .incv-card-body { padding: 16px 20px 20px; display: none; }
+.incv-rule-set-editor .incv-card.is-open .incv-card-body { display: block; }
+.incv-rule-set-editor .incv-card.has-search-hit { box-shadow: 0 0 0 2px var(--incv-primary); }
+/* Sticky save bar */
+.incv-rule-set-editor .incv-rule-submit-bar {
+    position: sticky;
+    bottom: 0;
+    background: rgba(238, 241, 246, .92);
+    backdrop-filter: blur(4px);
+    padding: 12px 0;
+    margin: 20px 0 0;
+    border-top: 1px solid var(--incv-border);
+    z-index: 9;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+/* ---- Preview Modal ---- */
+.incv-rule-set-editor .incv-preview-modal { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; font-family: var(--incv-font); }
+.incv-rule-set-editor .incv-preview-overlay { position: absolute; inset: 0; background: rgba(16,24,40,0.55); backdrop-filter: blur(2px); }
+.incv-rule-set-editor .incv-preview-dialog { position: relative; width: 90%; max-width: 900px; max-height: 90vh; background: #fff; border-radius: 18px; box-shadow: 0 30px 70px rgba(16,24,40,0.4); display: flex; flex-direction: column; overflow: hidden; }
+.incv-rule-set-editor .incv-preview-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; background: var(--incv-grad-brand); color: #fff; }
+.incv-rule-set-editor .incv-preview-header h2 { margin: 0; font-size: 17px; font-weight: 800; color: #fff; }
+.incv-rule-set-editor .incv-preview-close { padding: 4px; color: #fff !important; }
+.incv-rule-set-editor .incv-preview-body { padding: 20px; overflow-y: auto; flex: 1; }
+.incv-rule-set-editor .incv-preview-footer { padding: 12px 20px; border-top: 1px solid var(--incv-border-light); display: flex; justify-content: flex-end; gap: 8px; background: #fafbfc; }
+.incv-rule-set-editor #incv-preview-products-table th, .incv-rule-set-editor #incv-preview-products-table td { padding: 8px 10px; vertical-align: middle; }
+.incv-rule-set-editor #incv-preview-products-table .incv-preview-product-search { width: 100%; }
+.incv-rule-set-editor #incv-preview-products-table input[type="number"] { width: 70px; }
+.incv-rule-set-editor .incv-preview-summary { margin-top: 16px; padding: 13px 15px; background: var(--incv-success-light); border-radius: 10px; font-size: 13px; }
+.incv-rule-set-editor .incv-preview-summary strong { color: var(--incv-success); }
+/* Mobile */
+@media (max-width: 782px) {
+.incv-rule-set-editor .incv-rule-toolbar {
+        position: static;
+        flex-direction: column;
+        align-items: stretch;
+    }
+.incv-rule-set-editor .incv-rule-toolbar-actions, .incv-rule-set-editor .incv-rule-toolbar-jump { justify-content: center; }
+.incv-rule-set-editor .incv-rule-toolbar-jump select { flex: 1; }
+.incv-rule-set-editor .incv-card-title { padding: 12px 14px !important; font-size: 14px; }
+.incv-rule-set-editor .incv-card-body { padding: 12px 14px 16px; }
+.incv-rule-set-editor .form-table th { padding-bottom: 4px; width: auto; display: block; }
+.incv-rule-set-editor .form-table td { padding-top: 0; display: block; }
+.incv-rule-set-editor input[type="text"], .incv-rule-set-editor input[type="number"], .incv-rule-set-editor input[type="url"], .incv-rule-set-editor select, .incv-rule-set-editor textarea {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+.incv-rule-set-editor .incv-rule-submit-bar { margin: 16px 0 0; padding: 12px 10px; }
+.incv-rule-set-editor .incv-preview-dialog { width: 100%; max-width: 100%; max-height: 100vh; border-radius: 0; }
+.incv-rule-set-editor #incv-preview-products-table thead { display: none; }
+.incv-rule-set-editor #incv-preview-products-table tr { display: block; padding: 12px 0; border-bottom: 1px solid var(--incv-border-light); }
+.incv-rule-set-editor #incv-preview-products-table td { display: flex; justify-content: space-between; padding: 4px 0; border: 0; }
+.incv-rule-set-editor #incv-preview-products-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--incv-text-light);
+    }
+}

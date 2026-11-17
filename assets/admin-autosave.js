@@ -1,8 +1,8 @@
 /**
  * Incentiv — shared editor autosave / draft recovery.
  *
- * Any editor form/container tagged with data-mmd-autosave="<scope>" (and an
- * optional data-mmd-record-id) is snapshotted to localStorage as the user
+ * Any editor form/container tagged with data-incv-autosave="<scope>" (and an
+ * optional data-incv-record-id) is snapshotted to localStorage as the user
  * works. If an unsaved draft is found on load, a banner offers to restore it.
  * Dynamic tier rows (discount rules, event quantity tiers) are rebuilt
  * positionally so nothing is lost. Drafts clear on save.
@@ -13,8 +13,8 @@
 
     // Dynamic repeatable-row groups: rebuilt by count + filled positionally.
     var DYN_GROUPS = [
-        { btn: '#add_discount_rule', rowSel: '#discount_rules_container .mmd-discount-rule', prefix: 'discount_rules' },
-        { btn: '.add-discount-row', rowSel: '.mmd-discount-tiers tr:has(input[name^="quantity_discounts"])', prefix: 'quantity_discounts' }
+        { btn: '#add_discount_rule', rowSel: '#discount_rules_container .incv-discount-rule', prefix: 'discount_rules' },
+        { btn: '.add-discount-row', rowSel: '.incv-discount-tiers tr:has(input[name^="quantity_discounts"])', prefix: 'quantity_discounts' }
     ];
 
     function debounce(fn, wait) {
@@ -23,13 +23,13 @@
     }
 
     function init() {
-        var $root = $('[data-mmd-autosave]').first();
-        if (!$root.length || $root.data('mmdAutosaveBound')) { return; }
-        $root.data('mmdAutosaveBound', true);
+        var $root = $('[data-incv-autosave]').first();
+        if (!$root.length || $root.data('incvAutosaveBound')) { return; }
+        $root.data('incvAutosaveBound', true);
 
-        var scope = String($root.data('mmd-autosave') || 'form');
-        var recId = String($root.data('mmd-record-id') || '').trim() || 'new';
-        var KEY = 'mmd_autosave_' + scope + '_' + recId;
+        var scope = String($root.data('incv-autosave') || 'form');
+        var recId = String($root.data('incv-record-id') || '').trim() || 'new';
+        var KEY = 'incv_autosave_' + scope + '_' + recId;
         var INTERVAL = 4000;
         var submitting = false;
 
@@ -119,11 +119,11 @@
             if (submitting) { return; }
             // When an editor persists real server-side drafts it sets this flag,
             // so the localStorage safety net stands down to avoid a competing draft.
-            if ($root.data('mmdServerDraftActive')) { return; }
+            if ($root.data('incvServerDraftActive')) { return; }
             try { localStorage.setItem(KEY, JSON.stringify(serialize())); } catch (e) { /* full/unavailable */ }
         }
         function clear() { try { localStorage.removeItem(KEY); } catch (e) {} }
-        window.mmdClearAutosave = clear;
+        window.incvClearAutosave = clear;
 
         function showBanner(snapshot) {
             var age = Date.now() - (snapshot.t || 0);
@@ -132,20 +132,20 @@
             var ago = mins < 1 ? __( 'less than a minute', 'incentiv' ) : (mins === 1 ? __( 'a minute', 'incentiv' ) : mins + ( ' ' + __( 'minutes', 'incentiv' ) ));
 
             var $b = $(
-                '<div class="mmd-autosave-banner">' +
+                '<div class="incv-autosave-banner">' +
                 '<span class="msr">history</span>' +
-                ( '<span class="mmd-autosave-text">' + __( 'An unsaved draft was found (from', 'incentiv' ) + ' ' ) + ago + ( __( 'ago). Restore your work?', 'incentiv' ) + '</span>' ) +
-                ( '<button type="button" class="mmd-btn mmd-btn-brand mmd-restore-draft"><span class="msr">restore</span>' + __( 'Restore', 'incentiv' ) + '</button>' ) +
-                ( '<button type="button" class="mmd-btn mmd-btn-outline mmd-discard-draft">' + __( 'Dismiss', 'incentiv' ) + '</button>' ) +
+                ( '<span class="incv-autosave-text">' + __( 'An unsaved draft was found (from', 'incentiv' ) + ' ' ) + ago + ( __( 'ago). Restore your work?', 'incentiv' ) + '</span>' ) +
+                ( '<button type="button" class="incv-btn incv-btn-brand incv-restore-draft"><span class="msr">restore</span>' + __( 'Restore', 'incentiv' ) + '</button>' ) +
+                ( '<button type="button" class="incv-btn incv-btn-outline incv-discard-draft">' + __( 'Dismiss', 'incentiv' ) + '</button>' ) +
                 '</div>'
             );
             $root.before($b);
 
-            $b.on('click', '.mmd-restore-draft', function () {
+            $b.on('click', '.incv-restore-draft', function () {
                 restore(snapshot);
                 $b.slideUp(180, function () { $b.remove(); });
             });
-            $b.on('click', '.mmd-discard-draft', function () {
+            $b.on('click', '.incv-discard-draft', function () {
                 clear();
                 $b.slideUp(180, function () { $b.remove(); });
             });
@@ -165,15 +165,15 @@
         // Save triggers: debounced on edit + steady interval (registered so it
         // is cleared before a PJAX swap instead of leaking).
         $root.on('input change', 'input, select, textarea', debounce(save, 700));
-        var timer = (window.mmdSetInterval || setInterval)(save, INTERVAL);
+        var timer = (window.incvSetInterval || setInterval)(save, INTERVAL);
 
         // Clear on save. Native submit (rule/event) fires submit; AJAX saves
         // (gift) clear on the save click — the interval re-saves within a few
         // seconds if the save actually failed, so nothing is lost.
         $root.on('submit', function () { submitting = true; clearInterval(timer); clear(); });
-        $(document).on('click.mmdpjax', '#save-gift-rule, #save-rule-set', function () { setTimeout(clear, 1200); });
+        $(document).on('click.incvpjax', '#save-gift-rule, #save-rule-set', function () { setTimeout(clear, 1200); });
     }
 
     $(init);
-    $(document).on('mmd:pjax:after', init);
+    $(document).on('incv:pjax:after', init);
 })(jQuery);

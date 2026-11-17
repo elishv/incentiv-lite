@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template included from a class method; its variables are local to that method, not globals.
 /**
  * Admin Gift Styling Page
  */
@@ -8,22 +9,22 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<div class="wrap mmd-admin-wrap">
+<div class="wrap incv-admin-wrap">
     <?php include dirname(__FILE__) . '/admin-nav-tabs.php'; ?>
     <h1>
         <span class="dashicons dashicons-art"></span> <?php esc_html_e( 'Design settings', 'incentiv' ); ?>
-        <a href="<?php echo esc_url( admin_url('admin.php?page=mmd-gift-rules') ); ?>" class="page-title-action"><?php esc_html_e( '← Back to list', 'incentiv' ); ?></a>
+        <a href="<?php echo esc_url( admin_url('admin.php?page=incv-gift-rules') ); ?>" class="page-title-action"><?php esc_html_e( '← Back to list', 'incentiv' ); ?></a>
     </h1>
-    <p class="mmd-page-lead"><?php esc_html_e( 'Customise how the gift selection box and cart notes look. The preview on the side updates instantly with every change.', 'incentiv' ); ?></p>
+    <p class="incv-page-lead"><?php esc_html_e( 'Customise how the gift selection box and cart notes look. The preview on the side updates instantly with every change.', 'incentiv' ); ?></p>
 
-    <div class="mmd-styling-layout">
+    <div class="incv-styling-layout">
 
         <!-- ============ CONTROLS ============ -->
-        <div class="mmd-styling-controls">
+        <div class="incv-styling-controls">
 
             <!-- Gift Box Styling -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-gifts"></span> <?php esc_html_e( 'Gift selection box design', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-gifts"></span> <?php esc_html_e( 'Gift selection box design', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -38,8 +39,8 @@ if (!defined('ABSPATH')) {
                         <th scope="row"><label for="gift_box_subtitle_text"><?php esc_html_e( 'Subtitle text', 'incentiv' ); ?></label></th>
                         <td>
                             <input type="text" name="gift_box_subtitle_text" id="gift_box_subtitle_text" value="<?php echo esc_attr(isset($styling['gift_box_subtitle_text']) ? $styling['gift_box_subtitle_text'] : __( 'Buy this product and get {gift_type} on {selection_type}:', 'incentiv' )); ?>" class="large-text">
-                            <div class="mmd-mergetag-wrap">
-                                <button type="button" class="mmd-mergetag-btn" data-target="gift_box_subtitle_text" data-tags="gift_type,selection_type"><span class="msr">sell</span> <?php esc_html_e( 'Merge tags', 'incentiv' ); ?></button>
+                            <div class="incv-mergetag-wrap">
+                                <button type="button" class="incv-mergetag-btn" data-target="gift_box_subtitle_text" data-tags="gift_type,selection_type"><span class="msr">sell</span> <?php esc_html_e( 'Merge tags', 'incentiv' ); ?></button>
                             </div>
                             <p class="description"><?php esc_html_e( 'The subtitle under the title. Click "Merge tags" to insert dynamic values such as the gift type or the selection type.', 'incentiv' ); ?></p>
                         </td>
@@ -56,7 +57,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="gift_box_bg_color_1"><?php esc_html_e( 'Background colour 1', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="gift_box_bg_color_1" id="gift_box_bg_color_1" value="<?php echo esc_attr($styling['gift_box_bg_color_1']); ?>" class="mmd-color-picker">
+                            <input type="text" name="gift_box_bg_color_1" id="gift_box_bg_color_1" value="<?php echo esc_attr($styling['gift_box_bg_color_1']); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'First colour of the background gradient', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -64,7 +65,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="gift_box_bg_color_2"><?php esc_html_e( 'Background colour 2', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="gift_box_bg_color_2" id="gift_box_bg_color_2" value="<?php echo esc_attr($styling['gift_box_bg_color_2']); ?>" class="mmd-color-picker">
+                            <input type="text" name="gift_box_bg_color_2" id="gift_box_bg_color_2" value="<?php echo esc_attr($styling['gift_box_bg_color_2']); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'Second colour of the background gradient', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -72,7 +73,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="gift_box_text_color"><?php esc_html_e( 'Text colour', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="gift_box_text_color" id="gift_box_text_color" value="<?php echo esc_attr($styling['gift_box_text_color']); ?>" class="mmd-color-picker">
+                            <input type="text" name="gift_box_text_color" id="gift_box_text_color" value="<?php echo esc_attr($styling['gift_box_text_color']); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'The text colour in the gift box', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -128,7 +129,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="gift_box_border_color"><?php esc_html_e( 'Border colour', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="gift_box_border_color" id="gift_box_border_color" value="<?php echo esc_attr(isset($styling['gift_box_border_color']) ? $styling['gift_box_border_color'] : '#ffffff'); ?>" class="mmd-color-picker">
+                            <input type="text" name="gift_box_border_color" id="gift_box_border_color" value="<?php echo esc_attr(isset($styling['gift_box_border_color']) ? $styling['gift_box_border_color'] : '#ffffff'); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'Border colour (if set)', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -149,7 +150,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="gift_button_bg_color"><?php esc_html_e( 'Button background colour', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="gift_button_bg_color" id="gift_button_bg_color" value="<?php echo esc_attr(isset($styling['gift_button_bg_color']) ? $styling['gift_button_bg_color'] : '#ffffff'); ?>" class="mmd-color-picker">
+                            <input type="text" name="gift_button_bg_color" id="gift_button_bg_color" value="<?php echo esc_attr(isset($styling['gift_button_bg_color']) ? $styling['gift_button_bg_color'] : '#ffffff'); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'Background colour of the "Choose" button', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -157,7 +158,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="gift_button_text_color"><?php esc_html_e( 'Button text colour', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="gift_button_text_color" id="gift_button_text_color" value="<?php echo esc_attr(isset($styling['gift_button_text_color']) ? $styling['gift_button_text_color'] : '#667eea'); ?>" class="mmd-color-picker">
+                            <input type="text" name="gift_button_text_color" id="gift_button_text_color" value="<?php echo esc_attr(isset($styling['gift_button_text_color']) ? $styling['gift_button_text_color'] : '#667eea'); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'Text colour of the "Choose" button', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -165,7 +166,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="gift_button_hover_bg"><?php esc_html_e( 'Button background colour (hover)', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="gift_button_hover_bg" id="gift_button_hover_bg" value="<?php echo esc_attr(isset($styling['gift_button_hover_bg']) ? $styling['gift_button_hover_bg'] : '#667eea'); ?>" class="mmd-color-picker">
+                            <input type="text" name="gift_button_hover_bg" id="gift_button_hover_bg" value="<?php echo esc_attr(isset($styling['gift_button_hover_bg']) ? $styling['gift_button_hover_bg'] : '#667eea'); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'Background colour on mouse hover', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -173,7 +174,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="gift_button_hover_text"><?php esc_html_e( 'Button text colour (hover)', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="gift_button_hover_text" id="gift_button_hover_text" value="<?php echo esc_attr(isset($styling['gift_button_hover_text']) ? $styling['gift_button_hover_text'] : '#ffffff'); ?>" class="mmd-color-picker">
+                            <input type="text" name="gift_button_hover_text" id="gift_button_hover_text" value="<?php echo esc_attr(isset($styling['gift_button_hover_text']) ? $styling['gift_button_hover_text'] : '#ffffff'); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'Text colour on mouse hover', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -197,14 +198,14 @@ if (!defined('ABSPATH')) {
             </div>
 
             <!-- Cart Notes Styling -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-edit"></span> <?php esc_html_e( 'Cart notes design', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-edit"></span> <?php esc_html_e( 'Cart notes design', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="cart_note_bg_color"><?php esc_html_e( 'Background colour', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="cart_note_bg_color" id="cart_note_bg_color" value="<?php echo esc_attr($styling['cart_note_bg_color']); ?>" class="mmd-color-picker">
+                            <input type="text" name="cart_note_bg_color" id="cart_note_bg_color" value="<?php echo esc_attr($styling['cart_note_bg_color']); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'Background colour of the note field', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -212,7 +213,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="cart_note_text_color"><?php esc_html_e( 'Text colour', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="cart_note_text_color" id="cart_note_text_color" value="<?php echo esc_attr($styling['cart_note_text_color']); ?>" class="mmd-color-picker">
+                            <input type="text" name="cart_note_text_color" id="cart_note_text_color" value="<?php echo esc_attr($styling['cart_note_text_color']); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'Text colour of the note field', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -236,7 +237,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="cart_note_border_color"><?php echo esc_html_x( 'Border colour', 'note', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="cart_note_border_color" id="cart_note_border_color" value="<?php echo esc_attr($styling['cart_note_border_color']); ?>" class="mmd-color-picker">
+                            <input type="text" name="cart_note_border_color" id="cart_note_border_color" value="<?php echo esc_attr($styling['cart_note_border_color']); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'The border colour around the field', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -268,7 +269,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="cart_note_placeholder_color"><?php esc_html_e( 'Placeholder colour', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="cart_note_placeholder_color" id="cart_note_placeholder_color" value="<?php echo esc_attr(isset($styling['cart_note_placeholder_color']) ? $styling['cart_note_placeholder_color'] : '#999999'); ?>" class="mmd-color-picker">
+                            <input type="text" name="cart_note_placeholder_color" id="cart_note_placeholder_color" value="<?php echo esc_attr(isset($styling['cart_note_placeholder_color']) ? $styling['cart_note_placeholder_color'] : '#999999'); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'The placeholder text colour', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -276,7 +277,7 @@ if (!defined('ABSPATH')) {
                     <tr>
                         <th scope="row"><label for="cart_note_focus_border"><?php esc_html_e( 'Border colour (focus)', 'incentiv' ); ?></label></th>
                         <td>
-                            <input type="text" name="cart_note_focus_border" id="cart_note_focus_border" value="<?php echo esc_attr(isset($styling['cart_note_focus_border']) ? $styling['cart_note_focus_border'] : '#667eea'); ?>" class="mmd-color-picker">
+                            <input type="text" name="cart_note_focus_border" id="cart_note_focus_border" value="<?php echo esc_attr(isset($styling['cart_note_focus_border']) ? $styling['cart_note_focus_border'] : '#667eea'); ?>" class="incv-color-picker">
                             <p class="description"><?php esc_html_e( 'The border colour when the field is active', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -284,8 +285,8 @@ if (!defined('ABSPATH')) {
             </div>
 
             <!-- Developer Settings -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-code-standards"></span> <?php esc_html_e( 'Developer Settings', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-code-standards"></span> <?php esc_html_e( 'Developer Settings', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -304,25 +305,25 @@ if (!defined('ABSPATH')) {
         </div>
 
         <!-- ============ STICKY LIVE PREVIEW ============ -->
-        <aside class="mmd-styling-preview">
-            <div class="mmd-preview-rail">
-                <div class="mmd-preview-rail-head">
+        <aside class="incv-styling-preview">
+            <div class="incv-preview-rail">
+                <div class="incv-preview-rail-head">
                     <span class="msr">visibility</span> <?php esc_html_e( 'Preview', 'incentiv' ); ?>
-                    <span class="mmd-preview-live">Live</span>
+                    <span class="incv-preview-live">Live</span>
                 </div>
 
-                <div class="mmd-preview-stage">
-                    <div class="mmd-preview-stage-label"><?php esc_html_e( 'Product page · gift box', 'incentiv' ); ?></div>
+                <div class="incv-preview-stage">
+                    <div class="incv-preview-stage-label"><?php esc_html_e( 'Product page · gift box', 'incentiv' ); ?></div>
 
-                    <div class="mmd-preview-mock-product">
-                        <span class="mmd-preview-mock-thumb"><span class="msr">local_cafe</span></span>
-                        <span class="mmd-preview-mock-lines">
+                    <div class="incv-preview-mock-product">
+                        <span class="incv-preview-mock-thumb"><span class="msr">local_cafe</span></span>
+                        <span class="incv-preview-mock-lines">
                             <b><?php esc_html_e( 'Elegant ceramic mug', 'incentiv' ); ?></b>
-                            <span class="mmd-preview-mock-price">₪89.00</span>
+                            <span class="incv-preview-mock-price">₪89.00</span>
                         </span>
                     </div>
 
-                    <div class="mmd-gift-box-preview" id="gift-box-preview">
+                    <div class="incv-gift-box-preview" id="gift-box-preview">
                         <h3 id="gift-preview-title"><?php esc_html_e( '🎁 Choose your gift!', 'incentiv' ); ?></h3>
                         <p id="gift-preview-subtitle"><?php esc_html_e( 'Buy this product and get a gift on a product of your choice:', 'incentiv' ); ?></p>
                         <div class="preview-product">
@@ -335,14 +336,14 @@ if (!defined('ABSPATH')) {
                         </div>
                     </div>
 
-                    <div class="mmd-preview-stage-label"><?php esc_html_e( 'Cart · order note', 'incentiv' ); ?></div>
-                    <div class="mmd-cart-note-preview" id="cart-note-preview">
+                    <div class="incv-preview-stage-label"><?php esc_html_e( 'Cart · order note', 'incentiv' ); ?></div>
+                    <div class="incv-cart-note-preview" id="cart-note-preview">
                         <label><?php esc_html_e( 'Order note', 'incentiv' ); ?></label>
                         <textarea rows="3" placeholder="<?php esc_attr_e( 'Add a special note to your order...', 'incentiv' ); ?>"></textarea>
                     </div>
                 </div>
 
-                <div class="mmd-styling-actions-sticky">
+                <div class="incv-styling-actions-sticky">
                     <button type="button" class="button button-primary button-large" id="save-styling"><?php esc_html_e( 'Save design', 'incentiv' ); ?></button>
                     <button type="button" class="button button-large" id="reset-styling"><?php esc_html_e( 'Reset', 'incentiv' ); ?></button>
                 </div>
@@ -352,16 +353,16 @@ if (!defined('ABSPATH')) {
     </div>
 </div>
 
-<script>
+<?php ob_start(); ?>
 jQuery(document).ready(function($) {
     // Initialize color pickers
-    $('.mmd-color-picker').wpColorPicker({
+    $('.incv-color-picker').wpColorPicker({
         change: updatePreviews,
         clear: updatePreviews
     });
 
     // Update previews on any control change
-    $('.mmd-styling-controls').on('input change', 'input, select', updatePreviews);
+    $('.incv-styling-controls').on('input change', 'input, select', updatePreviews);
 
     // Initial preview update
     updatePreviews();
@@ -437,10 +438,10 @@ jQuery(document).ready(function($) {
         noteLabel.css({ 'color': noteText, 'font-size': labelSize + 'px' });
 
         // Placeholder + focus colors (injected styles)
-        $('#mmd-placeholder-style').remove();
-        $('<style id="mmd-placeholder-style">#cart-note-preview textarea::placeholder { color: ' + placeholderColor + '; }</style>').appendTo('head');
-        $('#mmd-focus-style').remove();
-        $('<style id="mmd-focus-style">#cart-note-preview textarea:focus { border-color: ' + focusBorder + '; outline: none; }</style>').appendTo('head');
+        $('#incv-placeholder-style').remove();
+        $('<style id="incv-placeholder-style">#cart-note-preview textarea::placeholder { color: ' + placeholderColor + '; }</style>').appendTo('head');
+        $('#incv-focus-style').remove();
+        $('<style id="incv-focus-style">#cart-note-preview textarea:focus { border-color: ' + focusBorder + '; outline: none; }</style>').appendTo('head');
     }
 
     // Save styling
@@ -485,8 +486,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_save_gift_styling',
-                nonce: mmdGiftRulesAjax.nonce,
+                action: 'incv_save_gift_styling',
+                nonce: incvGiftRulesAjax.nonce,
                 styling: JSON.stringify(stylingData)
             },
             success: function(response) {
@@ -543,4 +544,4 @@ jQuery(document).ready(function($) {
         updatePreviews();
     });
 });
-</script>
+<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>

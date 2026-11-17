@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Elementor_Widget {
+class INCV_Elementor_Widget {
 
     public function __construct() {
         add_action('elementor/widgets/register', array($this, 'register_widgets'));
@@ -19,7 +19,7 @@ class MMD_Elementor_Widget {
      */
     public function add_elementor_category($elements_manager) {
         $elements_manager->add_category(
-            'mmd-widgets',
+            'incv-widgets',
             array(
                 'title' => __('Incentiv', 'incentiv'),
                 'icon' => 'fa fa-gift',
@@ -31,15 +31,15 @@ class MMD_Elementor_Widget {
      * Register widgets
      */
     public function register_widgets($widgets_manager) {
-        require_once MMD_PLUGIN_DIR . 'includes/widgets/gift-notice-widget.php';
-        $widgets_manager->register(new \MMD_Gift_Notice_Widget());
+        require_once INCV_PLUGIN_DIR . 'includes/widgets/gift-notice-widget.php';
+        $widgets_manager->register(new \INCV_Gift_Notice_Widget());
 
-        require_once MMD_PLUGIN_DIR . 'includes/widgets/gift-selection-widget.php';
-        $widgets_manager->register(new \MMD_Gift_Selection_Widget());
+        require_once INCV_PLUGIN_DIR . 'includes/widgets/gift-selection-widget.php';
+        $widgets_manager->register(new \INCV_Gift_Selection_Widget());
 
-        require_once MMD_PLUGIN_DIR . 'includes/widgets/cart-gift-selection-widget.php';
-        $widgets_manager->register(new \MMD_Cart_Gift_Selection_Widget());
+        require_once INCV_PLUGIN_DIR . 'includes/widgets/cart-gift-selection-widget.php';
+        $widgets_manager->register(new \INCV_Cart_Gift_Selection_Widget());
     }
 }
 
-new MMD_Elementor_Widget();
+new INCV_Elementor_Widget();

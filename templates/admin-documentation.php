@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template included from a class method; its variables are local to that method, not globals.
 /**
  * Plugin Documentation Page - English & Hebrew
  */
@@ -8,76 +9,76 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<div class="wrap mmd-admin-wrap">
+<div class="wrap incv-admin-wrap">
     <?php include dirname(__FILE__) . '/admin-nav-tabs.php'; ?>
 
     <div style="max-width:1000px;margin:0 auto;">
 
     <!-- Getting-started hero -->
-    <div class="mmd-docs-hero">
-        <span class="mmd-docs-hero-icon"><span class="msr">rocket_launch</span></span>
+    <div class="incv-docs-hero">
+        <span class="incv-docs-hero-icon"><span class="msr">rocket_launch</span></span>
         <div>
             <h2><?php esc_html_e( 'Let\'s get started', 'incentiv' ); ?></h2>
-            <div class="mmd-docs-hero-sub"><?php echo wp_kses_post( __( '4 steps to your first quantity discount &middot; Get started in minutes', 'incentiv' ) ); ?></div>
+            <div class="incv-docs-hero-sub"><?php echo wp_kses_post( __( '4 steps to your first quantity discount &middot; Get started in minutes', 'incentiv' ) ); ?></div>
         </div>
     </div>
 
-    <?php $mmd_has_rules = class_exists('MMD_Discount_Rules') && count((array) MMD_Discount_Rules::get_all_rule_sets()) > 0; ?>
-    <div class="mmd-steps-grid">
-        <div class="mmd-step-card">
-            <span class="mmd-step-num-circle done">✓</span>
+    <?php $incv_has_rules = class_exists('INCV_Discount_Rules') && count((array) INCV_Discount_Rules::get_all_rule_sets()) > 0; ?>
+    <div class="incv-steps-grid">
+        <div class="incv-step-card">
+            <span class="incv-step-num-circle done">✓</span>
             <div>
-                <div class="mmd-step-title"><?php echo wp_kses_post( __( 'Install &amp; activate', 'incentiv' ) ); ?></div>
-                <div class="mmd-step-desc"><?php esc_html_e( 'The plugin requires WooCommerce 4.0+. You\'ve activated it, so this step is done.', 'incentiv' ); ?></div>
+                <div class="incv-step-title"><?php echo wp_kses_post( __( 'Install &amp; activate', 'incentiv' ) ); ?></div>
+                <div class="incv-step-desc"><?php esc_html_e( 'The plugin requires WooCommerce 4.0+. You\'ve activated it, so this step is done.', 'incentiv' ); ?></div>
             </div>
         </div>
-        <div class="mmd-step-card">
-            <span class="mmd-step-num-circle <?php echo $mmd_has_rules ? 'done' : 'current'; ?>"><?php echo $mmd_has_rules ? '✓' : '2'; ?></span>
+        <div class="incv-step-card">
+            <span class="incv-step-num-circle <?php echo $incv_has_rules ? 'done' : 'current'; ?>"><?php echo $incv_has_rules ? '✓' : '2'; ?></span>
             <div>
-                <div class="mmd-step-title"><?php esc_html_e( 'Create your first rule', 'incentiv' ); ?></div>
-                <div class="mmd-step-desc"><?php
+                <div class="incv-step-title"><?php esc_html_e( 'Create your first rule', 'incentiv' ); ?></div>
+                <div class="incv-step-desc"><?php
                 /* translators: %s: URL of the new-rule wizard. */
-                echo wp_kses_post( sprintf( __( 'Use the <a href="%s">wizard</a> or import a ready-made template in one click.', 'incentiv' ), esc_url( admin_url( 'admin.php?page=mix-match-discounts&action=new' ) ) ) ); ?></div>
+                echo wp_kses_post( sprintf( __( 'Use the <a href="%s">wizard</a> or import a ready-made template in one click.', 'incentiv' ), esc_url( admin_url( 'admin.php?page=incv-discount-rules&action=new' ) ) ) ); ?></div>
             </div>
         </div>
-        <div class="mmd-step-card">
-            <span class="mmd-step-num-circle">3</span>
+        <div class="incv-step-card">
+            <span class="incv-step-num-circle">3</span>
             <div>
-                <div class="mmd-step-title"><?php esc_html_e( 'Customise messages and design', 'incentiv' ); ?></div>
-                <div class="mmd-step-desc"><?php
+                <div class="incv-step-title"><?php esc_html_e( 'Customise messages and design', 'incentiv' ); ?></div>
+                <div class="incv-step-desc"><?php
                 /* translators: %s: URL of the Customer view screen. */
-                echo wp_kses_post( sprintf( __( 'Set colours, texts and banners in <a href="%s">Customer view</a>.', 'incentiv' ), esc_url( admin_url( 'admin.php?page=mmd-storefront' ) ) ) ); ?></div>
+                echo wp_kses_post( sprintf( __( 'Set colours, texts and banners in <a href="%s">Customer view</a>.', 'incentiv' ), esc_url( admin_url( 'admin.php?page=incv-storefront' ) ) ) ); ?></div>
             </div>
         </div>
-        <div class="mmd-step-card">
-            <span class="mmd-step-num-circle">4</span>
+        <div class="incv-step-card">
+            <span class="incv-step-num-circle">4</span>
             <div>
-                <div class="mmd-step-title"><?php esc_html_e( 'Track it on the dashboard', 'incentiv' ); ?></div>
-                <div class="mmd-step-desc"><?php
+                <div class="incv-step-title"><?php esc_html_e( 'Track it on the dashboard', 'incentiv' ); ?></div>
+                <div class="incv-step-desc"><?php
                 /* translators: %s: URL of the dashboard. */
-                echo wp_kses_post( sprintf( __( 'Analyse performance, redemptions and conversion funnels on <a href="%s">the dashboard</a>.', 'incentiv' ), esc_url( admin_url( 'admin.php?page=mmd-dashboard' ) ) ) ); ?></div>
+                echo wp_kses_post( sprintf( __( 'Analyse performance, redemptions and conversion funnels on <a href="%s">the dashboard</a>.', 'incentiv' ), esc_url( admin_url( 'admin.php?page=incv-dashboard' ) ) ) ); ?></div>
             </div>
         </div>
     </div>
 
     <!-- FAQ -->
-    <div class="mmd-faq-card" style="margin-bottom:24px;">
+    <div class="incv-faq-card" style="margin-bottom:24px;">
         <h3><?php esc_html_e( 'Frequently asked questions', 'incentiv' ); ?></h3>
-        <div class="mmd-faq-item open">
-            <div class="mmd-faq-q"><span><?php esc_html_e( 'How do I set up "buy 3, get one free"?', 'incentiv' ); ?></span><span class="msr">expand_more</span></div>
-            <div class="mmd-faq-a"><?php esc_html_e( 'Set a discount tier with a quantity of 3 and a 100% discount. The plugin applies the discount to the cheapest item in the cart.', 'incentiv' ); ?></div>
+        <div class="incv-faq-item open">
+            <div class="incv-faq-q"><span><?php esc_html_e( 'How do I set up "buy 3, get one free"?', 'incentiv' ); ?></span><span class="msr">expand_more</span></div>
+            <div class="incv-faq-a"><?php esc_html_e( 'Set a discount tier with a quantity of 3 and a 100% discount. The plugin applies the discount to the cheapest item in the cart.', 'incentiv' ); ?></div>
         </div>
-        <div class="mmd-faq-item">
-            <div class="mmd-faq-q"><span><?php esc_html_e( 'Can customers mix different products?', 'incentiv' ); ?></span><span class="msr">expand_more</span></div>
-            <div class="mmd-faq-a"><?php echo wp_kses_post( __( 'Yes! That\'s exactly what Mix &amp; Match is: choose the "Categories" method and customers can mix any product from the included categories to reach the qualifying quantity.', 'incentiv' ) ); ?></div>
+        <div class="incv-faq-item">
+            <div class="incv-faq-q"><span><?php esc_html_e( 'Can customers mix different products?', 'incentiv' ); ?></span><span class="msr">expand_more</span></div>
+            <div class="incv-faq-a"><?php echo wp_kses_post( __( 'Yes! That\'s exactly what Mix &amp; Match is: choose the "Categories" method and customers can mix any product from the included categories to reach the qualifying quantity.', 'incentiv' ) ); ?></div>
         </div>
-        <div class="mmd-faq-item">
-            <div class="mmd-faq-q"><span><?php esc_html_e( 'Does it support Hebrew and RTL?', 'incentiv' ); ?></span><span class="msr">expand_more</span></div>
-            <div class="mmd-faq-a"><?php esc_html_e( 'Yes. The admin and storefront are built RTL-first and a Hebrew translation is included. On stores with VAT-inclusive prices, discounts stay exact on those prices.', 'incentiv' ); ?></div>
+        <div class="incv-faq-item">
+            <div class="incv-faq-q"><span><?php esc_html_e( 'Does it support Hebrew and RTL?', 'incentiv' ); ?></span><span class="msr">expand_more</span></div>
+            <div class="incv-faq-a"><?php esc_html_e( 'Yes. The admin and storefront are built RTL-first and a Hebrew translation is included. On stores with VAT-inclusive prices, discounts stay exact on those prices.', 'incentiv' ); ?></div>
         </div>
-        <div class="mmd-faq-item">
-            <div class="mmd-faq-q"><span><?php esc_html_e( 'How do I track discount performance?', 'incentiv' ); ?></span><span class="msr">expand_more</span></div>
-            <div class="mmd-faq-a"><?php esc_html_e( 'The new dashboard shows sales attributed to discounts, redeemed gifts, conversion rates and top rules, all from your real order data.', 'incentiv' ); ?></div>
+        <div class="incv-faq-item">
+            <div class="incv-faq-q"><span><?php esc_html_e( 'How do I track discount performance?', 'incentiv' ); ?></span><span class="msr">expand_more</span></div>
+            <div class="incv-faq-a"><?php esc_html_e( 'The new dashboard shows sales attributed to discounts, redeemed gifts, conversion rates and top rules, all from your real order data.', 'incentiv' ); ?></div>
         </div>
     </div>
 
@@ -85,23 +86,23 @@ if (!defined('ABSPATH')) {
     // The translatable guide below is the main documentation. Hebrew-locale sites keep the
     // original Hebrew / English toggle with the static English guide; other locales show only
     // the (translated) guide, so English admins don't see the same text twice.
-    $mmd_docs_toggle = ( 0 === strpos( determine_locale(), 'he' ) );
-    if ( $mmd_docs_toggle ) : ?>
-    <div class="mmd-docs-lang-toggle">
-        <button type="button" class="button mmd-docs-lang-btn active" data-lang="he"><?php esc_html_e( 'Hebrew', 'incentiv' ); ?></button>
-        <button type="button" class="button mmd-docs-lang-btn" data-lang="en">English</button>
+    $incv_docs_toggle = ( 0 === strpos( determine_locale(), 'he' ) );
+    if ( $incv_docs_toggle ) : ?>
+    <div class="incv-docs-lang-toggle">
+        <button type="button" class="button incv-docs-lang-btn active" data-lang="he"><?php esc_html_e( 'Hebrew', 'incentiv' ); ?></button>
+        <button type="button" class="button incv-docs-lang-btn" data-lang="en">English</button>
     </div>
     <?php endif; ?>
 
     <!-- HEBREW DOCUMENTATION -->
-    <div class="mmd-docs-content mmd-docs-he" id="mmd-docs-he" <?php echo $mmd_docs_toggle ? 'style="direction: rtl; text-align: right;"' : ''; ?>>
+    <div class="incv-docs-content incv-docs-he" id="incv-docs-he" <?php echo $incv_docs_toggle ? 'style="direction: rtl; text-align: right;"' : ''; ?>>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2><?php esc_html_e( 'User guide: Incentiv', 'incentiv' ); ?></h2>
             <p><?php esc_html_e( 'This plugin lets you create advanced quantity discount rules for your WooCommerce store. It supports many scenarios such as "buy 3 get a discount", BOGO, tiered discounts and more.', 'incentiv' ); ?></p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2><?php esc_html_e( '1. Quick start', 'incentiv' ); ?></h2>
             <ol>
                 <li><?php echo wp_kses_post( __( 'Go to the <strong>"Quantity discounts"</strong> menu in the admin sidebar.', 'incentiv' ) ); ?></li>
@@ -112,7 +113,7 @@ if (!defined('ABSPATH')) {
             </ol>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2><?php esc_html_e( '2. Using the rule wizard', 'incentiv' ); ?></h2>
             <p><?php esc_html_e( 'The wizard guides you step by step through creating a discount rule:', 'incentiv' ); ?></p>
             <ol>
@@ -125,9 +126,9 @@ if (!defined('ABSPATH')) {
             <p><?php echo wp_kses_post( __( 'To start the wizard, click <strong>"Create with wizard"</strong> on the rules list page.', 'incentiv' ) ); ?></p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2><?php esc_html_e( '3. Product selection methods', 'incentiv' ); ?></h2>
-            <table class="mmd-docs-table">
+            <table class="incv-docs-table">
                 <thead>
                     <tr>
                         <th><?php esc_html_e( 'Method', 'incentiv' ); ?></th>
@@ -160,9 +161,9 @@ if (!defined('ABSPATH')) {
             </table>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2><?php esc_html_e( '4. Discount types', 'incentiv' ); ?></h2>
-            <table class="mmd-docs-table">
+            <table class="incv-docs-table">
                 <thead>
                     <tr>
                         <th><?php esc_html_e( 'Type', 'incentiv' ); ?></th>
@@ -186,7 +187,7 @@ if (!defined('ABSPATH')) {
             <p><?php echo wp_kses_post( __( '<strong>Tip:</strong> use 100% to give an item for free (like "buy 4 get 1 free").', 'incentiv' ) ); ?></p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2><?php esc_html_e( '5. Advanced settings', 'incentiv' ); ?></h2>
             <h3><?php esc_html_e( 'Coupon requirement', 'incentiv' ); ?></h3>
             <p><?php esc_html_e( 'You can make a discount apply only when the customer enters a specific coupon code. Useful for VIP or exclusive promotions.', 'incentiv' ); ?></p>
@@ -207,7 +208,7 @@ if (!defined('ABSPATH')) {
             <p><?php esc_html_e( 'Activate a discount only when the customer chooses a specific shipping method.', 'incentiv' ); ?></p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2><?php esc_html_e( '6. Ready-made example rules', 'incentiv' ); ?></h2>
             <p><?php esc_html_e( 'The plugin includes several ready-to-use example rules:', 'incentiv' ); ?></p>
             <ul>
@@ -221,7 +222,7 @@ if (!defined('ABSPATH')) {
             <p><?php echo wp_kses_post( __( 'To import, go to the <strong>"Discount rules"</strong> page and click <strong>"Import rule"</strong> next to the example you want.', 'incentiv' ) ); ?></p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2><?php esc_html_e( '7. FAQ', 'incentiv' ); ?></h2>
 
             <h3><?php esc_html_e( 'What happens when a product matches several rules?', 'incentiv' ); ?></h3>
@@ -238,16 +239,16 @@ if (!defined('ABSPATH')) {
         </div>
     </div>
 
-    <?php if ( $mmd_docs_toggle ) : ?>
+    <?php if ( $incv_docs_toggle ) : ?>
     <!-- ENGLISH DOCUMENTATION -->
-    <div class="mmd-docs-content mmd-docs-en" id="mmd-docs-en" style="display: none; direction: ltr; text-align: left;">
+    <div class="incv-docs-content incv-docs-en" id="incv-docs-en" style="display: none; direction: ltr; text-align: left;">
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2>User Guide — Incentiv</h2>
             <p>This plugin allows you to create advanced quantity discount rules for your WooCommerce store. It supports various scenarios like "Buy 3 Get a Discount", BOGO, tiered discounts, and more.</p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2>1. Quick Start</h2>
             <ol>
                 <li>Navigate to the <strong>"Quantity Discounts"</strong> menu in the WordPress admin sidebar.</li>
@@ -258,7 +259,7 @@ if (!defined('ABSPATH')) {
             </ol>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2>2. Using the Rule Creation Wizard</h2>
             <p>The wizard guides you step by step through creating a discount rule:</p>
             <ol>
@@ -271,9 +272,9 @@ if (!defined('ABSPATH')) {
             <p>To launch the wizard, click <strong>"Create with Wizard"</strong> on the rules list page.</p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2>3. Product Selection Methods</h2>
-            <table class="mmd-docs-table">
+            <table class="incv-docs-table">
                 <thead>
                     <tr>
                         <th>Method</th>
@@ -306,9 +307,9 @@ if (!defined('ABSPATH')) {
             </table>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2>4. Discount Types</h2>
-            <table class="mmd-docs-table">
+            <table class="incv-docs-table">
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -332,7 +333,7 @@ if (!defined('ABSPATH')) {
             <p><strong>Tip:</strong> Use 100% to give a free item (like "Buy 4 Get 1 Free").</p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2>5. Advanced Settings</h2>
 
             <h3>Coupon Requirement</h3>
@@ -354,7 +355,7 @@ if (!defined('ABSPATH')) {
             <p>Activate the discount only when the customer selects a specific shipping method.</p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2>6. Ready-to-Use Example Rules</h2>
             <p>The plugin includes several pre-configured example rules:</p>
             <ul>
@@ -368,7 +369,7 @@ if (!defined('ABSPATH')) {
             <p>To import, go to the <strong>"Manage Discount Rules"</strong> page and click <strong>"Import Rule"</strong> next to the desired example.</p>
         </div>
 
-        <div class="mmd-docs-card">
+        <div class="incv-docs-card">
             <h2>7. FAQ</h2>
 
             <h3>What happens when a product matches multiple rules?</h3>
@@ -389,15 +390,5 @@ if (!defined('ABSPATH')) {
     </div><!-- /max-width wrapper -->
 </div>
 
-<script>
-jQuery(document).ready(function($) {
-    $('.mmd-docs-lang-btn').on('click', function() {
-        var lang = $(this).data('lang');
-        $('.mmd-docs-lang-btn').removeClass('active');
-        $(this).addClass('active');
-        $('.mmd-docs-content').hide();
-        $('#mmd-docs-' + lang).show();
-    });
-});
-</script>
+
 

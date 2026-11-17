@@ -1,5 +1,5 @@
 /* Gift Selection Styles - Inline like Product Add-ons */
-.mmd-gift-selection-container {
+.incv-gift-selection-container {
     background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
     color: white;
     padding: 20px;
@@ -17,52 +17,52 @@
     max-width: none !important;
 }
 
-.mmd-gift-title {
+.incv-gift-title {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 8px;
 }
 
-.mmd-gift-subtitle {
+.incv-gift-subtitle {
     font-size: 14px;
     margin-bottom: 15px;
     opacity: 0.95;
 }
 
-.mmd-gift-products-table {
+.incv-gift-products-table {
     background: white;
     border-radius: 6px;
     overflow: hidden;
 }
 
-.mmd-gift-table {
+.incv-gift-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.mmd-gift-product-row {
+.incv-gift-product-row {
     border-bottom: 1px solid #e0e0e0;
     transition: background-color 0.2s;
 }
 
-.mmd-gift-product-row:last-child {
+.incv-gift-product-row:last-child {
     border-bottom: none;
 }
 
-.mmd-gift-product-row:hover {
+.incv-gift-product-row:hover {
     background-color: #f5f5f5;
 }
 
-.mmd-gift-product-row.selected {
+.incv-gift-product-row.selected {
     background-color: #e8f5e9;
 }
 
-.mmd-gift-image-cell {
+.incv-gift-image-cell {
     width: 60px;
     padding: 10px;
 }
 
-.mmd-gift-image-cell img {
+.incv-gift-image-cell img {
     width: 50px;
     max-width: none; /* themes set img{max-width:100%}, which collapsed the thumbnail in narrow product columns */
     height: 50px;
@@ -70,31 +70,31 @@
     border-radius: 4px;
 }
 
-.mmd-gift-name-cell {
+.incv-gift-name-cell {
     padding: 10px;
     font-weight: 500;
     color: #333;
     font-size: 14px;
 }
 
-.mmd-gift-variations-cell {
+.incv-gift-variations-cell {
     padding: 10px;
     min-width: 200px;
 }
 
-.mmd-simple-product-indicator {
+.incv-simple-product-indicator {
     color: #999;
     font-size: 12px;
     font-style: italic;
 }
 
-.mmd-gift-action-cell {
+.incv-gift-action-cell {
     padding: 10px;
     text-align: center;
     width: 100px;
 }
 
-.mmd-gift-select-btn {
+.incv-gift-select-btn {
     background: #7c3aed;
     color: white;
     border: none;
@@ -106,39 +106,39 @@
     font-size: 13px;
 }
 
-.mmd-gift-select-btn:hover {
+.incv-gift-select-btn:hover {
     background: #5568d3;
 }
 
-.mmd-gift-select-btn.selected {
+.incv-gift-select-btn.selected {
     background: #4CAF50;
 }
 
-.mmd-gift-product-row.selected .mmd-gift-select-btn {
+.incv-gift-product-row.selected .incv-gift-select-btn {
     background: #4CAF50;
 }
 
 /* Inline Variation Selectors */
-.mmd-variation-selectors {
+.incv-variation-selectors {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.mmd-attribute-field {
+.incv-attribute-field {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.mmd-attribute-field label {
+.incv-attribute-field label {
     font-size: 12px;
     color: #000;
     white-space: nowrap;
     margin: 0;
 }
 
-.mmd-variation-attribute {
+.incv-variation-attribute {
     padding: 6px 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -149,18 +149,18 @@
     min-width: 120px;
 }
 
-.mmd-variation-attribute option {
+.incv-variation-attribute option {
     color: #000 !important;
     background: white;
 }
 
-.mmd-variation-attribute:focus {
+.incv-variation-attribute:focus {
     border-color: #7c3aed;
     outline: none;
 }
 
 /* Gift Badge in Cart */
-.mmd-gift-badge {
+.incv-gift-badge {
     display: inline-block;
     background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
     color: white;
@@ -172,7 +172,7 @@
 }
 
 /* Quantity Controls with +/- Buttons */
-.mmd-quantity-control {
+.incv-quantity-control {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -183,7 +183,7 @@
     border: 1px solid #ddd;
 }
 
-.mmd-quantity-btn {
+.incv-quantity-btn {
     width: 32px;
     height: 32px;
     border: none;
@@ -201,22 +201,22 @@
     padding: 0;
 }
 
-.mmd-quantity-btn:hover {
+.incv-quantity-btn:hover {
     background: #5568d3;
     transform: scale(1.05);
 }
 
-.mmd-quantity-btn:active {
+.incv-quantity-btn:active {
     transform: scale(0.95);
 }
 
-.mmd-quantity-btn:disabled {
+.incv-quantity-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
     opacity: 0.6;
 }
 
-.mmd-quantity-input-wrapper input[type="number"] {
+.incv-quantity-input-wrapper input[type="number"] {
     width: 60px;
     text-align: center;
     border: none;
@@ -229,26 +229,26 @@
     -moz-appearance: textfield;
 }
 
-.mmd-quantity-input-wrapper input[type="number"]::-webkit-inner-spin-button,
-.mmd-quantity-input-wrapper input[type="number"]::-webkit-outer-spin-button {
+.incv-quantity-input-wrapper input[type="number"]::-webkit-inner-spin-button,
+.incv-quantity-input-wrapper input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-.mmd-quantity-input-wrapper input[type="number"]:focus {
+.incv-quantity-input-wrapper input[type="number"]:focus {
     outline: 2px solid #7c3aed;
     outline-offset: -2px;
 }
 
 /* Total Quantity Indicator */
-.mmd-total-quantity-indicator {
+.incv-total-quantity-indicator {
     text-align: center;
     font-weight: 600;
     transition: background-color 0.3s;
 }
 
 /* Pagination Controls */
-.mmd-gift-pagination-controls {
+.incv-gift-pagination-controls {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -256,15 +256,15 @@
     padding: 10px 0;
 }
 
-.mmd-gift-pagination-top {
+.incv-gift-pagination-top {
     margin-bottom: 10px;
 }
 
-.mmd-gift-pagination-bottom {
+.incv-gift-pagination-bottom {
     margin-top: 10px;
 }
 
-.mmd-pagination-btn {
+.incv-pagination-btn {
     background: rgba(255,255,255,0.9);
     color: #333;
     border: none;
@@ -276,70 +276,70 @@
     transition: all 0.3s;
 }
 
-.mmd-pagination-btn:hover:not(:disabled) {
+.incv-pagination-btn:hover:not(:disabled) {
     background: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-.mmd-pagination-btn:disabled {
+.incv-pagination-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
 }
 
-.mmd-pagination-info {
+.incv-pagination-info {
     font-size: 13px;
     font-weight: 500;
 }
 
 /* Prevent gift selection from showing in grid/archive/quick-add contexts */
-.wd-quick-shop .mmd-gift-selection-container,
-.wd-add-to-cart-popup .mmd-gift-selection-container,
-.product-grid-item .mmd-gift-selection-container,
-.product-list-item .mmd-gift-selection-container,
-.woodmart-product-categories .mmd-gift-selection-container,
-.wd-products .mmd-gift-selection-container,
-.wd-products-element .mmd-gift-selection-container,
-.products .mmd-gift-selection-container:not(.single-product .mmd-gift-selection-container),
-.woocommerce ul.products .mmd-gift-selection-container,
-.shop-loop-head .mmd-gift-selection-container,
-.wd-hover-base .mmd-gift-selection-container,
-.wd-hover-icons .mmd-gift-selection-container,
-.wd-hover-alt .mmd-gift-selection-container,
-.wd-hover-quick .mmd-gift-selection-container,
-.wd-grid-g .mmd-gift-selection-container,
-.wd-builder-on .mmd-gift-selection-container,
-body:not(.single-product) .summary-inner .mmd-gift-selection-container {
+.wd-quick-shop .incv-gift-selection-container,
+.wd-add-to-cart-popup .incv-gift-selection-container,
+.product-grid-item .incv-gift-selection-container,
+.product-list-item .incv-gift-selection-container,
+.woodmart-product-categories .incv-gift-selection-container,
+.wd-products .incv-gift-selection-container,
+.wd-products-element .incv-gift-selection-container,
+.products .incv-gift-selection-container:not(.single-product .incv-gift-selection-container),
+.woocommerce ul.products .incv-gift-selection-container,
+.shop-loop-head .incv-gift-selection-container,
+.wd-hover-base .incv-gift-selection-container,
+.wd-hover-icons .incv-gift-selection-container,
+.wd-hover-alt .incv-gift-selection-container,
+.wd-hover-quick .incv-gift-selection-container,
+.wd-grid-g .incv-gift-selection-container,
+.wd-builder-on .incv-gift-selection-container,
+body:not(.single-product) .summary-inner .incv-gift-selection-container {
     display: none !important;
 }
 
 /* Responsive — mobile */
 @media (max-width: 768px) {
-    .mmd-gift-selection-container {
+    .incv-gift-selection-container {
         padding: 14px;
         margin: 12px 0;
         border-radius: 6px;
     }
 
-    .mmd-gift-title {
+    .incv-gift-title {
         font-size: 16px;
         text-align: center;
     }
 
-    .mmd-gift-subtitle {
+    .incv-gift-subtitle {
         font-size: 12px;
         text-align: center;
     }
 
     /* Convert table to card layout on mobile */
-    .mmd-gift-table {
+    .incv-gift-table {
         font-size: 13px;
     }
 
-    .mmd-gift-table thead {
+    .incv-gift-table thead {
         display: none;
     }
 
-    .mmd-gift-product-row {
+    .incv-gift-product-row {
         display: flex;
         flex-wrap: wrap;
         padding: 10px;
@@ -347,19 +347,19 @@ body:not(.single-product) .summary-inner .mmd-gift-selection-container {
         align-items: center;
     }
 
-    .mmd-gift-image-cell {
+    .incv-gift-image-cell {
         width: 60px;
         padding: 0;
         flex-shrink: 0;
     }
 
-    .mmd-gift-image-cell img {
+    .incv-gift-image-cell img {
         width: 50px;
         height: 50px;
         border-radius: 6px;
     }
 
-    .mmd-gift-name-cell {
+    .incv-gift-name-cell {
         flex: 1;
         min-width: 0;
         padding: 0;
@@ -367,54 +367,54 @@ body:not(.single-product) .summary-inner .mmd-gift-selection-container {
         font-weight: 600;
     }
 
-    .mmd-gift-variations-cell {
+    .incv-gift-variations-cell {
         width: 100%;
         min-width: 0;
         padding: 0;
     }
 
-    .mmd-variation-selectors {
+    .incv-variation-selectors {
         flex-direction: column;
         gap: 6px;
         align-items: stretch;
     }
 
-    .mmd-attribute-field {
+    .incv-attribute-field {
         flex-direction: row;
         align-items: center;
         gap: 8px;
     }
 
-    .mmd-attribute-field label {
+    .incv-attribute-field label {
         min-width: 50px;
         font-size: 12px;
     }
 
-    .mmd-variation-attribute {
+    .incv-variation-attribute {
         flex: 1;
         min-width: 0;
         width: auto;
     }
 
-    .mmd-gift-action-cell {
+    .incv-gift-action-cell {
         width: 100%;
         padding: 4px 0 0;
         text-align: center;
     }
 
-    .mmd-gift-select-btn {
+    .incv-gift-select-btn {
         width: 100%;
         padding: 10px;
         font-size: 14px;
         border-radius: 6px;
     }
 
-    .mmd-cart-gift-selection-container .mmd-gift-products-table {
+    .incv-cart-gift-selection-container .incv-gift-products-table {
         overflow-x: auto;
     }
 
     /* Single product page gift — full width below add-to-cart */
-    .single-product .mmd-gift-selection-container {
+    .single-product .incv-gift-selection-container {
         margin: 16px -15px;
         border-radius: 0;
         width: calc(100% + 30px);
@@ -422,53 +422,53 @@ body:not(.single-product) .summary-inner .mmd-gift-selection-container {
 }
 
 /* Cart/Checkout Gift Selection */
-.mmd-cart-gift-selection-container {
+.incv-cart-gift-selection-container {
     margin-bottom: 20px;
 }
 
-.mmd-cart-gift-selection-container .mmd-gift-title {
+.incv-cart-gift-selection-container .incv-gift-title {
     font-size: 18px;
 }
 
-.mmd-cart-gift-selection-container .mmd-gift-subtitle {
+.incv-cart-gift-selection-container .incv-gift-subtitle {
     font-size: 14px;
     margin-bottom: 12px;
 }
 
-.mmd-cart-gift-add-btn {
+.incv-cart-gift-add-btn {
     white-space: nowrap;
     min-width: 100px;
 }
 
-.mmd-cart-gift-add-btn:disabled {
+.incv-cart-gift-add-btn:disabled {
     opacity: 0.7;
     cursor: wait;
 }
 
-.mmd-cart-gift-variation-select {
+.incv-cart-gift-variation-select {
     max-width: 200px;
 }
 
 /* Gift promo notices */
-.mmd-gift-promo-notices {
+.incv-gift-promo-notices {
     pointer-events: none;
 }
 
-.mmd-gift-promo-notice {
+.incv-gift-promo-notice {
     pointer-events: auto;
 }
 
 /* Cart Gift Attribute Selectors */
-.mmd-cart-gift-attributes {
+.incv-cart-gift-attributes {
     min-width: 180px;
 }
 
-.mmd-cart-gift-attr-field label {
+.incv-cart-gift-attr-field label {
     font-weight: 500;
     color: #333 !important;
 }
 
-.mmd-cart-gift-attr-select {
+.incv-cart-gift-attr-select {
     transition: border-color 0.3s;
     /* Force readable colors even when the theme paints selects white-on-white
        (Woodmart cart/checkout sets light text on form controls). */
@@ -477,35 +477,35 @@ body:not(.single-product) .summary-inner .mmd-gift-selection-container {
     -webkit-text-fill-color: #000;
 }
 
-.mmd-cart-gift-attr-select option {
+.incv-cart-gift-attr-select option {
     color: #000 !important;
     background-color: #fff !important;
 }
 
-.mmd-cart-gift-attr-select option:disabled {
+.incv-cart-gift-attr-select option:disabled {
     color: #ccc !important;
 }
 
 /* Cart Gift Modal */
-.mmd-cart-gift-modal-overlay {
-    animation: mmdModalFadeIn 0.3s ease-out;
+.incv-cart-gift-modal-overlay {
+    animation: incvModalFadeIn 0.3s ease-out;
 }
 
-@keyframes mmdModalFadeIn {
+@keyframes incvModalFadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-.mmd-cart-gift-modal-overlay > div {
-    animation: mmdModalSlideUp 0.3s ease-out;
+.incv-cart-gift-modal-overlay > div {
+    animation: incvModalSlideUp 0.3s ease-out;
 }
 
-@keyframes mmdModalSlideUp {
+@keyframes incvModalSlideUp {
     from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
-.mmd-open-gift-modal-btn:hover {
+.incv-open-gift-modal-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
@@ -515,18 +515,18 @@ body:not(.single-product) .summary-inner .mmd-gift-selection-container {
    The money already sits in the product line prices; this row names the
    rule that produced it so the promotion stays visible.
    ========================================== */
-.mmd-savings-row th,
-.mmd-savings-row td {
+.incv-savings-row th,
+.incv-savings-row td {
     border-top: 1px dashed rgba(124, 58, 237, .35) !important;
 }
-.mmd-savings-label {
+.incv-savings-label {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     font-weight: 700;
     color: #7c3aed;
 }
-.mmd-savings-label::before {
+.incv-savings-label::before {
     content: "";
     width: 8px;
     height: 8px;
@@ -534,13 +534,13 @@ body:not(.single-product) .summary-inner .mmd-gift-selection-container {
     background: #7c3aed;
     flex: none;
 }
-.mmd-savings-amount {
+.incv-savings-amount {
     display: block;
     font-weight: 800;
     color: #17b26a;
     white-space: nowrap;
 }
-.mmd-savings-note {
+.incv-savings-note {
     display: block;
     margin-top: 2px;
     font-size: 11px;
@@ -551,11 +551,11 @@ body:not(.single-product) .summary-inner .mmd-gift-selection-container {
 
 /* Incentiv notices carry their own emoji/icon. Hide the theme's notice icon so it
    doesn't sit on top of the text (most visible in left-to-right themes). */
-.woocommerce-info.mmd-discount-notice::before,
-.woocommerce-info.mmd-custom-rule-message::before,
-.woocommerce-info.mmd-custom-gift-message::before,
-.woocommerce-info.mmd-product-gift-notice::before,
-.woocommerce-info.mmd-combined-discount-cart-notice::before,
-.woocommerce-info.mmd-cart-gift-notice::before {
+.woocommerce-info.incv-discount-notice::before,
+.woocommerce-info.incv-custom-rule-message::before,
+.woocommerce-info.incv-custom-gift-message::before,
+.woocommerce-info.incv-product-gift-notice::before,
+.woocommerce-info.incv-combined-discount-cart-notice::before,
+.woocommerce-info.incv-cart-gift-notice::before {
     display: none;
 }

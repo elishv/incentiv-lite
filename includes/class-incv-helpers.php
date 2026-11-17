@@ -7,17 +7,97 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Helpers {
+class INCV_Helpers {
+
+    /**
+     * Number of inline script handles queued on this request.
+     *
+     * @var int
+     */
+    private static $inline_scripts = 0;
+
+    /**
+     * JSON flags for values placed inside inline scripts (no "</script>" break-out).
+     */
+    const JSON_INLINE = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
+
+    /**
+     * Queue page-specific JavaScript through the script API instead of
+     * printing a <script> tag in the markup.
+     *
+     * The code goes on its own footer handle (no file) with wp_add_inline_script().
+     * The handles are placed at the front of the footer queue, in call order,
+     * so they still run before the plugin's footer files, as the markup
+     * blocks they replace did. Used only for code that carries per-page data.
+     *
+     * During AJAX requests, or once the footer scripts have printed, the code is
+     * printed with wp_print_inline_script_tag() instead.
+     *
+     * @param string   $js   JavaScript, without <script> tags.
+     * @param string[] $deps Script dependencies.
+     * @return bool Whether the code was queued.
+     */
+    public static function add_inline_script($js, $deps = array('jquery')) {
+        $js = trim((string) $js);
+        if ('' === $js) {
+            return false;
+        }
+        // AJAX-rendered fragments (quick views, Elementor previews) and markup printed
+        // after the footer scripts have no queue to join: use core's inline tag API.
+        if (wp_doing_ajax() || did_action('wp_print_footer_scripts') || did_action('admin_print_footer_scripts')) {
+            wp_print_inline_script_tag($js);
+            return true;
+        }
+        $handle = 'incv-inline-' . (++self::$inline_scripts);
+        wp_register_script($handle, false, (array) $deps, INCV_VERSION, true);
+        wp_add_inline_script($handle, $js);
+        wp_enqueue_script($handle);
+
+        // Move the handle to the front of the queue (after earlier inline handles).
+        $scripts = wp_scripts();
+        $scripts->queue = array_values(array_diff($scripts->queue, array($handle)));
+        array_splice($scripts->queue, self::$inline_scripts - 1, 0, array($handle));
+        return true;
+    }
+
+    /**
+     * Small front-end helper script (close buttons on notices and the debug panel).
+     * Enqueued only when markup that needs it is printed.
+     */
+    public static function enqueue_frontend_ui() {
+        wp_enqueue_script('incv-frontend-ui', INCV_PLUGIN_URL . 'assets/frontend-ui.js', array(), INCV_VERSION, true);
+    }
+
+    /**
+     * Queue page-specific CSS through the style API instead of a <style> tag.
+     * Styles queued after <head> was printed are printed in the footer by WordPress.
+     *
+     * @param string $css CSS, without <style> tags.
+     * @return bool Whether the CSS was queued.
+     */
+    public static function add_inline_style($css) {
+        $css = trim((string) $css);
+        if ('' === $css || wp_doing_ajax()) {
+            return false;
+        }
+        $handle = 'incv-inline-css-' . substr(md5($css), 0, 12);
+        if (!wp_style_is($handle, 'registered')) {
+            wp_register_style($handle, false, array(), INCV_VERSION);
+            wp_add_inline_style($handle, $css);
+        }
+        wp_enqueue_style($handle);
+        return true;
+    }
 
     /**
      * Debug logging is off unless the site sets WP_DEBUG and INCENTIV_DEBUG
-     * (or the older MMD_DEBUG) to true in wp-config.php.
+     * (or INCV_DEBUG) to true in wp-config.php.
      */
     public static function debug_enabled() {
         if (!defined('WP_DEBUG') || !WP_DEBUG) {
             return false;
         }
-        return (defined('INCENTIV_DEBUG') && INCENTIV_DEBUG) || (defined('MMD_DEBUG') && MMD_DEBUG);
+        return (defined('INCENTIV_DEBUG') && INCENTIV_DEBUG) || (defined('INCV_DEBUG') && INCV_DEBUG);
     }
 
     /**
@@ -69,7 +149,7 @@ class MMD_Helpers {
             'debug_mode' => 'no',
         );
         
-        $settings = get_option('mmd_settings', $defaults);
+        $settings = get_option('incv_settings', $defaults);
         return wp_parse_args($settings, $defaults);
     }
     
@@ -77,7 +157,7 @@ class MMD_Helpers {
      * Update plugin settings
      */
     public static function update_settings($new_settings) {
-        return update_option('mmd_settings', $new_settings);
+        return update_option('incv_settings', $new_settings);
     }
     
     /**

@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template included from a class method; its variables are local to that method, not globals.
 /**
  * Admin Gift Rule Edit Page
  */
@@ -71,13 +72,13 @@ $rule_set = wp_parse_args($rule_set, array(
 ));
 ?>
 
-<div class="wrap mmd-admin-wrap">
+<div class="wrap incv-admin-wrap">
     <?php include dirname(__FILE__) . '/admin-nav-tabs.php'; ?>
-    <div class="mmd-editor-head">
-        <a href="<?php echo esc_url( admin_url('admin.php?page=mmd-gift-rules') ); ?>" class="mmd-back-btn" title="<?php esc_attr_e( 'Back to list', 'incentiv' ); ?>"><span class="msr mmd-dir-icon">arrow_forward</span></a>
-        <div class="mmd-editor-head-titles">
+    <div class="incv-editor-head">
+        <a href="<?php echo esc_url( admin_url('admin.php?page=incv-gift-rules') ); ?>" class="incv-back-btn" title="<?php esc_attr_e( 'Back to list', 'incentiv' ); ?>"><span class="msr incv-dir-icon">arrow_forward</span></a>
+        <div class="incv-editor-head-titles">
             <h2><?php if ($is_new): ?><?php esc_html_e( 'New gift rule', 'incentiv' ); ?><?php else: ?><?php echo wp_kses_post( __( 'Edit gift rule &middot;', 'incentiv' ) ); ?> <?php echo esc_html($rule_set['name']); ?><?php endif; ?></h2>
-            <?php if (!$is_new && !empty($rule_set['id'])): ?><div class="mmd-editor-id"><?php echo esc_html($rule_set['id']); ?></div><?php endif; ?>
+            <?php if (!$is_new && !empty($rule_set['id'])): ?><div class="incv-editor-id"><?php echo esc_html($rule_set['id']); ?></div><?php endif; ?>
         </div>
     </div>
 
@@ -88,25 +89,25 @@ $rule_set = wp_parse_args($rule_set, array(
     }
 
     // Styling options power the live preview column
-    $mmd_gift_styling = MMD_Gift_Rules::get_instance()->get_styling_options();
-    $mmd_gw_title = !empty($mmd_gift_styling['gift_box_title_text']) ? $mmd_gift_styling['gift_box_title_text'] : _x( '🎁 Choose your gift!', 'rule', 'incentiv' );
-    $mmd_gw_bg1 = !empty($mmd_gift_styling['gift_box_bg_color_1']) ? $mmd_gift_styling['gift_box_bg_color_1'] : '#7c3aed';
-    $mmd_gw_bg2 = !empty($mmd_gift_styling['gift_box_bg_color_2']) ? $mmd_gift_styling['gift_box_bg_color_2'] : '#a855f7';
+    $incv_gift_styling = INCV_Gift_Rules::get_instance()->get_styling_options();
+    $incv_gw_title = !empty($incv_gift_styling['gift_box_title_text']) ? $incv_gift_styling['gift_box_title_text'] : _x( '🎁 Choose your gift!', 'rule', 'incentiv' );
+    $incv_gw_bg1 = !empty($incv_gift_styling['gift_box_bg_color_1']) ? $incv_gift_styling['gift_box_bg_color_1'] : '#7c3aed';
+    $incv_gw_bg2 = !empty($incv_gift_styling['gift_box_bg_color_2']) ? $incv_gift_styling['gift_box_bg_color_2'] : '#a855f7';
     ?>
 
-    <div class="mmd-editor-grid">
-    <div class="mmd-editor-main">
+    <div class="incv-editor-grid">
+    <div class="incv-editor-main">
 
     <!-- Step navigation (filled by JS) -->
-    <div class="mmd-stepper" id="mmd-gift-stepper">
-        <div class="mmd-stepper-steps" id="mmd-gift-stepper-steps"></div>
+    <div class="incv-stepper" id="incv-gift-stepper">
+        <div class="incv-stepper-steps" id="incv-gift-stepper-steps"></div>
     </div>
 
-    <div class="mmd-admin-container" data-mmd-autosave="gift" data-mmd-record-id="<?php echo esc_attr(isset($rule_set['id']) ? $rule_set['id'] : ''); ?>">
+    <div class="incv-admin-container" data-incv-autosave="gift" data-incv-record-id="<?php echo esc_attr(isset($rule_set['id']) ? $rule_set['id'] : ''); ?>">
 
         <!-- Basic Settings -->
-        <div class="mmd-card">
-            <h2 class="mmd-card-title"><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Basic settings', 'incentiv' ); ?></h2>
+        <div class="incv-card">
+            <h2 class="incv-card-title"><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Basic settings', 'incentiv' ); ?></h2>
 
             <table class="form-table">
                 <tr>
@@ -124,9 +125,9 @@ $rule_set = wp_parse_args($rule_set, array(
                         <label for="enabled"><?php esc_html_e( 'Enable this rule', 'incentiv' ); ?></label>
                     </th>
                     <td>
-                        <label class="mmd-switch">
+                        <label class="incv-switch">
                             <input type="checkbox" name="enabled" id="enabled" <?php echo (($rule_set['enabled'] ?? '') === 'yes' || (isset($rule_set['status']) && $rule_set['status'] === 'draft')) ? 'checked' : ''; ?>>
-                            <span class="mmd-slider"></span>
+                            <span class="incv-slider"></span>
                         </label>
                         <p class="description"><?php esc_html_e( 'Turn off to disable the rule temporarily without deleting it', 'incentiv' ); ?></p>
                     </td>
@@ -137,9 +138,9 @@ $rule_set = wp_parse_args($rule_set, array(
                         <label for="override_product_settings"><?php esc_html_e( 'Override product settings', 'incentiv' ); ?></label>
                     </th>
                     <td>
-                        <label class="mmd-switch">
+                        <label class="incv-switch">
                             <input type="checkbox" name="override_product_settings" id="override_product_settings" <?php checked($rule_set['override_product_settings'], 'yes'); ?>>
-                            <span class="mmd-slider"></span>
+                            <span class="incv-slider"></span>
                         </label>
                         <p class="description"><?php esc_html_e( 'If enabled, this rule overrides the gift settings of individual products', 'incentiv' ); ?></p>
                     </td>
@@ -148,8 +149,8 @@ $rule_set = wp_parse_args($rule_set, array(
         </div>
 
         <!-- Product Selection -->
-        <div class="mmd-card">
-            <h2 class="mmd-card-title"><span class="dashicons dashicons-cart"></span> <?php esc_html_e( 'Product selection', 'incentiv' ); ?></h2>
+        <div class="incv-card">
+            <h2 class="incv-card-title"><span class="dashicons dashicons-cart"></span> <?php esc_html_e( 'Product selection', 'incentiv' ); ?></h2>
 
             <table class="form-table">
                 <tr>
@@ -169,7 +170,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </table>
 
             <!-- Category Selection -->
-            <div id="category_section" class="mmd-section" style="display: <?php echo $rule_set['selection_method'] === 'category' ? 'block' : 'none'; ?>;">
+            <div id="category_section" class="incv-section" style="display: <?php echo $rule_set['selection_method'] === 'category' ? 'block' : 'none'; ?>;">
                 <h3><?php esc_html_e( 'Categories', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -177,7 +178,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label><?php esc_html_e( 'Included categories', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <div class="mmd-checkbox-group">
+                            <div class="incv-checkbox-group">
                                 <?php foreach ($categories as $category): ?>
                                     <label>
                                         <input type="checkbox" name="included_categories[]" value="<?php echo esc_attr($category->term_id); ?>" <?php checked(in_array($category->term_id, $rule_set['included_categories'])); ?>>
@@ -194,7 +195,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label><?php esc_html_e( 'Excluded categories', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <div class="mmd-checkbox-group">
+                            <div class="incv-checkbox-group">
                                 <?php foreach ($categories as $category): ?>
                                     <label>
                                         <input type="checkbox" name="excluded_categories[]" value="<?php echo esc_attr($category->term_id); ?>" <?php checked(in_array($category->term_id, $rule_set['excluded_categories'])); ?>>
@@ -211,7 +212,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label for="excluded_products_from_categories"><?php esc_html_e( 'Products/variations excluded from the categories', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <select name="excluded_products_from_categories[]" id="excluded_products_from_categories" class="mmd-product-search-multiple" multiple style="width: 100%;">
+                            <select name="excluded_products_from_categories[]" id="excluded_products_from_categories" class="incv-product-search-multiple" multiple style="width: 100%;">
                                 <?php
                                 if (!empty($rule_set['excluded_products_from_categories'])) {
                                     foreach ($rule_set['excluded_products_from_categories'] as $product_id) {
@@ -232,7 +233,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </div>
 
             <!-- Product IDs Selection -->
-            <div id="product_ids_section" class="mmd-section" style="display: <?php echo $rule_set['selection_method'] === 'product_ids' ? 'block' : 'none'; ?>;">
+            <div id="product_ids_section" class="incv-section" style="display: <?php echo $rule_set['selection_method'] === 'product_ids' ? 'block' : 'none'; ?>;">
                 <h3><?php esc_html_e( 'Product IDs', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -240,7 +241,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label for="included_products"><?php esc_html_e( 'Included products/variations', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <select name="included_products[]" id="included_products" class="mmd-product-search-multiple" multiple style="width: 100%;">
+                            <select name="included_products[]" id="included_products" class="incv-product-search-multiple" multiple style="width: 100%;">
                                 <?php
                                 if (!empty($rule_set['included_products'])) {
                                     foreach ($rule_set['included_products'] as $product_id) {
@@ -263,7 +264,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label for="excluded_products"><?php esc_html_e( 'Excluded products/variations', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <select name="excluded_products[]" id="excluded_products" class="mmd-product-search-multiple" multiple style="width: 100%;">
+                            <select name="excluded_products[]" id="excluded_products" class="incv-product-search-multiple" multiple style="width: 100%;">
                                 <?php
                                 if (!empty($rule_set['excluded_products'])) {
                                     foreach ($rule_set['excluded_products'] as $product_id) {
@@ -284,7 +285,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </div>
 
             <!-- Attribute Selection -->
-            <div id="attribute_section" class="mmd-section" style="display: <?php echo $rule_set['selection_method'] === 'attribute' ? 'block' : 'none'; ?>;">
+            <div id="attribute_section" class="incv-section" style="display: <?php echo $rule_set['selection_method'] === 'attribute' ? 'block' : 'none'; ?>;">
                 <h3><?php esc_html_e( 'Attribute', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -309,7 +310,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label><?php esc_html_e( 'Attribute values', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <div id="attribute_values_list" class="mmd-checkbox-group">
+                            <div id="attribute_values_list" class="incv-checkbox-group">
                                 <!-- Dynamically loaded -->
                             </div>
                             <p class="description"><?php esc_html_e( 'Choose values that are eligible for gifts', 'incentiv' ); ?></p>
@@ -321,7 +322,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label><?php esc_html_e( 'Excluded attribute values', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <div id="attribute_excluded_values_list" class="mmd-checkbox-group">
+                            <div id="attribute_excluded_values_list" class="incv-checkbox-group">
                                 <!-- Dynamically loaded -->
                             </div>
                             <p class="description"><?php esc_html_e( 'Choose values that are not eligible for gifts', 'incentiv' ); ?></p>
@@ -332,8 +333,8 @@ $rule_set = wp_parse_args($rule_set, array(
         </div>
 
         <!-- Gift Settings -->
-        <div class="mmd-card">
-            <h2 class="mmd-card-title"><span class="dashicons dashicons-gifts"></span> <?php esc_html_e( 'Gift settings', 'incentiv' ); ?></h2>
+        <div class="incv-card">
+            <h2 class="incv-card-title"><span class="dashicons dashicons-gifts"></span> <?php esc_html_e( 'Gift settings', 'incentiv' ); ?></h2>
 
             <table class="form-table">
                 <tr>
@@ -341,28 +342,28 @@ $rule_set = wp_parse_args($rule_set, array(
                         <label for="gift_type"><?php echo esc_html_x( 'Gift type', 'summary', 'incentiv' ); ?></label>
                     </th>
                     <td>
-                        <div class="mmd-gift-type-selector">
-                            <label class="mmd-gift-type-option <?php echo $rule_set['gift_type'] === 'free' ? 'active' : ''; ?>">
+                        <div class="incv-gift-type-selector">
+                            <label class="incv-gift-type-option <?php echo $rule_set['gift_type'] === 'free' ? 'active' : ''; ?>">
                                 <input type="radio" name="gift_type" value="free" <?php checked($rule_set['gift_type'], 'free'); ?>>
-                                <span class="mmd-gift-type-label">
+                                <span class="incv-gift-type-label">
                                     <span class="dashicons dashicons-cart"></span>
                                     <strong><?php esc_html_e( 'Free gift', 'incentiv' ); ?></strong>
                                     <small><?php esc_html_e( 'The product will be completely free', 'incentiv' ); ?></small>
                                 </span>
                             </label>
 
-                            <label class="mmd-gift-type-option <?php echo $rule_set['gift_type'] === 'discount' ? 'active' : ''; ?>">
+                            <label class="incv-gift-type-option <?php echo $rule_set['gift_type'] === 'discount' ? 'active' : ''; ?>">
                                 <input type="radio" name="gift_type" value="discount" <?php checked($rule_set['gift_type'], 'discount'); ?>>
-                                <span class="mmd-gift-type-label">
+                                <span class="incv-gift-type-label">
                                     <span class="dashicons dashicons-tag"></span>
                                     <strong><?php esc_html_e( 'Percentage discount', 'incentiv' ); ?></strong>
                                     <small><?php echo esc_html_x( 'A percentage off the price', 'gift', 'incentiv' ); ?></small>
                                 </span>
                             </label>
 
-                            <label class="mmd-gift-type-option <?php echo $rule_set['gift_type'] === 'fixed_discount' ? 'active' : ''; ?>">
+                            <label class="incv-gift-type-option <?php echo $rule_set['gift_type'] === 'fixed_discount' ? 'active' : ''; ?>">
                                 <input type="radio" name="gift_type" value="fixed_discount" <?php checked($rule_set['gift_type'], 'fixed_discount'); ?>>
-                                <span class="mmd-gift-type-label">
+                                <span class="incv-gift-type-label">
                                     <span class="dashicons dashicons-money"></span>
                                     <strong><?php esc_html_e( 'Fixed discount', 'incentiv' ); ?></strong>
                                     <small><?php esc_html_e( 'Fixed amount discount', 'incentiv' ); ?></small>
@@ -388,19 +389,19 @@ $rule_set = wp_parse_args($rule_set, array(
                         <label><?php esc_html_e( 'How the gift is given', 'incentiv' ); ?></label>
                     </th>
                     <td>
-                        <div class="mmd-gift-mode-selector">
-                            <label class="mmd-gift-mode-option <?php echo $rule_set['gift_mode'] === 'product_page' ? 'active' : ''; ?>">
+                        <div class="incv-gift-mode-selector">
+                            <label class="incv-gift-mode-option <?php echo $rule_set['gift_mode'] === 'product_page' ? 'active' : ''; ?>">
                                 <input type="radio" name="gift_mode" value="product_page" <?php checked($rule_set['gift_mode'], 'product_page'); ?>>
-                                <span class="mmd-gift-mode-label">
+                                <span class="incv-gift-mode-label">
                                     <span class="dashicons dashicons-products"></span>
                                     <strong><?php esc_html_e( 'On the product page', 'incentiv' ); ?></strong>
                                     <small><?php esc_html_e( 'The customer chooses a gift on the product page before adding to the cart', 'incentiv' ); ?></small>
                                 </span>
                             </label>
 
-                            <label class="mmd-gift-mode-option <?php echo $rule_set['gift_mode'] === 'cart_based' ? 'active' : ''; ?>">
+                            <label class="incv-gift-mode-option <?php echo $rule_set['gift_mode'] === 'cart_based' ? 'active' : ''; ?>">
                                 <input type="radio" name="gift_mode" value="cart_based" <?php checked($rule_set['gift_mode'], 'cart_based'); ?>>
-                                <span class="mmd-gift-mode-label">
+                                <span class="incv-gift-mode-label">
                                     <span class="dashicons dashicons-cart"></span>
                                     <strong><?php esc_html_e( 'Gift in the cart', 'incentiv' ); ?></strong>
                                     <small><?php esc_html_e( 'The customer adds a product from the store and the gift is applied automatically in the cart', 'incentiv' ); ?></small>
@@ -485,7 +486,7 @@ $rule_set = wp_parse_args($rule_set, array(
                         <label for="gift_products"><?php echo esc_html_x( 'Gift products', 'flow', 'incentiv' ); ?></label>
                     </th>
                     <td>
-                        <select name="gift_products[]" id="gift_products" class="mmd-product-search-multiple" multiple style="width: 100%;">
+                        <select name="gift_products[]" id="gift_products" class="incv-product-search-multiple" multiple style="width: 100%;">
                             <?php
                             if (!empty($rule_set['gift_products'])) {
                                 foreach ($rule_set['gift_products'] as $product_id) {
@@ -503,7 +504,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </table>
 
             <!-- Category-based Gift Selection -->
-            <div id="gift_category_section" class="mmd-section" style="display: <?php echo $rule_set['gift_source'] === 'category' ? 'block' : 'none'; ?>;">
+            <div id="gift_category_section" class="incv-section" style="display: <?php echo $rule_set['gift_source'] === 'category' ? 'block' : 'none'; ?>;">
                 <h3><span class="dashicons dashicons-tag"></span> <?php esc_html_e( 'Gift selection by categories', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -511,7 +512,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label><?php echo esc_html_x( 'Gift categories', 'rule', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <div class="mmd-checkbox-group">
+                            <div class="incv-checkbox-group">
                                 <?php foreach ($categories as $category): ?>
                                     <label>
                                         <input type="checkbox" name="gift_categories[]" value="<?php echo esc_attr($category->term_id); ?>" <?php checked(in_array($category->term_id, $rule_set['gift_categories'])); ?>>
@@ -545,7 +546,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label><?php esc_html_e( 'Attribute values for gifts', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <div id="gift_attribute_values_list" class="mmd-checkbox-group">
+                            <div id="gift_attribute_values_list" class="incv-checkbox-group">
                                 <!-- Dynamically loaded -->
                             </div>
                             <p class="description"><?php esc_html_e( 'Choose which attribute values are available as gifts (for example: only 100 g)', 'incentiv' ); ?></p>
@@ -564,7 +565,7 @@ $rule_set = wp_parse_args($rule_set, array(
                                 if (!empty($additional_attrs)):
                                     foreach ($additional_attrs as $idx => $add_attr):
                                 ?>
-                                    <div class="mmd-additional-attr-row" style="display: flex; gap: 10px; margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0; align-items: flex-start;">
+                                    <div class="incv-additional-attr-row" style="display: flex; gap: 10px; margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0; align-items: flex-start;">
                                         <div style="flex: 1;">
                                             <label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;"><?php esc_html_e( 'Attribute', 'incentiv' ); ?></label>
                                             <select class="gift-additional-attr-slug regular-text" style="width: 100%;">
@@ -578,7 +579,7 @@ $rule_set = wp_parse_args($rule_set, array(
                                         </div>
                                         <div style="flex: 2;">
                                             <label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;"><?php esc_html_e( 'Values', 'incentiv' ); ?></label>
-                                            <div class="gift-additional-attr-values mmd-checkbox-group">
+                                            <div class="gift-additional-attr-values incv-checkbox-group">
                                                 <!-- Dynamically loaded -->
                                             </div>
                                         </div>
@@ -601,7 +602,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </div>
 
             <!-- Gift Products Limit -->
-            <div id="gift_products_limit_section" class="mmd-section" style="display: <?php echo $rule_set['gift_source'] === 'category' ? 'block' : 'none'; ?>;">
+            <div id="gift_products_limit_section" class="incv-section" style="display: <?php echo $rule_set['gift_source'] === 'category' ? 'block' : 'none'; ?>;">
                 <h3><?php esc_html_e( '📊 Limit the products to choose from', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -617,7 +618,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </div>
 
             <!-- Gift Exclusions Section -->
-            <div id="gift_exclusions_section" class="mmd-section" style="display: <?php echo $rule_set['gift_source'] === 'category' ? 'block' : 'none'; ?>;">
+            <div id="gift_exclusions_section" class="incv-section" style="display: <?php echo $rule_set['gift_source'] === 'category' ? 'block' : 'none'; ?>;">
                 <h3><span class="dashicons dashicons-dismiss"></span> <?php esc_html_e( 'Filter and exclude products', 'incentiv' ); ?></h3>
                 <p class="description" style="margin-bottom: 15px;"><?php esc_html_e( 'Set which products are not available as gifts even though they are in the selected categories', 'incentiv' ); ?></p>
                 <table class="form-table">
@@ -626,7 +627,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label><?php esc_html_e( 'Exclude categories', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <div class="mmd-checkbox-group">
+                            <div class="incv-checkbox-group">
                                 <?php foreach ($categories as $category): ?>
                                     <label>
                                         <input type="checkbox" name="gift_excluded_categories[]" value="<?php echo esc_attr($category->term_id); ?>" <?php checked(in_array($category->term_id, $rule_set['gift_excluded_categories'])); ?>>
@@ -643,7 +644,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label><?php esc_html_e( 'Exclude tags', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <div class="mmd-checkbox-group">
+                            <div class="incv-checkbox-group">
                                 <?php if (!empty($tags) && !is_wp_error($tags)): ?>
                                     <?php foreach ($tags as $tag): ?>
                                         <label>
@@ -664,7 +665,7 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label for="gift_excluded_products"><?php esc_html_e( 'Exclude specific products', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <select name="gift_excluded_products[]" id="gift_excluded_products" class="mmd-product-search-multiple" multiple style="width: 100%;">
+                            <select name="gift_excluded_products[]" id="gift_excluded_products" class="incv-product-search-multiple" multiple style="width: 100%;">
                                 <?php
                                 if (!empty($rule_set['gift_excluded_products'])) {
                                     foreach ($rule_set['gift_excluded_products'] as $product_id) {
@@ -685,7 +686,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </div>
 
             <!-- Custom Messages for Cart & Checkout -->
-            <div class="mmd-section">
+            <div class="incv-section">
                 <h3><span class="dashicons dashicons-megaphone"></span> <?php esc_html_e( 'Custom messages', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -710,7 +711,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </div>
 
             <!-- Shipping Method Condition -->
-            <div class="mmd-section">
+            <div class="incv-section">
                 <h3><?php esc_html_e( '🚚 Shipping method condition', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -729,7 +730,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </div>
 
             <!-- Cart Total Conditions -->
-            <div class="mmd-section">
+            <div class="incv-section">
                 <h3><span class="dashicons dashicons-money-alt"></span> <?php esc_html_e( 'Cart total conditions', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -763,7 +764,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </div>
 
             <!-- User Role Conditions -->
-            <div class="mmd-section">
+            <div class="incv-section">
                 <h3><span class="dashicons dashicons-admin-users"></span> <?php esc_html_e( 'User role conditions', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -790,7 +791,7 @@ $rule_set = wp_parse_args($rule_set, array(
             </div>
 
             <!-- Coupon requirement -->
-            <div class="mmd-section">
+            <div class="incv-section">
                 <h3><span class="dashicons dashicons-tickets-alt"></span> <?php esc_html_e( 'Coupon requirement', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -821,17 +822,11 @@ $rule_set = wp_parse_args($rule_set, array(
                         </td>
                     </tr>
                 </table>
-                <script>
-                jQuery(function($) {
-                    $('#coupon_required').on('change', function() {
-                        $('#required_coupon_codes_row').toggle($(this).is(':checked'));
-                    });
-                });
-                </script>
+                
             </div>
 
             <!-- Schedule -->
-            <div class="mmd-section">
+            <div class="incv-section">
                 <h3><span class="dashicons dashicons-calendar-alt"></span> <?php esc_html_e( 'Scheduling', 'incentiv' ); ?></h3>
                 <table class="form-table">
                     <tr>
@@ -875,9 +870,9 @@ $rule_set = wp_parse_args($rule_set, array(
                         <label for="allow_quantity"><?php esc_html_e( 'Allow quantity selection', 'incentiv' ); ?></label>
                     </th>
                     <td>
-                        <label class="mmd-switch">
+                        <label class="incv-switch">
                             <input type="checkbox" name="allow_quantity" id="allow_quantity" <?php checked(isset($rule_set['allow_quantity']) ? $rule_set['allow_quantity'] : 'no', 'yes'); ?>>
-                            <span class="mmd-slider"></span>
+                            <span class="incv-slider"></span>
                         </label>
                         <p class="description"><?php esc_html_e( 'Let customers choose how many units of each gift', 'incentiv' ); ?></p>
                     </td>
@@ -906,15 +901,15 @@ $rule_set = wp_parse_args($rule_set, array(
         </div>
 
         <!-- Default Variations -->
-        <div class="mmd-card" id="default-variations-card" style="display: none;">
-            <h2 class="mmd-card-title"><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Default variations', 'incentiv' ); ?></h2>
+        <div class="incv-card" id="default-variations-card" style="display: none;">
+            <h2 class="incv-card-title"><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Default variations', 'incentiv' ); ?></h2>
             <p class="description"><?php esc_html_e( 'Set a default variation for each variable product. The customer can change the selection.', 'incentiv' ); ?></p>
             <div id="default-variations-container"></div>
         </div>
 
         <!-- Promo Notice Settings -->
-        <div class="mmd-card">
-            <h2 class="mmd-card-title"><span class="dashicons dashicons-megaphone"></span> <?php esc_html_e( 'Promo message', 'incentiv' ); ?></h2>
+        <div class="incv-card">
+            <h2 class="incv-card-title"><span class="dashicons dashicons-megaphone"></span> <?php esc_html_e( 'Promo message', 'incentiv' ); ?></h2>
             <p class="description"><?php esc_html_e( 'Set a promo message shown to customers on the site to promote the gift.', 'incentiv' ); ?></p>
             <table class="form-table">
                 <tr>
@@ -922,9 +917,9 @@ $rule_set = wp_parse_args($rule_set, array(
                         <label for="promo_notice_enabled"><?php esc_html_e( 'Enable promo message', 'incentiv' ); ?></label>
                     </th>
                     <td>
-                        <label class="mmd-switch">
+                        <label class="incv-switch">
                             <input type="checkbox" name="promo_notice_enabled" id="promo_notice_enabled" <?php checked(isset($rule_set['promo_notice_enabled']) ? $rule_set['promo_notice_enabled'] : 'no', 'yes'); ?>>
-                            <span class="mmd-slider"></span>
+                            <span class="incv-slider"></span>
                         </label>
                         <p class="description"><?php esc_html_e( 'Show a promo message on the site to let customers know about the available gift', 'incentiv' ); ?></p>
                     </td>
@@ -935,8 +930,8 @@ $rule_set = wp_parse_args($rule_set, array(
                     </th>
                     <td>
                         <textarea name="promo_notice_text" id="promo_notice_text" rows="2" class="large-text" placeholder="<?php esc_attr_e( 'Buy selected products and get', 'incentiv' ); ?> {gift_type}!"><?php echo esc_textarea(isset($rule_set['promo_notice_text']) ? $rule_set['promo_notice_text'] : ''); ?></textarea>
-                        <div class="mmd-mergetag-wrap">
-                            <button type="button" class="mmd-mergetag-btn" data-target="promo_notice_text" data-tags="gift_type,rule_name"><span class="msr">sell</span> <?php esc_html_e( 'Merge tags', 'incentiv' ); ?></button>
+                        <div class="incv-mergetag-wrap">
+                            <button type="button" class="incv-mergetag-btn" data-target="promo_notice_text" data-tags="gift_type,rule_name"><span class="msr">sell</span> <?php esc_html_e( 'Merge tags', 'incentiv' ); ?></button>
                         </div>
                         <p class="description"><?php esc_html_e( 'Click "Merge tags" to insert dynamic values. Leave empty for automatic text.', 'incentiv' ); ?></p>
                     </td>
@@ -976,8 +971,8 @@ $rule_set = wp_parse_args($rule_set, array(
         </div>
 
         <!-- Combined Discount + Gift (Optional) -->
-        <div class="mmd-card">
-            <h2 class="mmd-card-title"><span class="dashicons dashicons-money-alt"></span> <?php esc_html_e( 'Combined quantity discount (optional)', 'incentiv' ); ?></h2>
+        <div class="incv-card">
+            <h2 class="incv-card-title"><span class="dashicons dashicons-money-alt"></span> <?php esc_html_e( 'Combined quantity discount (optional)', 'incentiv' ); ?></h2>
             <p class="description"><?php echo wp_kses_post( __( 'Add quantity discounts on top of the gift: the customer gets both a discount and a gift in the same rule. <br> <em>The quantity discounts apply to the products matched by this rule, and the gift is given in addition.</em>', 'incentiv' ) ); ?></p>
             <table class="form-table">
                 <tr>
@@ -985,9 +980,9 @@ $rule_set = wp_parse_args($rule_set, array(
                         <label for="combined_discount_enabled"><?php esc_html_e( 'Enable combined quantity discount', 'incentiv' ); ?></label>
                     </th>
                     <td>
-                        <label class="mmd-switch">
+                        <label class="incv-switch">
                             <input type="checkbox" name="combined_discount_enabled" id="combined_discount_enabled" <?php checked(isset($rule_set['combined_discount_enabled']) ? $rule_set['combined_discount_enabled'] : 'no', 'yes'); ?>>
-                            <span class="mmd-slider"></span>
+                            <span class="incv-slider"></span>
                         </label>
                         <p class="description"><?php esc_html_e( 'When enabled, the customer gets both a quantity discount on the products and the gift', 'incentiv' ); ?></p>
                     </td>
@@ -1044,16 +1039,16 @@ $rule_set = wp_parse_args($rule_set, array(
                     }
                     foreach ($combined_rules as $idx => $disc_rule):
                     ?>
-                        <div class="mmd-discount-rule combined-discount-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0;">
-                            <div class="mmd-field" style="flex: 1;">
+                        <div class="incv-discount-rule combined-discount-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0;">
+                            <div class="incv-field" style="flex: 1;">
                                 <label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;"><?php echo esc_html_x( 'Minimum quantity', 'tier', 'incentiv' ); ?></label>
                                 <input type="number" name="combined_discount_quantity[]" value="<?php echo esc_attr(isset($disc_rule['quantity']) ? $disc_rule['quantity'] : ''); ?>" min="1" placeholder="2" style="width: 100%; padding: 6px;">
                             </div>
-                            <div class="mmd-field" style="flex: 1;">
+                            <div class="incv-field" style="flex: 1;">
                                 <label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;"><?php esc_html_e( 'Discount', 'incentiv' ); ?></label>
                                 <input type="number" name="combined_discount_amount[]" value="<?php echo esc_attr(isset($disc_rule['discount']) ? $disc_rule['discount'] : ''); ?>" min="0" step="0.01" placeholder="30" style="width: 100%; padding: 6px;">
                             </div>
-                            <div class="mmd-field" style="flex: 1;">
+                            <div class="incv-field" style="flex: 1;">
                                 <label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;"><?php echo esc_html_x( 'Discount type', 'tier', 'incentiv' ); ?></label>
                                 <select name="combined_discount_type[]" style="width: 100%; padding: 6px;">
                                     <option value="percentage" <?php selected(isset($disc_rule['type']) ? $disc_rule['type'] : 'percentage', 'percentage'); ?>><?php esc_html_e( 'Percentage (%)', 'incentiv' ); ?></option>
@@ -1083,9 +1078,9 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label for="combined_discount_notice_enabled"><?php esc_html_e( 'Show discount message', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="combined_discount_notice_enabled" id="combined_discount_notice_enabled" <?php checked(isset($rule_set['combined_discount_notice_enabled']) ? $rule_set['combined_discount_notice_enabled'] : 'yes', 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php esc_html_e( 'Show a message about the quantity discount on the product page and in the cart', 'incentiv' ); ?></p>
                         </td>
@@ -1103,58 +1098,58 @@ $rule_set = wp_parse_args($rule_set, array(
                             <label for="combined_discount_notice_color"><?php echo esc_html_x( 'Message colour', 'gift', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <input type="text" name="combined_discount_notice_color" id="combined_discount_notice_color" value="<?php echo esc_attr(isset($rule_set['combined_discount_notice_color']) ? $rule_set['combined_discount_notice_color'] : '#4CAF50'); ?>" class="mmd-color-picker">
+                            <input type="text" name="combined_discount_notice_color" id="combined_discount_notice_color" value="<?php echo esc_attr(isset($rule_set['combined_discount_notice_color']) ? $rule_set['combined_discount_notice_color'] : '#4CAF50'); ?>" class="incv-color-picker">
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
 
-    </div><!-- /.mmd-admin-container -->
+    </div><!-- /.incv-admin-container -->
 
         <!-- Stepper submit bar -->
-        <p class="submit mmd-rule-submit-bar">
-            <button type="button" class="mmd-btn mmd-btn-outline" id="mmd-gift-step-prev"><span class="msr mmd-dir-icon">arrow_forward</span> <?php esc_html_e( 'Previous', 'incentiv' ); ?></button>
-            <span id="mmd-gift-step-indicator" style="font-size:12.5px;font-weight:700;color:var(--mmd-text-muted);"></span>
-            <button type="button" class="mmd-btn mmd-btn-primary" id="mmd-gift-step-next"><?php esc_html_e( 'Next', 'incentiv' ); ?> <span class="msr mmd-dir-icon">arrow_back</span></button>
+        <p class="submit incv-rule-submit-bar">
+            <button type="button" class="incv-btn incv-btn-outline" id="incv-gift-step-prev"><span class="msr incv-dir-icon">arrow_forward</span> <?php esc_html_e( 'Previous', 'incentiv' ); ?></button>
+            <span id="incv-gift-step-indicator" style="font-size:12.5px;font-weight:700;color:var(--incv-text-muted);"></span>
+            <button type="button" class="incv-btn incv-btn-primary" id="incv-gift-step-next"><?php esc_html_e( 'Next', 'incentiv' ); ?> <span class="msr incv-dir-icon">arrow_back</span></button>
             <span style="flex:1;"></span>
-            <span id="mmd-gift-draft-status" class="mmd-draft-status" aria-live="polite"></span>
-            <button type="button" id="mmd-gift-save-draft" class="mmd-btn mmd-btn-outline" style="padding:10px 18px;"><span class="msr">save</span> <?php esc_html_e( 'Save draft', 'incentiv' ); ?></button>
-            <button type="button" class="mmd-btn mmd-btn-green" id="save-gift-rule" style="padding:10px 20px;">
+            <span id="incv-gift-draft-status" class="incv-draft-status" aria-live="polite"></span>
+            <button type="button" id="incv-gift-save-draft" class="incv-btn incv-btn-outline" style="padding:10px 18px;"><span class="msr">save</span> <?php esc_html_e( 'Save draft', 'incentiv' ); ?></button>
+            <button type="button" class="incv-btn incv-btn-green" id="save-gift-rule" style="padding:10px 20px;">
                 <span class="msr">check</span><?php if ($is_new): ?> <?php esc_html_e( 'Publish gift', 'incentiv' ); ?><?php else: ?> <?php esc_html_e( 'Save gift', 'incentiv' ); ?><?php endif; ?>
             </button>
-            <a href="<?php echo esc_url( admin_url('admin.php?page=mmd-gift-rules') ); ?>" class="mmd-btn mmd-btn-ghost"><?php esc_html_e( 'Cancel', 'incentiv' ); ?></a>
+            <a href="<?php echo esc_url( admin_url('admin.php?page=incv-gift-rules') ); ?>" class="incv-btn incv-btn-ghost"><?php esc_html_e( 'Cancel', 'incentiv' ); ?></a>
         </p>
 
-    </div><!-- /.mmd-editor-main -->
+    </div><!-- /.incv-editor-main -->
 
     <!-- Sticky live preview -->
-    <aside class="mmd-editor-preview" id="mmd-gift-live-preview">
-        <div class="mmd-preview-label"><span class="msr">visibility</span><?php echo wp_kses_post( __( 'Preview &middot; Live', 'incentiv' ) ); ?></div>
-        <div class="mmd-gift-widget-preview" style="background:linear-gradient(135deg,<?php echo esc_attr($mmd_gw_bg1); ?> 0%,<?php echo esc_attr($mmd_gw_bg2); ?> 100%);">
-            <div class="mmd-gw-title"><?php echo esc_html($mmd_gw_title); ?></div>
-            <div class="mmd-gw-sub mmd-glp-rule-name"><?php echo esc_html($rule_set['name'] ? $rule_set['name'] : esc_html__( 'New gift rule', 'incentiv' )); ?></div>
-            <div class="mmd-gw-list">
-                <div class="mmd-gw-item">
-                    <span class="mmd-gw-thumb"><span class="msr">image</span></span>
-                    <div class="mmd-gw-name"><?php esc_html_e( 'Ceramic mug', 'incentiv' ); ?></div>
-                    <button type="button" class="mmd-gw-btn" style="background:<?php echo esc_attr($mmd_gw_bg1); ?>;"><?php esc_html_e( 'Choose', 'incentiv' ); ?></button>
+    <aside class="incv-editor-preview" id="incv-gift-live-preview">
+        <div class="incv-preview-label"><span class="msr">visibility</span><?php echo wp_kses_post( __( 'Preview &middot; Live', 'incentiv' ) ); ?></div>
+        <div class="incv-gift-widget-preview" style="background:linear-gradient(135deg,<?php echo esc_attr($incv_gw_bg1); ?> 0%,<?php echo esc_attr($incv_gw_bg2); ?> 100%);">
+            <div class="incv-gw-title"><?php echo esc_html($incv_gw_title); ?></div>
+            <div class="incv-gw-sub incv-glp-rule-name"><?php echo esc_html($rule_set['name'] ? $rule_set['name'] : esc_html__( 'New gift rule', 'incentiv' )); ?></div>
+            <div class="incv-gw-list">
+                <div class="incv-gw-item">
+                    <span class="incv-gw-thumb"><span class="msr">image</span></span>
+                    <div class="incv-gw-name"><?php esc_html_e( 'Ceramic mug', 'incentiv' ); ?></div>
+                    <button type="button" class="incv-gw-btn" style="background:<?php echo esc_attr($incv_gw_bg1); ?>;"><?php esc_html_e( 'Choose', 'incentiv' ); ?></button>
                 </div>
-                <div class="mmd-gw-item mmd-gw-selected">
-                    <span class="mmd-gw-thumb"><span class="msr">check_circle</span></span>
-                    <div class="mmd-gw-name"><?php esc_html_e( 'Thermal jug 500 ml', 'incentiv' ); ?></div>
-                    <button type="button" class="mmd-gw-btn"><?php esc_html_e( 'Selected ✓', 'incentiv' ); ?></button>
+                <div class="incv-gw-item incv-gw-selected">
+                    <span class="incv-gw-thumb"><span class="msr">check_circle</span></span>
+                    <div class="incv-gw-name"><?php esc_html_e( 'Thermal jug 500 ml', 'incentiv' ); ?></div>
+                    <button type="button" class="incv-gw-btn"><?php esc_html_e( 'Selected ✓', 'incentiv' ); ?></button>
                 </div>
             </div>
         </div>
-        <a href="<?php echo esc_url(admin_url('admin.php?page=mmd-gift-rules&action=styling')); ?>" class="mmd-btn mmd-btn-soft-purple" style="width:100%;">
+        <a href="<?php echo esc_url(admin_url('admin.php?page=incv-gift-rules&action=styling')); ?>" class="incv-btn incv-btn-soft-purple" style="width:100%;">
             <span class="msr">palette</span><?php esc_html_e( 'Edit the widget design', 'incentiv' ); ?>
         </a>
     </aside>
-    </div><!-- /.mmd-editor-grid -->
+    </div><!-- /.incv-editor-grid -->
 </div>
 
-<script>
+<?php ob_start(); ?>
 jQuery(document).ready(function($) {
     var ruleSet = <?php echo json_encode($rule_set); ?>;
 
@@ -1189,44 +1184,44 @@ jQuery(document).ready(function($) {
         var st = giftWizardState, h = '';
         if (step === 1) {
             h += ( '<h3>' + <?php echo wp_json_encode( __( 'What does the gift include?', 'incentiv' ) ); ?> + '<\/h3><p>' + <?php echo wp_json_encode( __( 'Name the rule and choose the gift type.', 'incentiv' ) ); ?> + '<\/p>' );
-            h += ( '<label class="mmd-form-label">' + <?php echo wp_json_encode( __( 'Rule name', 'incentiv' ) ); ?> + '<\/label>' ) +
-                '<input type="text" id="giftwz-name" value="' + $('<i>').text(st.name).html() + ( '" placeholder="' + <?php echo wp_json_encode( __( 'e.g. A gift over ₪200', 'incentiv' ) ); ?> + '" style="width:100%;padding:10px 12px;border:1px solid var(--mmd-border-input);border-radius:9px;font-size:14px;margin-bottom:16px;">' );
-            h += ( '<label class="mmd-form-label">' + <?php echo wp_json_encode( __( 'Gift type', 'incentiv' ) ); ?> + '<\/label><div class="mmd-select-cards mmd-select-cards-3">' );
+            h += ( '<label class="incv-form-label">' + <?php echo wp_json_encode( __( 'Rule name', 'incentiv' ) ); ?> + '<\/label>' ) +
+                '<input type="text" id="giftwz-name" value="' + $('<i>').text(st.name).html() + ( '" placeholder="' + <?php echo wp_json_encode( __( 'e.g. A gift over ₪200', 'incentiv' ) ); ?> + '" style="width:100%;padding:10px 12px;border:1px solid var(--incv-border-input);border-radius:9px;font-size:14px;margin-bottom:16px;">' );
+            h += ( '<label class="incv-form-label">' + <?php echo wp_json_encode( __( 'Gift type', 'incentiv' ) ); ?> + '<\/label><div class="incv-select-cards incv-select-cards-3">' );
             giftTypeCards.forEach(function(c){
-                var on = st.gift_type===c.id ? ' mmd-active mmd-select-card-purple' : '';
-                h += '<div class="mmd-select-card'+on+'" data-gtype="'+c.id+'"><span class="msr" style="font-size:24px;">'+c.icon+'</span><span class="mmd-select-card-label" style="font-weight:700;">'+c.title+'</span><span class="mmd-select-card-hint">'+c.desc+'</span></div>';
+                var on = st.gift_type===c.id ? ' incv-active incv-select-card-purple' : '';
+                h += '<div class="incv-select-card'+on+'" data-gtype="'+c.id+'"><span class="msr" style="font-size:24px;">'+c.icon+'</span><span class="incv-select-card-label" style="font-weight:700;">'+c.title+'</span><span class="incv-select-card-hint">'+c.desc+'</span></div>';
             });
             h += '</div>';
-            h += '<div id="giftwz-disc" style="margin-top:14px;'+(st.gift_type==='free'?'display:none;':'')+( '"><label class="mmd-form-label">' + <?php echo wp_json_encode( __( 'Discount size', 'incentiv' ) ); ?> + ' ' )+(st.gift_type==='fixed_discount'?'(₪)':'(%)')+'</label><input type="number" id="giftwz-discval" min="0" value="'+st.gift_discount+'" style="width:160px;padding:9px 11px;border:1px solid var(--mmd-border-input);border-radius:8px;"></div>';
+            h += '<div id="giftwz-disc" style="margin-top:14px;'+(st.gift_type==='free'?'display:none;':'')+( '"><label class="incv-form-label">' + <?php echo wp_json_encode( __( 'Discount size', 'incentiv' ) ); ?> + ' ' )+(st.gift_type==='fixed_discount'?'(₪)':'(%)')+'</label><input type="number" id="giftwz-discval" min="0" value="'+st.gift_discount+'" style="width:160px;padding:9px 11px;border:1px solid var(--incv-border-input);border-radius:8px;"></div>';
         } else if (step === 2) {
             h += ( '<h3>' + <?php echo wp_json_encode( __( 'How is the gift given?', 'incentiv' ) ); ?> + '<\/h3><p>' + <?php echo wp_json_encode( __( 'Choose how the customer gets the gift.', 'incentiv' ) ); ?> + '<\/p>' );
-            h += '<div class="mmd-select-cards mmd-select-cards-2">';
+            h += '<div class="incv-select-cards incv-select-cards-2">';
             giftModeCards.forEach(function(c){
-                var on = st.gift_mode===c.id ? ' mmd-active mmd-select-card-purple' : '';
-                h += '<div class="mmd-select-card'+on+'" data-gmode="'+c.id+'"><span class="msr" style="font-size:26px;">'+c.icon+'</span><span class="mmd-select-card-label" style="font-weight:700;">'+c.title+'</span><span class="mmd-select-card-hint">'+c.desc+'</span></div>';
+                var on = st.gift_mode===c.id ? ' incv-active incv-select-card-purple' : '';
+                h += '<div class="incv-select-card'+on+'" data-gmode="'+c.id+'"><span class="msr" style="font-size:26px;">'+c.icon+'</span><span class="incv-select-card-label" style="font-weight:700;">'+c.title+'</span><span class="incv-select-card-hint">'+c.desc+'</span></div>';
             });
             h += '</div>';
         } else if (step === 3) {
             h += ( '<h3>' + <?php echo wp_json_encode( __( 'When is the gift triggered?', 'incentiv' ) ); ?> + '<\/h3><p>' + <?php echo wp_json_encode( __( 'Set threshold conditions (leave empty for no condition).', 'incentiv' ) ); ?> + '<\/p>' );
-            h += '<div class="mmd-form-grid-2">';
-            h += ( '<div><label class="mmd-form-label">' + <?php echo wp_json_encode( _x( 'Minimum cart total (₪)', 'gift', 'incentiv' ) ); ?> + '<\/label><input type="number" id="giftwz-mincart" min="0" value="' )+st.min_cart_total+( '" placeholder="' + <?php echo wp_json_encode( __( 'None', 'incentiv' ) ); ?> + '" style="width:100%;padding:9px 11px;border:1px solid var(--mmd-border-input);border-radius:8px;"><\/div>' );
-            h += ( '<div><label class="mmd-form-label">' + <?php echo wp_json_encode( __( 'Minimum number of items', 'incentiv' ) ); ?> + '<\/label><input type="number" id="giftwz-minqty" min="0" value="' )+st.min_quantity+( '" placeholder="' + <?php echo wp_json_encode( __( 'None', 'incentiv' ) ); ?> + '" style="width:100%;padding:9px 11px;border:1px solid var(--mmd-border-input);border-radius:8px;"><\/div>' );
+            h += '<div class="incv-form-grid-2">';
+            h += ( '<div><label class="incv-form-label">' + <?php echo wp_json_encode( _x( 'Minimum cart total (₪)', 'gift', 'incentiv' ) ); ?> + '<\/label><input type="number" id="giftwz-mincart" min="0" value="' )+st.min_cart_total+( '" placeholder="' + <?php echo wp_json_encode( __( 'None', 'incentiv' ) ); ?> + '" style="width:100%;padding:9px 11px;border:1px solid var(--incv-border-input);border-radius:8px;"><\/div>' );
+            h += ( '<div><label class="incv-form-label">' + <?php echo wp_json_encode( __( 'Minimum number of items', 'incentiv' ) ); ?> + '<\/label><input type="number" id="giftwz-minqty" min="0" value="' )+st.min_quantity+( '" placeholder="' + <?php echo wp_json_encode( __( 'None', 'incentiv' ) ); ?> + '" style="width:100%;padding:9px 11px;border:1px solid var(--incv-border-input);border-radius:8px;"><\/div>' );
             h += '</div>';
-            h += ( '<div class="mmd-wizard-tip">' + <?php echo wp_json_encode( __( 'You choose the gift products themselves in the form after the wizard ("Gift setup" step).', 'incentiv' ) ); ?> + '<\/div>' );
+            h += ( '<div class="incv-wizard-tip">' + <?php echo wp_json_encode( __( 'You choose the gift products themselves in the form after the wizard ("Gift setup" step).', 'incentiv' ) ); ?> + '<\/div>' );
         } else if (step === 4) {
             var gt = giftTypeCards.filter(function(c){return c.id===st.gift_type;})[0];
             var gm = giftModeCards.filter(function(c){return c.id===st.gift_mode;})[0];
             h += ( '<h3>' + <?php echo wp_json_encode( __( 'Summary', 'incentiv' ) ); ?> + '<\/h3><p>' + <?php echo wp_json_encode( __( 'Check and click "Create gift" to fill in the form.', 'incentiv' ) ); ?> + '<\/p>' );
-            h += '<div style="border:1px solid var(--mmd-border);border-radius:12px;overflow:hidden;">';
-            function row(k,v){ return '<div style="display:flex;justify-content:space-between;padding:12px 15px;border-bottom:1px solid var(--mmd-border-row);font-size:13.5px;"><span style="color:var(--mmd-text-muted);">'+k+'</span><strong>'+v+'</strong></div>'; }
+            h += '<div style="border:1px solid var(--incv-border);border-radius:12px;overflow:hidden;">';
+            function row(k,v){ return '<div style="display:flex;justify-content:space-between;padding:12px 15px;border-bottom:1px solid var(--incv-border-row);font-size:13.5px;"><span style="color:var(--incv-text-muted);">'+k+'</span><strong>'+v+'</strong></div>'; }
             h += row(<?php echo wp_json_encode( __( 'Name', 'incentiv' ) ); ?>, $('<i>').text(st.name||<?php echo wp_json_encode( __( '(no name)', 'incentiv' ) ); ?>).html());
             h += row(<?php echo wp_json_encode( _x( 'Gift type', 'summary', 'incentiv' ) ); ?>, gt.title + (st.gift_type!=='free' ? ' · '+st.gift_discount+(st.gift_type==='fixed_discount'?'₪':'%') : ''));
             h += row(<?php echo wp_json_encode( __( 'How it\'s given', 'incentiv' ) ); ?>, gm.title);
             h += row(<?php echo wp_json_encode( __( 'Condition', 'incentiv' ) ); ?>, (st.min_cart_total?(<?php echo wp_json_encode( __( 'Cart ₪', 'incentiv' ) ); ?>+st.min_cart_total+( ' ' + <?php echo wp_json_encode( __( 'and up', 'incentiv' ) ); ?> )):'') + (st.min_quantity?(st.min_cart_total?' · ':'')+( <?php echo wp_json_encode( __( 'Quantity', 'incentiv' ) ); ?> + ' ' )+st.min_quantity+( ' ' + <?php echo wp_json_encode( __( 'and up', 'incentiv' ) ); ?> ):'') || <?php echo wp_json_encode( __( 'None', 'incentiv' ) ); ?>);
             h += '</div>';
-            h += ( '<div class="mmd-wizard-tip" style="background:var(--mmd-success-light);border-color:var(--mmd-success);color:#155724;margin-top:14px;">' + <?php echo wp_json_encode( __( 'All set! Next, choose the gift products in the form.', 'incentiv' ) ); ?> + '<\/div>' );
+            h += ( '<div class="incv-wizard-tip" style="background:var(--incv-success-light);border-color:var(--incv-success);color:#155724;margin-top:14px;">' + <?php echo wp_json_encode( __( 'All set! Next, choose the gift products in the form.', 'incentiv' ) ); ?> + '<\/div>' );
         }
-        return '<div style="animation:mmdRise .25s ease both;">'+h+'</div>';
+        return '<div style="animation:incvRise .25s ease both;">'+h+'</div>';
     }
 
     function giftWizReadStep() {
@@ -1240,29 +1235,29 @@ jQuery(document).ready(function($) {
     }
 
     function updateGiftWizardStep() {
-        $('#mmd-gift-wizard-title').text(<?php echo wp_json_encode( __( 'Gift rule wizard', 'incentiv' ) ); ?>);
-        $('#mmd-gift-wizard-body').html(giftWizStepHtml(giftWizardCurrentStep));
-        $('.mmd-gift-wizard-step').each(function(){
+        $('#incv-gift-wizard-title').text(<?php echo wp_json_encode( __( 'Gift rule wizard', 'incentiv' ) ); ?>);
+        $('#incv-gift-wizard-body').html(giftWizStepHtml(giftWizardCurrentStep));
+        $('.incv-gift-wizard-step').each(function(){
             var n = parseInt($(this).data('step'),10);
             $(this).toggleClass('active', n===giftWizardCurrentStep).toggleClass('completed', n<giftWizardCurrentStep);
         });
-        $('#mmd-gift-wizard-prev').toggle(giftWizardCurrentStep>1);
-        $('#mmd-gift-wizard-next').toggle(giftWizardCurrentStep<giftWizardTotalSteps);
-        $('#mmd-gift-wizard-finish').toggle(giftWizardCurrentStep===giftWizardTotalSteps);
+        $('#incv-gift-wizard-prev').toggle(giftWizardCurrentStep>1);
+        $('#incv-gift-wizard-next').toggle(giftWizardCurrentStep<giftWizardTotalSteps);
+        $('#incv-gift-wizard-finish').toggle(giftWizardCurrentStep===giftWizardTotalSteps);
     }
 
-    if ($('#mmd-gift-wizard-overlay').length) {
+    if ($('#incv-gift-wizard-overlay').length) {
         // steps bar in this wizard has 6 dots in markup; hide extras beyond 4
-        $('.mmd-gift-wizard-step').each(function(){ if (parseInt($(this).data('step'),10) > 4) $(this).hide(); });
+        $('.incv-gift-wizard-step').each(function(){ if (parseInt($(this).data('step'),10) > 4) $(this).hide(); });
     }
 
     function showGiftWizard() {
         giftWizardCurrentStep = 1;
         if (!giftWizardState.name) giftWizardState.name = $('#rule_name').val()||'';
-        $('#mmd-gift-wizard-overlay').fadeIn(200);
+        $('#incv-gift-wizard-overlay').fadeIn(200);
         updateGiftWizardStep();
     }
-    function hideGiftWizard() { $('#mmd-gift-wizard-overlay').fadeOut(200); }
+    function hideGiftWizard() { $('#incv-gift-wizard-overlay').fadeOut(200); }
 
     function giftWizApplyToForm() {
         var st = giftWizardState;
@@ -1275,42 +1270,42 @@ jQuery(document).ready(function($) {
     }
 
     // Step interactions
-    $(document).on('click', '#mmd-gift-wizard-body [data-gtype]', function(){
+    $(document).on('click', '#incv-gift-wizard-body [data-gtype]', function(){
         giftWizardState.gift_type = $(this).data('gtype');
-        $('#mmd-gift-wizard-body [data-gtype]').removeClass('mmd-active mmd-select-card-purple');
-        $(this).addClass('mmd-active mmd-select-card-purple');
+        $('#incv-gift-wizard-body [data-gtype]').removeClass('incv-active incv-select-card-purple');
+        $(this).addClass('incv-active incv-select-card-purple');
         $('#giftwz-disc').toggle(giftWizardState.gift_type!=='free');
     });
-    $(document).on('click', '#mmd-gift-wizard-body [data-gmode]', function(){
+    $(document).on('click', '#incv-gift-wizard-body [data-gmode]', function(){
         giftWizardState.gift_mode = $(this).data('gmode');
-        $('#mmd-gift-wizard-body [data-gmode]').removeClass('mmd-active mmd-select-card-purple');
-        $(this).addClass('mmd-active mmd-select-card-purple');
+        $('#incv-gift-wizard-body [data-gmode]').removeClass('incv-active incv-select-card-purple');
+        $(this).addClass('incv-active incv-select-card-purple');
     });
 
-    $(document).on('click', '#mmd-gift-wizard-next', function() {
+    $(document).on('click', '#incv-gift-wizard-next', function() {
         giftWizReadStep();
         if (giftWizardCurrentStep < giftWizardTotalSteps) { giftWizardCurrentStep++; updateGiftWizardStep(); }
     });
-    $(document).on('click', '#mmd-gift-wizard-prev', function() {
+    $(document).on('click', '#incv-gift-wizard-prev', function() {
         giftWizReadStep();
         if (giftWizardCurrentStep > 1) { giftWizardCurrentStep--; updateGiftWizardStep(); }
     });
-    $(document).on('click', '#mmd-gift-wizard-finish', function() {
+    $(document).on('click', '#incv-gift-wizard-finish', function() {
         giftWizReadStep();
         giftWizApplyToForm();
         hideGiftWizard();
-        if (typeof window.mmdShowGiftStep === 'function') { window.mmdShowGiftStep(2); }
+        if (typeof window.incvShowGiftStep === 'function') { window.incvShowGiftStep(2); }
     });
-    $(document).on('click', '#mmd-gift-wizard-overlay .mmd-wizard-close, #mmd-gift-wizard-overlay .mmd-wizard-backdrop', function() { hideGiftWizard(); });
+    $(document).on('click', '#incv-gift-wizard-overlay .incv-wizard-close, #incv-gift-wizard-overlay .incv-wizard-backdrop', function() { hideGiftWizard(); });
     $(document).on('keydown', function(e) {
-        if (e.key === 'Escape' && $('#mmd-gift-wizard-overlay').is(':visible')) { hideGiftWizard(); }
+        if (e.key === 'Escape' && $('#incv-gift-wizard-overlay').is(':visible')) { hideGiftWizard(); }
     });
-    $(document).on('click', '#mmd-launch-gift-wizard, .mmd-launch-gift-wizard', function(e){ e.preventDefault(); showGiftWizard(); });
+    $(document).on('click', '#incv-launch-gift-wizard, .incv-launch-gift-wizard', function(e){ e.preventDefault(); showGiftWizard(); });
 
     // Auto-open for brand-new rules (unless skipped)
     (function(){
         var params = new URLSearchParams(window.location.search);
-        if (params.get('action')==='new' && params.get('skip_wizard')!=='1' && $('#mmd-gift-wizard-overlay').length) {
+        if (params.get('action')==='new' && params.get('skip_wizard')!=='1' && $('#incv-gift-wizard-overlay').length) {
             showGiftWizard();
         }
     })();
@@ -1411,8 +1406,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_get_shipping_methods',
-                nonce: mmdGiftRulesAjax.nonce
+                action: 'incv_get_shipping_methods',
+                nonce: incvGiftRulesAjax.nonce
             },
             success: function(response) {
                 if (response.success && response.data) {
@@ -1433,8 +1428,8 @@ jQuery(document).ready(function($) {
     // Gift mode toggle (product page vs cart-based)
     $('input[name="gift_mode"]').on('change', function() {
         var mode = $(this).val();
-        $('.mmd-gift-mode-option').removeClass('active');
-        $(this).closest('.mmd-gift-mode-option').addClass('active');
+        $('.incv-gift-mode-option').removeClass('active');
+        $(this).closest('.incv-gift-mode-option').addClass('active');
 
         if (mode === 'cart_based') {
             $('#cart_gift_notice_row').show();
@@ -1446,8 +1441,8 @@ jQuery(document).ready(function($) {
     });
 
     // Gift mode visual feedback on click
-    $('.mmd-gift-mode-option').on('click', function() {
-        $('.mmd-gift-mode-option').removeClass('active');
+    $('.incv-gift-mode-option').on('click', function() {
+        $('.incv-gift-mode-option').removeClass('active');
         $(this).addClass('active');
         $(this).find('input[type="radio"]').prop('checked', true).trigger('change');
     });
@@ -1455,8 +1450,8 @@ jQuery(document).ready(function($) {
     // Gift type change
     $('input[name="gift_type"]').on('change', function() {
         var type = $(this).val();
-        $('.mmd-gift-type-option').removeClass('active');
-        $(this).closest('.mmd-gift-type-option').addClass('active');
+        $('.incv-gift-type-option').removeClass('active');
+        $(this).closest('.incv-gift-type-option').addClass('active');
 
         if (type === 'free') {
             $('#discount_amount_row').hide();
@@ -1536,12 +1531,12 @@ jQuery(document).ready(function($) {
     var combinedRowIndex = <?php echo count($combined_rules); ?>;
     $('#add-combined-discount-row').on('click', function() {
         combinedRowIndex++;
-        var html = '<div class="mmd-discount-rule combined-discount-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0;">' +
-            ( '<div class="mmd-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( _x( 'Minimum quantity', 'tier', 'incentiv' ) ); ?> + '<\/label>' ) +
+        var html = '<div class="incv-discount-rule combined-discount-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0;">' +
+            ( '<div class="incv-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( _x( 'Minimum quantity', 'tier', 'incentiv' ) ); ?> + '<\/label>' ) +
             '<input type="number" name="combined_discount_quantity[]" value="" min="1" placeholder="2" style="width: 100%; padding: 6px;"></div>' +
-            ( '<div class="mmd-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label>' ) +
+            ( '<div class="incv-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label>' ) +
             '<input type="number" name="combined_discount_amount[]" value="" min="0" step="0.01" placeholder="30" style="width: 100%; padding: 6px;"></div>' +
-            ( '<div class="mmd-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( _x( 'Discount type', 'tier', 'incentiv' ) ); ?> + '<\/label>' ) +
+            ( '<div class="incv-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( _x( 'Discount type', 'tier', 'incentiv' ) ); ?> + '<\/label>' ) +
             '<select name="combined_discount_type[]" style="width: 100%; padding: 6px;">' +
             ( '<option value="percentage">' + <?php echo wp_json_encode( __( 'Percentage (%)', 'incentiv' ) ); ?> + '<\/option>' ) +
             ( '<option value="fixed">' + <?php echo wp_json_encode( __( 'Fixed amount (₪)', 'incentiv' ) ); ?> + '<\/option><\/select><\/div>' ) +
@@ -1586,12 +1581,12 @@ jQuery(document).ready(function($) {
         // Clear existing rows and add preset rows
         $('#combined-discount-rules-container').empty();
         rules.forEach(function(rule, index) {
-            var html = '<div class="mmd-discount-rule combined-discount-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0;">' +
-                ( '<div class="mmd-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( _x( 'Minimum quantity', 'tier', 'incentiv' ) ); ?> + '<\/label>' ) +
+            var html = '<div class="incv-discount-rule combined-discount-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0;">' +
+                ( '<div class="incv-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( _x( 'Minimum quantity', 'tier', 'incentiv' ) ); ?> + '<\/label>' ) +
                 '<input type="number" name="combined_discount_quantity[]" value="' + rule.quantity + '" min="1" style="width: 100%; padding: 6px;"></div>' +
-                ( '<div class="mmd-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label>' ) +
+                ( '<div class="incv-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label>' ) +
                 '<input type="number" name="combined_discount_amount[]" value="' + rule.discount + '" min="0" step="0.01" style="width: 100%; padding: 6px;"></div>' +
-                ( '<div class="mmd-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( _x( 'Discount type', 'tier', 'incentiv' ) ); ?> + '<\/label>' ) +
+                ( '<div class="incv-field" style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( _x( 'Discount type', 'tier', 'incentiv' ) ); ?> + '<\/label>' ) +
                 '<select name="combined_discount_type[]" style="width: 100%; padding: 6px;">' +
                 '<option value="percentage"' + (rule.type === 'percentage' ? ' selected' : '') + ( '>' + <?php echo wp_json_encode( __( 'Percentage (%)', 'incentiv' ) ); ?> + '<\/option>' ) +
                 '<option value="fixed"' + (rule.type === 'fixed' ? ' selected' : '') + ( '>' + <?php echo wp_json_encode( __( 'Fixed amount (₪)', 'incentiv' ) ); ?> + '<\/option><\/select><\/div>' ) +
@@ -1602,15 +1597,15 @@ jQuery(document).ready(function($) {
     });
 
     // Initialize Select2 for product search (includes variations)
-    $('.mmd-product-search-multiple').select2({
+    $('.incv-product-search-multiple').select2({
         ajax: {
             url: ajaxurl,
             dataType: 'json',
             delay: 250,
             data: function(params) {
                 return {
-                    action: 'mmd_search_products',
-                    nonce: mmdGiftRulesAjax.nonce,
+                    action: 'incv_search_products',
+                    nonce: incvGiftRulesAjax.nonce,
                     include_variations: '1',
                     q: params.term
                 };
@@ -1647,8 +1642,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_get_gift_products_variations',
-                nonce: mmdGiftRulesAjax.nonce,
+                action: 'incv_get_gift_products_variations',
+                nonce: incvGiftRulesAjax.nonce,
                 product_ids: productIds
             },
             success: function(response) {
@@ -1711,8 +1706,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_get_attribute_terms',
-                nonce: mmdGiftRulesAjax.nonce,
+                action: 'incv_get_attribute_terms',
+                nonce: incvGiftRulesAjax.nonce,
                 attribute_slug: slug
             },
             success: function(response) {
@@ -1761,22 +1756,22 @@ jQuery(document).ready(function($) {
         attrOptions += '<option value="pa_<?php echo esc_js($attribute->attribute_name); ?>"><?php echo esc_js($attribute->attribute_label); ?></option>';
         <?php endforeach; ?>
 
-        var html = '<div class="mmd-additional-attr-row" style="display: flex; gap: 10px; margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0; align-items: flex-start;">' +
+        var html = '<div class="incv-additional-attr-row" style="display: flex; gap: 10px; margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-radius: 4px; border: 1px solid #e0e0e0; align-items: flex-start;">' +
             ( '<div style="flex: 1;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( __( 'Attribute', 'incentiv' ) ); ?> + '<\/label>' ) +
             '<select class="gift-additional-attr-slug regular-text" style="width: 100%;">' + attrOptions + '</select></div>' +
             ( '<div style="flex: 2;"><label style="display: block; font-size: 12px; color: #666; margin-bottom: 3px;">' + <?php echo wp_json_encode( __( 'Values', 'incentiv' ) ); ?> + '<\/label>' ) +
-            ( '<div class="gift-additional-attr-values mmd-checkbox-group">' + <?php echo wp_json_encode( __( 'Choose an attribute...', 'incentiv' ) ); ?> + '<\/div><\/div>' ) +
+            ( '<div class="gift-additional-attr-values incv-checkbox-group">' + <?php echo wp_json_encode( __( 'Choose an attribute...', 'incentiv' ) ); ?> + '<\/div><\/div>' ) +
             ( '<div style="padding-top: 20px;"><button type="button" class="button remove-additional-attr" title="' + <?php echo wp_json_encode( __( 'Remove', 'incentiv' ) ); ?> + '"><span class="dashicons dashicons-trash" style="vertical-align: middle;"><\/span><\/button><\/div>' ) +
             '</div>';
         $('#gift_additional_attributes_container').append(html);
     });
 
     $(document).on('click', '.remove-additional-attr', function() {
-        $(this).closest('.mmd-additional-attr-row').remove();
+        $(this).closest('.incv-additional-attr-row').remove();
     });
 
     $(document).on('change', '.gift-additional-attr-slug', function() {
-        var $row = $(this).closest('.mmd-additional-attr-row');
+        var $row = $(this).closest('.incv-additional-attr-row');
         var slug = $(this).val();
         var $valuesContainer = $row.find('.gift-additional-attr-values');
 
@@ -1790,8 +1785,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_get_attribute_terms',
-                nonce: mmdGiftRulesAjax.nonce,
+                action: 'incv_get_attribute_terms',
+                nonce: incvGiftRulesAjax.nonce,
                 attribute_slug: slug
             },
             success: function(response) {
@@ -1810,15 +1805,15 @@ jQuery(document).ready(function($) {
     var additionalAttrs = ruleSet.gift_additional_attributes || [];
     if (additionalAttrs.length > 0) {
         additionalAttrs.forEach(function(addAttr, idx) {
-            var $row = $('#gift_additional_attributes_container .mmd-additional-attr-row').eq(idx);
+            var $row = $('#gift_additional_attributes_container .incv-additional-attr-row').eq(idx);
             if ($row.length && addAttr.slug) {
                 var $valuesContainer = $row.find('.gift-additional-attr-values');
                 $.ajax({
                     url: ajaxurl,
                     type: 'POST',
                     data: {
-                        action: 'mmd_get_attribute_terms',
-                        nonce: mmdGiftRulesAjax.nonce,
+                        action: 'incv_get_attribute_terms',
+                        nonce: incvGiftRulesAjax.nonce,
                         attribute_slug: addAttr.slug
                     },
                     success: function(response) {
@@ -1841,8 +1836,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_get_attribute_terms',
-                nonce: mmdGiftRulesAjax.nonce,
+                action: 'incv_get_attribute_terms',
+                nonce: incvGiftRulesAjax.nonce,
                 attribute_slug: slug
             },
             success: function(response) {
@@ -1976,7 +1971,7 @@ jQuery(document).ready(function($) {
 
         // Collect additional gift attribute filters
         formData.gift_additional_attributes = [];
-        $('#gift_additional_attributes_container .mmd-additional-attr-row').each(function() {
+        $('#gift_additional_attributes_container .incv-additional-attr-row').each(function() {
             var slug = $(this).find('.gift-additional-attr-slug').val();
             if (!slug) return;
             var values = [];
@@ -2012,13 +2007,13 @@ jQuery(document).ready(function($) {
     // ---- Publish + draft (server-side) ----
     var giftDraftInitialStatus = <?php echo json_encode(isset($rule_set['status']) ? $rule_set['status'] : ''); ?>;
     var giftDraftContext = <?php echo $is_new ? 'true' : 'false'; ?> || giftDraftInitialStatus === 'draft';
-    var $giftForm = $('[data-mmd-autosave="gift"]').first();
-    if (giftDraftContext) { $giftForm.data('mmdServerDraftActive', true); }
+    var $giftForm = $('[data-incv-autosave="gift"]').first();
+    if (giftDraftContext) { $giftForm.data('incvServerDraftActive', true); }
     var giftSaving = false, giftPublished = false;
 
     function giftStamp(msg) {
         var d = new Date(), hh = ('0' + d.getHours()).slice(-2), mm = ('0' + d.getMinutes()).slice(-2);
-        $('#mmd-gift-draft-status').text(msg + ' · ' + hh + ':' + mm).addClass('is-visible');
+        $('#incv-gift-draft-status').text(msg + ' · ' + hh + ':' + mm).addClass('is-visible');
     }
 
     // Publish (full save)
@@ -2028,11 +2023,11 @@ jQuery(document).ready(function($) {
         giftPublished = true;
         $.ajax({
             url: ajaxurl, type: 'POST',
-            data: { action: 'mmd_save_gift_rule', nonce: mmdGiftRulesAjax.nonce, rule_set: JSON.stringify(buildGiftFormData()) },
+            data: { action: 'incv_save_gift_rule', nonce: incvGiftRulesAjax.nonce, rule_set: JSON.stringify(buildGiftFormData()) },
             success: function(response) {
                 if (response.success) {
-                    if (window.mmdClearAutosave) { window.mmdClearAutosave(); }
-                    window.location.href = '<?php echo esc_url( admin_url('admin.php?page=mmd-gift-rules') ); ?>';
+                    if (window.incvClearAutosave) { window.incvClearAutosave(); }
+                    window.location.href = '<?php echo esc_url( admin_url('admin.php?page=incv-gift-rules') ); ?>';
                 } else {
                     giftPublished = false;
                     alert(( <?php echo wp_json_encode( __( 'Error:', 'incentiv' ) ); ?> + ' ' ) + response.data);
@@ -2054,10 +2049,10 @@ jQuery(document).ready(function($) {
         if (!manual && !giftDraftContext) { return; }
         if (!$('#rule_name').val() && !ruleSet.id) { return; }
         giftSaving = true;
-        if (manual) { $('#mmd-gift-draft-status').text(<?php echo wp_json_encode( __( 'Saving…', 'incentiv' ) ); ?>).addClass('is-visible'); }
+        if (manual) { $('#incv-gift-draft-status').text(<?php echo wp_json_encode( __( 'Saving…', 'incentiv' ) ); ?>).addClass('is-visible'); }
         $.ajax({
             url: ajaxurl, type: 'POST',
-            data: { action: 'mmd_save_gift_rule', nonce: mmdGiftRulesAjax.nonce, is_draft: 1, rule_set: JSON.stringify(buildGiftFormData()) },
+            data: { action: 'incv_save_gift_rule', nonce: incvGiftRulesAjax.nonce, is_draft: 1, rule_set: JSON.stringify(buildGiftFormData()) },
             success: function(response) {
                 giftSaving = false;
                 if (!response || !response.success) { if (manual) { giftStamp(<?php echo wp_json_encode( __( 'Save failed', 'incentiv' ) ); ?>); } return; }
@@ -2065,7 +2060,7 @@ jQuery(document).ready(function($) {
                 if (saved && saved.id && !ruleSet.id) {
                     ruleSet.id = saved.id;
                     giftDraftContext = true;
-                    $giftForm.data('mmdServerDraftActive', true);
+                    $giftForm.data('incvServerDraftActive', true);
                     try {
                         var u = new URL(window.location.href);
                         u.searchParams.set('action', 'edit');
@@ -2073,18 +2068,18 @@ jQuery(document).ready(function($) {
                         history.replaceState({}, '', u.toString());
                     } catch (e) {}
                 }
-                if (window.mmdClearAutosave) { window.mmdClearAutosave(); }
+                if (window.incvClearAutosave) { window.incvClearAutosave(); }
                 giftStamp(<?php echo wp_json_encode( __( 'Draft saved', 'incentiv' ) ); ?>);
             },
             error: function() { giftSaving = false; if (manual) { giftStamp(<?php echo wp_json_encode( __( 'Save failed', 'incentiv' ) ); ?>); } }
         });
     }
-    $('#mmd-gift-save-draft').on('click', function() { saveGiftDraft(true); });
-    (window.mmdSetInterval || setInterval)(function() { saveGiftDraft(false); }, 12000);
+    $('#incv-gift-save-draft').on('click', function() { saveGiftDraft(true); });
+    (window.incvSetInterval || setInterval)(function() { saveGiftDraft(false); }, 12000);
 });
-</script>
+<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
 
-<script>
+<?php ob_start(); ?>
 jQuery(function($) {
     // ==========================================================================
     // STEPPED GIFT EDITOR — navigable steps, every step freely clickable
@@ -2099,7 +2094,7 @@ jQuery(function($) {
         var currentStep = 1;
 
         function stepForCard($card) {
-            var title = $card.find('.mmd-card-title').first().text();
+            var title = $card.find('.incv-card-title').first().text();
             for (var i = 0; i < STEPS.length; i++) {
                 for (var j = 0; j < STEPS[i].keywords.length; j++) {
                     if (title.indexOf(STEPS[i].keywords[j]) !== -1) return STEPS[i].id;
@@ -2108,17 +2103,17 @@ jQuery(function($) {
             return 1;
         }
 
-        $('.mmd-admin-container > .mmd-card').each(function() {
-            $(this).attr('data-mmd-step', stepForCard($(this)));
+        $('.incv-admin-container > .incv-card').each(function() {
+            $(this).attr('data-incv-step', stepForCard($(this)));
         });
 
         // Summary card
-        var $summary = $('<div class="mmd-card" data-mmd-step="4" id="mmd-gift-summary">' +
-            ( '<h2 class="mmd-card-title"><span class="msr" style="color:var(--mmd-success);">check_circle<\/span> ' + <?php echo wp_json_encode( __( 'Gift summary', 'incentiv' ) ); ?> + '<\/h2>' ) +
-            '<div id="mmd-gift-summary-rows"></div>' +
-            ( '<div class="mmd-card-tip" style="margin-top:14px;background:var(--mmd-success-light);border-right-color:var(--mmd-success);">' + <?php echo wp_json_encode( __( 'Check that everything is right, then save. You can go back to any step by clicking its number above.', 'incentiv' ) ); ?> + '<\/div>' ) +
+        var $summary = $('<div class="incv-card" data-incv-step="4" id="incv-gift-summary">' +
+            ( '<h2 class="incv-card-title"><span class="msr" style="color:var(--incv-success);">check_circle<\/span> ' + <?php echo wp_json_encode( __( 'Gift summary', 'incentiv' ) ); ?> + '<\/h2>' ) +
+            '<div id="incv-gift-summary-rows"></div>' +
+            ( '<div class="incv-card-tip" style="margin-top:14px;background:var(--incv-success-light);border-right-color:var(--incv-success);">' + <?php echo wp_json_encode( __( 'Check that everything is right, then save. You can go back to any step by clicking its number above.', 'incentiv' ) ); ?> + '<\/div>' ) +
             '</div>');
-        $('.mmd-admin-container').append($summary);
+        $('.incv-admin-container').append($summary);
 
         function esc(t) { return $('<i>').text(t == null ? '' : t).html(); }
 
@@ -2141,51 +2136,51 @@ jQuery(function($) {
             ];
             var html = '';
             rows.forEach(function(r) {
-                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--mmd-border-lighter);font-size:13.5px;">' +
-                    '<span style="color:var(--mmd-text-muted);flex:none;">' + esc(r[0]) + '</span>' +
-                    '<span style="font-weight:700;color:var(--mmd-ink);text-align:left;">' + esc(r[1]) + '</span>' +
-                    '<button type="button" class="mmd-icon-btn mmd-gift-summary-edit" data-step="' + r[2] + ( '" title="' + <?php echo wp_json_encode( __( 'Edit', 'incentiv' ) ); ?> + '" style="flex:none;width:28px;height:28px;"><span class="msr" style="font-size:15px;">edit<\/span><\/button>' ) +
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--incv-border-lighter);font-size:13.5px;">' +
+                    '<span style="color:var(--incv-text-muted);flex:none;">' + esc(r[0]) + '</span>' +
+                    '<span style="font-weight:700;color:var(--incv-ink);text-align:left;">' + esc(r[1]) + '</span>' +
+                    '<button type="button" class="incv-icon-btn incv-gift-summary-edit" data-step="' + r[2] + ( '" title="' + <?php echo wp_json_encode( __( 'Edit', 'incentiv' ) ); ?> + '" style="flex:none;width:28px;height:28px;"><span class="msr" style="font-size:15px;">edit<\/span><\/button>' ) +
                     '</div>';
             });
-            $('#mmd-gift-summary-rows').html(html);
+            $('#incv-gift-summary-rows').html(html);
         }
 
         function renderStepper() {
             var html = '';
             STEPS.forEach(function(s) {
                 var cls = s.id === currentStep ? ' active' : (s.id < currentStep ? ' completed' : '');
-                html += '<button type="button" class="mmd-stepper-step' + cls + '" data-step="' + s.id + '">' +
-                    '<span class="mmd-step-num">' + (s.id < currentStep ? '✓' : s.id) + '</span>' +
-                    '<span class="mmd-step-label">' + s.label + '</span></button>';
+                html += '<button type="button" class="incv-stepper-step' + cls + '" data-step="' + s.id + '">' +
+                    '<span class="incv-step-num">' + (s.id < currentStep ? '✓' : s.id) + '</span>' +
+                    '<span class="incv-step-label">' + s.label + '</span></button>';
             });
-            $('#mmd-gift-stepper-steps').html(html);
+            $('#incv-gift-stepper-steps').html(html);
         }
 
         function showStep(n, scroll) {
             currentStep = Math.max(1, Math.min(STEPS.length, n));
-            $('.mmd-admin-container > .mmd-card[data-mmd-step]').each(function() {
-                $(this).toggleClass('is-step-active', parseInt($(this).attr('data-mmd-step'), 10) === currentStep);
+            $('.incv-admin-container > .incv-card[data-incv-step]').each(function() {
+                $(this).toggleClass('is-step-active', parseInt($(this).attr('data-incv-step'), 10) === currentStep);
             });
             if (currentStep === STEPS.length) buildSummary();
             renderStepper();
-            $('#mmd-gift-step-prev').prop('disabled', currentStep === 1);
-            $('#mmd-gift-step-next').toggle(currentStep < STEPS.length);
-            $('#mmd-gift-step-indicator').text(( <?php echo wp_json_encode( __( 'Step', 'incentiv' ) ); ?> + ' ' ) + currentStep + ( ' ' + <?php echo wp_json_encode( __( 'of', 'incentiv' ) ); ?> + ' ' ) + STEPS.length);
+            $('#incv-gift-step-prev').prop('disabled', currentStep === 1);
+            $('#incv-gift-step-next').toggle(currentStep < STEPS.length);
+            $('#incv-gift-step-indicator').text(( <?php echo wp_json_encode( __( 'Step', 'incentiv' ) ); ?> + ' ' ) + currentStep + ( ' ' + <?php echo wp_json_encode( __( 'of', 'incentiv' ) ); ?> + ' ' ) + STEPS.length);
             if (history.replaceState) history.replaceState(null, '', '#step=' + currentStep);
-            $(document).trigger('mmd:substep');
+            $(document).trigger('incv:substep');
             if (scroll !== false) window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        $(document).on('click', '.mmd-stepper-step', function() { showStep(parseInt($(this).data('step'), 10)); });
-        $(document).on('click', '.mmd-gift-summary-edit', function() { showStep(parseInt($(this).data('step'), 10)); });
-        $(document).on('click', '#mmd-gift-step-next', function() { showStep(currentStep + 1); });
-        $(document).on('click', '#mmd-gift-step-prev', function() { showStep(currentStep - 1); });
+        $(document).on('click', '.incv-stepper-step', function() { showStep(parseInt($(this).data('step'), 10)); });
+        $(document).on('click', '.incv-gift-summary-edit', function() { showStep(parseInt($(this).data('step'), 10)); });
+        $(document).on('click', '#incv-gift-step-next', function() { showStep(currentStep + 1); });
+        $(document).on('click', '#incv-gift-step-prev', function() { showStep(currentStep - 1); });
 
         // Expose so the gift wizard can land on a step after finishing
-        window.mmdShowGiftStep = showStep;
+        window.incvShowGiftStep = showStep;
 
         var m = (window.location.hash || '').match(/step=(\d+)/);
         showStep(m ? parseInt(m[1], 10) : 1, false);
     })();
 });
-</script>
+<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>

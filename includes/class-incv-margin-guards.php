@@ -15,9 +15,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Margin_Guards {
+class INCV_Margin_Guards {
 
-    const SPEND_OPTION = 'mmd_rule_discount_spend';
+    const SPEND_OPTION = 'incv_rule_discount_spend';
 
     private static $instance = null;
 
@@ -47,7 +47,7 @@ class MMD_Margin_Guards {
             return null;
         }
 
-        $keys = array('_mmd_cost', '_wc_cog_cost', '_wc_cog_cost_variable', '_alg_wc_cog_cost', '_cost_of_goods');
+        $keys = array('_incv_cost', '_wc_cog_cost', '_wc_cog_cost_variable', '_alg_wc_cog_cost', '_cost_of_goods');
         foreach ($keys as $key) {
             $value = $product->get_meta($key, true);
             if ($value !== '' && $value !== null && is_numeric($value)) {
@@ -209,21 +209,21 @@ class MMD_Margin_Guards {
         }
 
         // Guard against double-counting if both hooks fire.
-        if ($order->get_meta('_mmd_spend_recorded') === 'yes') {
+        if ($order->get_meta('_incv_spend_recorded') === 'yes') {
             return;
         }
 
         $totals = array();
         foreach ($order->get_items('fee') as $fee) {
-            $rule_id = $fee->get_meta('_mmd_rule_id');
+            $rule_id = $fee->get_meta('_incv_rule_id');
             $amount = abs(floatval($fee->get_total()));
             if ($rule_id && $amount > 0) {
                 $totals[$rule_id] = (isset($totals[$rule_id]) ? $totals[$rule_id] : 0) + $amount;
             }
         }
         foreach ($order->get_items() as $item) {
-            $rule_id = $item->get_meta('_mmd_rule_id');
-            $saved = floatval($item->get_meta('_mmd_discount_amount'));
+            $rule_id = $item->get_meta('_incv_rule_id');
+            $saved = floatval($item->get_meta('_incv_discount_amount'));
             if ($rule_id && $saved > 0) {
                 $totals[$rule_id] = (isset($totals[$rule_id]) ? $totals[$rule_id] : 0) + $saved;
             }
@@ -238,7 +238,7 @@ class MMD_Margin_Guards {
             self::maybe_pause_rule($rule_id);
         }
 
-        $order->update_meta_data('_mmd_spend_recorded', 'yes');
+        $order->update_meta_data('_incv_spend_recorded', 'yes');
         $order->save();
     }
 
@@ -247,10 +247,10 @@ class MMD_Margin_Guards {
      * rule so the admin shows why it paused.
      */
     public static function maybe_pause_rule($rule_id) {
-        if (!class_exists('MMD_Discount_Rules')) {
+        if (!class_exists('INCV_Discount_Rules')) {
             return;
         }
-        $rule_set = MMD_Discount_Rules::get_rule_set($rule_id);
+        $rule_set = INCV_Discount_Rules::get_rule_set($rule_id);
         if (!$rule_set || !self::budget_exhausted($rule_set)) {
             return;
         }
@@ -259,8 +259,8 @@ class MMD_Margin_Guards {
         }
         $rule_set['enabled'] = 'no';
         $rule_set['paused_reason'] = 'budget';
-        MMD_Discount_Rules::save_rule_set($rule_set);
+        INCV_Discount_Rules::save_rule_set($rule_set);
     }
 }
 
-MMD_Margin_Guards::instance();
+INCV_Margin_Guards::instance();

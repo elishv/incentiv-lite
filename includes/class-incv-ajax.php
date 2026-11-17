@@ -7,23 +7,23 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Ajax {
+class INCV_Ajax {
 
     public function __construct() {
         // Product search
-        add_action('wp_ajax_mmd_search_products', array($this, 'search_products'));
+        add_action('wp_ajax_incv_search_products', array($this, 'search_products'));
 
         // Get product variations
-        add_action('wp_ajax_mmd_get_product_variations', array($this, 'get_product_variations'));
+        add_action('wp_ajax_incv_get_product_variations', array($this, 'get_product_variations'));
 
         // Get attribute terms
-        add_action('wp_ajax_mmd_get_attribute_terms', array($this, 'get_attribute_terms'));
+        add_action('wp_ajax_incv_get_attribute_terms', array($this, 'get_attribute_terms'));
 
         // Get gift products variations (for admin default variations UI)
-        add_action('wp_ajax_mmd_get_gift_products_variations', array($this, 'get_gift_products_variations'));
+        add_action('wp_ajax_incv_get_gift_products_variations', array($this, 'get_gift_products_variations'));
 
         // Get products and variations by categories
-        add_action('wp_ajax_mmd_get_products_by_categories', array($this, 'get_products_by_categories'));
+        add_action('wp_ajax_incv_get_products_by_categories', array($this, 'get_products_by_categories'));
     }
 
     /**
@@ -33,7 +33,7 @@ class MMD_Ajax {
         // Allow multiple nonce names for flexibility
         $nonce_valid = false;
         $nonce = isset($_GET['nonce']) ? sanitize_text_field(wp_unslash($_GET['nonce'])) : '';
-        if ($nonce && (wp_verify_nonce($nonce, 'mmd_search_products') || wp_verify_nonce($nonce, 'mmd_gift_rules_nonce'))) {
+        if ($nonce && (wp_verify_nonce($nonce, 'incv_search_products') || wp_verify_nonce($nonce, 'incv_gift_rules_nonce'))) {
             $nonce_valid = true;
         }
 
@@ -134,7 +134,7 @@ class MMD_Ajax {
      * Get product variations
      */
     public function get_product_variations() {
-        check_ajax_referer('mmd_variations_nonce', 'nonce');
+        check_ajax_referer('incv_variations_nonce', 'nonce');
 
         $product_ids = isset($_POST['product_ids']) && is_array($_POST['product_ids'])
             ? array_map('intval', $_POST['product_ids'])
@@ -167,7 +167,7 @@ class MMD_Ajax {
                 continue;
             }
 
-            echo '<div class="mmd-product-variations" style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 5px;">';
+            echo '<div class="incv-product-variations" style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 5px;">';
             echo '<h5 style="margin-top: 0; color: #333;">' . esc_html($product->get_name()) . '</h5>';
 
             foreach ($variations as $variation) {
@@ -175,9 +175,9 @@ class MMD_Ajax {
                 $variation_name = implode(', ', $variation['attributes']);
                 $is_selected = in_array($variation['variation_id'], $selected_variations);
 
-                echo '<div class="mmd-variation-item" style="margin: 8px 0; padding: 8px; border: 1px solid #ddd; border-radius: 3px; background: #fafafa;">';
+                echo '<div class="incv-variation-item" style="margin: 8px 0; padding: 8px; border: 1px solid #ddd; border-radius: 3px; background: #fafafa;">';
                 echo '<label style="display: flex; align-items: center; cursor: pointer;">';
-                echo '<input type="checkbox" name="mmd_allowed_variations[]" value="' . esc_attr($variation['variation_id']) . '"' . checked($is_selected, true, false) . ' style="margin-left: 8px;">';
+                echo '<input type="checkbox" name="incv_allowed_variations[]" value="' . esc_attr($variation['variation_id']) . '"' . checked($is_selected, true, false) . ' style="margin-left: 8px;">';
                 echo '<span style="flex: 1;">' . esc_html($variation_name) . ' <small style="color: #666;">(#' . esc_html( $variation['variation_id'] ) . ')</small></span>';
 
                 // Show price
@@ -212,7 +212,7 @@ class MMD_Ajax {
      * Get attribute terms for a given attribute
      */
     public function get_attribute_terms() {
-        check_ajax_referer('mmd_gift_rules_nonce', 'nonce');
+        check_ajax_referer('incv_gift_rules_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -252,7 +252,7 @@ class MMD_Ajax {
      * Get gift products variations for admin UI
      */
     public function get_gift_products_variations() {
-        check_ajax_referer('mmd_gift_rules_nonce', 'nonce');
+        check_ajax_referer('incv_gift_rules_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -318,7 +318,7 @@ class MMD_Ajax {
     public function get_products_by_categories() {
         // Verify nonce
         $nonce_valid = false;
-        if (isset($_POST['nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'mmd_search_products')) {
+        if (isset($_POST['nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'incv_search_products')) {
             $nonce_valid = true;
         }
 
@@ -348,7 +348,7 @@ class MMD_Ajax {
             'post_type' => 'product',
             'post_status' => 'publish',
             'posts_per_page' => -1,
-            'tax_query' => array(
+            'tax_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Scoping the query to a term is the feature itself; bounded, paginated query.
                 array(
                     'taxonomy' => 'product_cat',
                     'field' => 'slug',
@@ -404,4 +404,4 @@ class MMD_Ajax {
     }
 }
 
-new MMD_Ajax();
+new INCV_Ajax();

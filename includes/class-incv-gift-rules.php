@@ -10,14 +10,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Gift_Rules {
+class INCV_Gift_Rules {
 
     private static $instance = null;
-    private $option_name = 'mmd_gift_rule_sets';
-    private $styling_option_name = 'mmd_gift_styling';
+    private $option_name = 'incv_gift_rule_sets';
+    private $styling_option_name = 'incv_gift_styling';
 
     private static function debug_log($message) {
-        MMD_Helpers::log($message);
+        INCV_Helpers::log($message);
     }
 
     public static function get_instance() {
@@ -33,11 +33,11 @@ class MMD_Gift_Rules {
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
 
         // AJAX handlers
-        add_action('wp_ajax_mmd_save_gift_rule', array($this, 'ajax_save_gift_rule'));
-        add_action('wp_ajax_mmd_delete_gift_rule', array($this, 'ajax_delete_gift_rule'));
-        add_action('wp_ajax_mmd_duplicate_gift_rule', array($this, 'ajax_duplicate_gift_rule'));
-        add_action('wp_ajax_mmd_save_gift_styling', array($this, 'ajax_save_gift_styling'));
-        add_action('wp_ajax_mmd_get_shipping_methods', array($this, 'ajax_get_shipping_methods'));
+        add_action('wp_ajax_incv_save_gift_rule', array($this, 'ajax_save_gift_rule'));
+        add_action('wp_ajax_incv_delete_gift_rule', array($this, 'ajax_delete_gift_rule'));
+        add_action('wp_ajax_incv_duplicate_gift_rule', array($this, 'ajax_duplicate_gift_rule'));
+        add_action('wp_ajax_incv_save_gift_styling', array($this, 'ajax_save_gift_styling'));
+        add_action('wp_ajax_incv_get_shipping_methods', array($this, 'ajax_get_shipping_methods'));
     }
 
     /**
@@ -45,20 +45,20 @@ class MMD_Gift_Rules {
      */
     public function add_admin_menu() {
         add_submenu_page(
-            'mix-match-discounts',
+            'incv-discount-rules',
             __( 'Gift management', 'incentiv' ),
             __( 'Gift management', 'incentiv' ),
             'manage_options',
-            'mmd-gift-rules',
+            'incv-gift-rules',
             array($this, 'render_admin_page')
         );
 
         add_submenu_page(
-            'mix-match-discounts',
+            'incv-discount-rules',
             __( 'Gift design', 'incentiv' ),
             __( 'Gift design', 'incentiv' ),
             'manage_options',
-            'mmd-gift-styling',
+            'incv-gift-styling',
             array($this, 'render_styling_page')
         );
     }
@@ -67,22 +67,22 @@ class MMD_Gift_Rules {
      * Enqueue admin scripts
      */
     public function enqueue_admin_scripts($hook) {
-        if (strpos($hook, 'mmd-gift-rules') === false && strpos($hook, 'mmd-gift-styling') === false) {
+        if (strpos($hook, 'incv-gift-rules') === false && strpos($hook, 'incv-gift-styling') === false) {
             return;
         }
 
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker');
-        wp_enqueue_style('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.css', array(), '4.0.13');
-        wp_enqueue_script('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'), '4.0.13', true);
+        wp_enqueue_style('select2', INCV_PLUGIN_URL . 'assets/vendor/select2/select2.min.css', array(), '4.0.13');
+        wp_enqueue_script('select2', INCV_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'), '4.0.13', true);
 
-        wp_enqueue_style('mmd-admin-style', plugins_url('assets/admin-style.css', dirname(__FILE__)), array(), MMD_VERSION);
-        wp_enqueue_script('mmd-admin-script', plugins_url('assets/admin-script.js', dirname(__FILE__)), array('jquery', 'select2', 'wp-color-picker', 'wp-i18n'), '1.0.0', true);
-        wp_set_script_translations('mmd-admin-script', 'incentiv', MMD_PLUGIN_DIR . 'languages');
+        wp_enqueue_style('incv-admin-style', plugins_url('assets/admin-style.css', dirname(__FILE__)), array(), INCV_VERSION);
+        wp_enqueue_script('incv-admin-script', plugins_url('assets/admin-script.js', dirname(__FILE__)), array('jquery', 'select2', 'wp-color-picker', 'wp-i18n'), '1.0.0', true);
+        wp_set_script_translations('incv-admin-script', 'incentiv', INCV_PLUGIN_DIR . 'languages');
 
-        wp_localize_script('mmd-admin-script', 'mmdGiftRulesAjax', array(
+        wp_localize_script('incv-admin-script', 'incvGiftRulesAjax', array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('mmd_gift_rules_nonce')
+            'nonce' => wp_create_nonce('incv_gift_rules_nonce')
         ));
     }
 
@@ -348,7 +348,7 @@ class MMD_Gift_Rules {
      * AJAX: Save gift rule
      */
     public function ajax_save_gift_rule() {
-        check_ajax_referer('mmd_gift_rules_nonce', 'nonce');
+        check_ajax_referer('incv_gift_rules_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -360,7 +360,7 @@ class MMD_Gift_Rules {
         $is_draft = !empty($_POST['is_draft']);
 
         if (empty($rule_set) || !is_array($rule_set)) {
-            self::debug_log('MMD Gift Rules: Empty rule set received');
+            self::debug_log('INCV Gift Rules: Empty rule set received');
             wp_send_json_error('Invalid rule set - empty data');
             return;
         }
@@ -375,21 +375,21 @@ class MMD_Gift_Rules {
         } else {
             $rule_set['status'] = 'active'; // publishing clears any draft flag
             if (empty($rule_set['name'])) {
-                self::debug_log('MMD Gift Rules: Rule name is empty');
+                self::debug_log('INCV Gift Rules: Rule name is empty');
                 wp_send_json_error('Invalid rule set - missing name');
                 return;
             }
         }
 
-        self::debug_log('MMD Gift Rules: Attempting to save rule: ' . wp_json_encode($rule_set));
+        self::debug_log('INCV Gift Rules: Attempting to save rule: ' . wp_json_encode($rule_set));
 
         $result = $this->save_rule_set($rule_set);
 
         if ($result) {
-            self::debug_log('MMD Gift Rules: Rule saved successfully with ID: ' . $result['id']);
+            self::debug_log('INCV Gift Rules: Rule saved successfully with ID: ' . $result['id']);
             wp_send_json_success(array('message' => 'Rule saved successfully', 'rule_set' => $result));
         } else {
-            self::debug_log('MMD Gift Rules: Failed to save rule');
+            self::debug_log('INCV Gift Rules: Failed to save rule');
             wp_send_json_error('Failed to save rule - database error');
         }
     }
@@ -398,7 +398,7 @@ class MMD_Gift_Rules {
      * AJAX: Delete gift rule
      */
     public function ajax_delete_gift_rule() {
-        check_ajax_referer('mmd_gift_rules_nonce', 'nonce');
+        check_ajax_referer('incv_gift_rules_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -425,7 +425,7 @@ class MMD_Gift_Rules {
      * AJAX: Duplicate gift rule
      */
     public function ajax_duplicate_gift_rule() {
-        check_ajax_referer('mmd_gift_rules_nonce', 'nonce');
+        check_ajax_referer('incv_gift_rules_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -462,7 +462,7 @@ class MMD_Gift_Rules {
      * AJAX: Save styling options
      */
     public function ajax_save_gift_styling() {
-        check_ajax_referer('mmd_gift_rules_nonce', 'nonce');
+        check_ajax_referer('incv_gift_rules_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -497,7 +497,7 @@ class MMD_Gift_Rules {
      * AJAX: Get available shipping methods
      */
     public function ajax_get_shipping_methods() {
-        check_ajax_referer('mmd_gift_rules_nonce', 'nonce');
+        check_ajax_referer('incv_gift_rules_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -640,4 +640,4 @@ class MMD_Gift_Rules {
 }
 
 // Initialize
-MMD_Gift_Rules::get_instance();
+INCV_Gift_Rules::get_instance();
