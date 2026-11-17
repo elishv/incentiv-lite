@@ -10,7 +10,7 @@
 
     $(document).ready(function() {
         // Auto-save cart note on change
-        $('#mmd-cart-note').on('input', function() {
+        $('#incv-cart-note').on('input', function() {
             clearTimeout(cartNoteTimeout);
 
             cartNoteTimeout = setTimeout(function() {
@@ -19,21 +19,21 @@
         });
 
         // Save on blur (when field loses focus)
-        $('#mmd-cart-note').on('blur', function() {
+        $('#incv-cart-note').on('blur', function() {
             clearTimeout(cartNoteTimeout);
             saveCartNote();
         });
     });
 
     function saveCartNote() {
-        var cartNote = $('#mmd-cart-note').val();
+        var cartNote = $('#incv-cart-note').val();
 
         $.ajax({
-            url: mmdCartNotes.ajaxurl,
+            url: incvCartNotes.ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_save_cart_note',
-                nonce: mmdCartNotes.nonce,
+                action: 'incv_save_cart_note',
+                nonce: incvCartNotes.nonce,
                 cart_note: cartNote
             },
             success: function(response) {

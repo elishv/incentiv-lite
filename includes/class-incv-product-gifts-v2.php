@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Product_Gifts_V2 {
+class INCV_Product_Gifts_V2 {
 
     private static $instance = null;
 
@@ -38,7 +38,7 @@ class MMD_Product_Gifts_V2 {
      * @return array
      */
     public static function get_notice_gift_products($product_id) {
-        $gift_products = get_post_meta($product_id, '_mmd_gift_products', true);
+        $gift_products = get_post_meta($product_id, '_incv_gift_products', true);
         if (empty($gift_products)) {
             return array();
         }
@@ -46,17 +46,17 @@ class MMD_Product_Gifts_V2 {
     }
 
     /**
-     * Whether gift debug mode is on (MMD_DEBUG or the gift styling setting).
+     * Whether gift debug mode is on (INCV_DEBUG or the gift styling setting).
      */
     private static function is_debug_enabled() {
         // Console output is for store managers only, whatever the setting says.
-        if (!MMD_Helpers::can_see_frontend_debug()) {
+        if (!INCV_Helpers::can_see_frontend_debug()) {
             return false;
         }
-        if (defined('MMD_DEBUG') && MMD_DEBUG) {
+        if (defined('INCV_DEBUG') && INCV_DEBUG) {
             return true;
         }
-        $styling = get_option('mmd_gift_styling', array());
+        $styling = get_option('incv_gift_styling', array());
         return !empty($styling['debug_mode']) && $styling['debug_mode'] === 'yes';
     }
 
@@ -64,7 +64,7 @@ class MMD_Product_Gifts_V2 {
      * Log debug message only when debug mode is enabled
      */
     private static function debug_log($message) {
-        MMD_Helpers::log($message);
+        INCV_Helpers::log($message);
     }
 
     /**
@@ -77,23 +77,14 @@ class MMD_Product_Gifts_V2 {
         return self::$instance;
     }
 
-    public function __construct() {
-        // Add meta box to product pages
-        add_action('add_meta_boxes', array($this, 'add_gift_meta_box'));
-
-        // Save meta box data
-        add_action('save_post_product', array($this, 'save_gift_meta_box'), 10, 2);
-
-        // Enqueue admin scripts
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
-
-        // Frontend hooks
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_scripts'));
-        // Display gift selection on product page - configurable hook location
+    /**
+     * Hook the gift selection box into the product page location chosen in the styling settings.
+     */
+    public function register_gift_display_hook() {
         $gift_display_hook = 'woocommerce_after_add_to_cart_button';
         $gift_display_priority = 10;
-        if (class_exists('MMD_Gift_Rules')) {
-            $styling = MMD_Gift_Rules::get_instance()->get_styling_options();
+        if (class_exists('INCV_Gift_Rules')) {
+            $styling = INCV_Gift_Rules::get_instance()->get_styling_options();
             $hook_setting = isset($styling['gift_display_hook']) ? $styling['gift_display_hook'] : 'after_add_to_cart';
             switch ($hook_setting) {
                 case 'before_add_to_cart':
@@ -126,6 +117,23 @@ class MMD_Product_Gifts_V2 {
         if ($gift_display_hook) {
             add_action($gift_display_hook, array($this, 'display_gift_selection'), $gift_display_priority);
         }
+    }
+
+    public function __construct() {
+        // Add meta box to product pages
+        add_action('add_meta_boxes', array($this, 'add_gift_meta_box'));
+
+        // Save meta box data
+        add_action('save_post_product', array($this, 'save_gift_meta_box'), 10, 2);
+
+        // Enqueue admin scripts
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
+
+        // Frontend hooks
+        add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_scripts'));
+        // Display gift selection on product page - configurable hook location.
+        // Resolved on init: the styling defaults contain translated strings.
+        add_action('init', array($this, 'register_gift_display_hook'), 5);
         // Also hook into Unico Elementor add-to-cart widget (displays after the add-to-cart button)
         add_action('unico_after_add_to_cart_form', array($this, 'display_gift_selection_for_widget'));
         add_action('woocommerce_add_to_cart', array($this, 'handle_gift_selection'), 10, 6);
@@ -152,10 +160,10 @@ class MMD_Product_Gifts_V2 {
         add_action('woocommerce_cart_item_removed', array($this, 'remove_associated_gifts'), 10, 2);
 
         // AJAX handlers
-        add_action('wp_ajax_mmd_get_gift_variations', array($this, 'ajax_get_variations'));
-        add_action('wp_ajax_nopriv_mmd_get_gift_variations', array($this, 'ajax_get_variations'));
-        add_action('wp_ajax_mmd_add_gift_to_cart', array($this, 'ajax_add_gift_to_cart'));
-        add_action('wp_ajax_nopriv_mmd_add_gift_to_cart', array($this, 'ajax_add_gift_to_cart'));
+        add_action('wp_ajax_incv_get_gift_variations', array($this, 'ajax_get_variations'));
+        add_action('wp_ajax_nopriv_incv_get_gift_variations', array($this, 'ajax_get_variations'));
+        add_action('wp_ajax_incv_add_gift_to_cart', array($this, 'ajax_add_gift_to_cart'));
+        add_action('wp_ajax_nopriv_incv_add_gift_to_cart', array($this, 'ajax_add_gift_to_cart'));
 
         // Cart-based gift functionality
         add_action('woocommerce_before_cart', array($this, 'display_cart_gift_notice'));
@@ -174,7 +182,7 @@ class MMD_Product_Gifts_V2 {
         add_filter('woocommerce_cart_item_subtotal', array($this, 'display_cart_based_gift_subtotal'), 20, 3);
 
         // Shortcode for gift selection (works on any page including custom Elementor pages)
-        add_shortcode('mmd_gift_selection', array($this, 'gift_selection_shortcode'));
+        add_shortcode('incv_gift_selection', array($this, 'gift_selection_shortcode'));
 
         // Inject gift display on Elementor-rendered product pages via wp_footer
         add_action('wp_footer', array($this, 'inject_gift_selection_elementor'), 5);
@@ -182,13 +190,13 @@ class MMD_Product_Gifts_V2 {
         // Cart/checkout interactive gift selection
         add_action('woocommerce_before_cart', array($this, 'display_cart_gift_selection'), 5);
         add_action('woocommerce_before_checkout_form', array($this, 'display_cart_gift_selection'), 3);
-        add_action('mmd_render_cart_gift_selection', array($this, 'display_cart_gift_selection'));
+        add_action('incv_render_cart_gift_selection', array($this, 'display_cart_gift_selection'));
 
         // AJAX handler for adding cart-based gift selection
-        add_action('wp_ajax_mmd_add_cart_gift', array($this, 'ajax_add_cart_gift'));
-        add_action('wp_ajax_nopriv_mmd_add_cart_gift', array($this, 'ajax_add_cart_gift'));
-        add_action('wp_ajax_mmd_switch_cart_gift', array($this, 'ajax_switch_cart_gift'));
-        add_action('wp_ajax_nopriv_mmd_switch_cart_gift', array($this, 'ajax_switch_cart_gift'));
+        add_action('wp_ajax_incv_add_cart_gift', array($this, 'ajax_add_cart_gift'));
+        add_action('wp_ajax_nopriv_incv_add_cart_gift', array($this, 'ajax_add_cart_gift'));
+        add_action('wp_ajax_incv_switch_cart_gift', array($this, 'ajax_switch_cart_gift'));
+        add_action('wp_ajax_nopriv_incv_switch_cart_gift', array($this, 'ajax_switch_cart_gift'));
 
         // Gift promo notices in global notice system
         add_action('wp_footer', array($this, 'display_gift_promo_notices'), 15);
@@ -207,7 +215,7 @@ class MMD_Product_Gifts_V2 {
      */
     public function add_gift_meta_box() {
         add_meta_box(
-            'mmd_product_gifts_v2',
+            'incv_product_gifts_v2',
             __( '🎁 Gift and discounted product settings', 'incentiv' ),
             array($this, 'render_gift_meta_box'),
             'product',
@@ -220,30 +228,30 @@ class MMD_Product_Gifts_V2 {
      * Render gift meta box with improved styling
      */
     public function render_gift_meta_box($post) {
-        wp_nonce_field('mmd_gift_meta_box_v2', 'mmd_gift_meta_box_v2_nonce');
+        wp_nonce_field('incv_gift_meta_box_v2', 'incv_gift_meta_box_v2_nonce');
 
-        $enabled = get_post_meta($post->ID, '_mmd_gift_enabled', true);
-        $gift_products = get_post_meta($post->ID, '_mmd_gift_products', true);
-        $gift_type = get_post_meta($post->ID, '_mmd_gift_type', true);
-        $gift_discount = get_post_meta($post->ID, '_mmd_gift_discount', true);
-        $gift_selection_type = get_post_meta($post->ID, '_mmd_gift_selection_type', true);
-        $limit_variations = get_post_meta($post->ID, '_mmd_gift_limit_variations', true);
-        $allowed_variations = get_post_meta($post->ID, '_mmd_gift_allowed_variations', true);
+        $enabled = get_post_meta($post->ID, '_incv_gift_enabled', true);
+        $gift_products = get_post_meta($post->ID, '_incv_gift_products', true);
+        $gift_type = get_post_meta($post->ID, '_incv_gift_type', true);
+        $gift_discount = get_post_meta($post->ID, '_incv_gift_discount', true);
+        $gift_selection_type = get_post_meta($post->ID, '_incv_gift_selection_type', true);
+        $limit_variations = get_post_meta($post->ID, '_incv_gift_limit_variations', true);
+        $allowed_variations = get_post_meta($post->ID, '_incv_gift_allowed_variations', true);
 
         // New fields for category-based gift selection
-        $gift_source = get_post_meta($post->ID, '_mmd_gift_source', true);
-        $gift_categories = get_post_meta($post->ID, '_mmd_gift_categories', true);
-        $gift_excluded_categories = get_post_meta($post->ID, '_mmd_gift_excluded_categories', true);
-        $gift_excluded_tags = get_post_meta($post->ID, '_mmd_gift_excluded_tags', true);
-        $gift_excluded_products = get_post_meta($post->ID, '_mmd_gift_excluded_products', true);
+        $gift_source = get_post_meta($post->ID, '_incv_gift_source', true);
+        $gift_categories = get_post_meta($post->ID, '_incv_gift_categories', true);
+        $gift_excluded_categories = get_post_meta($post->ID, '_incv_gift_excluded_categories', true);
+        $gift_excluded_tags = get_post_meta($post->ID, '_incv_gift_excluded_tags', true);
+        $gift_excluded_products = get_post_meta($post->ID, '_incv_gift_excluded_products', true);
 
         // Gift mode fields
-        $gift_mode = get_post_meta($post->ID, '_mmd_gift_mode', true);
-        $cart_gift_notice = get_post_meta($post->ID, '_mmd_cart_gift_notice', true);
+        $gift_mode = get_post_meta($post->ID, '_incv_gift_mode', true);
+        $cart_gift_notice = get_post_meta($post->ID, '_incv_cart_gift_notice', true);
 
         // Gift attribute filter fields
-        $gift_attribute_slug = get_post_meta($post->ID, '_mmd_gift_attribute_slug', true);
-        $gift_attribute_values = get_post_meta($post->ID, '_mmd_gift_attribute_values', true);
+        $gift_attribute_slug = get_post_meta($post->ID, '_incv_gift_attribute_slug', true);
+        $gift_attribute_values = get_post_meta($post->ID, '_incv_gift_attribute_values', true);
 
         $gift_products = !empty($gift_products) ? $gift_products : array();
         $gift_type = !empty($gift_type) ? $gift_type : 'free';
@@ -268,62 +276,41 @@ class MMD_Product_Gifts_V2 {
         $attributes = wc_get_attribute_taxonomies();
 
         ?>
-        <div class="mmd-gift-settings-v2">
-            <style>
-                .mmd-gift-settings-v2 { padding: 20px; background: #f9f9f9; border-radius: 8px; }
-                .mmd-gift-field-v2 { margin-bottom: 25px; background: white; padding: 20px; border-radius: 5px; border: 1px solid #ddd; }
-                .mmd-gift-field-v2 label.main-label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 10px; color: #333; }
-                .mmd-gift-field-v2 input[type="text"],
-                .mmd-gift-field-v2 select.full-width { width: 100%; padding: 8px; font-size: 14px; border: 1px solid #ddd; border-radius: 4px; }
-                .mmd-gift-field-v2 input[type="number"] { padding: 8px; font-size: 14px; border: 1px solid #ddd; border-radius: 4px; width: 200px; }
-                .mmd-gift-field-v2 .description { margin: 8px 0 0 0; color: #666; font-size: 13px; line-height: 1.5; }
-                .mmd-switch-v2 { position: relative; display: inline-block; width: 60px; height: 30px; margin-left: 10px; }
-                .mmd-switch-v2 input { opacity: 0; width: 0; height: 0; }
-                .mmd-switch-slider-v2 { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 30px; }
-                .mmd-switch-slider-v2:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-                .mmd-switch-v2 input:checked + .mmd-switch-slider-v2 { background-color: #4CAF50; }
-                .mmd-switch-v2 input:checked + .mmd-switch-slider-v2:before { transform: translateX(30px); }
-                .mmd-gift-header { background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 15px 20px; border-radius: 5px; margin-bottom: 20px; }
-                .mmd-gift-header h3 { margin: 0; font-size: 16px; }
-                .mmd-type-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 10px; }
-                .mmd-type-option { padding: 15px; border: 2px solid #ddd; border-radius: 5px; text-align: center; cursor: pointer; transition: all 0.3s; }
-                .mmd-type-option:hover { border-color: #7c3aed; }
-                .mmd-type-option.selected { border-color: #7c3aed; background: #f4eeff; }
-                .mmd-type-option input[type="radio"] { margin-bottom: 5px; }
-            </style>
+        <div class="incv-gift-settings-v2">
+            
 
-            <div class="mmd-gift-header">
+            <div class="incv-gift-header">
                 <h3><?php esc_html_e( '⚙️ Set up a gift or discounted product for this product', 'incentiv' ); ?></h3>
             </div>
 
-            <div class="mmd-gift-field-v2">
+            <div class="incv-gift-field-v2">
                 <label class="main-label">
-                    <label class="mmd-switch-v2">
-                        <input type="checkbox" name="mmd_gift_enabled" value="1" <?php checked($enabled, '1'); ?>>
-                        <span class="mmd-switch-slider-v2"></span>
+                    <label class="incv-switch-v2">
+                        <input type="checkbox" name="incv_gift_enabled" value="1" <?php checked($enabled, '1'); ?>>
+                        <span class="incv-switch-slider-v2"></span>
                     </label>
                     <?php esc_html_e( 'Enable gifts/discounts for this product', 'incentiv' ); ?>
                 </label>
                 <p class="description"><?php esc_html_e( 'When a customer buys this product, they can choose a gift or a discounted product from the list you set', 'incentiv' ); ?></p>
             </div>
 
-            <div class="mmd-gift-field-v2">
+            <div class="incv-gift-field-v2">
                 <label class="main-label"><?php esc_html_e( 'Choose a benefit type', 'incentiv' ); ?></label>
-                <div class="mmd-type-selector">
-                    <div class="mmd-type-option <?php echo $gift_type === 'free' ? 'selected' : ''; ?>">
-                        <input type="radio" name="mmd_gift_type" value="free" <?php checked($gift_type, 'free'); ?>>
+                <div class="incv-type-selector">
+                    <div class="incv-type-option <?php echo $gift_type === 'free' ? 'selected' : ''; ?>">
+                        <input type="radio" name="incv_gift_type" value="free" <?php checked($gift_type, 'free'); ?>>
                         <div style="font-size: 24px;">🎁</div>
                         <strong><?php esc_html_e( 'Free gift', 'incentiv' ); ?></strong>
                         <div style="font-size: 12px; color: #666;"><?php esc_html_e( 'The customer gets a product at no charge', 'incentiv' ); ?></div>
                     </div>
-                    <div class="mmd-type-option <?php echo $gift_type === 'discount' ? 'selected' : ''; ?>">
-                        <input type="radio" name="mmd_gift_type" value="discount" <?php checked($gift_type, 'discount'); ?>>
+                    <div class="incv-type-option <?php echo $gift_type === 'discount' ? 'selected' : ''; ?>">
+                        <input type="radio" name="incv_gift_type" value="discount" <?php checked($gift_type, 'discount'); ?>>
                         <div style="font-size: 24px;">💰</div>
                         <strong><?php esc_html_e( 'Percentage discount', 'incentiv' ); ?></strong>
                         <div style="font-size: 12px; color: #666;"><?php esc_html_e( 'A percentage off the product', 'incentiv' ); ?></div>
                     </div>
-                    <div class="mmd-type-option <?php echo $gift_type === 'fixed_discount' ? 'selected' : ''; ?>">
-                        <input type="radio" name="mmd_gift_type" value="fixed_discount" <?php checked($gift_type, 'fixed_discount'); ?>>
+                    <div class="incv-type-option <?php echo $gift_type === 'fixed_discount' ? 'selected' : ''; ?>">
+                        <input type="radio" name="incv_gift_type" value="fixed_discount" <?php checked($gift_type, 'fixed_discount'); ?>>
                         <div style="font-size: 24px;">🏷️</div>
                         <strong><?php esc_html_e( 'Fixed discount', 'incentiv' ); ?></strong>
                         <div style="font-size: 12px; color: #666;"><?php esc_html_e( 'A fixed amount in shekels', 'incentiv' ); ?></div>
@@ -331,25 +318,25 @@ class MMD_Product_Gifts_V2 {
                 </div>
             </div>
 
-            <div class="mmd-gift-field-v2" id="mmd_discount_field_v2" style="display: <?php echo ($gift_type !== 'free') ? 'block' : 'none'; ?>;">
-                <label class="main-label" for="mmd_gift_discount"><?php esc_html_e( 'Discount rate', 'incentiv' ); ?></label>
-                <input type="number" name="mmd_gift_discount" id="mmd_gift_discount" value="<?php echo esc_attr($gift_discount); ?>" min="0" step="0.01">
+            <div class="incv-gift-field-v2" id="incv_discount_field_v2" style="display: <?php echo ($gift_type !== 'free') ? 'block' : 'none'; ?>;">
+                <label class="main-label" for="incv_gift_discount"><?php esc_html_e( 'Discount rate', 'incentiv' ); ?></label>
+                <input type="number" name="incv_gift_discount" id="incv_gift_discount" value="<?php echo esc_attr($gift_discount); ?>" min="0" step="0.01">
                 <p class="description"><?php esc_html_e( 'Enter a discount percentage (50 = 50%) or a fixed amount in shekels', 'incentiv' ); ?></p>
             </div>
 
             <!-- Gift Mode Selection -->
-            <div class="mmd-gift-field-v2">
+            <div class="incv-gift-field-v2">
                 <label class="main-label"><?php esc_html_e( 'How the gift is given', 'incentiv' ); ?></label>
                 <div style="display: flex; gap: 20px; margin-top: 10px;">
                     <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; border: 2px solid <?php echo $gift_mode === 'product_page' ? '#7c3aed' : '#ddd'; ?>; border-radius: 5px; flex: 1; background: <?php echo $gift_mode === 'product_page' ? '#f4eeff' : 'white'; ?>;">
-                        <input type="radio" name="mmd_gift_mode" value="product_page" <?php checked($gift_mode, 'product_page'); ?> style="margin-left: 8px;">
+                        <input type="radio" name="incv_gift_mode" value="product_page" <?php checked($gift_mode, 'product_page'); ?> style="margin-left: 8px;">
                         <div>
                             <strong><?php esc_html_e( 'On the product page', 'incentiv' ); ?></strong>
                             <div style="font-size: 12px; color: #666;"><?php esc_html_e( 'The customer chooses a gift on the product page', 'incentiv' ); ?></div>
                         </div>
                     </label>
                     <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; border: 2px solid <?php echo $gift_mode === 'cart_based' ? '#7c3aed' : '#ddd'; ?>; border-radius: 5px; flex: 1; background: <?php echo $gift_mode === 'cart_based' ? '#f4eeff' : 'white'; ?>;">
-                        <input type="radio" name="mmd_gift_mode" value="cart_based" <?php checked($gift_mode, 'cart_based'); ?> style="margin-left: 8px;">
+                        <input type="radio" name="incv_gift_mode" value="cart_based" <?php checked($gift_mode, 'cart_based'); ?> style="margin-left: 8px;">
                         <div>
                             <strong><?php esc_html_e( 'Gift in the cart', 'incentiv' ); ?></strong>
                             <div style="font-size: 12px; color: #666;"><?php esc_html_e( 'The customer adds a product from the store and the discount is applied automatically', 'incentiv' ); ?></div>
@@ -359,25 +346,25 @@ class MMD_Product_Gifts_V2 {
             </div>
 
             <!-- Cart Gift Notice -->
-            <div class="mmd-gift-field-v2" id="mmd_cart_gift_notice_field" style="display: <?php echo $gift_mode === 'cart_based' ? 'block' : 'none'; ?>;">
-                <label class="main-label" for="mmd_cart_gift_notice"><?php esc_html_e( 'Cart message', 'incentiv' ); ?></label>
-                <input type="text" name="mmd_cart_gift_notice" id="mmd_cart_gift_notice" value="<?php echo esc_attr($cart_gift_notice); ?>" style="width: 100%;">
+            <div class="incv-gift-field-v2" id="incv_cart_gift_notice_field" style="display: <?php echo $gift_mode === 'cart_based' ? 'block' : 'none'; ?>;">
+                <label class="main-label" for="incv_cart_gift_notice"><?php esc_html_e( 'Cart message', 'incentiv' ); ?></label>
+                <input type="text" name="incv_cart_gift_notice" id="incv_cart_gift_notice" value="<?php echo esc_attr($cart_gift_notice); ?>" style="width: 100%;">
                 <p class="description"><?php esc_html_e( 'A message shown to the customer in the cart when they qualify for a gift', 'incentiv' ); ?></p>
             </div>
 
             <!-- Gift Source Selection -->
-            <div class="mmd-gift-field-v2">
+            <div class="incv-gift-field-v2">
                 <label class="main-label"><?php esc_html_e( 'Gift product source', 'incentiv' ); ?></label>
                 <div style="display: flex; gap: 20px; margin-top: 10px;">
                     <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; border: 2px solid <?php echo $gift_source === 'specific' ? '#7c3aed' : '#ddd'; ?>; border-radius: 5px; flex: 1; background: <?php echo $gift_source === 'specific' ? '#f4eeff' : 'white'; ?>;">
-                        <input type="radio" name="mmd_gift_source" value="specific" <?php checked($gift_source, 'specific'); ?> style="margin-left: 8px;">
+                        <input type="radio" name="incv_gift_source" value="specific" <?php checked($gift_source, 'specific'); ?> style="margin-left: 8px;">
                         <div>
                             <strong><?php esc_html_e( 'Specific products', 'incentiv' ); ?></strong>
                             <div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Choose specific products as gifts', 'incentiv' ); ?></div>
                         </div>
                     </label>
                     <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; border: 2px solid <?php echo $gift_source === 'category' ? '#7c3aed' : '#ddd'; ?>; border-radius: 5px; flex: 1; background: <?php echo $gift_source === 'category' ? '#f4eeff' : 'white'; ?>;">
-                        <input type="radio" name="mmd_gift_source" value="category" <?php checked($gift_source, 'category'); ?> style="margin-left: 8px;">
+                        <input type="radio" name="incv_gift_source" value="category" <?php checked($gift_source, 'category'); ?> style="margin-left: 8px;">
                         <div>
                             <strong><?php esc_html_e( 'By categories', 'incentiv' ); ?></strong>
                             <div style="font-size: 12px; color: #666;"><?php esc_html_e( 'The customer chooses from categories', 'incentiv' ); ?></div>
@@ -387,9 +374,9 @@ class MMD_Product_Gifts_V2 {
             </div>
 
             <!-- Specific Products Selection -->
-            <div class="mmd-gift-field-v2" id="mmd_gift_products_field" style="display: <?php echo $gift_source === 'specific' ? 'block' : 'none'; ?>;">
-                <label class="main-label" for="mmd_gift_products"><?php esc_html_e( 'Choose products available as a gift/discount', 'incentiv' ); ?></label>
-                <select name="mmd_gift_products[]" id="mmd_gift_products" class="mmd-product-search" multiple style="width: 100%;">
+            <div class="incv-gift-field-v2" id="incv_gift_products_field" style="display: <?php echo $gift_source === 'specific' ? 'block' : 'none'; ?>;">
+                <label class="main-label" for="incv_gift_products"><?php esc_html_e( 'Choose products available as a gift/discount', 'incentiv' ); ?></label>
+                <select name="incv_gift_products[]" id="incv_gift_products" class="incv-product-search" multiple style="width: 100%;">
                     <?php
                     if (!empty($gift_products)) {
                         foreach ($gift_products as $product_id) {
@@ -405,13 +392,13 @@ class MMD_Product_Gifts_V2 {
             </div>
 
             <!-- Category-based Gift Selection -->
-            <div class="mmd-gift-field-v2" id="mmd_gift_categories_field" style="display: <?php echo $gift_source === 'category' ? 'block' : 'none'; ?>;">
+            <div class="incv-gift-field-v2" id="incv_gift_categories_field" style="display: <?php echo $gift_source === 'category' ? 'block' : 'none'; ?>;">
                 <label class="main-label"><?php esc_html_e( '🏷️ Gift categories', 'incentiv' ); ?></label>
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; max-height: 200px; overflow-y: auto; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: #fafafa;">
                     <?php if (!empty($categories) && !is_wp_error($categories)): ?>
                         <?php foreach ($categories as $category): ?>
                             <label style="display: flex; align-items: center; gap: 5px;">
-                                <input type="checkbox" name="mmd_gift_categories[]" value="<?php echo esc_attr($category->term_id); ?>" <?php checked(in_array($category->term_id, $gift_categories)); ?>>
+                                <input type="checkbox" name="incv_gift_categories[]" value="<?php echo esc_attr($category->term_id); ?>" <?php checked(in_array($category->term_id, $gift_categories)); ?>>
                                 <?php echo esc_html($category->name); ?> (<?php echo esc_html( $category->count ); ?>)
                             </label>
                         <?php endforeach; ?>
@@ -424,7 +411,7 @@ class MMD_Product_Gifts_V2 {
                 <!-- Attribute Filter -->
                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
                     <strong style="display: block; margin-bottom: 8px;"><?php esc_html_e( '🔍 Filter by attribute (optional):', 'incentiv' ); ?></strong>
-                    <select name="mmd_gift_attribute_slug" id="mmd_gift_attribute_slug" style="width: 100%; max-width: 300px;">
+                    <select name="incv_gift_attribute_slug" id="incv_gift_attribute_slug" style="width: 100%; max-width: 300px;">
                         <option value=""><?php esc_html_e( '-- No attribute filter --', 'incentiv' ); ?></option>
                         <?php foreach ($attributes as $attribute): ?>
                             <option value="<?php echo esc_attr('pa_' . $attribute->attribute_name); ?>" <?php selected($gift_attribute_slug, 'pa_' . $attribute->attribute_name); ?>>
@@ -435,9 +422,9 @@ class MMD_Product_Gifts_V2 {
                     <p class="description"><?php esc_html_e( 'Choose an attribute to filter the gift products by (for example: weight, size)', 'incentiv' ); ?></p>
                 </div>
 
-                <div id="mmd_gift_attribute_values_field" style="margin-top: 10px; display: <?php echo !empty($gift_attribute_slug) ? 'block' : 'none'; ?>;">
+                <div id="incv_gift_attribute_values_field" style="margin-top: 10px; display: <?php echo !empty($gift_attribute_slug) ? 'block' : 'none'; ?>;">
                     <strong style="display: block; margin-bottom: 8px;"><?php esc_html_e( 'Attribute values for gifts:', 'incentiv' ); ?></strong>
-                    <div id="mmd_gift_attribute_values_list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; max-height: 150px; overflow-y: auto; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: white;">
+                    <div id="incv_gift_attribute_values_list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; max-height: 150px; overflow-y: auto; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: white;">
                         <!-- Dynamically loaded via JavaScript -->
                     </div>
                     <p class="description"><?php esc_html_e( 'Choose which attribute values are available as gifts (for example: only 100 g)', 'incentiv' ); ?></p>
@@ -445,7 +432,7 @@ class MMD_Product_Gifts_V2 {
             </div>
 
             <!-- Gift Exclusions Section -->
-            <div class="mmd-gift-field-v2" id="mmd_gift_exclusions_field" style="display: <?php echo $gift_source === 'category' ? 'block' : 'none'; ?>; background: #fff5f5; border: 1px solid #ffcccc;">
+            <div class="incv-gift-field-v2" id="incv_gift_exclusions_field" style="display: <?php echo $gift_source === 'category' ? 'block' : 'none'; ?>; background: #fff5f5; border: 1px solid #ffcccc;">
                 <label class="main-label"><?php esc_html_e( '🚫 Exclude products from gifts', 'incentiv' ); ?></label>
                 <p class="description" style="margin-bottom: 15px;"><?php esc_html_e( 'Set which products are not available as gifts even though they are in the selected categories', 'incentiv' ); ?></p>
 
@@ -455,7 +442,7 @@ class MMD_Product_Gifts_V2 {
                         <?php if (!empty($categories) && !is_wp_error($categories)): ?>
                             <?php foreach ($categories as $category): ?>
                                 <label style="display: flex; align-items: center; gap: 5px;">
-                                    <input type="checkbox" name="mmd_gift_excluded_categories[]" value="<?php echo esc_attr($category->term_id); ?>" <?php checked(in_array($category->term_id, $gift_excluded_categories)); ?>>
+                                    <input type="checkbox" name="incv_gift_excluded_categories[]" value="<?php echo esc_attr($category->term_id); ?>" <?php checked(in_array($category->term_id, $gift_excluded_categories)); ?>>
                                     <?php echo esc_html($category->name); ?>
                                 </label>
                             <?php endforeach; ?>
@@ -469,7 +456,7 @@ class MMD_Product_Gifts_V2 {
                         <?php if (!empty($tags) && !is_wp_error($tags)): ?>
                             <?php foreach ($tags as $tag): ?>
                                 <label style="display: flex; align-items: center; gap: 5px;">
-                                    <input type="checkbox" name="mmd_gift_excluded_tags[]" value="<?php echo esc_attr($tag->term_id); ?>" <?php checked(in_array($tag->term_id, $gift_excluded_tags)); ?>>
+                                    <input type="checkbox" name="incv_gift_excluded_tags[]" value="<?php echo esc_attr($tag->term_id); ?>" <?php checked(in_array($tag->term_id, $gift_excluded_tags)); ?>>
                                     <?php echo esc_html($tag->name); ?>
                                 </label>
                             <?php endforeach; ?>
@@ -481,7 +468,7 @@ class MMD_Product_Gifts_V2 {
 
                 <div>
                     <strong style="display: block; margin-bottom: 8px;"><?php esc_html_e( 'Exclude specific products:', 'incentiv' ); ?></strong>
-                    <select name="mmd_gift_excluded_products[]" id="mmd_gift_excluded_products" class="mmd-product-search-excluded" multiple style="width: 100%;">
+                    <select name="incv_gift_excluded_products[]" id="incv_gift_excluded_products" class="incv-product-search-excluded" multiple style="width: 100%;">
                         <?php
                         if (!empty($gift_excluded_products)) {
                             foreach ($gift_excluded_products as $product_id) {
@@ -499,18 +486,18 @@ class MMD_Product_Gifts_V2 {
                 </div>
             </div>
 
-            <div class="mmd-gift-field-v2">
+            <div class="incv-gift-field-v2">
                 <label class="main-label"><?php esc_html_e( 'Selection type', 'incentiv' ); ?></label>
                 <div style="display: flex; gap: 20px; margin-top: 10px;">
                     <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; border: 2px solid <?php echo $gift_selection_type === 'single' ? '#7c3aed' : '#ddd'; ?>; border-radius: 5px; flex: 1; background: <?php echo $gift_selection_type === 'single' ? '#f4eeff' : 'white'; ?>;">
-                        <input type="radio" name="mmd_gift_selection_type" value="single" <?php checked($gift_selection_type, 'single'); ?> style="margin-left: 8px;">
+                        <input type="radio" name="incv_gift_selection_type" value="single" <?php checked($gift_selection_type, 'single'); ?> style="margin-left: 8px;">
                         <div>
                             <strong><?php esc_html_e( 'Single product selection', 'incentiv' ); ?></strong>
                             <div style="font-size: 12px; color: #666;"><?php esc_html_e( 'The customer can choose only one product', 'incentiv' ); ?></div>
                         </div>
                     </label>
                     <label style="display: flex; align-items: center; cursor: pointer; padding: 10px; border: 2px solid <?php echo $gift_selection_type === 'multiple' ? '#7c3aed' : '#ddd'; ?>; border-radius: 5px; flex: 1; background: <?php echo $gift_selection_type === 'multiple' ? '#f4eeff' : 'white'; ?>;">
-                        <input type="radio" name="mmd_gift_selection_type" value="multiple" <?php checked($gift_selection_type, 'multiple'); ?> style="margin-left: 8px;">
+                        <input type="radio" name="incv_gift_selection_type" value="multiple" <?php checked($gift_selection_type, 'multiple'); ?> style="margin-left: 8px;">
                         <div>
                             <strong><?php esc_html_e( 'Multiple selection', 'incentiv' ); ?></strong>
                             <div style="font-size: 12px; color: #666;"><?php esc_html_e( 'The customer can choose several products', 'incentiv' ); ?></div>
@@ -520,31 +507,31 @@ class MMD_Product_Gifts_V2 {
                 <p class="description" style="margin-top: 10px;"><?php esc_html_e( 'Choose whether the customer can pick only one product or several products from the list', 'incentiv' ); ?></p>
             </div>
 
-            <div class="mmd-gift-field-v2">
+            <div class="incv-gift-field-v2">
                 <label class="main-label">
-                    <input type="checkbox" name="mmd_gift_allow_quantity" value="yes" <?php checked(get_post_meta($post->ID, '_mmd_gift_allow_quantity', true), 'yes'); ?> id="mmd_allow_quantity_v2">
+                    <input type="checkbox" name="incv_gift_allow_quantity" value="yes" <?php checked(get_post_meta($post->ID, '_incv_gift_allow_quantity', true), 'yes'); ?> id="incv_allow_quantity_v2">
                     <?php esc_html_e( 'Allow quantity selection', 'incentiv' ); ?>
                 </label>
                 <p class="description"><?php esc_html_e( 'When enabled, the customer can choose a quantity for each gift product', 'incentiv' ); ?></p>
             </div>
 
-            <div class="mmd-gift-field-v2" id="mmd_max_quantity_field_v2" style="display: <?php echo (get_post_meta($post->ID, '_mmd_gift_allow_quantity', true) === 'yes') ? 'block' : 'none'; ?>;">
-                <label class="main-label" for="mmd_gift_max_quantity"><?php esc_html_e( 'Maximum quantity', 'incentiv' ); ?></label>
-                <input type="number" name="mmd_gift_max_quantity" id="mmd_gift_max_quantity" value="<?php echo esc_attr(get_post_meta($post->ID, '_mmd_gift_max_quantity', true) ?: '5'); ?>" min="1" max="100" step="1">
+            <div class="incv-gift-field-v2" id="incv_max_quantity_field_v2" style="display: <?php echo (get_post_meta($post->ID, '_incv_gift_allow_quantity', true) === 'yes') ? 'block' : 'none'; ?>;">
+                <label class="main-label" for="incv_gift_max_quantity"><?php esc_html_e( 'Maximum quantity', 'incentiv' ); ?></label>
+                <input type="number" name="incv_gift_max_quantity" id="incv_gift_max_quantity" value="<?php echo esc_attr(get_post_meta($post->ID, '_incv_gift_max_quantity', true) ?: '5'); ?>" min="1" max="100" step="1">
                 <p class="description"><?php esc_html_e( 'The maximum quantity the customer can choose for each gift product (1-100)', 'incentiv' ); ?></p>
             </div>
 
-            <div class="mmd-gift-field-v2">
+            <div class="incv-gift-field-v2">
                 <label class="main-label">
-                    <input type="checkbox" name="mmd_gift_limit_variations" value="1" <?php checked($limit_variations, '1'); ?> id="mmd_limit_variations_v2">
+                    <input type="checkbox" name="incv_gift_limit_variations" value="1" <?php checked($limit_variations, '1'); ?> id="incv_limit_variations_v2">
                     <?php esc_html_e( 'Limit to specific variations of the gift products', 'incentiv' ); ?>
                 </label>
                 <p class="description"><?php esc_html_e( 'Tick this option to choose manually which variations are available as gifts. If unticked, all variations are available.', 'incentiv' ); ?></p>
             </div>
 
-            <div class="mmd-gift-field-v2" id="mmd_variations_container_v2" style="display: <?php echo ($limit_variations == '1') ? 'block' : 'none'; ?>; background: #f0f0f1; border: 2px dashed #999;">
+            <div class="incv-gift-field-v2" id="incv_variations_container_v2" style="display: <?php echo ($limit_variations == '1') ? 'block' : 'none'; ?>; background: #f0f0f1; border: 2px dashed #999;">
                 <h4 style="margin-top: 0;"><?php esc_html_e( '🎯 Choose allowed variations', 'incentiv' ); ?></h4>
-                <div id="mmd_variations_list_v2">
+                <div id="incv_variations_list_v2">
                     <p class="description" style="color: #666;"><?php esc_html_e( 'Select a variable product above to show its variations', 'incentiv' ); ?></p>
                 </div>
             </div>
@@ -560,29 +547,29 @@ class MMD_Product_Gifts_V2 {
             </div>
         </div>
 
-        <script>
+        <?php ob_start(); ?>
         jQuery(document).ready(function($) {
             // Toggle discount field based on type
-            $('input[name="mmd_gift_type"]').on('change', function() {
+            $('input[name="incv_gift_type"]').on('change', function() {
                 if ($(this).val() === 'free') {
-                    $('#mmd_discount_field_v2').hide();
+                    $('#incv_discount_field_v2').hide();
                 } else {
-                    $('#mmd_discount_field_v2').show();
+                    $('#incv_discount_field_v2').show();
                 }
             });
 
             // Visual feedback for type selection
-            $('.mmd-type-option').on('click', function() {
-                $('.mmd-type-option').removeClass('selected');
+            $('.incv-type-option').on('click', function() {
+                $('.incv-type-option').removeClass('selected');
                 $(this).addClass('selected');
                 $(this).find('input[type="radio"]').prop('checked', true).trigger('change');
             });
 
             // Gift mode toggle (product_page vs cart_based)
-            $('input[name="mmd_gift_mode"]').on('change', function() {
+            $('input[name="incv_gift_mode"]').on('change', function() {
                 var mode = $(this).val();
                 // Update visual styling
-                $('input[name="mmd_gift_mode"]').each(function() {
+                $('input[name="incv_gift_mode"]').each(function() {
                     const label = $(this).closest('label');
                     if ($(this).is(':checked')) {
                         label.css({'border-color': '#7c3aed', 'background': '#f4eeff'});
@@ -592,17 +579,17 @@ class MMD_Product_Gifts_V2 {
                 });
                 // Toggle visibility
                 if (mode === 'cart_based') {
-                    $('#mmd_cart_gift_notice_field').show();
+                    $('#incv_cart_gift_notice_field').show();
                 } else {
-                    $('#mmd_cart_gift_notice_field').hide();
+                    $('#incv_cart_gift_notice_field').hide();
                 }
             });
 
             // Gift source toggle (specific vs category)
-            $('input[name="mmd_gift_source"]').on('change', function() {
+            $('input[name="incv_gift_source"]').on('change', function() {
                 var source = $(this).val();
                 // Update visual styling
-                $('input[name="mmd_gift_source"]').each(function() {
+                $('input[name="incv_gift_source"]').each(function() {
                     const label = $(this).closest('label');
                     if ($(this).is(':checked')) {
                         label.css({'border-color': '#7c3aed', 'background': '#f4eeff'});
@@ -612,27 +599,27 @@ class MMD_Product_Gifts_V2 {
                 });
                 // Toggle visibility
                 if (source === 'specific') {
-                    $('#mmd_gift_products_field').show();
-                    $('#mmd_gift_categories_field').hide();
-                    $('#mmd_gift_exclusions_field').hide();
+                    $('#incv_gift_products_field').show();
+                    $('#incv_gift_categories_field').hide();
+                    $('#incv_gift_exclusions_field').hide();
                 } else {
-                    $('#mmd_gift_products_field').hide();
-                    $('#mmd_gift_categories_field').show();
-                    $('#mmd_gift_exclusions_field').show();
+                    $('#incv_gift_products_field').hide();
+                    $('#incv_gift_categories_field').show();
+                    $('#incv_gift_exclusions_field').show();
                 }
             });
 
             // Gift attribute filter
             var currentGiftAttributeValues = <?php echo json_encode($gift_attribute_values); ?>;
 
-            $('#mmd_gift_attribute_slug').on('change', function() {
+            $('#incv_gift_attribute_slug').on('change', function() {
                 var slug = $(this).val();
                 if (slug) {
-                    $('#mmd_gift_attribute_values_field').show();
+                    $('#incv_gift_attribute_values_field').show();
                     loadGiftAttributeTerms(slug);
                 } else {
-                    $('#mmd_gift_attribute_values_field').hide();
-                    $('#mmd_gift_attribute_values_list').html('');
+                    $('#incv_gift_attribute_values_field').hide();
+                    $('#incv_gift_attribute_values_list').html('');
                 }
             });
 
@@ -641,9 +628,9 @@ class MMD_Product_Gifts_V2 {
                     url: ajaxurl,
                     type: 'POST',
                     data: {
-                        action: 'mmd_get_attribute_terms',
+                        action: 'incv_get_attribute_terms',
                         attribute_slug: slug,
-                        nonce: '<?php echo esc_attr( wp_create_nonce('mmd_gift_rules_nonce') ); ?>'
+                        nonce: '<?php echo esc_attr( wp_create_nonce('incv_gift_rules_nonce') ); ?>'
                     },
                     success: function(response) {
                         if (response.success) {
@@ -652,10 +639,10 @@ class MMD_Product_Gifts_V2 {
                             terms.forEach(function(term) {
                                 var checked = currentGiftAttributeValues.indexOf(term.term_id) !== -1 ? 'checked' : '';
                                 html += '<label style="display: flex; align-items: center; gap: 5px;">';
-                                html += '<input type="checkbox" name="mmd_gift_attribute_values[]" value="' + term.term_id + '" ' + checked + '>';
+                                html += '<input type="checkbox" name="incv_gift_attribute_values[]" value="' + term.term_id + '" ' + checked + '>';
                                 html += term.name + '</label>';
                             });
-                            $('#mmd_gift_attribute_values_list').html(html);
+                            $('#incv_gift_attribute_values_list').html(html);
                         }
                     }
                 });
@@ -667,17 +654,17 @@ class MMD_Product_Gifts_V2 {
             <?php endif; ?>
 
             // Initialize Select2 for excluded products (with variations support)
-            $('.mmd-product-search-excluded').select2({
+            $('.incv-product-search-excluded').select2({
                 ajax: {
                     url: ajaxurl,
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
                         return {
-                            action: 'mmd_search_products',
+                            action: 'incv_search_products',
                             q: params.term,
                             include_variations: '1',
-                            nonce: '<?php echo esc_attr( wp_create_nonce('mmd_search_products') ); ?>'
+                            nonce: '<?php echo esc_attr( wp_create_nonce('incv_search_products') ); ?>'
                         };
                     },
                     processResults: function(data) {
@@ -697,8 +684,8 @@ class MMD_Product_Gifts_V2 {
             });
 
             // Visual feedback for selection type
-            $('input[name="mmd_gift_selection_type"]').on('change', function() {
-                $('input[name="mmd_gift_selection_type"]').each(function() {
+            $('input[name="incv_gift_selection_type"]').on('change', function() {
+                $('input[name="incv_gift_selection_type"]').each(function() {
                     const label = $(this).closest('label');
                     if ($(this).is(':checked')) {
                         label.css({'border-color': '#7c3aed', 'background': '#f4eeff'});
@@ -709,35 +696,35 @@ class MMD_Product_Gifts_V2 {
             });
 
             // Toggle max quantity field
-            $('#mmd_allow_quantity_v2').on('change', function() {
+            $('#incv_allow_quantity_v2').on('change', function() {
                 if ($(this).is(':checked')) {
-                    $('#mmd_max_quantity_field_v2').show();
+                    $('#incv_max_quantity_field_v2').show();
                 } else {
-                    $('#mmd_max_quantity_field_v2').hide();
+                    $('#incv_max_quantity_field_v2').hide();
                 }
             });
 
             // Toggle variations container
-            $('#mmd_limit_variations_v2').on('change', function() {
+            $('#incv_limit_variations_v2').on('change', function() {
                 if ($(this).is(':checked')) {
-                    $('#mmd_variations_container_v2').show();
+                    $('#incv_variations_container_v2').show();
                     loadVariations();
                 } else {
-                    $('#mmd_variations_container_v2').hide();
+                    $('#incv_variations_container_v2').hide();
                 }
             });
 
             // Load variations when products change
-            $('#mmd_gift_products').on('change', function() {
-                if ($('#mmd_limit_variations_v2').is(':checked')) {
+            $('#incv_gift_products').on('change', function() {
+                if ($('#incv_limit_variations_v2').is(':checked')) {
                     loadVariations();
                 }
             });
 
             function loadVariations() {
-                var productIds = $('#mmd_gift_products').val();
+                var productIds = $('#incv_gift_products').val();
                 if (!productIds || productIds.length === 0) {
-                    $('#mmd_variations_list_v2').html(( '<p class="description" style="color: #666;">' + <?php echo wp_json_encode( __( 'Select a variable product above to show its variations', 'incentiv' ) ); ?> + '<\/p>' ));
+                    $('#incv_variations_list_v2').html(( '<p class="description" style="color: #666;">' + <?php echo wp_json_encode( __( 'Select a variable product above to show its variations', 'incentiv' ) ); ?> + '<\/p>' ));
                     return;
                 }
 
@@ -745,23 +732,23 @@ class MMD_Product_Gifts_V2 {
                     url: ajaxurl,
                     type: 'POST',
                     data: {
-                        action: 'mmd_get_product_variations',
+                        action: 'incv_get_product_variations',
                         product_ids: productIds,
                         selected_variations: <?php echo json_encode($allowed_variations); ?>,
-                        nonce: '<?php echo esc_attr( wp_create_nonce('mmd_variations_nonce') ); ?>'
+                        nonce: '<?php echo esc_attr( wp_create_nonce('incv_variations_nonce') ); ?>'
                     },
                     beforeSend: function() {
-                        $('#mmd_variations_list_v2').html(( '<p style="text-align: center;"><span class="spinner is-active" style="float: none; margin: 0;"><\/span> ' + <?php echo wp_json_encode( __( 'Loading variations...', 'incentiv' ) ); ?> + '<\/p>' ));
+                        $('#incv_variations_list_v2').html(( '<p style="text-align: center;"><span class="spinner is-active" style="float: none; margin: 0;"><\/span> ' + <?php echo wp_json_encode( __( 'Loading variations...', 'incentiv' ) ); ?> + '<\/p>' ));
                     },
                     success: function(response) {
                         if (response.success) {
-                            $('#mmd_variations_list_v2').html(response.data.html);
+                            $('#incv_variations_list_v2').html(response.data.html);
                         } else {
-                            $('#mmd_variations_list_v2').html(( '<p style="color: red;">' + <?php echo wp_json_encode( __( 'Error:', 'incentiv' ) ); ?> + ' ' ) + response.data + '</p>');
+                            $('#incv_variations_list_v2').html(( '<p style="color: red;">' + <?php echo wp_json_encode( __( 'Error:', 'incentiv' ) ); ?> + ' ' ) + response.data + '</p>');
                         }
                     },
                     error: function() {
-                        $('#mmd_variations_list_v2').html(( '<p style="color: red;">' + <?php echo wp_json_encode( __( 'Error loading variations', 'incentiv' ) ); ?> + '<\/p>' ));
+                        $('#incv_variations_list_v2').html(( '<p style="color: red;">' + <?php echo wp_json_encode( __( 'Error loading variations', 'incentiv' ) ); ?> + '<\/p>' ));
                     }
                 });
             }
@@ -771,7 +758,7 @@ class MMD_Product_Gifts_V2 {
             loadVariations();
             <?php endif; ?>
         });
-        </script>
+        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
         <?php
     }
 
@@ -779,7 +766,7 @@ class MMD_Product_Gifts_V2 {
      * Save meta box data
      */
     public function save_gift_meta_box($post_id, $post) {
-        if (!isset($_POST['mmd_gift_meta_box_v2_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mmd_gift_meta_box_v2_nonce'])), 'mmd_gift_meta_box_v2')) {
+        if (!isset($_POST['incv_gift_meta_box_v2_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['incv_gift_meta_box_v2_nonce'])), 'incv_gift_meta_box_v2')) {
             return;
         }
 
@@ -791,79 +778,79 @@ class MMD_Product_Gifts_V2 {
             return;
         }
 
-        $enabled = isset($_POST['mmd_gift_enabled']) ? '1' : '0';
-        update_post_meta($post_id, '_mmd_gift_enabled', $enabled);
+        $enabled = isset($_POST['incv_gift_enabled']) ? '1' : '0';
+        update_post_meta($post_id, '_incv_gift_enabled', $enabled);
 
-        $gift_type = isset($_POST['mmd_gift_type']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_type'])) : 'free';
-        update_post_meta($post_id, '_mmd_gift_type', $gift_type);
+        $gift_type = isset($_POST['incv_gift_type']) ? sanitize_text_field(wp_unslash($_POST['incv_gift_type'])) : 'free';
+        update_post_meta($post_id, '_incv_gift_type', $gift_type);
 
-        $gift_discount = isset($_POST['mmd_gift_discount']) ? floatval($_POST['mmd_gift_discount']) : 0;
-        update_post_meta($post_id, '_mmd_gift_discount', $gift_discount);
+        $gift_discount = isset($_POST['incv_gift_discount']) ? floatval($_POST['incv_gift_discount']) : 0;
+        update_post_meta($post_id, '_incv_gift_discount', $gift_discount);
 
         // Gift mode (product_page or cart_based)
-        $gift_mode = isset($_POST['mmd_gift_mode']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_mode'])) : 'product_page';
-        update_post_meta($post_id, '_mmd_gift_mode', $gift_mode);
+        $gift_mode = isset($_POST['incv_gift_mode']) ? sanitize_text_field(wp_unslash($_POST['incv_gift_mode'])) : 'product_page';
+        update_post_meta($post_id, '_incv_gift_mode', $gift_mode);
 
         // Cart gift notice
-        $cart_gift_notice = isset($_POST['mmd_cart_gift_notice']) ? sanitize_text_field(wp_unslash($_POST['mmd_cart_gift_notice'])) : '';
-        update_post_meta($post_id, '_mmd_cart_gift_notice', $cart_gift_notice);
+        $cart_gift_notice = isset($_POST['incv_cart_gift_notice']) ? sanitize_text_field(wp_unslash($_POST['incv_cart_gift_notice'])) : '';
+        update_post_meta($post_id, '_incv_cart_gift_notice', $cart_gift_notice);
 
         // Gift source (specific or category)
-        $gift_source = isset($_POST['mmd_gift_source']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_source'])) : 'specific';
-        update_post_meta($post_id, '_mmd_gift_source', $gift_source);
+        $gift_source = isset($_POST['incv_gift_source']) ? sanitize_text_field(wp_unslash($_POST['incv_gift_source'])) : 'specific';
+        update_post_meta($post_id, '_incv_gift_source', $gift_source);
 
-        $gift_products = isset($_POST['mmd_gift_products']) && is_array($_POST['mmd_gift_products'])
-            ? array_map('intval', $_POST['mmd_gift_products'])
+        $gift_products = isset($_POST['incv_gift_products']) && is_array($_POST['incv_gift_products'])
+            ? array_map('intval', $_POST['incv_gift_products'])
             : array();
-        update_post_meta($post_id, '_mmd_gift_products', $gift_products);
+        update_post_meta($post_id, '_incv_gift_products', $gift_products);
 
         // Gift categories
-        $gift_categories = isset($_POST['mmd_gift_categories']) && is_array($_POST['mmd_gift_categories'])
-            ? array_map('intval', $_POST['mmd_gift_categories'])
+        $gift_categories = isset($_POST['incv_gift_categories']) && is_array($_POST['incv_gift_categories'])
+            ? array_map('intval', $_POST['incv_gift_categories'])
             : array();
-        update_post_meta($post_id, '_mmd_gift_categories', $gift_categories);
+        update_post_meta($post_id, '_incv_gift_categories', $gift_categories);
 
         // Gift exclusions
-        $gift_excluded_categories = isset($_POST['mmd_gift_excluded_categories']) && is_array($_POST['mmd_gift_excluded_categories'])
-            ? array_map('intval', $_POST['mmd_gift_excluded_categories'])
+        $gift_excluded_categories = isset($_POST['incv_gift_excluded_categories']) && is_array($_POST['incv_gift_excluded_categories'])
+            ? array_map('intval', $_POST['incv_gift_excluded_categories'])
             : array();
-        update_post_meta($post_id, '_mmd_gift_excluded_categories', $gift_excluded_categories);
+        update_post_meta($post_id, '_incv_gift_excluded_categories', $gift_excluded_categories);
 
-        $gift_excluded_tags = isset($_POST['mmd_gift_excluded_tags']) && is_array($_POST['mmd_gift_excluded_tags'])
-            ? array_map('intval', $_POST['mmd_gift_excluded_tags'])
+        $gift_excluded_tags = isset($_POST['incv_gift_excluded_tags']) && is_array($_POST['incv_gift_excluded_tags'])
+            ? array_map('intval', $_POST['incv_gift_excluded_tags'])
             : array();
-        update_post_meta($post_id, '_mmd_gift_excluded_tags', $gift_excluded_tags);
+        update_post_meta($post_id, '_incv_gift_excluded_tags', $gift_excluded_tags);
 
-        $gift_excluded_products = isset($_POST['mmd_gift_excluded_products']) && is_array($_POST['mmd_gift_excluded_products'])
-            ? array_map('intval', $_POST['mmd_gift_excluded_products'])
+        $gift_excluded_products = isset($_POST['incv_gift_excluded_products']) && is_array($_POST['incv_gift_excluded_products'])
+            ? array_map('intval', $_POST['incv_gift_excluded_products'])
             : array();
-        update_post_meta($post_id, '_mmd_gift_excluded_products', $gift_excluded_products);
+        update_post_meta($post_id, '_incv_gift_excluded_products', $gift_excluded_products);
 
         // Gift attribute filter
-        $gift_attribute_slug = isset($_POST['mmd_gift_attribute_slug']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_attribute_slug'])) : '';
-        update_post_meta($post_id, '_mmd_gift_attribute_slug', $gift_attribute_slug);
+        $gift_attribute_slug = isset($_POST['incv_gift_attribute_slug']) ? sanitize_text_field(wp_unslash($_POST['incv_gift_attribute_slug'])) : '';
+        update_post_meta($post_id, '_incv_gift_attribute_slug', $gift_attribute_slug);
 
-        $gift_attribute_values = isset($_POST['mmd_gift_attribute_values']) && is_array($_POST['mmd_gift_attribute_values'])
-            ? array_map('intval', $_POST['mmd_gift_attribute_values'])
+        $gift_attribute_values = isset($_POST['incv_gift_attribute_values']) && is_array($_POST['incv_gift_attribute_values'])
+            ? array_map('intval', $_POST['incv_gift_attribute_values'])
             : array();
-        update_post_meta($post_id, '_mmd_gift_attribute_values', $gift_attribute_values);
+        update_post_meta($post_id, '_incv_gift_attribute_values', $gift_attribute_values);
 
-        $gift_selection_type = isset($_POST['mmd_gift_selection_type']) ? sanitize_text_field(wp_unslash($_POST['mmd_gift_selection_type'])) : 'single';
-        update_post_meta($post_id, '_mmd_gift_selection_type', $gift_selection_type);
+        $gift_selection_type = isset($_POST['incv_gift_selection_type']) ? sanitize_text_field(wp_unslash($_POST['incv_gift_selection_type'])) : 'single';
+        update_post_meta($post_id, '_incv_gift_selection_type', $gift_selection_type);
 
-        $allow_quantity = isset($_POST['mmd_gift_allow_quantity']) && $_POST['mmd_gift_allow_quantity'] === 'yes' ? 'yes' : 'no';
-        update_post_meta($post_id, '_mmd_gift_allow_quantity', $allow_quantity);
+        $allow_quantity = isset($_POST['incv_gift_allow_quantity']) && $_POST['incv_gift_allow_quantity'] === 'yes' ? 'yes' : 'no';
+        update_post_meta($post_id, '_incv_gift_allow_quantity', $allow_quantity);
 
-        $max_quantity = isset($_POST['mmd_gift_max_quantity']) ? intval($_POST['mmd_gift_max_quantity']) : 5;
-        update_post_meta($post_id, '_mmd_gift_max_quantity', $max_quantity);
+        $max_quantity = isset($_POST['incv_gift_max_quantity']) ? intval($_POST['incv_gift_max_quantity']) : 5;
+        update_post_meta($post_id, '_incv_gift_max_quantity', $max_quantity);
 
-        $limit_variations = isset($_POST['mmd_gift_limit_variations']) ? '1' : '0';
-        update_post_meta($post_id, '_mmd_gift_limit_variations', $limit_variations);
+        $limit_variations = isset($_POST['incv_gift_limit_variations']) ? '1' : '0';
+        update_post_meta($post_id, '_incv_gift_limit_variations', $limit_variations);
 
-        $allowed_variations = isset($_POST['mmd_allowed_variations']) && is_array($_POST['mmd_allowed_variations'])
-            ? array_map('intval', $_POST['mmd_allowed_variations'])
+        $allowed_variations = isset($_POST['incv_allowed_variations']) && is_array($_POST['incv_allowed_variations'])
+            ? array_map('intval', $_POST['incv_allowed_variations'])
             : array();
-        update_post_meta($post_id, '_mmd_gift_allowed_variations', $allowed_variations);
+        update_post_meta($post_id, '_incv_gift_allowed_variations', $allowed_variations);
     }
 
     /**
@@ -876,21 +863,22 @@ class MMD_Product_Gifts_V2 {
             return;
         }
 
-        wp_enqueue_script('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'), '4.0.13', true);
-        wp_enqueue_style('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.css', array(), '4.0.13');
+        wp_enqueue_script('select2', INCV_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'), '4.0.13', true);
+        wp_enqueue_style('select2', INCV_PLUGIN_URL . 'assets/vendor/select2/select2.min.css', array(), '4.0.13');
+        wp_enqueue_style('incv-product-gifts-admin', INCV_PLUGIN_URL . 'assets/product-gifts-admin.css', array(), INCV_VERSION);
 
         wp_add_inline_script('select2', "
             jQuery(document).ready(function($) {
-                $('.mmd-product-search').select2({
+                $('.incv-product-search').select2({
                     ajax: {
                         url: ajaxurl,
                         dataType: 'json',
                         delay: 250,
                         data: function(params) {
                             return {
-                                action: 'mmd_search_products',
+                                action: 'incv_search_products',
                                 q: params.term,
-                                nonce: '" . wp_create_nonce('mmd_search_products') . "'
+                                nonce: '" . wp_create_nonce('incv_search_products') . "'
                             };
                         },
                         processResults: function(data) {
@@ -939,52 +927,52 @@ class MMD_Product_Gifts_V2 {
         }
 
         // Use file modification time for cache busting
-        $js_version = filemtime(MMD_PLUGIN_DIR . 'assets/gift-selection.js');
-        $css_version = filemtime(MMD_PLUGIN_DIR . 'assets/gift-selection.css');
+        $js_version = filemtime(INCV_PLUGIN_DIR . 'assets/gift-selection.js');
+        $css_version = filemtime(INCV_PLUGIN_DIR . 'assets/gift-selection.css');
 
-        wp_enqueue_style('mmd-gift-selection', MMD_PLUGIN_URL . 'assets/gift-selection.css', array(), $css_version);
-        wp_enqueue_script('mmd-gift-selection', MMD_PLUGIN_URL . 'assets/gift-selection.js', array('jquery', 'wp-i18n'), $js_version, true);
-        wp_set_script_translations('mmd-gift-selection', 'incentiv', MMD_PLUGIN_DIR . 'languages');
+        wp_enqueue_style('incv-gift-selection', INCV_PLUGIN_URL . 'assets/gift-selection.css', array(), $css_version);
+        wp_enqueue_script('incv-gift-selection', INCV_PLUGIN_URL . 'assets/gift-selection.js', array('jquery', 'wp-i18n'), $js_version, true);
+        wp_set_script_translations('incv-gift-selection', 'incentiv', INCV_PLUGIN_DIR . 'languages');
 
-        wp_localize_script('mmd-gift-selection', 'mmdGiftData', array(
+        wp_localize_script('incv-gift-selection', 'incvGiftData', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('mmd_gift_nonce'),
-            'debug' => MMD_Helpers::debug_enabled() && MMD_Helpers::can_see_frontend_debug(),
+            'nonce' => wp_create_nonce('incv_gift_nonce'),
+            'debug' => INCV_Helpers::debug_enabled() && INCV_Helpers::can_see_frontend_debug(),
         ));
 
         // Get styling options
         $styling = array();
-        if (class_exists('MMD_Gift_Rules')) {
-            $gift_rules = MMD_Gift_Rules::get_instance();
+        if (class_exists('INCV_Gift_Rules')) {
+            $gift_rules = INCV_Gift_Rules::get_instance();
             $styling = $gift_rules->get_styling_options();
         }
 
         // Build dynamic inline styles
         $inline_css = "
             /* Force hide quantity inputs/buttons for gift items in mini-cart and checkout */
-            .mmd-gift-mini-cart-item .quantity,
-            .mmd-gift-item-row .quantity,
-            .mmd-gift-item-row .product-quantity .quantity,
-            tr.mmd-gift-item-row td.product-quantity div.quantity {
+            .incv-gift-mini-cart-item .quantity,
+            .incv-gift-item-row .quantity,
+            .incv-gift-item-row .product-quantity .quantity,
+            tr.incv-gift-item-row td.product-quantity div.quantity {
                 display: none !important;
             }
 
             /* Modern CSS - target any list item that contains the lock icon */
-            li.woocommerce-mini-cart-item:has(.mmd-gift-locked) .quantity,
-            tr.cart_item:has(.mmd-gift-locked) .product-quantity .quantity,
-            tr.cart_item:has(.mmd-gift-locked) .quantity {
+            li.woocommerce-mini-cart-item:has(.incv-gift-locked) .quantity,
+            tr.cart_item:has(.incv-gift-locked) .product-quantity .quantity,
+            tr.cart_item:has(.incv-gift-locked) .quantity {
                 display: none !important;
             }
 
             /* JS Fallback classes */
-            .mmd-gift-row-locked .quantity,
-            .mmd-gift-row-locked .product-quantity .quantity {
+            .incv-gift-row-locked .quantity,
+            .incv-gift-row-locked .product-quantity .quantity {
                 display: none !important;
             }
 
             /* Make sure we show '1' if the input is hidden */
-            .mmd-gift-item-row .product-quantity:after,
-            .mmd-gift-row-locked .product-quantity:after {
+            .incv-gift-item-row .product-quantity:after,
+            .incv-gift-row-locked .product-quantity:after {
                 content: '1';
                 display: block;
             }
@@ -1010,7 +998,7 @@ class MMD_Product_Gifts_V2 {
 
             $inline_css .= "
                 /* Custom gift box styling */
-                .mmd-gift-selection-container {
+                .incv-gift-selection-container {
                     background: linear-gradient(135deg, " . esc_attr($styling['gift_box_bg_color_1']) . " 0%, " . esc_attr($styling['gift_box_bg_color_2']) . " 100%) !important;
                     color: " . esc_attr($styling['gift_box_text_color']) . " !important;
                     border-radius: " . esc_attr($styling['gift_box_border_radius']) . "px !important;
@@ -1020,18 +1008,18 @@ class MMD_Product_Gifts_V2 {
                     box-shadow: " . $box_shadow . " !important;
                 }
 
-                .mmd-gift-title {
+                .incv-gift-title {
                     color: " . esc_attr($styling['gift_box_text_color']) . " !important;
                     font-size: " . esc_attr(isset($styling['gift_box_title_size']) ? $styling['gift_box_title_size'] : '20') . "px !important;
                 }
 
-                .mmd-gift-subtitle {
+                .incv-gift-subtitle {
                     color: " . esc_attr($styling['gift_box_text_color']) . " !important;
                     font-size: " . esc_attr(isset($styling['gift_box_subtitle_size']) ? $styling['gift_box_subtitle_size'] : '14') . "px !important;
                 }
 
                 /* Gift selection buttons */
-                .mmd-gift-select-btn {
+                .incv-gift-select-btn {
                     background-color: " . esc_attr(isset($styling['gift_button_bg_color']) ? $styling['gift_button_bg_color'] : '#ffffff') . " !important;
                     color: " . esc_attr(isset($styling['gift_button_text_color']) ? $styling['gift_button_text_color'] : '#7c3aed') . " !important;
                     border: none !important;
@@ -1041,61 +1029,61 @@ class MMD_Product_Gifts_V2 {
                     transition: all 0.3s ease !important;
                 }
 
-                .mmd-gift-select-btn:hover {
+                .incv-gift-select-btn:hover {
                     background-color: " . esc_attr(isset($styling['gift_button_hover_bg']) ? $styling['gift_button_hover_bg'] : '#7c3aed') . " !important;
                     color: " . esc_attr(isset($styling['gift_button_hover_text']) ? $styling['gift_button_hover_text'] : '#ffffff') . " !important;
                 }
 
-                .mmd-gift-select-btn.selected {
+                .incv-gift-select-btn.selected {
                     background-color: " . esc_attr(isset($styling['gift_button_hover_bg']) ? $styling['gift_button_hover_bg'] : '#7c3aed') . " !important;
                     color: " . esc_attr(isset($styling['gift_button_hover_text']) ? $styling['gift_button_hover_text'] : '#ffffff') . " !important;
                 }
 
                 /* Gift items in cart, mini-cart, and checkout */
-                .mmd-gift-item-row,
-                .mmd-gift-mini-cart-item {
+                .incv-gift-item-row,
+                .incv-gift-mini-cart-item {
                     background: linear-gradient(135deg, " . esc_attr($styling['gift_box_bg_color_1']) . " 0%, " . esc_attr($styling['gift_box_bg_color_2']) . " 100%) !important;
                     position: relative;
                 }
 
-                .mmd-gift-item-row td,
-                .mmd-gift-mini-cart-item,
-                .mmd-gift-mini-cart-item a {
+                .incv-gift-item-row td,
+                .incv-gift-mini-cart-item,
+                .incv-gift-mini-cart-item a {
                     color: " . esc_attr($styling['gift_box_text_color']) . " !important;
                 }
 
                 /* Gift badge styling */
-                .mmd-gift-badge {
+                .incv-gift-badge {
                     background: linear-gradient(135deg, " . esc_attr($styling['gift_box_bg_color_1']) . " 0%, " . esc_attr($styling['gift_box_bg_color_2']) . " 100%) !important;
                     color: " . esc_attr($styling['gift_box_text_color']) . " !important;
                     border-radius: " . esc_attr(isset($styling['gift_box_border_radius']) ? $styling['gift_box_border_radius'] : '8') . "px !important;
                 }
 
                 /* Make gift rows stand out with subtle styling */
-                .mmd-gift-item-row {
+                .incv-gift-item-row {
                     border-left: " . esc_attr(isset($styling['gift_box_border_width']) ? max(3, $styling['gift_box_border_width']) : '3') . "px solid " . esc_attr($styling['gift_box_bg_color_1']) . " !important;
                 }
 
-                .mmd-gift-mini-cart-item {
+                .incv-gift-mini-cart-item {
                     border-left: " . esc_attr(isset($styling['gift_box_border_width']) ? max(3, $styling['gift_box_border_width']) : '3') . "px solid " . esc_attr($styling['gift_box_bg_color_1']) . " !important;
                     padding-left: 10px !important;
                 }
             ";
         }
 
-        wp_add_inline_style('mmd-gift-selection', $inline_css);
+        wp_add_inline_style('incv-gift-selection', $inline_css);
         
         // Add inline JS to add classes to gift rows (fallback for theme overrides)
-        wp_add_inline_script('mmd-gift-selection', "
+        wp_add_inline_script('incv-gift-selection', "
             jQuery(document).ready(function($) {
                 // Function to process rows
                 function tagGiftRows() {
                     // Find lock icons and add class to parent row/item
-                    $('.mmd-gift-locked').each(function() {
+                    $('.incv-gift-locked').each(function() {
                         // For checkout tables
-                        $(this).closest('tr').addClass('mmd-gift-row-locked mmd-gift-item-row');
+                        $(this).closest('tr').addClass('incv-gift-row-locked incv-gift-item-row');
                         // For mini-cart items
-                        $(this).closest('li').addClass('mmd-gift-row-locked mmd-gift-mini-cart-item');
+                        $(this).closest('li').addClass('incv-gift-row-locked incv-gift-mini-cart-item');
                     });
                 }
                 
@@ -1130,8 +1118,8 @@ class MMD_Product_Gifts_V2 {
      */
     private function get_gift_settings($product_id) {
         // Check if gift rules class exists
-        if (class_exists('MMD_Gift_Rules')) {
-            $gift_rules = MMD_Gift_Rules::get_instance();
+        if (class_exists('INCV_Gift_Rules')) {
+            $gift_rules = INCV_Gift_Rules::get_instance();
             $matching_rule = $gift_rules->get_matching_rule_for_product($product_id);
 
             // If a rule matches and override is enabled, use rule settings
@@ -1168,7 +1156,7 @@ class MMD_Product_Gifts_V2 {
         }
 
         // Fall back to product meta
-        $enabled = get_post_meta($product_id, '_mmd_gift_enabled', true);
+        $enabled = get_post_meta($product_id, '_incv_gift_enabled', true);
 
         if ($enabled !== '1') {
             // Check if there's a matching rule without override
@@ -1207,17 +1195,17 @@ class MMD_Product_Gifts_V2 {
 
         // Get gift products from product meta (handles both specific and category sources)
         $gift_products = $this->get_gift_products_from_product_meta($product_id);
-        $gift_type = get_post_meta($product_id, '_mmd_gift_type', true);
-        $gift_discount = get_post_meta($product_id, '_mmd_gift_discount', true);
-        $gift_selection_type = get_post_meta($product_id, '_mmd_gift_selection_type', true);
-        $allow_quantity = get_post_meta($product_id, '_mmd_gift_allow_quantity', true);
-        $max_quantity = get_post_meta($product_id, '_mmd_gift_max_quantity', true);
+        $gift_type = get_post_meta($product_id, '_incv_gift_type', true);
+        $gift_discount = get_post_meta($product_id, '_incv_gift_discount', true);
+        $gift_selection_type = get_post_meta($product_id, '_incv_gift_selection_type', true);
+        $allow_quantity = get_post_meta($product_id, '_incv_gift_allow_quantity', true);
+        $max_quantity = get_post_meta($product_id, '_incv_gift_max_quantity', true);
 
         if (empty($gift_products)) {
             return null;
         }
 
-        $gift_mode = get_post_meta($product_id, '_mmd_gift_mode', true);
+        $gift_mode = get_post_meta($product_id, '_incv_gift_mode', true);
 
         return array(
             'enabled' => true,
@@ -1242,12 +1230,12 @@ class MMD_Product_Gifts_V2 {
     private function get_gift_products_from_rule($rule) {
         $gift_source = isset($rule['gift_source']) ? $rule['gift_source'] : 'specific';
 
-        self::debug_log('MMD get_gift_products_from_rule: gift_source=' . $gift_source);
-        self::debug_log('MMD get_gift_products_from_rule: rule keys=' . implode(', ', array_keys($rule)));
+        self::debug_log('INCV get_gift_products_from_rule: gift_source=' . $gift_source);
+        self::debug_log('INCV get_gift_products_from_rule: rule keys=' . implode(', ', array_keys($rule)));
 
         if ($gift_source === 'specific') {
             $products = isset($rule['gift_products']) ? $rule['gift_products'] : array();
-            self::debug_log('MMD get_gift_products_from_rule: specific mode, returning ' . count($products) . ' products');
+            self::debug_log('INCV get_gift_products_from_rule: specific mode, returning ' . count($products) . ' products');
             return $products;
         }
 
@@ -1259,10 +1247,10 @@ class MMD_Product_Gifts_V2 {
         $attribute_slug = isset($rule['gift_attribute_slug']) ? $rule['gift_attribute_slug'] : '';
         $attribute_values = isset($rule['gift_attribute_values']) ? $rule['gift_attribute_values'] : array();
 
-        self::debug_log('MMD get_gift_products_from_rule: category mode');
-        self::debug_log('MMD get_gift_products_from_rule: gift_categories=' . wp_json_encode($gift_categories));
-        self::debug_log('MMD get_gift_products_from_rule: attribute_slug=' . $attribute_slug);
-        self::debug_log('MMD get_gift_products_from_rule: attribute_values=' . wp_json_encode($attribute_values));
+        self::debug_log('INCV get_gift_products_from_rule: category mode');
+        self::debug_log('INCV get_gift_products_from_rule: gift_categories=' . wp_json_encode($gift_categories));
+        self::debug_log('INCV get_gift_products_from_rule: attribute_slug=' . $attribute_slug);
+        self::debug_log('INCV get_gift_products_from_rule: attribute_values=' . wp_json_encode($attribute_values));
 
         $products = $this->get_products_from_categories($gift_categories, $excluded_categories, $excluded_tags, $excluded_products, $attribute_slug, $attribute_values);
 
@@ -1319,7 +1307,7 @@ class MMD_Product_Gifts_V2 {
         // matched or which source was configured.
         $products = self::filter_global_gift_exclusions($products);
 
-        self::debug_log('MMD get_gift_products_from_rule: returned ' . count($products) . ' products: ' . implode(',', $products));
+        self::debug_log('INCV get_gift_products_from_rule: returned ' . count($products) . ' products: ' . implode(',', $products));
 
         return $products;
     }
@@ -1330,7 +1318,7 @@ class MMD_Product_Gifts_V2 {
      * product the admin globally excluded can't slip through any rule.
      */
     public static function filter_global_gift_exclusions($product_ids) {
-        $settings = get_option('mmd_settings', array());
+        $settings = get_option('incv_settings', array());
         $globally_excluded = isset($settings['global_gift_excluded_products']) && is_array($settings['global_gift_excluded_products'])
             ? array_map('intval', $settings['global_gift_excluded_products'])
             : array();
@@ -1345,20 +1333,20 @@ class MMD_Product_Gifts_V2 {
      * @return array Array of product IDs
      */
     private function get_gift_products_from_product_meta($product_id) {
-        $gift_source = get_post_meta($product_id, '_mmd_gift_source', true);
+        $gift_source = get_post_meta($product_id, '_incv_gift_source', true);
 
         if (empty($gift_source) || $gift_source === 'specific') {
-            $specific = get_post_meta($product_id, '_mmd_gift_products', true) ?: array();
+            $specific = get_post_meta($product_id, '_incv_gift_products', true) ?: array();
             return self::filter_global_gift_exclusions($specific);
         }
 
         // Category-based gift selection
-        $gift_categories = get_post_meta($product_id, '_mmd_gift_categories', true) ?: array();
-        $excluded_categories = get_post_meta($product_id, '_mmd_gift_excluded_categories', true) ?: array();
-        $excluded_tags = get_post_meta($product_id, '_mmd_gift_excluded_tags', true) ?: array();
-        $excluded_products = get_post_meta($product_id, '_mmd_gift_excluded_products', true) ?: array();
-        $attribute_slug = get_post_meta($product_id, '_mmd_gift_attribute_slug', true) ?: '';
-        $attribute_values = get_post_meta($product_id, '_mmd_gift_attribute_values', true) ?: array();
+        $gift_categories = get_post_meta($product_id, '_incv_gift_categories', true) ?: array();
+        $excluded_categories = get_post_meta($product_id, '_incv_gift_excluded_categories', true) ?: array();
+        $excluded_tags = get_post_meta($product_id, '_incv_gift_excluded_tags', true) ?: array();
+        $excluded_products = get_post_meta($product_id, '_incv_gift_excluded_products', true) ?: array();
+        $attribute_slug = get_post_meta($product_id, '_incv_gift_attribute_slug', true) ?: '';
+        $attribute_values = get_post_meta($product_id, '_incv_gift_attribute_values', true) ?: array();
 
         return self::filter_global_gift_exclusions(
             $this->get_products_from_categories($gift_categories, $excluded_categories, $excluded_tags, $excluded_products, $attribute_slug, $attribute_values)
@@ -1387,7 +1375,7 @@ class MMD_Product_Gifts_V2 {
             'post_status' => 'publish',
             'posts_per_page' => -1,
             'fields' => 'ids',
-            'tax_query' => array(
+            'tax_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Scoping the query to a term is the feature itself; bounded, paginated query.
                 array(
                     'taxonomy' => 'product_cat',
                     'field' => 'term_id',
@@ -1424,7 +1412,7 @@ class MMD_Product_Gifts_V2 {
 
         // Add excluded specific products
         if (!empty($excluded_products)) {
-            $args['post__not_in'] = $excluded_products;
+            $args['post__not_in'] = $excluded_products; // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Small, bounded exclusion list (already-selected items).
         }
 
         // Run query
@@ -1501,8 +1489,8 @@ class MMD_Product_Gifts_V2 {
     private static $gift_selection_rendered = false;
 
     public function display_gift_selection() {
-        // Shoppers blocked by an add-on (filter `mmd_promotions_blocked`) get no promotions.
-        if (MMD_Modules::promotions_blocked('gifts')) {
+        // Shoppers blocked by an add-on (filter `incv_promotions_blocked`) get no promotions.
+        if (INCV_Modules::promotions_blocked('gifts')) {
             return;
         }
 
@@ -1651,8 +1639,8 @@ class MMD_Product_Gifts_V2 {
 
         // Get text customization from styling options
         $styling = array();
-        if (class_exists('MMD_Gift_Rules')) {
-            $gift_rules = MMD_Gift_Rules::get_instance();
+        if (class_exists('INCV_Gift_Rules')) {
+            $gift_rules = INCV_Gift_Rules::get_instance();
             $styling = $gift_rules->get_styling_options();
         }
 
@@ -1668,7 +1656,7 @@ class MMD_Product_Gifts_V2 {
 
         self::$gift_selection_rendered = true;
         ?>
-        <div class="mmd-gift-selection-container woocommerce-product-addons"
+        <div class="incv-gift-selection-container woocommerce-product-addons"
              style="display: block !important; position: static !important; visibility: visible !important;"
              data-selection-type="<?php echo esc_attr($gift_selection_type); ?>"
              data-parent-product-id="<?php echo esc_attr($product->get_id()); ?>"
@@ -1679,21 +1667,21 @@ class MMD_Product_Gifts_V2 {
              data-products-per-page="<?php echo esc_attr($products_per_page); ?>"
              data-total-products="<?php echo esc_attr($total_products); ?>"
              data-use-pagination="<?php echo $use_pagination ? '1' : '0'; ?>">
-            <div class="mmd-gift-title">
+            <div class="incv-gift-title">
                 <?php echo esc_html($title_text); ?>
             </div>
-            <p class="mmd-gift-subtitle"><?php echo esc_html($subtitle_text); ?></p>
+            <p class="incv-gift-subtitle"><?php echo esc_html($subtitle_text); ?></p>
 
             <?php if ($use_pagination): ?>
-            <div class="mmd-gift-pagination-controls mmd-gift-pagination-top">
-                <button type="button" class="mmd-pagination-btn mmd-pagination-prev" disabled><?php echo wp_kses_post( __( '&laquo; Previous', 'incentiv' ) ); ?></button>
-                <span class="mmd-pagination-info"><?php esc_html_e( 'Page', 'incentiv' ); ?> <span class="mmd-current-page">1</span> <?php esc_html_e( 'of', 'incentiv' ); ?> <span class="mmd-total-pages"><?php echo esc_html( ceil($total_products / $products_per_page) ); ?></span></span>
-                <button type="button" class="mmd-pagination-btn mmd-pagination-next"><?php echo wp_kses_post( __( 'Next &raquo;', 'incentiv' ) ); ?></button>
+            <div class="incv-gift-pagination-controls incv-gift-pagination-top">
+                <button type="button" class="incv-pagination-btn incv-pagination-prev" disabled><?php echo wp_kses_post( __( '&laquo; Previous', 'incentiv' ) ); ?></button>
+                <span class="incv-pagination-info"><?php esc_html_e( 'Page', 'incentiv' ); ?> <span class="incv-current-page">1</span> <?php esc_html_e( 'of', 'incentiv' ); ?> <span class="incv-total-pages"><?php echo esc_html( ceil($total_products / $products_per_page) ); ?></span></span>
+                <button type="button" class="incv-pagination-btn incv-pagination-next"><?php echo wp_kses_post( __( 'Next &raquo;', 'incentiv' ) ); ?></button>
             </div>
             <?php endif; ?>
 
-            <div class="mmd-gift-products-table">
-                <table class="mmd-gift-table">
+            <div class="incv-gift-products-table">
+                <table class="incv-gift-table">
                     <tbody>
                         <?php $product_index = 0; ?>
                         <?php foreach ($gift_products as $gift_product_id):
@@ -1723,8 +1711,8 @@ class MMD_Product_Gifts_V2 {
                                 $rule_attr_slug = isset($gift_settings['gift_attribute_slug']) ? $gift_settings['gift_attribute_slug'] : '';
                                 $rule_attr_values = isset($gift_settings['gift_attribute_values']) ? $gift_settings['gift_attribute_values'] : array();
                                 $rule_additional_attrs = array();
-                                if (isset($gift_settings['from_rule']) && $gift_settings['from_rule'] && class_exists('MMD_Gift_Rules')) {
-                                    $matching_rule = MMD_Gift_Rules::get_instance()->get_matching_rule_for_product($product->get_id());
+                                if (isset($gift_settings['from_rule']) && $gift_settings['from_rule'] && class_exists('INCV_Gift_Rules')) {
+                                    $matching_rule = INCV_Gift_Rules::get_instance()->get_matching_rule_for_product($product->get_id());
                                     if ($matching_rule) {
                                         $rule_additional_attrs = isset($matching_rule['gift_additional_attributes']) ? $matching_rule['gift_additional_attributes'] : array();
                                     }
@@ -1855,24 +1843,24 @@ class MMD_Product_Gifts_V2 {
 
                                     $variation_name = $gift_product->get_name() . ' - ' . wc_get_formatted_variation($variation, true);
                                     ?>
-                                    <tr class="mmd-gift-product-row mmd-variation-row"
+                                    <tr class="incv-gift-product-row incv-variation-row"
                                         data-product-id="<?php echo esc_attr($gift_product_id); ?>"
                                         data-variation-id="<?php echo esc_attr($variation_data['variation_id']); ?>"
                                         data-variable="1"
                                         data-product-index="<?php echo esc_attr( $product_index ); ?>"
                                         style="<?php echo ($use_pagination && $product_index >= $products_per_page) ? 'display:none;' : ''; ?>"><?php $product_index++; ?>
-                                        <td class="mmd-gift-image-cell">
+                                        <td class="incv-gift-image-cell">
                                             <?php echo wp_kses_post( $variation->get_image('thumbnail') ); ?>
                                         </td>
-                                        <td class="mmd-gift-name-cell" colspan="2">
+                                        <td class="incv-gift-name-cell" colspan="2">
                                             <?php echo esc_html($variation_name); ?>
                                         </td>
-                                        <td class="mmd-gift-quantity-cell">
-                                            <div class="mmd-quantity-control">
-                                                <button type="button" class="mmd-quantity-btn mmd-quantity-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'incentiv' ); ?>">−</button>
-                                                <div class="mmd-quantity-input-wrapper">
+                                        <td class="incv-gift-quantity-cell">
+                                            <div class="incv-quantity-control">
+                                                <button type="button" class="incv-quantity-btn incv-quantity-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'incentiv' ); ?>">−</button>
+                                                <div class="incv-quantity-input-wrapper">
                                                     <input type="number"
-                                                           class="mmd-gift-variation-quantity-input"
+                                                           class="incv-gift-variation-quantity-input"
                                                            min="0"
                                                            max="<?php echo esc_attr($max_quantity); ?>"
                                                            value="0"
@@ -1880,10 +1868,10 @@ class MMD_Product_Gifts_V2 {
                                                            data-variation-id="<?php echo esc_attr($variation_data['variation_id']); ?>"
                                                            data-attributes="<?php echo esc_attr(json_encode($variation->get_variation_attributes())); ?>">
                                                 </div>
-                                                <button type="button" class="mmd-quantity-btn mmd-quantity-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'incentiv' ); ?>">+</button>
+                                                <button type="button" class="incv-quantity-btn incv-quantity-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'incentiv' ); ?>">+</button>
                                             </div>
                                         </td>
-                                        <td class="mmd-gift-action-cell">
+                                        <td class="incv-gift-action-cell">
                                             <span style="color: #666; font-size: 12px;"><?php esc_html_e( 'Choose quantity', 'incentiv' ); ?></span>
                                         </td>
                                     </tr>
@@ -1893,7 +1881,7 @@ class MMD_Product_Gifts_V2 {
                                 // Show as a row with remaining attribute selectors if any
                                 $display_name = $gift_product->get_name();
                                 ?>
-                                <tr class="mmd-gift-product-row"
+                                <tr class="incv-gift-product-row"
                                     data-product-id="<?php echo esc_attr($parent_product_id); ?>"
                                     data-variation-id="<?php echo esc_attr($preset_variation_id); ?>"
                                     data-variable="<?php echo !empty($remaining_attributes) ? '1' : '0'; ?>"
@@ -1901,19 +1889,19 @@ class MMD_Product_Gifts_V2 {
                                     data-preset-attributes="<?php echo esc_attr(wp_json_encode($preset_attributes)); ?>"
                                     data-product-index="<?php echo esc_attr( $product_index ); ?>"
                                     style="<?php echo ($use_pagination && $product_index >= $products_per_page) ? 'display:none;' : ''; ?>"><?php $product_index++; ?>
-                                    <td class="mmd-gift-image-cell">
+                                    <td class="incv-gift-image-cell">
                                         <?php echo wp_kses_post( $gift_product->get_image('thumbnail') ); ?>
                                     </td>
-                                    <td class="mmd-gift-name-cell">
+                                    <td class="incv-gift-name-cell">
                                         <?php echo esc_html($display_name); ?>
                                     </td>
-                                    <td class="mmd-gift-variations-cell">
+                                    <td class="incv-gift-variations-cell">
                                         <?php if (!empty($remaining_attributes)): ?>
-                                            <div class="mmd-variation-remaining-attrs">
+                                            <div class="incv-variation-remaining-attrs">
                                                 <?php foreach ($remaining_attributes as $rem_attr): ?>
-                                                    <div class="mmd-attribute-field" style="margin-bottom: 6px;">
+                                                    <div class="incv-attribute-field" style="margin-bottom: 6px;">
                                                         <label style="display: block; font-size: 12px; color: #666; margin-bottom: 2px;"><?php echo esc_html($rem_attr['label']); ?></label>
-                                                        <select class="mmd-variation-remaining-select"
+                                                        <select class="incv-variation-remaining-select"
                                                                 data-attribute-key="<?php echo esc_attr($rem_attr['key']); ?>"
                                                                 style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; color: #000;">
                                                             <option value=""><?php esc_html_e( 'Choose', 'incentiv' ); ?> <?php echo esc_html($rem_attr['label']); ?>...</option>
@@ -1927,27 +1915,27 @@ class MMD_Product_Gifts_V2 {
                                         <?php endif; ?>
                                     </td>
                                     <?php if ($allow_quantity === 'yes'): ?>
-                                    <td class="mmd-gift-quantity-cell">
-                                        <div class="mmd-quantity-control">
-                                            <button type="button" class="mmd-quantity-btn mmd-quantity-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'incentiv' ); ?>">−</button>
-                                            <div class="mmd-quantity-input-wrapper">
+                                    <td class="incv-gift-quantity-cell">
+                                        <div class="incv-quantity-control">
+                                            <button type="button" class="incv-quantity-btn incv-quantity-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'incentiv' ); ?>">−</button>
+                                            <div class="incv-quantity-input-wrapper">
                                                 <input type="number"
-                                                       class="mmd-gift-quantity-input"
+                                                       class="incv-gift-quantity-input"
                                                        min="<?php echo $gift_selection_type === 'multiple' ? '0' : '1'; ?>"
                                                        max="<?php echo esc_attr($max_quantity); ?>"
                                                        value="<?php echo $gift_selection_type === 'multiple' ? '0' : '1'; ?>"
                                                        data-product-id="<?php echo esc_attr($parent_product_id); ?>"
                                                        data-variation-id="<?php echo esc_attr($preset_variation_id); ?>">
                                             </div>
-                                            <button type="button" class="mmd-quantity-btn mmd-quantity-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'incentiv' ); ?>">+</button>
+                                            <button type="button" class="incv-quantity-btn incv-quantity-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'incentiv' ); ?>">+</button>
                                         </div>
                                     </td>
                                     <?php endif; ?>
-                                    <td class="mmd-gift-action-cell">
+                                    <td class="incv-gift-action-cell">
                                         <?php if ($allow_quantity === 'yes' && $gift_selection_type === 'multiple'): ?>
                                             <span style="color: #666; font-size: 12px;"><?php esc_html_e( 'Choose quantity', 'incentiv' ); ?></span>
                                         <?php else: ?>
-                                            <button type="button" class="mmd-gift-select-btn mmd-gift-variation-select-btn"
+                                            <button type="button" class="incv-gift-select-btn incv-gift-variation-select-btn"
                                                     data-product-id="<?php echo esc_attr($parent_product_id); ?>"
                                                     data-variation-id="<?php echo esc_attr($preset_variation_id); ?>"
                                                     data-preset-attributes="<?php echo esc_attr(wp_json_encode($preset_attributes)); ?>">
@@ -1972,8 +1960,8 @@ class MMD_Product_Gifts_V2 {
                                     }
                                     // Honor `gift_additional_attributes` (extra filters
                                     // from the wizard's category_attribute mode).
-                                    if (isset($gift_settings['from_rule']) && $gift_settings['from_rule'] && class_exists('MMD_Gift_Rules')) {
-                                        $matching = MMD_Gift_Rules::get_instance()->get_matching_rule_for_product($product->get_id());
+                                    if (isset($gift_settings['from_rule']) && $gift_settings['from_rule'] && class_exists('INCV_Gift_Rules')) {
+                                        $matching = INCV_Gift_Rules::get_instance()->get_matching_rule_for_product($product->get_id());
                                         if ($matching && !empty($matching['gift_additional_attributes']) && is_array($matching['gift_additional_attributes'])) {
                                             foreach ($matching['gift_additional_attributes'] as $add) {
                                                 if (!empty($add['slug']) && !empty($add['values'])) {
@@ -1986,50 +1974,50 @@ class MMD_Product_Gifts_V2 {
                                 }
                                 $default_variation_id = isset($default_variations[$gift_product_id]) ? $default_variations[$gift_product_id] : '';
                                 ?>
-                                <tr class="mmd-gift-product-row"
+                                <tr class="incv-gift-product-row"
                                     data-product-id="<?php echo esc_attr($gift_product_id); ?>"
                                     data-variable="<?php echo $is_variable ? '1' : '0'; ?>"
                                     data-product-index="<?php echo esc_attr( $product_index ); ?>"
                                     style="<?php echo ($use_pagination && $product_index >= $products_per_page) ? 'display:none;' : ''; ?>"
                                     <?php if ($is_variable): ?>data-variation-info="<?php echo esc_attr(json_encode($variation_data)); ?>"<?php endif; ?>
                                     <?php if ($default_variation_id): ?>data-default-variation="<?php echo esc_attr($default_variation_id); ?>"<?php endif; ?>><?php $product_index++; ?>
-                                    <td class="mmd-gift-image-cell">
+                                    <td class="incv-gift-image-cell">
                                         <?php echo wp_kses_post( $gift_product->get_image('thumbnail') ); ?>
                                     </td>
-                                    <td class="mmd-gift-name-cell">
+                                    <td class="incv-gift-name-cell">
                                         <?php echo esc_html($gift_product->get_name()); ?>
                                     </td>
-                                    <td class="mmd-gift-variations-cell">
+                                    <td class="incv-gift-variations-cell">
                                         <?php if ($is_variable): ?>
-                                            <div class="mmd-variation-selectors" style="display: none;"></div>
+                                            <div class="incv-variation-selectors" style="display: none;"></div>
                                         <?php endif; ?>
                                     </td>
                                     <?php if ($allow_quantity === 'yes'): ?>
-                                    <td class="mmd-gift-quantity-cell">
-                                        <div class="mmd-quantity-control">
-                                            <button type="button" class="mmd-quantity-btn mmd-quantity-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'incentiv' ); ?>">−</button>
-                                            <div class="mmd-quantity-input-wrapper">
+                                    <td class="incv-gift-quantity-cell">
+                                        <div class="incv-quantity-control">
+                                            <button type="button" class="incv-quantity-btn incv-quantity-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'incentiv' ); ?>">−</button>
+                                            <div class="incv-quantity-input-wrapper">
                                                 <input type="number"
-                                                       class="mmd-gift-quantity-input"
+                                                       class="incv-gift-quantity-input"
                                                        min="<?php echo $gift_selection_type === 'multiple' ? '0' : '1'; ?>"
                                                        max="<?php echo esc_attr($max_quantity); ?>"
                                                        value="<?php echo $gift_selection_type === 'multiple' ? '0' : '1'; ?>"
                                                        data-product-id="<?php echo esc_attr($gift_product_id); ?>">
                                             </div>
-                                            <button type="button" class="mmd-quantity-btn mmd-quantity-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'incentiv' ); ?>">+</button>
+                                            <button type="button" class="incv-quantity-btn incv-quantity-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'incentiv' ); ?>">+</button>
                                         </div>
                                     </td>
                                     <?php endif; ?>
-                                    <td class="mmd-gift-action-cell">
+                                    <td class="incv-gift-action-cell">
                                         <?php if ($allow_quantity === 'yes' && $gift_selection_type === 'multiple'): ?>
                                             <span style="color: #666; font-size: 12px;"><?php esc_html_e( 'Choose quantity', 'incentiv' ); ?></span>
                                         <?php else: ?>
                                             <?php if ($is_variable): ?>
-                                                <button type="button" class="mmd-gift-select-btn mmd-gift-variable-btn">
+                                                <button type="button" class="incv-gift-select-btn incv-gift-variable-btn">
                                                     <?php esc_html_e( 'Choose', 'incentiv' ); ?>
                                                 </button>
                                             <?php else: ?>
-                                                <button type="button" class="mmd-gift-select-btn" data-simple-product="<?php echo esc_attr($gift_product_id); ?>">
+                                                <button type="button" class="incv-gift-select-btn" data-simple-product="<?php echo esc_attr($gift_product_id); ?>">
                                                     <?php esc_html_e( 'Choose', 'incentiv' ); ?>
                                                 </button>
                                             <?php endif; ?>
@@ -2043,38 +2031,38 @@ class MMD_Product_Gifts_V2 {
             </div>
 
             <?php if ($use_pagination): ?>
-            <div class="mmd-gift-pagination-controls mmd-gift-pagination-bottom">
-                <button type="button" class="mmd-pagination-btn mmd-pagination-prev" disabled><?php echo wp_kses_post( __( '&laquo; Previous', 'incentiv' ) ); ?></button>
-                <span class="mmd-pagination-info"><?php esc_html_e( 'Page', 'incentiv' ); ?> <span class="mmd-current-page">1</span> <?php esc_html_e( 'of', 'incentiv' ); ?> <span class="mmd-total-pages"><?php echo esc_html( ceil($total_products / $products_per_page) ); ?></span></span>
-                <button type="button" class="mmd-pagination-btn mmd-pagination-next"><?php echo wp_kses_post( __( 'Next &raquo;', 'incentiv' ) ); ?></button>
+            <div class="incv-gift-pagination-controls incv-gift-pagination-bottom">
+                <button type="button" class="incv-pagination-btn incv-pagination-prev" disabled><?php echo wp_kses_post( __( '&laquo; Previous', 'incentiv' ) ); ?></button>
+                <span class="incv-pagination-info"><?php esc_html_e( 'Page', 'incentiv' ); ?> <span class="incv-current-page">1</span> <?php esc_html_e( 'of', 'incentiv' ); ?> <span class="incv-total-pages"><?php echo esc_html( ceil($total_products / $products_per_page) ); ?></span></span>
+                <button type="button" class="incv-pagination-btn incv-pagination-next"><?php echo wp_kses_post( __( 'Next &raquo;', 'incentiv' ) ); ?></button>
             </div>
             <?php endif; ?>
 
         </div>
 
-        <script>
+        <?php ob_start(); ?>
         jQuery(document).ready(function($) {
             // Ensure hidden fields are in the correct form
             var form = $('form.cart');
             if (form.length) {
                 <?php if ($gift_selection_type === 'multiple'): ?>
-                    if (!form.find('#mmd_selected_gifts_container').length) {
-                        form.append('<div id="mmd_selected_gifts_container"></div>');
+                    if (!form.find('#incv_selected_gifts_container').length) {
+                        form.append('<div id="incv_selected_gifts_container"></div>');
                     }
                 <?php else: ?>
-                    if (!form.find('#mmd_selected_gift_product').length) {
-                        form.append('<input type="hidden" name="mmd_selected_gift_product" id="mmd_selected_gift_product" value="">');
+                    if (!form.find('#incv_selected_gift_product').length) {
+                        form.append('<input type="hidden" name="incv_selected_gift_product" id="incv_selected_gift_product" value="">');
                     }
-                    if (!form.find('#mmd_selected_gift_variation').length) {
-                        form.append('<input type="hidden" name="mmd_selected_gift_variation" id="mmd_selected_gift_variation" value="">');
+                    if (!form.find('#incv_selected_gift_variation').length) {
+                        form.append('<input type="hidden" name="incv_selected_gift_variation" id="incv_selected_gift_variation" value="">');
                     }
-                    if (!form.find('#mmd_selected_gift_attributes').length) {
-                        form.append('<input type="hidden" name="mmd_selected_gift_attributes" id="mmd_selected_gift_attributes" value="">');
+                    if (!form.find('#incv_selected_gift_attributes').length) {
+                        form.append('<input type="hidden" name="incv_selected_gift_attributes" id="incv_selected_gift_attributes" value="">');
                     }
                 <?php endif; ?>
             }
         });
-        </script>
+        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
         <?php
     }
 
@@ -2085,17 +2073,17 @@ class MMD_Product_Gifts_V2 {
      * @param WC_Product $widget_product The product from the Elementor widget.
      */
     public function display_gift_selection_for_widget($widget_product = null) {
-        // Shoppers blocked by an add-on (filter `mmd_promotions_blocked`) get no promotions.
-        if (MMD_Modules::promotions_blocked('gifts')) {
+        // Shoppers blocked by an add-on (filter `incv_promotions_blocked`) get no promotions.
+        if (INCV_Modules::promotions_blocked('gifts')) {
             return;
         }
 
         if ($widget_product) {
             global $product;
             $original_product = $product;
-            $product = $widget_product;
+            $product = $widget_product; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's own global $product, set for the current product as WooCommerce templates expect.
             $this->display_gift_selection();
-            $product = $original_product;
+            $product = $original_product; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's own global $product, set for the current product as WooCommerce templates expect.
         } else {
             $this->display_gift_selection();
         }
@@ -2112,8 +2100,8 @@ class MMD_Product_Gifts_V2 {
         }
 
         // Get variation limiting settings from parent product
-        $limit_variations = get_post_meta($parent_product_id, '_mmd_gift_limit_variations', true);
-        $allowed_variations = get_post_meta($parent_product_id, '_mmd_gift_allowed_variations', true);
+        $limit_variations = get_post_meta($parent_product_id, '_incv_gift_limit_variations', true);
+        $allowed_variations = get_post_meta($parent_product_id, '_incv_gift_allowed_variations', true);
         $allowed_variations = !empty($allowed_variations) ? $allowed_variations : array();
 
         // Build a slug-whitelist per attribute from $rule_attr_filter (which
@@ -2462,11 +2450,11 @@ class MMD_Product_Gifts_V2 {
      * AJAX get variations (uses the reusable method)
      */
     public function ajax_get_variations() {
-        self::debug_log('MMD: ajax_get_variations called');
+        self::debug_log('INCV: ajax_get_variations called');
 
         // Check nonce
-        if (!check_ajax_referer('mmd_gift_nonce', 'nonce', false)) {
-            self::debug_log('MMD: Nonce verification failed');
+        if (!check_ajax_referer('incv_gift_nonce', 'nonce', false)) {
+            self::debug_log('INCV: Nonce verification failed');
             wp_send_json_error(array('message' => 'Nonce verification failed'));
             return;
         }
@@ -2474,10 +2462,10 @@ class MMD_Product_Gifts_V2 {
         $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
         $parent_product_id = isset($_POST['parent_product_id']) ? intval($_POST['parent_product_id']) : 0;
 
-        self::debug_log('MMD: Product ID: ' . $product_id . ', Parent ID: ' . $parent_product_id);
+        self::debug_log('INCV: Product ID: ' . $product_id . ', Parent ID: ' . $parent_product_id);
 
         if (!$product_id) {
-            self::debug_log('MMD: No product ID provided');
+            self::debug_log('INCV: No product ID provided');
             wp_send_json_error(array('message' => 'Invalid product ID'));
             return;
         }
@@ -2485,13 +2473,13 @@ class MMD_Product_Gifts_V2 {
         $product = wc_get_product($product_id);
 
         if (!$product) {
-            self::debug_log('MMD: Product not found: ' . $product_id);
+            self::debug_log('INCV: Product not found: ' . $product_id);
             wp_send_json_error(array('message' => 'Product not found'));
             return;
         }
 
         if (!$product->is_type('variable')) {
-            self::debug_log('MMD: Product is not variable: ' . $product_id . ' (type: ' . $product->get_type() . ')');
+            self::debug_log('INCV: Product is not variable: ' . $product_id . ' (type: ' . $product->get_type() . ')');
             wp_send_json_error(array('message' => 'Product is not variable'));
             return;
         }
@@ -2499,7 +2487,7 @@ class MMD_Product_Gifts_V2 {
         // Use the reusable method to get variation data
         $response_data = $this->get_variation_data($product_id, $parent_product_id);
 
-        self::debug_log('MMD: Sending successful response with ' . count($response_data['attributes']) . ' attributes and ' . count($response_data['variations']) . ' variations');
+        self::debug_log('INCV: Sending successful response with ' . count($response_data['attributes']) . ' attributes and ' . count($response_data['variations']) . ' variations');
 
         wp_send_json_success($response_data);
     }
@@ -2511,19 +2499,19 @@ class MMD_Product_Gifts_V2 {
     public function capture_ajax_gift_data($passed, $product_id, $quantity) {
         // Runs inside WooCommerce's add-to-cart request (the product form posts to WooCommerce, which has no nonce, by design, so cached product pages keep working). Values are cast or sanitized where read.
         // phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
-        self::debug_log('MMD Gift: capture_ajax_gift_data called for product ' . $product_id);
-        self::debug_log('MMD Gift: Is AJAX: ' . (defined('DOING_AJAX') && DOING_AJAX ? 'YES' : 'NO'));
+        self::debug_log('INCV Gift: capture_ajax_gift_data called for product ' . $product_id);
+        self::debug_log('INCV Gift: Is AJAX: ' . (defined('DOING_AJAX') && DOING_AJAX ? 'YES' : 'NO'));
 
         // Check all gift-related keys in the request
-        if (MMD_Helpers::debug_enabled()) {
+        if (INCV_Helpers::debug_enabled()) {
             $gift_keys_found = array();
             foreach (array_keys(array_merge($_POST, $_REQUEST)) as $key) {
                 $key = sanitize_key($key);
-                if (strpos($key, 'mmd_') === 0 || strpos($key, 'gift_') === 0) {
+                if (strpos($key, 'incv_') === 0 || strpos($key, 'gift_') === 0) {
                     $gift_keys_found[] = $key;
                 }
             }
-            self::debug_log('MMD Gift: Gift-related keys in request: ' . wp_json_encode($gift_keys_found));
+            self::debug_log('INCV Gift: Gift-related keys in request: ' . wp_json_encode($gift_keys_found));
         }
 
         // Check if this is an AJAX request
@@ -2534,44 +2522,44 @@ class MMD_Product_Gifts_V2 {
             $gift_attributes = '';
 
             // Try to get gift product ID
-            if (isset($_POST['mmd_selected_gift_product'])) {
-                $gift_product = sanitize_text_field(wp_unslash($_POST['mmd_selected_gift_product']));
-            } elseif (isset($_REQUEST['mmd_selected_gift_product'])) {
-                $gift_product = sanitize_text_field(wp_unslash($_REQUEST['mmd_selected_gift_product']));
+            if (isset($_POST['incv_selected_gift_product'])) {
+                $gift_product = sanitize_text_field(wp_unslash($_POST['incv_selected_gift_product']));
+            } elseif (isset($_REQUEST['incv_selected_gift_product'])) {
+                $gift_product = sanitize_text_field(wp_unslash($_REQUEST['incv_selected_gift_product']));
             }
 
             // Try to get gift variation ID
-            if (isset($_POST['mmd_selected_gift_variation'])) {
-                $gift_variation = sanitize_text_field(wp_unslash($_POST['mmd_selected_gift_variation']));
-            } elseif (isset($_REQUEST['mmd_selected_gift_variation'])) {
-                $gift_variation = sanitize_text_field(wp_unslash($_REQUEST['mmd_selected_gift_variation']));
+            if (isset($_POST['incv_selected_gift_variation'])) {
+                $gift_variation = sanitize_text_field(wp_unslash($_POST['incv_selected_gift_variation']));
+            } elseif (isset($_REQUEST['incv_selected_gift_variation'])) {
+                $gift_variation = sanitize_text_field(wp_unslash($_REQUEST['incv_selected_gift_variation']));
             }
 
             // Try to get gift attributes JSON
-            if (isset($_POST['mmd_selected_gift_attributes'])) {
-                $gift_attributes = sanitize_text_field(wp_unslash($_POST['mmd_selected_gift_attributes']));
-            } elseif (isset($_REQUEST['mmd_selected_gift_attributes'])) {
-                $gift_attributes = sanitize_text_field(wp_unslash($_REQUEST['mmd_selected_gift_attributes']));
+            if (isset($_POST['incv_selected_gift_attributes'])) {
+                $gift_attributes = sanitize_text_field(wp_unslash($_POST['incv_selected_gift_attributes']));
+            } elseif (isset($_REQUEST['incv_selected_gift_attributes'])) {
+                $gift_attributes = sanitize_text_field(wp_unslash($_REQUEST['incv_selected_gift_attributes']));
             }
 
             if (!empty($gift_product)) {
-                self::debug_log('MMD Gift: AJAX gift data captured - Product: ' . $gift_product . ', Variation: ' . $gift_variation);
-                self::debug_log('MMD Gift: Attributes JSON length: ' . strlen($gift_attributes));
+                self::debug_log('INCV Gift: AJAX gift data captured - Product: ' . $gift_product . ', Variation: ' . $gift_variation);
+                self::debug_log('INCV Gift: Attributes JSON length: ' . strlen($gift_attributes));
 
                 // Store in session for use in handle_gift_selection
-                WC()->session->set('mmd_temp_gift_product', $gift_product);
-                WC()->session->set('mmd_temp_gift_variation', $gift_variation);
-                WC()->session->set('mmd_temp_gift_attributes', $gift_attributes);
-                self::debug_log('MMD Gift: Stored gift data in session successfully');
+                WC()->session->set('incv_temp_gift_product', $gift_product);
+                WC()->session->set('incv_temp_gift_variation', $gift_variation);
+                WC()->session->set('incv_temp_gift_attributes', $gift_attributes);
+                self::debug_log('INCV Gift: Stored gift data in session successfully');
             } else {
-                self::debug_log('MMD Gift: WARNING - No gift product found in AJAX request, but this product may have gifts enabled');
-                self::debug_log('MMD Gift: This could be because:');
-                self::debug_log('MMD Gift: 1. User did not select a gift');
-                self::debug_log('MMD Gift: 2. Gift data was lost during AJAX transmission');
-                self::debug_log('MMD Gift: 3. This product does not have gifts enabled');
+                self::debug_log('INCV Gift: WARNING - No gift product found in AJAX request, but this product may have gifts enabled');
+                self::debug_log('INCV Gift: This could be because:');
+                self::debug_log('INCV Gift: 1. User did not select a gift');
+                self::debug_log('INCV Gift: 2. Gift data was lost during AJAX transmission');
+                self::debug_log('INCV Gift: 3. This product does not have gifts enabled');
             }
         } else {
-            self::debug_log('MMD Gift: Not an AJAX request - gift data will be read directly from POST in handle_gift_selection');
+            self::debug_log('INCV Gift: Not an AJAX request - gift data will be read directly from POST in handle_gift_selection');
         }
 
         return $passed;
@@ -2583,25 +2571,25 @@ class MMD_Product_Gifts_V2 {
      * This allows the gift data to be passed to handle_gift_selection
      */
     public function preserve_gift_data_in_session($cart_item_data, $product_id, $variation_id) {
-        self::debug_log('MMD Gift: preserve_gift_data_in_session called');
+        self::debug_log('INCV Gift: preserve_gift_data_in_session called');
 
         // Check if we have gift data in session
-        $gift_product = WC()->session->get('mmd_temp_gift_product');
-        $gift_variation = WC()->session->get('mmd_temp_gift_variation');
-        $gift_attributes = WC()->session->get('mmd_temp_gift_attributes');
+        $gift_product = WC()->session->get('incv_temp_gift_product');
+        $gift_variation = WC()->session->get('incv_temp_gift_variation');
+        $gift_attributes = WC()->session->get('incv_temp_gift_attributes');
 
         if ($gift_product) {
-            self::debug_log('MMD Gift: Found gift data in session, adding to $_POST for handle_gift_selection');
+            self::debug_log('INCV Gift: Found gift data in session, adding to $_POST for handle_gift_selection');
 
             // Add to $_POST so handle_gift_selection can find it
-            $_POST['mmd_selected_gift_product'] = $gift_product;
-            $_POST['mmd_selected_gift_variation'] = $gift_variation;
-            $_POST['mmd_selected_gift_attributes'] = $gift_attributes;
+            $_POST['incv_selected_gift_product'] = $gift_product;
+            $_POST['incv_selected_gift_variation'] = $gift_variation;
+            $_POST['incv_selected_gift_attributes'] = $gift_attributes;
 
             // Clear from session
-            WC()->session->__unset('mmd_temp_gift_product');
-            WC()->session->__unset('mmd_temp_gift_variation');
-            WC()->session->__unset('mmd_temp_gift_attributes');
+            WC()->session->__unset('incv_temp_gift_product');
+            WC()->session->__unset('incv_temp_gift_variation');
+            WC()->session->__unset('incv_temp_gift_attributes');
         }
 
         return $cart_item_data;
@@ -2615,14 +2603,14 @@ class MMD_Product_Gifts_V2 {
         // Runs inside WooCommerce's add-to-cart request (the product form posts to WooCommerce, which has no nonce, by design, so cached product pages keep working). Values are cast or sanitized where read.
         // phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
         // Skip if this item IS a gift (prevent recursion)
-        if (isset($cart_item_data['mmd_is_gift']) || isset($cart_item_data['mmd_cart_based_gift'])) {
+        if (isset($cart_item_data['incv_is_gift']) || isset($cart_item_data['incv_cart_based_gift'])) {
             return;
         }
 
         // For AJAX requests, check if gift data is in session (set by capture_ajax_gift_data)
         if (defined('DOING_AJAX') && DOING_AJAX) {
-            $session_gift = WC()->session ? WC()->session->get('mmd_temp_gift_product') : '';
-            if (empty($session_gift) && empty($_POST['mmd_selected_gift_product'])) {
+            $session_gift = WC()->session ? WC()->session->get('incv_temp_gift_product') : '';
+            if (empty($session_gift) && empty($_POST['incv_selected_gift_product'])) {
                 // No gift data available - the chained JS method will handle it
                 return;
             }
@@ -2632,8 +2620,8 @@ class MMD_Product_Gifts_V2 {
         // Check if gifts are enabled - either via product meta or global rules
         $gift_settings = $this->get_gift_settings($product_id);
         if (!$gift_settings) {
-            self::debug_log('MMD Gift: No gift settings found for product ' . $product_id);
-            self::debug_log('===== MMD Gift: handle_gift_selection END (not enabled) =====');
+            self::debug_log('INCV Gift: No gift settings found for product ' . $product_id);
+            self::debug_log('===== INCV Gift: handle_gift_selection END (not enabled) =====');
             return;
         }
 
@@ -2642,8 +2630,8 @@ class MMD_Product_Gifts_V2 {
 
         // Prevent duplicate gifts: check if a gift for this parent is already in cart
         foreach (WC()->cart->get_cart() as $existing_key => $existing_item) {
-            if (isset($existing_item['mmd_is_gift']) && $existing_item['mmd_is_gift']
-                && isset($existing_item['mmd_parent_key']) && $existing_item['mmd_parent_key'] === $cart_item_key) {
+            if (isset($existing_item['incv_is_gift']) && $existing_item['incv_is_gift']
+                && isset($existing_item['incv_parent_key']) && $existing_item['incv_parent_key'] === $cart_item_key) {
                 return;
             }
         }
@@ -2651,15 +2639,15 @@ class MMD_Product_Gifts_V2 {
         if ($selection_type === 'multiple') {
             // Handle multiple gift selection
             $selected_gifts = array();
-            if (isset($_POST['mmd_selected_gift_products']) && is_array($_POST['mmd_selected_gift_products'])) {
-                $selected_gifts = wp_unslash($_POST['mmd_selected_gift_products']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each entry's product_id/variation_id go through intval() and its URL-encoded attributes JSON is decoded and validated below.
+            if (isset($_POST['incv_selected_gift_products']) && is_array($_POST['incv_selected_gift_products'])) {
+                $selected_gifts = wp_unslash($_POST['incv_selected_gift_products']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each entry's product_id/variation_id go through intval() and its URL-encoded attributes JSON is decoded and validated below.
             }
 
-            self::debug_log('MMD Gift: Multiple selection - gifts: ' . wp_json_encode($selected_gifts));
+            self::debug_log('INCV Gift: Multiple selection - gifts: ' . wp_json_encode($selected_gifts));
 
             if (empty($selected_gifts)) {
-                self::debug_log('MMD Gift: No gifts selected in multiple mode');
-                self::debug_log('===== MMD Gift: handle_gift_selection END (no selection) =====');
+                self::debug_log('INCV Gift: No gifts selected in multiple mode');
+                self::debug_log('===== INCV Gift: handle_gift_selection END (no selection) =====');
                 return;
             }
 
@@ -2672,7 +2660,7 @@ class MMD_Product_Gifts_V2 {
                     continue;
                 }
 
-                self::debug_log('MMD Gift: Adding gift - Product: ' . $gift_product_id . ', Variation: ' . $gift_variation_id);
+                self::debug_log('INCV Gift: Adding gift - Product: ' . $gift_product_id . ', Variation: ' . $gift_variation_id);
 
                 // Parse attributes from JSON if present
                 $gift_attributes = array();
@@ -2681,21 +2669,21 @@ class MMD_Product_Gifts_V2 {
                     if (is_array($decoded)) {
                         // Attribute values are already decoded in JS, use them as-is
                         $gift_attributes = $decoded;
-                        self::debug_log('MMD Gift: Parsed gift attributes: ' . wp_json_encode($gift_attributes));
+                        self::debug_log('INCV Gift: Parsed gift attributes: ' . wp_json_encode($gift_attributes));
                     }
                 }
 
                 $gift_cart_data = array(
-                    'mmd_is_gift' => true,
-                    'mmd_parent_key' => $cart_item_key,
-                    'mmd_gift_type' => $gift_type,
-                    'mmd_parent_product_id' => $product_id
+                    'incv_is_gift' => true,
+                    'incv_parent_key' => $cart_item_key,
+                    'incv_gift_type' => $gift_type,
+                    'incv_parent_product_id' => $product_id
                 );
 
                 if ($gift_variation_id) {
                     $variation_product = wc_get_product($gift_variation_id);
                     if (!$variation_product) {
-                        self::debug_log('MMD Gift: ERROR - Variation product not found: ' . $gift_variation_id);
+                        self::debug_log('INCV Gift: ERROR - Variation product not found: ' . $gift_variation_id);
                         continue;
                     }
 
@@ -2712,9 +2700,9 @@ class MMD_Product_Gifts_V2 {
                         }
                     }
 
-                    self::debug_log('MMD Gift: Selected attributes from frontend: ' . wp_json_encode($gift_attributes));
-                    self::debug_log('MMD Gift: Variation product attributes: ' . wp_json_encode($variation_product->get_variation_attributes()));
-                    self::debug_log('MMD Gift: Merged attributes for cart: ' . wp_json_encode($variation_attributes));
+                    self::debug_log('INCV Gift: Selected attributes from frontend: ' . wp_json_encode($gift_attributes));
+                    self::debug_log('INCV Gift: Variation product attributes: ' . wp_json_encode($variation_product->get_variation_attributes()));
+                    self::debug_log('INCV Gift: Merged attributes for cart: ' . wp_json_encode($variation_attributes));
 
                     $result = WC()->cart->add_to_cart(
                         $variation_product->get_parent_id(),
@@ -2723,66 +2711,66 @@ class MMD_Product_Gifts_V2 {
                         $variation_attributes,
                         $gift_cart_data
                     );
-                    self::debug_log('MMD Gift: Variation added to cart. Result: ' . ($result ? 'SUCCESS' : 'FAILED'));
+                    self::debug_log('INCV Gift: Variation added to cart. Result: ' . ($result ? 'SUCCESS' : 'FAILED'));
                 } else {
                     $result = WC()->cart->add_to_cart($gift_product_id, $quantity, 0, array(), $gift_cart_data);
-                    self::debug_log('MMD Gift: Simple product added to cart. Result: ' . ($result ? 'SUCCESS' : 'FAILED'));
+                    self::debug_log('INCV Gift: Simple product added to cart. Result: ' . ($result ? 'SUCCESS' : 'FAILED'));
                 }
             }
         } else {
             // Handle single gift selection
-            $selected_gift = isset($_POST['mmd_selected_gift_product']) ? intval($_POST['mmd_selected_gift_product']) : 0;
-            $selected_variation = isset($_POST['mmd_selected_gift_variation']) ? intval($_POST['mmd_selected_gift_variation']) : 0;
+            $selected_gift = isset($_POST['incv_selected_gift_product']) ? intval($_POST['incv_selected_gift_product']) : 0;
+            $selected_variation = isset($_POST['incv_selected_gift_variation']) ? intval($_POST['incv_selected_gift_variation']) : 0;
             // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; decoded and validated against the product's attributes below.
-            $selected_attributes_json = isset($_POST['mmd_selected_gift_attributes']) ? wp_unslash($_POST['mmd_selected_gift_attributes']) : '';
+            $selected_attributes_json = isset($_POST['incv_selected_gift_attributes']) ? wp_unslash($_POST['incv_selected_gift_attributes']) : '';
 
-            self::debug_log('MMD Gift: Single selection - product: ' . $selected_gift . ', variation: ' . $selected_variation);
-            self::debug_log('MMD Gift: Attributes JSON: ' . $selected_attributes_json);
+            self::debug_log('INCV Gift: Single selection - product: ' . $selected_gift . ', variation: ' . $selected_variation);
+            self::debug_log('INCV Gift: Attributes JSON: ' . $selected_attributes_json);
 
             if (!$selected_gift) {
-                self::debug_log('MMD Gift: No gift product selected in single mode - POST mmd_selected_gift_product is missing or 0');
-                self::debug_log('===== MMD Gift: handle_gift_selection END (no selection) =====');
+                self::debug_log('INCV Gift: No gift product selected in single mode - POST incv_selected_gift_product is missing or 0');
+                self::debug_log('===== INCV Gift: handle_gift_selection END (no selection) =====');
                 return;
             }
 
             // Parse attributes from JSON
             $selected_attributes = array();
             if (!empty($selected_attributes_json)) {
-                self::debug_log('MMD Gift: Raw attributes JSON from POST: ' . $selected_attributes_json);
+                self::debug_log('INCV Gift: Raw attributes JSON from POST: ' . $selected_attributes_json);
 
                 // URL-decode the JSON string first (it was URL-encoded in JS to preserve special characters)
                 $decoded_json = urldecode($selected_attributes_json);
-                self::debug_log('MMD Gift: URL-decoded JSON string: ' . $decoded_json);
+                self::debug_log('INCV Gift: URL-decoded JSON string: ' . $decoded_json);
 
                 $decoded = json_decode($decoded_json, true);
                 if (is_array($decoded)) {
                     // Attribute values are already decoded in JS, use them as-is
                     $selected_attributes = $decoded;
-                    self::debug_log('MMD Gift: Successfully parsed attributes: ' . wp_json_encode($selected_attributes));
+                    self::debug_log('INCV Gift: Successfully parsed attributes: ' . wp_json_encode($selected_attributes));
                 } else {
-                    self::debug_log('MMD Gift: ERROR - Failed to JSON-decode attributes.');
-                    self::debug_log('MMD Gift: - Raw JSON: ' . $selected_attributes_json);
-                    self::debug_log('MMD Gift: - Decoded JSON: ' . $decoded_json);
-                    self::debug_log('MMD Gift: - JSON decode error: ' . json_last_error_msg());
+                    self::debug_log('INCV Gift: ERROR - Failed to JSON-decode attributes.');
+                    self::debug_log('INCV Gift: - Raw JSON: ' . $selected_attributes_json);
+                    self::debug_log('INCV Gift: - Decoded JSON: ' . $decoded_json);
+                    self::debug_log('INCV Gift: - JSON decode error: ' . json_last_error_msg());
                 }
             } else {
-                self::debug_log('MMD Gift: WARNING - No attributes JSON in POST (mmd_selected_gift_attributes is empty or not set)');
+                self::debug_log('INCV Gift: WARNING - No attributes JSON in POST (incv_selected_gift_attributes is empty or not set)');
             }
 
-            self::debug_log('MMD Gift: Adding gift to cart - product: ' . $selected_gift . ', variation: ' . $selected_variation);
+            self::debug_log('INCV Gift: Adding gift to cart - product: ' . $selected_gift . ', variation: ' . $selected_variation);
 
             $gift_cart_data = array(
-                'mmd_is_gift' => true,
-                'mmd_parent_key' => $cart_item_key,
-                'mmd_gift_type' => $gift_type,
-                'mmd_parent_product_id' => $product_id
+                'incv_is_gift' => true,
+                'incv_parent_key' => $cart_item_key,
+                'incv_gift_type' => $gift_type,
+                'incv_parent_product_id' => $product_id
             );
 
             if ($selected_variation) {
                 $variation_product = wc_get_product($selected_variation);
                 if (!$variation_product) {
-                    self::debug_log('MMD Gift: ERROR - Variation product not found: ' . $selected_variation);
-                    self::debug_log('===== MMD Gift: handle_gift_selection END (variation not found) =====');
+                    self::debug_log('INCV Gift: ERROR - Variation product not found: ' . $selected_variation);
+                    self::debug_log('===== INCV Gift: handle_gift_selection END (variation not found) =====');
                     return;
                 }
 
@@ -2791,20 +2779,20 @@ class MMD_Product_Gifts_V2 {
                 // with the actual selected values from the frontend to pass WooCommerce validation
                 $variation_attributes = $variation_product->get_variation_attributes();
 
-                self::debug_log('MMD Gift: BEFORE MERGE - Selected attributes from frontend: ' . wp_json_encode($selected_attributes));
-                self::debug_log('MMD Gift: BEFORE MERGE - Variation product attributes: ' . wp_json_encode($variation_attributes));
-                self::debug_log('MMD Gift: BEFORE MERGE - Count of selected attributes: ' . count($selected_attributes));
+                self::debug_log('INCV Gift: BEFORE MERGE - Selected attributes from frontend: ' . wp_json_encode($selected_attributes));
+                self::debug_log('INCV Gift: BEFORE MERGE - Variation product attributes: ' . wp_json_encode($variation_attributes));
+                self::debug_log('INCV Gift: BEFORE MERGE - Count of selected attributes: ' . count($selected_attributes));
 
                 // Check if selected_attributes is empty
-                if (empty($selected_attributes) && MMD_Helpers::debug_enabled()) {
-                    self::debug_log('MMD Gift: WARNING - Selected attributes is EMPTY! This will cause validation failure.');
-                    self::debug_log('MMD Gift: Checking if attributes are in POST with different keys...');
+                if (empty($selected_attributes) && INCV_Helpers::debug_enabled()) {
+                    self::debug_log('INCV Gift: WARNING - Selected attributes is EMPTY! This will cause validation failure.');
+                    self::debug_log('INCV Gift: Checking if attributes are in POST with different keys...');
 
                     // Check for attributes with 'gift_' prefix
                     foreach (array_keys($_POST) as $key) {
                         $key = sanitize_key($key);
                         if (strpos($key, 'gift_attribute_') === 0 || strpos($key, 'gift_attr') === 0) {
-                            self::debug_log('MMD Gift: Found POST key: ' . $key);
+                            self::debug_log('INCV Gift: Found POST key: ' . $key);
                         }
                     }
 
@@ -2816,7 +2804,7 @@ class MMD_Product_Gifts_V2 {
                             $all_post_attrs[sanitize_key($key)] = sanitize_text_field($value);
                         }
                     }
-                    self::debug_log('MMD Gift: All attribute_* keys in POST: ' . wp_json_encode($all_post_attrs));
+                    self::debug_log('INCV Gift: All attribute_* keys in POST: ' . wp_json_encode($all_post_attrs));
                 }
 
                 // Merge with selected attributes - selected attributes take precedence for empty variation attributes
@@ -2824,27 +2812,27 @@ class MMD_Product_Gifts_V2 {
                     // If the variation has an "any" value (empty) for this attribute, use the selected value
                     if (!isset($variation_attributes[$attr_key]) || $variation_attributes[$attr_key] === '') {
                         $variation_attributes[$attr_key] = $attr_value;
-                        self::debug_log('MMD Gift: Merged attribute ' . $attr_key . ' = ' . $attr_value);
+                        self::debug_log('INCV Gift: Merged attribute ' . $attr_key . ' = ' . $attr_value);
                     } else {
-                        self::debug_log('MMD Gift: Skipped merging ' . $attr_key . ' (variation already has value: ' . $variation_attributes[$attr_key] . ')');
+                        self::debug_log('INCV Gift: Skipped merging ' . $attr_key . ' (variation already has value: ' . $variation_attributes[$attr_key] . ')');
                     }
                 }
 
-                self::debug_log('MMD Gift: AFTER MERGE - Adding variation to cart - Parent: ' . $variation_product->get_parent_id() . ', Variation: ' . $selected_variation);
-                self::debug_log('MMD Gift: AFTER MERGE - Final merged attributes for cart: ' . wp_json_encode($variation_attributes));
+                self::debug_log('INCV Gift: AFTER MERGE - Adding variation to cart - Parent: ' . $variation_product->get_parent_id() . ', Variation: ' . $selected_variation);
+                self::debug_log('INCV Gift: AFTER MERGE - Final merged attributes for cart: ' . wp_json_encode($variation_attributes));
 
                 // Check if any required attributes are still empty
                 $has_empty_attrs = false;
                 foreach ($variation_attributes as $attr_key => $attr_value) {
                     if ($attr_value === '' || $attr_value === null) {
-                        self::debug_log('MMD Gift: WARNING - Attribute ' . $attr_key . ' is EMPTY after merge!');
+                        self::debug_log('INCV Gift: WARNING - Attribute ' . $attr_key . ' is EMPTY after merge!');
                         $has_empty_attrs = true;
                     }
                 }
 
                 if ($has_empty_attrs) {
-                    self::debug_log('MMD Gift: ERROR - Cannot add variation to cart with empty required attributes.');
-                    self::debug_log('MMD Gift: This will fail WooCommerce validation.');
+                    self::debug_log('INCV Gift: ERROR - Cannot add variation to cart with empty required attributes.');
+                    self::debug_log('INCV Gift: This will fail WooCommerce validation.');
                 }
 
                 $result = WC()->cart->add_to_cart(
@@ -2854,22 +2842,22 @@ class MMD_Product_Gifts_V2 {
                     $variation_attributes,
                     $gift_cart_data
                 );
-                self::debug_log('MMD Gift: Variation added to cart. Result: ' . ($result ? 'SUCCESS (' . $result . ')' : 'FAILED'));
+                self::debug_log('INCV Gift: Variation added to cart. Result: ' . ($result ? 'SUCCESS (' . $result . ')' : 'FAILED'));
 
                 if (!$result) {
-                    self::debug_log('MMD Gift: ADD TO CART FAILED - Dumping all diagnostic info:');
-                    self::debug_log('MMD Gift: - Parent product ID: ' . $variation_product->get_parent_id());
-                    self::debug_log('MMD Gift: - Variation ID: ' . $selected_variation);
-                    self::debug_log('MMD Gift: - Variation object type: ' . get_class($variation_product));
-                    self::debug_log('MMD Gift: - Variation is_purchasable: ' . ($variation_product->is_purchasable() ? 'YES' : 'NO'));
-                    self::debug_log('MMD Gift: - Variation is_in_stock: ' . ($variation_product->is_in_stock() ? 'YES' : 'NO'));
-                    self::debug_log('MMD Gift: - Variation stock_status: ' . $variation_product->get_stock_status());
+                    self::debug_log('INCV Gift: ADD TO CART FAILED - Dumping all diagnostic info:');
+                    self::debug_log('INCV Gift: - Parent product ID: ' . $variation_product->get_parent_id());
+                    self::debug_log('INCV Gift: - Variation ID: ' . $selected_variation);
+                    self::debug_log('INCV Gift: - Variation object type: ' . get_class($variation_product));
+                    self::debug_log('INCV Gift: - Variation is_purchasable: ' . ($variation_product->is_purchasable() ? 'YES' : 'NO'));
+                    self::debug_log('INCV Gift: - Variation is_in_stock: ' . ($variation_product->is_in_stock() ? 'YES' : 'NO'));
+                    self::debug_log('INCV Gift: - Variation stock_status: ' . $variation_product->get_stock_status());
                 }
             } else {
                 // Check if $selected_gift is actually a variation ID (happens with attribute-filtered gifts)
                 $gift_check_product = wc_get_product($selected_gift);
                 if ($gift_check_product && $gift_check_product->is_type('variation')) {
-                    self::debug_log('MMD Gift: Detected variation ID passed as product ID: ' . $selected_gift);
+                    self::debug_log('INCV Gift: Detected variation ID passed as product ID: ' . $selected_gift);
                     $variation_product = $gift_check_product;
                     $actual_variation_id = $selected_gift;
                     $actual_parent_id = $variation_product->get_parent_id();
@@ -2883,7 +2871,7 @@ class MMD_Product_Gifts_V2 {
                         }
                     }
 
-                    self::debug_log('MMD Gift: Adding variation via parent route - Parent: ' . $actual_parent_id . ', Variation: ' . $actual_variation_id);
+                    self::debug_log('INCV Gift: Adding variation via parent route - Parent: ' . $actual_parent_id . ', Variation: ' . $actual_variation_id);
                     $result = WC()->cart->add_to_cart(
                         $actual_parent_id,
                         $quantity,
@@ -2891,16 +2879,16 @@ class MMD_Product_Gifts_V2 {
                         $variation_attributes,
                         $gift_cart_data
                     );
-                    self::debug_log('MMD Gift: Variation added via parent route. Result: ' . ($result ? 'SUCCESS (' . $result . ')' : 'FAILED'));
+                    self::debug_log('INCV Gift: Variation added via parent route. Result: ' . ($result ? 'SUCCESS (' . $result . ')' : 'FAILED'));
                 } else {
-                    self::debug_log('MMD Gift: Adding simple product to cart - Product: ' . $selected_gift);
+                    self::debug_log('INCV Gift: Adding simple product to cart - Product: ' . $selected_gift);
                     $result = WC()->cart->add_to_cart($selected_gift, $quantity, 0, array(), $gift_cart_data);
-                    self::debug_log('MMD Gift: Simple product added to cart. Result: ' . ($result ? 'SUCCESS (' . $result . ')' : 'FAILED'));
+                    self::debug_log('INCV Gift: Simple product added to cart. Result: ' . ($result ? 'SUCCESS (' . $result . ')' : 'FAILED'));
                 }
             }
         }
 
-        self::debug_log('===== MMD Gift: handle_gift_selection END (completed) =====');
+        self::debug_log('===== INCV Gift: handle_gift_selection END (completed) =====');
         // phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
     }
 
@@ -2908,8 +2896,8 @@ class MMD_Product_Gifts_V2 {
      * Apply gift pricing
      */
     public function apply_gift_pricing($cart) {
-        // Shoppers blocked by an add-on (filter `mmd_promotions_blocked`) get no promotions.
-        if (MMD_Modules::promotions_blocked('gifts')) {
+        // Shoppers blocked by an add-on (filter `incv_promotions_blocked`) get no promotions.
+        if (INCV_Modules::promotions_blocked('gifts')) {
             return;
         }
 
@@ -2918,11 +2906,11 @@ class MMD_Product_Gifts_V2 {
         }
 
         foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
-            if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
-                $gift_type = isset($cart_item['mmd_gift_type']) ? $cart_item['mmd_gift_type'] : '';
+            if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
+                $gift_type = isset($cart_item['incv_gift_type']) ? $cart_item['incv_gift_type'] : '';
                 $original_price = $cart_item['data']->get_price();
 
-                $parent_product_id = isset($cart_item['mmd_parent_product_id']) ? $cart_item['mmd_parent_product_id'] : 0;
+                $parent_product_id = isset($cart_item['incv_parent_product_id']) ? $cart_item['incv_parent_product_id'] : 0;
 
                 // If gift_type is empty, resolve it from gift settings (supports rules)
                 if (empty($gift_type) && $parent_product_id) {
@@ -2938,7 +2926,7 @@ class MMD_Product_Gifts_V2 {
                 $gift_discount = 0;
                 if ($parent_product_id && ($gift_type === 'discount' || $gift_type === 'fixed_discount')) {
                     $gift_settings = isset($gift_settings) ? $gift_settings : $this->get_gift_settings($parent_product_id);
-                    $gift_discount = $gift_settings ? $gift_settings['gift_discount'] : get_post_meta($parent_product_id, '_mmd_gift_discount', true);
+                    $gift_discount = $gift_settings ? $gift_settings['gift_discount'] : get_post_meta($parent_product_id, '_incv_gift_discount', true);
                 }
 
                 if ($gift_type === 'free') {
@@ -2958,8 +2946,8 @@ class MMD_Product_Gifts_V2 {
      * Display gift badge in cart
      */
     public function display_gift_in_cart($item_data, $cart_item) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
-            $gift_type = $cart_item['mmd_gift_type'];
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
+            $gift_type = $cart_item['incv_gift_type'];
 
             $label = '';
             if ($gift_type === 'free') {
@@ -2981,14 +2969,14 @@ class MMD_Product_Gifts_V2 {
      * Display gift badge in cart name
      */
     public function display_gift_badge_in_cart($name, $cart_item, $cart_item_key) {
-        $is_product_page_gift = isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift'];
-        $is_cart_based_gift = isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift'];
+        $is_product_page_gift = isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift'];
+        $is_cart_based_gift = isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift'];
 
         if ($is_product_page_gift || $is_cart_based_gift) {
             // Get styling options
             $styling = array();
-            if (class_exists('MMD_Gift_Rules')) {
-                $gift_rules = MMD_Gift_Rules::get_instance();
+            if (class_exists('INCV_Gift_Rules')) {
+                $gift_rules = INCV_Gift_Rules::get_instance();
                 $styling = $gift_rules->get_styling_options();
             }
 
@@ -2999,25 +2987,25 @@ class MMD_Product_Gifts_V2 {
 
             // Custom badge for cart-based gifts showing discount type
             if ($is_cart_based_gift) {
-                $gift_type = isset($cart_item['mmd_gift_type']) ? $cart_item['mmd_gift_type'] : 'free';
+                $gift_type = isset($cart_item['incv_gift_type']) ? $cart_item['incv_gift_type'] : 'free';
                 if ($gift_type === 'free') {
                     $badge_text = __( '🎁 Free gift', 'incentiv' );
                 } elseif ($gift_type === 'discount') {
-                    $badge_text = ( __( '🎁 Discount', 'incentiv' ) . ' ' ) . $cart_item['mmd_gift_discount'] . '%';
+                    $badge_text = ( __( '🎁 Discount', 'incentiv' ) . ' ' ) . $cart_item['incv_gift_discount'] . '%';
                 } elseif ($gift_type === 'fixed_discount') {
-                    $badge_text = ( __( '🎁 Discount', 'incentiv' ) . ' ' ) . wc_price($cart_item['mmd_gift_discount']);
+                    $badge_text = ( __( '🎁 Discount', 'incentiv' ) . ' ' ) . wc_price($cart_item['incv_gift_discount']);
                 }
             }
 
-            $name .= ' <span class="mmd-gift-badge" style="background: linear-gradient(135deg, ' . esc_attr($bg_color_1) . ' 0%, ' . esc_attr($bg_color_2) . ' 100%); color: ' . esc_attr($text_color) . '; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-right: 5px;">' . $badge_text . '</span>';
+            $name .= ' <span class="incv-gift-badge" style="background: linear-gradient(135deg, ' . esc_attr($bg_color_1) . ' 0%, ' . esc_attr($bg_color_2) . ' 100%); color: ' . esc_attr($text_color) . '; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-right: 5px;">' . $badge_text . '</span>';
 
             // Inline "Switch gift" button on the cart item row itself, so
             // the customer can change their gift selection without scrolling
             // back to the selector notice at the top of the page.
             if ($is_cart_based_gift) {
-                $rule_id = isset($cart_item['mmd_gift_rule_id']) ? $cart_item['mmd_gift_rule_id'] : '';
-                $name .= '<div class="mmd-cart-item-switch-gift" style="margin-top:4px;">'
-                       . '<button type="button" class="mmd-switch-gift-btn button" data-rule-id="' . esc_attr($rule_id) . '" style="font-size:12px;padding:2px 10px;line-height:1.5;height:auto;background:#fff;color:#7c3aed;border:1px solid #7c3aed;border-radius:14px;cursor:pointer;">🔄 ' . esc_html__('Switch gift', 'incentiv') . '</button>'
+                $rule_id = isset($cart_item['incv_gift_rule_id']) ? $cart_item['incv_gift_rule_id'] : '';
+                $name .= '<div class="incv-cart-item-switch-gift" style="margin-top:4px;">'
+                       . '<button type="button" class="incv-switch-gift-btn button" data-rule-id="' . esc_attr($rule_id) . '" style="font-size:12px;padding:2px 10px;line-height:1.5;height:auto;background:#fff;color:#7c3aed;border:1px solid #7c3aed;border-radius:14px;cursor:pointer;">🔄 ' . esc_html__('Switch gift', 'incentiv') . '</button>'
                        . '</div>';
             }
         }
@@ -3031,8 +3019,8 @@ class MMD_Product_Gifts_V2 {
     public function prevent_gift_removal($link, $cart_item_key) {
         $cart_item = WC()->cart->get_cart_item($cart_item_key);
 
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
-            return ( '<span class="mmd-gift-locked" style="color: #999;" title="' . esc_attr__( 'This product is a gift and cannot be removed manually', 'incentiv' ) . '">🔒</span>' );
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
+            return ( '<span class="incv-gift-locked" style="color: #999;" title="' . esc_attr__( 'This product is a gift and cannot be removed manually', 'incentiv' ) . '">🔒</span>' );
         }
 
         return $link;
@@ -3042,7 +3030,7 @@ class MMD_Product_Gifts_V2 {
      * Lock gift quantity - Standard Cart
      */
     public function lock_gift_quantity($product_quantity, $cart_item_key, $cart_item) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
             return sprintf('%s <input type="hidden" name="cart[%s][qty]" value="%s" />', $cart_item['quantity'], $cart_item_key, $cart_item['quantity']);
         }
         return $product_quantity;
@@ -3052,7 +3040,7 @@ class MMD_Product_Gifts_V2 {
      * Lock gift quantity - Checkout and Mini Cart (Arg order: HTML, Item, Key)
      */
     public function lock_gift_quantity_checkout($quantity_html, $cart_item, $cart_item_key) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
             // Just return the quantity number and hidden input, effectively removing buttons/inputs
             return sprintf('%s <input type="hidden" name="cart[%s][qty]" value="%s" />', $cart_item['quantity'], $cart_item_key, $cart_item['quantity']);
         }
@@ -3063,8 +3051,8 @@ class MMD_Product_Gifts_V2 {
      * Add CSS class to gift items in cart
      */
     public function add_gift_cart_item_class($class, $cart_item, $cart_item_key) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
-            $class .= ' mmd-gift-item-row';
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
+            $class .= ' incv-gift-item-row';
         }
         return $class;
     }
@@ -3073,8 +3061,8 @@ class MMD_Product_Gifts_V2 {
      * Add CSS class to gift items in mini cart
      */
     public function add_gift_mini_cart_item_class($class, $cart_item, $cart_item_key) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
-            $class .= ' mmd-gift-mini-cart-item';
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
+            $class .= ' incv-gift-mini-cart-item';
         }
         return $class;
     }
@@ -3084,8 +3072,8 @@ class MMD_Product_Gifts_V2 {
      */
     public function remove_associated_gifts($cart_item_key, $cart) {
         foreach ($cart->get_cart() as $key => $cart_item) {
-            if (isset($cart_item['mmd_is_gift']) &&
-                $cart_item['mmd_parent_key'] === $cart_item_key) {
+            if (isset($cart_item['incv_is_gift']) &&
+                $cart_item['incv_parent_key'] === $cart_item_key) {
                 $cart->remove_cart_item($key);
             }
         }
@@ -3101,12 +3089,12 @@ class MMD_Product_Gifts_V2 {
             self::debug_log($message);
         };
 
-        $log('===== MMD Gift AJAX: ajax_add_gift_to_cart START =====');
+        $log('===== INCV Gift AJAX: ajax_add_gift_to_cart START =====');
 
         try {
             // Check nonce
-            if (!check_ajax_referer('mmd_gift_nonce', 'nonce', false)) {
-                $log('MMD Gift AJAX: Nonce verification failed');
+            if (!check_ajax_referer('incv_gift_nonce', 'nonce', false)) {
+                $log('INCV Gift AJAX: Nonce verification failed');
                 wp_send_json_error(array('message' => 'Security check failed'));
                 return;
             }
@@ -3119,21 +3107,21 @@ class MMD_Product_Gifts_V2 {
             $gift_attributes_json = isset($_POST['gift_attributes']) ? wp_unslash($_POST['gift_attributes']) : '';
 
             // Fallback to the standard field name used elsewhere if the dedicated one is missing
-            if (empty($gift_attributes_json) && isset($_POST['mmd_selected_gift_attributes'])) {
-                $gift_attributes_json = wp_unslash($_POST['mmd_selected_gift_attributes']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; validated below.
-                $log('MMD Gift AJAX: gift_attributes missing, using mmd_selected_gift_attributes fallback');
+            if (empty($gift_attributes_json) && isset($_POST['incv_selected_gift_attributes'])) {
+                $gift_attributes_json = wp_unslash($_POST['incv_selected_gift_attributes']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; validated below.
+                $log('INCV Gift AJAX: gift_attributes missing, using incv_selected_gift_attributes fallback');
             }
 
             $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
 
-            $log('MMD Gift AJAX: Parent product ID: ' . $parent_product_id);
-            $log('MMD Gift AJAX: Gift product ID: ' . $gift_product_id);
-            $log('MMD Gift AJAX: Gift variation ID: ' . $gift_variation_id);
-            $log('MMD Gift AJAX: Quantity: ' . $quantity);
-            $log('MMD Gift AJAX: Attributes JSON: ' . $gift_attributes_json);
+            $log('INCV Gift AJAX: Parent product ID: ' . $parent_product_id);
+            $log('INCV Gift AJAX: Gift product ID: ' . $gift_product_id);
+            $log('INCV Gift AJAX: Gift variation ID: ' . $gift_variation_id);
+            $log('INCV Gift AJAX: Quantity: ' . $quantity);
+            $log('INCV Gift AJAX: Attributes JSON: ' . $gift_attributes_json);
 
             if (!$gift_product_id || !$parent_product_id) {
-                $log('MMD Gift AJAX: Missing required parameters');
+                $log('INCV Gift AJAX: Missing required parameters');
                 wp_send_json_error(array('message' => 'Missing required parameters'));
                 return;
             }
@@ -3144,7 +3132,7 @@ class MMD_Product_Gifts_V2 {
             if ($cart) {
                 foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
                     // Check if this is the parent product (not a gift)
-                    if ($cart_item['product_id'] == $parent_product_id && !isset($cart_item['mmd_is_gift'])) {
+                    if ($cart_item['product_id'] == $parent_product_id && !isset($cart_item['incv_is_gift'])) {
                         $parent_cart_item_key = $cart_item_key;
                         // Don't break - we want the last one (most recent)
                     }
@@ -3152,16 +3140,16 @@ class MMD_Product_Gifts_V2 {
             }
 
             if (!$parent_cart_item_key) {
-                $log('MMD Gift AJAX: Parent product not found in cart');
+                $log('INCV Gift AJAX: Parent product not found in cart');
                 // Continue anyway - the gift will still be added, just without parent association
                 $parent_cart_item_key = 'unknown';
             }
 
-            $log('MMD Gift AJAX: Found parent cart key: ' . $parent_cart_item_key);
+            $log('INCV Gift AJAX: Found parent cart key: ' . $parent_cart_item_key);
 
             // Get gift settings - use get_gift_settings to support both product meta and gift rules
             $gift_settings = $this->get_gift_settings($parent_product_id);
-            $gift_type = $gift_settings ? $gift_settings['gift_type'] : get_post_meta($parent_product_id, '_mmd_gift_type', true);
+            $gift_type = $gift_settings ? $gift_settings['gift_type'] : get_post_meta($parent_product_id, '_incv_gift_type', true);
             if (empty($gift_type)) {
                 $gift_type = 'free'; // Default to free if not set
             }
@@ -3173,27 +3161,27 @@ class MMD_Product_Gifts_V2 {
 
                 // Handle cases where the JSON payload was URL encoded before reaching PHP
                 if (!is_array($decoded) && $gift_attributes_json !== urldecode($gift_attributes_json)) {
-                    $log('MMD Gift AJAX: First JSON decode failed, attempting urldecode fallback');
+                    $log('INCV Gift AJAX: First JSON decode failed, attempting urldecode fallback');
                     $decoded = json_decode(urldecode($gift_attributes_json), true);
                 }
 
                 if (is_array($decoded)) {
                     $gift_attributes = $decoded;
-                    $log('MMD Gift AJAX: Parsed attributes: ' . wp_json_encode($gift_attributes));
-                    $log('MMD Gift AJAX: Raw JSON received: ' . $gift_attributes_json);
+                    $log('INCV Gift AJAX: Parsed attributes: ' . wp_json_encode($gift_attributes));
+                    $log('INCV Gift AJAX: Raw JSON received: ' . $gift_attributes_json);
                 } else {
-                    $log('MMD Gift AJAX: Failed to parse attributes JSON');
-                    $log('MMD Gift AJAX: JSON error: ' . json_last_error_msg());
-                    $log('MMD Gift AJAX: Raw JSON: ' . $gift_attributes_json);
+                    $log('INCV Gift AJAX: Failed to parse attributes JSON');
+                    $log('INCV Gift AJAX: JSON error: ' . json_last_error_msg());
+                    $log('INCV Gift AJAX: Raw JSON: ' . $gift_attributes_json);
                 }
             }
 
             // Prepare cart item data
             $gift_cart_data = array(
-                'mmd_is_gift' => true,
-                'mmd_parent_key' => $parent_cart_item_key,
-                'mmd_gift_type' => $gift_type,
-                'mmd_parent_product_id' => $parent_product_id
+                'incv_is_gift' => true,
+                'incv_parent_key' => $parent_cart_item_key,
+                'incv_gift_type' => $gift_type,
+                'incv_parent_product_id' => $parent_product_id
             );
 
             $cart_item_key = false;
@@ -3203,7 +3191,7 @@ class MMD_Product_Gifts_V2 {
                 // Adding a variation product
                 $variation_product = wc_get_product($gift_variation_id);
                 if (!$variation_product || !($variation_product instanceof WC_Product_Variation)) {
-                    $log('MMD Gift AJAX: Variation product not found or invalid type: ' . $gift_variation_id);
+                    $log('INCV Gift AJAX: Variation product not found or invalid type: ' . $gift_variation_id);
                     wp_send_json_error(array('message' => 'Variation product not found'));
                     return;
                 }
@@ -3211,8 +3199,8 @@ class MMD_Product_Gifts_V2 {
                 // Get variation attributes from the product (these keys might be encoded!)
                 $original_variation_attributes = $variation_product->get_variation_attributes();
 
-                $log('MMD Gift AJAX: Original variation attributes (from product): ' . wp_json_encode($original_variation_attributes));
-                $log('MMD Gift AJAX: Gift attributes to merge (from user): ' . wp_json_encode($gift_attributes));
+                $log('INCV Gift AJAX: Original variation attributes (from product): ' . wp_json_encode($original_variation_attributes));
+                $log('INCV Gift AJAX: Gift attributes to merge (from user): ' . wp_json_encode($gift_attributes));
 
                 // Create a mapping of decoded keys to original (potentially encoded) keys
                 // We need to pass the KEYS exactly as they appear in $original_variation_attributes for WooCommerce to validate them
@@ -3235,48 +3223,48 @@ class MMD_Product_Gifts_V2 {
                     $decoded_user_key = urldecode($user_key);
                     $decoded_user_val = urldecode($user_val);
 
-                    $log('MMD Gift AJAX: Processing user attribute: ' . $user_key . ' => ' . $decoded_user_key . ' = ' . $decoded_user_val);
+                    $log('INCV Gift AJAX: Processing user attribute: ' . $user_key . ' => ' . $decoded_user_key . ' = ' . $decoded_user_val);
 
                     if (isset($key_map[$decoded_user_key])) {
                         $correct_key = $key_map[$decoded_user_key];
                         $final_variation_attributes[$correct_key] = $decoded_user_val;
-                        $log('MMD Gift AJAX: Mapped to correct key: ' . $correct_key . ' = ' . $decoded_user_val);
+                        $log('INCV Gift AJAX: Mapped to correct key: ' . $correct_key . ' = ' . $decoded_user_val);
                     } else {
                         // Fallback: if we can't map it, just use the key as provided (maybe it's a new custom attribute)
                         // But first try to add 'attribute_' prefix if missing
                         if (strpos($decoded_user_key, 'attribute_') === false) {
                             $final_variation_attributes['attribute_' . $decoded_user_key] = $decoded_user_val;
-                            $log('MMD Gift AJAX: Unmapped key, adding with prefix: attribute_' . $decoded_user_key);
+                            $log('INCV Gift AJAX: Unmapped key, adding with prefix: attribute_' . $decoded_user_key);
                         } else {
                             $final_variation_attributes[$decoded_user_key] = $decoded_user_val;
-                            $log('MMD Gift AJAX: Unmapped key, using as is: ' . $decoded_user_key);
+                            $log('INCV Gift AJAX: Unmapped key, using as is: ' . $decoded_user_key);
                         }
                     }
                 }
 
-                $log('MMD Gift AJAX: Final attributes for add_to_cart: ' . wp_json_encode($final_variation_attributes));
+                $log('INCV Gift AJAX: Final attributes for add_to_cart: ' . wp_json_encode($final_variation_attributes));
 
                 // Validate variation using WooCommerce's validation
                 try {
                     // Check if variation is valid and in stock
                     if (!$variation_product->is_purchasable()) {
-                        $log('MMD Gift AJAX: Variation is not purchasable');
+                        $log('INCV Gift AJAX: Variation is not purchasable');
                         wp_send_json_error(array('message' => 'Variation is not available for purchase'));
                         return;
                     }
 
                     if (!$variation_product->is_in_stock()) {
-                        $log('MMD Gift AJAX: Variation is out of stock');
+                        $log('INCV Gift AJAX: Variation is out of stock');
                         wp_send_json_error(array('message' => 'Variation is out of stock'));
                         return;
                     }
 
                     // Log exactly what we're passing to add_to_cart
-                    $log('MMD Gift AJAX: ===== CALLING WC()->cart->add_to_cart =====');
-                    $log('MMD Gift AJAX: Parameter 1 (parent_id): ' . $variation_product->get_parent_id());
-                    $log('MMD Gift AJAX: Parameter 2 (quantity): ' . $quantity);
-                    $log('MMD Gift AJAX: Parameter 3 (variation_id): ' . $gift_variation_id);
-                    $log('MMD Gift AJAX: Parameter 4 (variation_attributes): ' . wp_json_encode($final_variation_attributes));
+                    $log('INCV Gift AJAX: ===== CALLING WC()->cart->add_to_cart =====');
+                    $log('INCV Gift AJAX: Parameter 1 (parent_id): ' . $variation_product->get_parent_id());
+                    $log('INCV Gift AJAX: Parameter 2 (quantity): ' . $quantity);
+                    $log('INCV Gift AJAX: Parameter 3 (variation_id): ' . $gift_variation_id);
+                    $log('INCV Gift AJAX: Parameter 4 (variation_attributes): ' . wp_json_encode($final_variation_attributes));
 
                     // Add to cart with error handling
                     $cart_item_key = WC()->cart->add_to_cart(
@@ -3290,8 +3278,8 @@ class MMD_Product_Gifts_V2 {
                     // Check for WooCommerce notices if add_to_cart failed
                     if (!$cart_item_key) {
                         $notices = wc_get_notices('error');
-                        $log('MMD Gift AJAX: ❌ WooCommerce add_to_cart FAILED - returned false');
-                        $log('MMD Gift AJAX: WooCommerce error notices: ' . wp_json_encode($notices));
+                        $log('INCV Gift AJAX: ❌ WooCommerce add_to_cart FAILED - returned false');
+                        $log('INCV Gift AJAX: WooCommerce error notices: ' . wp_json_encode($notices));
 
                         // Clear notices to prevent them showing to user
                         wc_clear_notices();
@@ -3301,25 +3289,25 @@ class MMD_Product_Gifts_V2 {
                             $error_message .= ': ' . $notices[0]['notice'];
                         }
 
-                        $log('MMD Gift AJAX: Sending error response: ' . $error_message);
+                        $log('INCV Gift AJAX: Sending error response: ' . $error_message);
                         wp_send_json_error(array('message' => $error_message));
                         return;
                     } else {
-                        $log('MMD Gift AJAX: ✅ add_to_cart succeeded! Cart key: ' . $cart_item_key);
+                        $log('INCV Gift AJAX: ✅ add_to_cart succeeded! Cart key: ' . $cart_item_key);
                     }
                 } catch (Exception $e) {
-                    self::debug_log('MMD Gift AJAX: Exception during add to cart: ' . $e->getMessage());
+                    self::debug_log('INCV Gift AJAX: Exception during add to cart: ' . $e->getMessage());
                     wp_send_json_error(array('message' => 'Error adding variation to cart: ' . $e->getMessage()));
                     return;
                 }
             } else {
                 // Adding a simple product
-                self::debug_log('MMD Gift AJAX: Adding simple product to cart');
+                self::debug_log('INCV Gift AJAX: Adding simple product to cart');
                 $cart_item_key = WC()->cart->add_to_cart($gift_product_id, $quantity, 0, array(), $gift_cart_data);
 
                 if (!$cart_item_key) {
                     $notices = wc_get_notices('error');
-                    self::debug_log('MMD Gift AJAX: WooCommerce add_to_cart failed for simple product');
+                    self::debug_log('INCV Gift AJAX: WooCommerce add_to_cart failed for simple product');
                     wc_clear_notices();
 
                     $error_message = 'Failed to add simple product to cart';
@@ -3333,17 +3321,17 @@ class MMD_Product_Gifts_V2 {
             }
 
             if ($cart_item_key) {
-                self::debug_log('MMD Gift AJAX: Successfully added gift to cart. Cart key: ' . $cart_item_key);
+                self::debug_log('INCV Gift AJAX: Successfully added gift to cart. Cart key: ' . $cart_item_key);
                 wp_send_json_success(array(
                     'message' => 'Gift added to cart',
                     'cart_item_key' => $cart_item_key
                 ));
             }
 
-            self::debug_log('===== MMD Gift AJAX: ajax_add_gift_to_cart END =====');
+            self::debug_log('===== INCV Gift AJAX: ajax_add_gift_to_cart END =====');
         } catch (Exception $e) {
-            self::debug_log('MMD Gift AJAX: CRITICAL ERROR - ' . $e->getMessage());
-            self::debug_log('MMD Gift AJAX: Stack trace - ' . $e->getTraceAsString());
+            self::debug_log('INCV Gift AJAX: CRITICAL ERROR - ' . $e->getMessage());
+            self::debug_log('INCV Gift AJAX: Stack trace - ' . $e->getTraceAsString());
             wp_send_json_error(array('message' => 'Critical error: ' . $e->getMessage()));
         }
     }
@@ -3399,13 +3387,13 @@ class MMD_Product_Gifts_V2 {
             $debug_data['cart_items'][] = array(
                 'product_id' => $cart_item['product_id'],
                 'variation_id' => isset($cart_item['variation_id']) ? $cart_item['variation_id'] : 0,
-                'is_gift' => isset($cart_item['mmd_is_gift']) ? $cart_item['mmd_is_gift'] : false,
-                'is_cart_based_gift' => isset($cart_item['mmd_cart_based_gift']) ? $cart_item['mmd_cart_based_gift'] : false,
+                'is_gift' => isset($cart_item['incv_is_gift']) ? $cart_item['incv_is_gift'] : false,
+                'is_cart_based_gift' => isset($cart_item['incv_cart_based_gift']) ? $cart_item['incv_cart_based_gift'] : false,
             );
         }
 
-        if (class_exists('MMD_Gift_Rules')) {
-            $gift_rules = MMD_Gift_Rules::get_instance();
+        if (class_exists('INCV_Gift_Rules')) {
+            $gift_rules = INCV_Gift_Rules::get_instance();
             $all_rules = $gift_rules->get_rule_sets();
             foreach ($all_rules as $rule) {
                 $debug_data['rules'][] = array(
@@ -3424,13 +3412,13 @@ class MMD_Product_Gifts_V2 {
         // Rule and cart details go to the browser console only in debug mode.
         $debug_console = self::is_debug_enabled();
         if ($debug_console) {
-            echo '<script>console.log("MMD Cart Gift Debug:", ' . wp_json_encode($debug_data) . ');</script>';
+            INCV_Helpers::add_inline_script('console.log("INCV Cart Gift Debug:", ' . wp_json_encode($debug_data, INCV_Helpers::JSON_INLINE) . ');', array());
         }
 
         $cart_based_gifts = $this->get_cart_based_gift_eligibility();
 
         if ($debug_console) {
-            echo '<script>console.log("MMD Cart Gift Eligibility:", ' . wp_json_encode($cart_based_gifts) . ');</script>';
+            INCV_Helpers::add_inline_script('console.log("INCV Cart Gift Eligibility:", ' . wp_json_encode($cart_based_gifts, INCV_Helpers::JSON_INLINE) . ');', array());
         }
 
         if (empty($cart_based_gifts)) {
@@ -3461,12 +3449,12 @@ class MMD_Product_Gifts_V2 {
 
             if ($gift_claimed) {
                 $claimed_text = __( '✅ Your gift was added to the cart! (', 'incentiv' ) . $gift_type_text . ')';
-                echo '<div class="woocommerce-info mmd-cart-gift-notice mmd-gift-claimed" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none;">';
-                echo '<span class="mmd-gift-icon">🎁</span> ' . esc_html($claimed_text);
+                echo '<div class="woocommerce-info incv-cart-gift-notice incv-gift-claimed" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none;">';
+                echo '<span class="incv-gift-icon">🎁</span> ' . esc_html($claimed_text);
                 echo '</div>';
             } else {
-                echo '<div class="woocommerce-info mmd-cart-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none;">';
-                echo '<span class="mmd-gift-icon">🎁</span> ' . esc_html($notice_text);
+                echo '<div class="woocommerce-info incv-cart-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none;">';
+                echo '<span class="incv-gift-icon">🎁</span> ' . esc_html($notice_text);
                 echo ' <strong>(' . esc_html($gift_type_text) . ')</strong>';
                 echo '</div>';
             }
@@ -3483,7 +3471,7 @@ class MMD_Product_Gifts_V2 {
             }
 
             if (!empty($custom_message)) {
-                echo '<div class="woocommerce-info mmd-custom-gift-message" style="margin-bottom: 20px; background: #e8f5e9; border-left: 4px solid #7c3aed; padding: 12px; color: #333;">';
+                echo '<div class="woocommerce-info incv-custom-gift-message" style="margin-bottom: 20px; background: #e8f5e9; border-left: 4px solid #7c3aed; padding: 12px; color: #333;">';
                 echo '<div style="line-height: 1.6;">' . wp_kses_post($custom_message) . '</div>';
                 echo '</div>';
             }
@@ -3503,8 +3491,8 @@ class MMD_Product_Gifts_V2 {
         $product_id = $product->get_id();
 
         // Check if this product matches any cart-based gift rule
-        if (class_exists('MMD_Gift_Rules')) {
-            $gift_rules = MMD_Gift_Rules::get_instance();
+        if (class_exists('INCV_Gift_Rules')) {
+            $gift_rules = INCV_Gift_Rules::get_instance();
             $matching_rule = $gift_rules->get_matching_rule_for_product($product_id);
 
             if ($matching_rule && isset($matching_rule['gift_mode']) && $matching_rule['gift_mode'] === 'cart_based') {
@@ -3521,8 +3509,8 @@ class MMD_Product_Gifts_V2 {
                     }
                 }
 
-                echo '<div class="woocommerce-info mmd-product-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none; margin-bottom: 20px; padding: 15px; border-radius: 8px;">';
-                echo '<span class="mmd-gift-icon" style="font-size: 1.5em;">🎁</span> ' . esc_html($notice_text);
+                echo '<div class="woocommerce-info incv-product-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none; margin-bottom: 20px; padding: 15px; border-radius: 8px;">';
+                echo '<span class="incv-gift-icon" style="font-size: 1.5em;">🎁</span> ' . esc_html($notice_text);
                 if ($gift_type_text) {
                     echo ' <strong>(' . esc_html($gift_type_text) . ')</strong>';
                 }
@@ -3530,20 +3518,20 @@ class MMD_Product_Gifts_V2 {
 
                 // Debug output (debug mode only)
                 if (self::is_debug_enabled()) {
-                    echo '<script>console.log("MMD Product Page Gift Notice: Product ' . esc_attr( $product_id ) . ' matches rule: ' . esc_js($matching_rule['name']) . '");</script>';
+                    INCV_Helpers::add_inline_script('console.log("INCV Product Page Gift Notice: Product ' . absint( $product_id ) . ' matches rule: ' . esc_js($matching_rule['name']) . '");', array());
                 }
             }
         }
 
         // Also check product-level settings
-        $gift_mode = get_post_meta($product_id, '_mmd_gift_mode', true);
-        $gift_enabled = get_post_meta($product_id, '_mmd_gift_enabled', true);
+        $gift_mode = get_post_meta($product_id, '_incv_gift_mode', true);
+        $gift_enabled = get_post_meta($product_id, '_incv_gift_enabled', true);
 
         if ($gift_enabled === '1' && $gift_mode === 'cart_based') {
-            $cart_gift_notice = get_post_meta($product_id, '_mmd_cart_gift_notice', true);
+            $cart_gift_notice = get_post_meta($product_id, '_incv_cart_gift_notice', true);
             $notice_text = !empty($cart_gift_notice) ? $cart_gift_notice : __( 'You have a gift! Add a product from the participating categories to get a discount', 'incentiv' );
-            $gift_type = get_post_meta($product_id, '_mmd_gift_type', true);
-            $gift_discount = get_post_meta($product_id, '_mmd_gift_discount', true);
+            $gift_type = get_post_meta($product_id, '_incv_gift_type', true);
+            $gift_discount = get_post_meta($product_id, '_incv_gift_discount', true);
 
             $gift_type_text = '';
             if ($gift_type === 'free') {
@@ -3554,8 +3542,8 @@ class MMD_Product_Gifts_V2 {
                 $gift_type_text = ( __( 'A discount of', 'incentiv' ) . ' ' ) . wc_price($gift_discount);
             }
 
-            echo '<div class="woocommerce-info mmd-product-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none; margin-bottom: 20px; padding: 15px; border-radius: 8px;">';
-            echo '<span class="mmd-gift-icon" style="font-size: 1.5em;">🎁</span> ' . esc_html($notice_text);
+            echo '<div class="woocommerce-info incv-product-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none; margin-bottom: 20px; padding: 15px; border-radius: 8px;">';
+            echo '<span class="incv-gift-icon" style="font-size: 1.5em;">🎁</span> ' . esc_html($notice_text);
             if ($gift_type_text) {
                 echo ' <strong>(' . esc_html($gift_type_text) . ')</strong>';
             }
@@ -3591,7 +3579,7 @@ class MMD_Product_Gifts_V2 {
 
             $gift_claimed = $this->is_cart_gift_claimed($gift_info);
 
-            echo '<div class="mmd-mini-cart-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 10px; margin: 10px 0; border-radius: 5px; font-size: 13px;">';
+            echo '<div class="incv-mini-cart-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; padding: 10px; margin: 10px 0; border-radius: 5px; font-size: 13px;">';
             if ($gift_claimed) {
                 echo '<span>✅ ' . esc_html__('Gift added!', 'incentiv') . '</span>';
             } else {
@@ -3610,7 +3598,7 @@ class MMD_Product_Gifts_V2 {
         $cart_gifts = array();
         $processed_rules = array();
 
-        self::debug_log('=== MMD Cart Gift Debug: get_cart_based_gift_eligibility START ===');
+        self::debug_log('=== INCV Cart Gift Debug: get_cart_based_gift_eligibility START ===');
 
         // Coupon-driven gifts: any gift rule whose required coupon is applied
         // is eligible regardless of cart contents. A coupon campaign with
@@ -3621,8 +3609,8 @@ class MMD_Product_Gifts_V2 {
         if (WC()->cart) {
             $applied_coupons = array_map('strtolower', WC()->cart->get_applied_coupons());
         }
-        if (!empty($applied_coupons) && class_exists('MMD_Gift_Rules')) {
-            $gift_rules_inst = MMD_Gift_Rules::get_instance();
+        if (!empty($applied_coupons) && class_exists('INCV_Gift_Rules')) {
+            $gift_rules_inst = INCV_Gift_Rules::get_instance();
             foreach ($gift_rules_inst->get_rule_sets() as $rule) {
                 if (empty($rule['id'])) continue;
                 if (isset($rule['enabled']) && $rule['enabled'] === 'no') continue;
@@ -3685,34 +3673,34 @@ class MMD_Product_Gifts_V2 {
 
         foreach (WC()->cart->get_cart() as $cart_item) {
             $product_id = $cart_item['product_id'];
-            self::debug_log('MMD Cart Gift Debug: Checking product ID: ' . $product_id);
+            self::debug_log('INCV Cart Gift Debug: Checking product ID: ' . $product_id);
 
             // Skip items that are already gifts
-            if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
-                self::debug_log('MMD Cart Gift Debug: Skipping - is already a gift');
+            if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
+                self::debug_log('INCV Cart Gift Debug: Skipping - is already a gift');
                 continue;
             }
 
             // Skip items that are cart-based gifts
-            if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) {
-                self::debug_log('MMD Cart Gift Debug: Skipping - is cart-based gift');
+            if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) {
+                self::debug_log('INCV Cart Gift Debug: Skipping - is cart-based gift');
                 continue;
             }
 
             // Check global rules first
-            if (class_exists('MMD_Gift_Rules')) {
-                $gift_rules = MMD_Gift_Rules::get_instance();
+            if (class_exists('INCV_Gift_Rules')) {
+                $gift_rules = INCV_Gift_Rules::get_instance();
                 $all_rules = $gift_rules->get_rule_sets();
-                self::debug_log('MMD Cart Gift Debug: Total rules found: ' . count($all_rules));
+                self::debug_log('INCV Cart Gift Debug: Total rules found: ' . count($all_rules));
                 foreach ($all_rules as $rule) {
-                    self::debug_log('MMD Cart Gift Debug: Rule "' . $rule['name'] . '" - enabled: ' . ($rule['enabled'] ?? 'not set') . ', gift_mode: ' . ($rule['gift_mode'] ?? 'not set') . ', selection_method: ' . ($rule['selection_method'] ?? 'not set'));
+                    self::debug_log('INCV Cart Gift Debug: Rule "' . $rule['name'] . '" - enabled: ' . ($rule['enabled'] ?? 'not set') . ', gift_mode: ' . ($rule['gift_mode'] ?? 'not set') . ', selection_method: ' . ($rule['selection_method'] ?? 'not set'));
                 }
 
                 $matching_rule = $gift_rules->get_matching_rule_for_product($product_id);
-                self::debug_log('MMD Cart Gift Debug: Matching rule for product ' . $product_id . ': ' . ($matching_rule ? $matching_rule['name'] : 'NONE'));
+                self::debug_log('INCV Cart Gift Debug: Matching rule for product ' . $product_id . ': ' . ($matching_rule ? $matching_rule['name'] : 'NONE'));
 
                 if ($matching_rule) {
-                    self::debug_log('MMD Cart Gift Debug: Rule gift_mode: ' . ($matching_rule['gift_mode'] ?? 'NOT SET'));
+                    self::debug_log('INCV Cart Gift Debug: Rule gift_mode: ' . ($matching_rule['gift_mode'] ?? 'NOT SET'));
                 }
 
                 if ($matching_rule && isset($matching_rule['gift_mode'])) {
@@ -3725,8 +3713,8 @@ class MMD_Product_Gifts_V2 {
                         // Check if any gift from this rule is already in the cart
                         $has_gift_in_cart = false;
                         foreach (WC()->cart->get_cart() as $check_item) {
-                            if ((isset($check_item['mmd_is_gift']) && $check_item['mmd_is_gift']) ||
-                                (isset($check_item['mmd_cart_based_gift']) && $check_item['mmd_cart_based_gift'])) {
+                            if ((isset($check_item['incv_is_gift']) && $check_item['incv_is_gift']) ||
+                                (isset($check_item['incv_cart_based_gift']) && $check_item['incv_cart_based_gift'])) {
                                 $has_gift_in_cart = true;
                                 break;
                             }
@@ -3838,8 +3826,8 @@ class MMD_Product_Gifts_V2 {
             }
 
             // Check product-level settings
-            $gift_mode = get_post_meta($product_id, '_mmd_gift_mode', true);
-            $gift_enabled = get_post_meta($product_id, '_mmd_gift_enabled', true);
+            $gift_mode = get_post_meta($product_id, '_incv_gift_mode', true);
+            $gift_enabled = get_post_meta($product_id, '_incv_gift_enabled', true);
 
             if ($gift_enabled === '1' && $gift_mode === 'cart_based') {
                 // Skip if a rule already covers this
@@ -3848,9 +3836,9 @@ class MMD_Product_Gifts_V2 {
                 }
 
                 $gift_products = $this->get_gift_products_from_product_meta($product_id);
-                $cart_gift_notice = get_post_meta($product_id, '_mmd_cart_gift_notice', true);
-                $gift_type = get_post_meta($product_id, '_mmd_gift_type', true);
-                $gift_discount = get_post_meta($product_id, '_mmd_gift_discount', true);
+                $cart_gift_notice = get_post_meta($product_id, '_incv_cart_gift_notice', true);
+                $gift_type = get_post_meta($product_id, '_incv_gift_type', true);
+                $gift_discount = get_post_meta($product_id, '_incv_gift_discount', true);
 
                 $cart_gifts[] = array(
                     'source' => 'product',
@@ -3859,8 +3847,8 @@ class MMD_Product_Gifts_V2 {
                     'gift_type' => !empty($gift_type) ? $gift_type : 'free',
                     'gift_discount' => !empty($gift_discount) ? floatval($gift_discount) : 0,
                     'gift_products' => $gift_products,
-                    'gift_source' => get_post_meta($product_id, '_mmd_gift_source', true) ?: 'specific',
-                    'gift_categories' => get_post_meta($product_id, '_mmd_gift_categories', true) ?: array(),
+                    'gift_source' => get_post_meta($product_id, '_incv_gift_source', true) ?: 'specific',
+                    'gift_categories' => get_post_meta($product_id, '_incv_gift_categories', true) ?: array(),
                 );
             }
         }
@@ -3885,7 +3873,7 @@ class MMD_Product_Gifts_V2 {
             // Check if this item is in the gift products list
             if (in_array($cart_item['product_id'], $gift_products) || in_array($item_product_id, $gift_products)) {
                 // Check if it has the cart-based gift discount applied
-                if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) {
+                if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) {
                     return true;
                 }
             }
@@ -3903,16 +3891,16 @@ class MMD_Product_Gifts_V2 {
      * @return string Modified price HTML
      */
     public function display_cart_based_gift_price($price, $cart_item, $cart_item_key) {
-        if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) {
+        if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) {
             $product = $cart_item['data'];
-            $gift_type = isset($cart_item['mmd_gift_type']) ? $cart_item['mmd_gift_type'] : 'free';
+            $gift_type = isset($cart_item['incv_gift_type']) ? $cart_item['incv_gift_type'] : 'free';
 
             if ($gift_type === 'free') {
-                return '<span class="mmd-gift-price">' . wc_price(0) . '</span> <del>' . $price . '</del>';
+                return '<span class="incv-gift-price">' . wc_price(0) . '</span> <del>' . $price . '</del>';
             } else {
                 // For discount types, show current price (already modified by apply_cart_based_gift_discounts)
                 $current_price = $product->get_price();
-                return '<span class="mmd-gift-price">' . wc_price($current_price) . '</span>';
+                return '<span class="incv-gift-price">' . wc_price($current_price) . '</span>';
             }
         }
         return $price;
@@ -3927,17 +3915,17 @@ class MMD_Product_Gifts_V2 {
      * @return string Modified subtotal HTML
      */
     public function display_cart_based_gift_subtotal($subtotal, $cart_item, $cart_item_key) {
-        if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) {
+        if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) {
             $product = $cart_item['data'];
-            $gift_type = isset($cart_item['mmd_gift_type']) ? $cart_item['mmd_gift_type'] : 'free';
+            $gift_type = isset($cart_item['incv_gift_type']) ? $cart_item['incv_gift_type'] : 'free';
             $quantity = $cart_item['quantity'];
 
             if ($gift_type === 'free') {
-                return '<span class="mmd-gift-subtotal">' . wc_price(0) . '</span> <del>' . $subtotal . '</del>';
+                return '<span class="incv-gift-subtotal">' . wc_price(0) . '</span> <del>' . $subtotal . '</del>';
             } else {
                 // For discount types, calculate based on current price
                 $current_price = $product->get_price();
-                return '<span class="mmd-gift-subtotal">' . wc_price($current_price * $quantity) . '</span>';
+                return '<span class="incv-gift-subtotal">' . wc_price($current_price * $quantity) . '</span>';
             }
         }
         return $subtotal;
@@ -3949,8 +3937,8 @@ class MMD_Product_Gifts_V2 {
      * @param WC_Cart $cart Cart object
      */
     public function apply_cart_based_gift_discounts($cart) {
-        // Shoppers blocked by an add-on (filter `mmd_promotions_blocked`) get no promotions.
-        if (MMD_Modules::promotions_blocked('gifts')) {
+        // Shoppers blocked by an add-on (filter `incv_promotions_blocked`) get no promotions.
+        if (INCV_Modules::promotions_blocked('gifts')) {
             return;
         }
 
@@ -3997,18 +3985,18 @@ class MMD_Product_Gifts_V2 {
 
         foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
             // Skip items that are already marked as product-page gifts
-            if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
+            if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
                 $debug_info['skipped_reasons'][] = 'Item ' . $cart_item_key . ' - already a product-page gift';
                 continue;
             }
 
             // Only zero / discount items the customer EXPLICITLY claimed via
-            // the gift selector (ajax_add_cart_gift sets mmd_cart_based_gift=true).
+            // the gift selector (ajax_add_cart_gift sets incv_cart_based_gift=true).
             // Without this guard, any regular cart item whose parent happens
             // to be in the rule's gift_products list (e.g. another coffee in
             // the same category as the gift pool) gets auto-converted to a
             // free gift and the customer's purchase becomes ₪0.
-            if (empty($cart_item['mmd_cart_based_gift'])) {
+            if (empty($cart_item['incv_cart_based_gift'])) {
                 continue;
             }
 
@@ -4076,9 +4064,9 @@ class MMD_Product_Gifts_V2 {
                     }
 
                     // Mark this item as a cart-based gift
-                    $cart->cart_contents[$cart_item_key]['mmd_cart_based_gift'] = true;
-                    $cart->cart_contents[$cart_item_key]['mmd_gift_type'] = $gift_info['gift_type'];
-                    $cart->cart_contents[$cart_item_key]['mmd_gift_discount'] = $gift_info['gift_discount'];
+                    $cart->cart_contents[$cart_item_key]['incv_cart_based_gift'] = true;
+                    $cart->cart_contents[$cart_item_key]['incv_gift_type'] = $gift_info['gift_type'];
+                    $cart->cart_contents[$cart_item_key]['incv_gift_discount'] = $gift_info['gift_discount'];
 
                     // Apply the discount
                     $product = $cart_item['data'];
@@ -4133,11 +4121,11 @@ class MMD_Product_Gifts_V2 {
             add_action('wp_footer', function() use ($debug_info) {
                 // Output easy-to-read summary first. Every value goes through
                 // wp_json_encode() so it is a safe JS literal.
-                $log = function ( $label, $value ) {
-                    echo 'console.log(' . wp_json_encode( (string) $label ) . ', ' . wp_json_encode( $value ) . ');';
+                $js  = '';
+                $log = function ( $label, $value ) use ( &$js ) {
+                    $js .= 'console.log(' . wp_json_encode( (string) $label, INCV_Helpers::JSON_INLINE ) . ', ' . wp_json_encode( $value, INCV_Helpers::JSON_INLINE ) . ");\n";
                 };
-                echo '<script>';
-                $log( '=== MMD CART GIFT DEBUG SUMMARY ===', '' );
+                $log( '=== INCV CART GIFT DEBUG SUMMARY ===', '' );
                 $log( 'Cart items count:', count( $debug_info['cart_items'] ) );
                 $log( 'Cart-based gifts count:', $debug_info['cart_based_gifts_count'] ?? 0 );
 
@@ -4161,9 +4149,9 @@ class MMD_Product_Gifts_V2 {
                 $log( 'Applied gifts:', count( $debug_info['applied_gifts'] ?? array() ) );
                 $log( 'Result:', $debug_info['result'] ?? 'unknown' );
                 $log( '=== FULL DEBUG DATA ===', '' );
-                $log( 'MMD Cart Gift Apply Debug:', $debug_info );
-                echo '</script>';
-            }, 999);
+                $log( 'INCV Cart Gift Apply Debug:', $debug_info );
+                INCV_Helpers::add_inline_script( $js, array() );
+            }, 5);
         }
     }
     /**
@@ -4171,8 +4159,8 @@ class MMD_Product_Gifts_V2 {
      * Called during woocommerce_before_calculate_totals
      */
     public function apply_combined_discount_rules($cart) {
-        // Shoppers blocked by an add-on (filter `mmd_promotions_blocked`) get no promotions.
-        if (MMD_Modules::promotions_blocked('gifts')) {
+        // Shoppers blocked by an add-on (filter `incv_promotions_blocked`) get no promotions.
+        if (INCV_Modules::promotions_blocked('gifts')) {
             return;
         }
 
@@ -4180,11 +4168,11 @@ class MMD_Product_Gifts_V2 {
             return;
         }
 
-        if (!class_exists('MMD_Gift_Rules')) {
+        if (!class_exists('INCV_Gift_Rules')) {
             return;
         }
 
-        $gift_rules = MMD_Gift_Rules::get_instance();
+        $gift_rules = INCV_Gift_Rules::get_instance();
         $all_rules = $gift_rules->get_rule_sets();
 
         // Find rules with combined discounts enabled
@@ -4223,8 +4211,8 @@ class MMD_Product_Gifts_V2 {
 
             foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
                 // Skip gift items
-                if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) continue;
-                if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) continue;
+                if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) continue;
+                if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) continue;
 
                 $product_id = $cart_item['product_id'];
 
@@ -4262,8 +4250,8 @@ class MMD_Product_Gifts_V2 {
                     $product = $cart_item['data'];
                     $price = floatval($product->get_price());
                     $new_price = $this->calculate_combined_discount($price, $applicable_discount);
-                    if (class_exists('MMD_Margin_Guards')) {
-                        $new_price = MMD_Margin_Guards::enforce_margin_floor($new_price, $product, $rule);
+                    if (class_exists('INCV_Margin_Guards')) {
+                        $new_price = INCV_Margin_Guards::enforce_margin_floor($new_price, $product, $rule);
                     }
                     $product->set_price(max(0, $new_price));
                 }
@@ -4306,8 +4294,8 @@ class MMD_Product_Gifts_V2 {
                     } else {
                         $unit_price = max(0, $price - $discount_amount);
                     }
-                    if (class_exists('MMD_Margin_Guards')) {
-                        $unit_price = MMD_Margin_Guards::enforce_margin_floor($unit_price, $product, $rule);
+                    if (class_exists('INCV_Margin_Guards')) {
+                        $unit_price = INCV_Margin_Guards::enforce_margin_floor($unit_price, $product, $rule);
                     }
                     $product->set_price(max(0, $unit_price));
                 }
@@ -4342,7 +4330,7 @@ class MMD_Product_Gifts_V2 {
      */
     private function rule_matches($rule, $product_id, $gift_rules = null) {
         if (!$gift_rules) {
-            $gift_rules = MMD_Gift_Rules::get_instance();
+            $gift_rules = INCV_Gift_Rules::get_instance();
         }
         $matching = $gift_rules->get_matching_rule_for_product($product_id);
         return $matching && $matching['id'] === $rule['id'];
@@ -4355,9 +4343,9 @@ class MMD_Product_Gifts_V2 {
         global $product;
         if (!$product) return;
 
-        if (!class_exists('MMD_Gift_Rules')) return;
+        if (!class_exists('INCV_Gift_Rules')) return;
 
-        $gift_rules = MMD_Gift_Rules::get_instance();
+        $gift_rules = INCV_Gift_Rules::get_instance();
         $matching_rule = $gift_rules->get_matching_rule_for_product($product->get_id());
 
         if (!$matching_rule) return;
@@ -4385,7 +4373,7 @@ class MMD_Product_Gifts_V2 {
         }
 
         ?>
-        <div class="mmd-combined-discount-notice" style="
+        <div class="incv-combined-discount-notice" style="
             background: <?php echo esc_attr($notice_color); ?>;
             color: white;
             padding: 15px;
@@ -4453,15 +4441,15 @@ class MMD_Product_Gifts_V2 {
      */
     public function display_cart_combined_discount_notice() {
         if (!WC()->cart || WC()->cart->is_empty()) return;
-        if (!class_exists('MMD_Gift_Rules')) return;
+        if (!class_exists('INCV_Gift_Rules')) return;
 
-        $gift_rules = MMD_Gift_Rules::get_instance();
+        $gift_rules = INCV_Gift_Rules::get_instance();
         $all_rules = $gift_rules->get_rule_sets();
         $displayed_rules = array();
 
         foreach (WC()->cart->get_cart() as $cart_item) {
-            if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) continue;
-            if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) continue;
+            if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) continue;
+            if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) continue;
 
             $product_id = $cart_item['product_id'];
             $matching_rule = $gift_rules->get_matching_rule_for_product($product_id);
@@ -4485,8 +4473,8 @@ class MMD_Product_Gifts_V2 {
             // Count matching items in cart for this rule
             $current_qty = 0;
             foreach (WC()->cart->get_cart() as $ci) {
-                if (isset($ci['mmd_is_gift']) && $ci['mmd_is_gift']) continue;
-                if (isset($ci['mmd_cart_based_gift']) && $ci['mmd_cart_based_gift']) continue;
+                if (isset($ci['incv_is_gift']) && $ci['incv_is_gift']) continue;
+                if (isset($ci['incv_cart_based_gift']) && $ci['incv_cart_based_gift']) continue;
                 if ($gift_rules->get_matching_rule_for_product($ci['product_id']) &&
                     $gift_rules->get_matching_rule_for_product($ci['product_id'])['id'] === $matching_rule['id']) {
                     $current_qty += $ci['quantity'];
@@ -4504,7 +4492,7 @@ class MMD_Product_Gifts_V2 {
                 }
             }
 
-            echo '<div class="woocommerce-info mmd-combined-discount-cart-notice" style="background: ' . esc_attr($notice_color) . '; color: white; border: none; padding: 12px 18px; border-radius: 8px; margin-bottom: 15px;">';
+            echo '<div class="woocommerce-info incv-combined-discount-cart-notice" style="background: ' . esc_attr($notice_color) . '; color: white; border: none; padding: 12px 18px; border-radius: 8px; margin-bottom: 15px;">';
             echo '<strong>' . esc_html($notice_title) . '</strong>';
 
             if ($current_tier) {
@@ -4524,13 +4512,13 @@ class MMD_Product_Gifts_V2 {
 
     /**
      * Shortcode for gift selection - allows embedding on any page
-     * Usage: [mmd_gift_selection] or [mmd_gift_selection product_id="123"]
+     * Usage: [incv_gift_selection] or [incv_gift_selection product_id="123"]
      */
     public function gift_selection_shortcode($atts) {
         $atts = shortcode_atts(array(
             'product_id' => '',
             'context' => 'auto', // 'product', 'cart', 'auto'
-        ), $atts, 'mmd_gift_selection');
+        ), $atts, 'incv_gift_selection');
 
         ob_start();
 
@@ -4550,11 +4538,11 @@ class MMD_Product_Gifts_V2 {
             if (!empty($atts['product_id'])) {
                 global $product;
                 $original_product = $product;
-                $product = wc_get_product(intval($atts['product_id']));
+                $product = wc_get_product(intval($atts['product_id'])); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's own global $product, set for the current product as WooCommerce templates expect.
                 if ($product) {
                     $this->display_gift_selection();
                 }
-                $product = $original_product;
+                $product = $original_product; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's own global $product, set for the current product as WooCommerce templates expect.
             } else {
                 $this->display_gift_selection();
             }
@@ -4592,7 +4580,7 @@ class MMD_Product_Gifts_V2 {
         // Ensure product global is set
         global $product;
         if (!$product || !is_object($product)) {
-            $product = wc_get_product($post_id);
+            $product = wc_get_product($post_id); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's own global $product, set for the current product as WooCommerce templates expect.
         }
 
         if (!$product) {
@@ -4622,10 +4610,10 @@ class MMD_Product_Gifts_V2 {
         $gift_html_escaped = wp_json_encode($gift_html);
 
         ?>
-        <script>
+        <?php ob_start(); ?>
         jQuery(document).ready(function($) {
             // Skip if already injected
-            if ($('.mmd-gift-selection-container').length) return;
+            if ($('.incv-gift-selection-container').length) return;
 
             // Extended target list for all known Elementor product page structures
             var insertTargets = [
@@ -4664,7 +4652,7 @@ class MMD_Product_Gifts_V2 {
                     }
 
                     // Ensure the container has correct inline styles
-                    var $container = $('.mmd-gift-selection-container');
+                    var $container = $('.incv-gift-selection-container');
                     $container.css({
                         'display': 'block',
                         'position': 'static',
@@ -4674,10 +4662,10 @@ class MMD_Product_Gifts_V2 {
 
                     // Ensure hidden fields are in the form
                     var $form = $('form.cart');
-                    if ($form.length && !$form.find('#mmd_selected_gift_product').length) {
-                        $form.append('<input type="hidden" name="mmd_selected_gift_product" id="mmd_selected_gift_product" value="">');
-                        $form.append('<input type="hidden" name="mmd_selected_gift_variation" id="mmd_selected_gift_variation" value="">');
-                        $form.append('<input type="hidden" name="mmd_selected_gift_attributes" id="mmd_selected_gift_attributes" value="">');
+                    if ($form.length && !$form.find('#incv_selected_gift_product').length) {
+                        $form.append('<input type="hidden" name="incv_selected_gift_product" id="incv_selected_gift_product" value="">');
+                        $form.append('<input type="hidden" name="incv_selected_gift_variation" id="incv_selected_gift_variation" value="">');
+                        $form.append('<input type="hidden" name="incv_selected_gift_attributes" id="incv_selected_gift_attributes" value="">');
                     }
 
                     return;
@@ -4685,7 +4673,7 @@ class MMD_Product_Gifts_V2 {
             }
 
         });
-        </script>
+        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
         <?php
     }
 
@@ -4709,8 +4697,8 @@ class MMD_Product_Gifts_V2 {
 
         // Get styling options
         $styling = array();
-        if (class_exists('MMD_Gift_Rules')) {
-            $gift_rules = MMD_Gift_Rules::get_instance();
+        if (class_exists('INCV_Gift_Rules')) {
+            $gift_rules = INCV_Gift_Rules::get_instance();
             $styling = $gift_rules->get_styling_options();
         }
 
@@ -4735,9 +4723,9 @@ class MMD_Product_Gifts_V2 {
 
             if ($gift_claimed) {
                 $rule_id_for_switch = isset($gift_info['rule_id']) ? $gift_info['rule_id'] : '';
-                echo '<div class="woocommerce-info mmd-cart-gift-notice mmd-gift-claimed" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">';
-                echo ( '<span><span class="mmd-gift-icon" style="font-size: 1.3em;">🎁</span> ' . esc_html__( '✅ Your gift was added to the cart! (', 'incentiv' ) ) . esc_html($gift_type_text) . ')</span>';
-                echo '<button type="button" class="mmd-switch-gift-btn" data-rule-id="' . esc_attr($rule_id_for_switch) . ( '" style="background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.5); padding: 6px 14px; border-radius: 16px; cursor: pointer; font-size: 13px; font-weight: 500;">' . esc_html_x( 'Switch gift', 'picker', 'incentiv' ) . '</button>' );
+                echo '<div class="woocommerce-info incv-cart-gift-notice incv-gift-claimed" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">';
+                echo ( '<span><span class="incv-gift-icon" style="font-size: 1.3em;">🎁</span> ' . esc_html__( '✅ Your gift was added to the cart! (', 'incentiv' ) ) . esc_html($gift_type_text) . ')</span>';
+                echo '<button type="button" class="incv-switch-gift-btn" data-rule-id="' . esc_attr($rule_id_for_switch) . ( '" style="background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.5); padding: 6px 14px; border-radius: 16px; cursor: pointer; font-size: 13px; font-weight: 500;">' . esc_html_x( 'Switch gift', 'picker', 'incentiv' ) . '</button>' );
                 echo '</div>';
                 self::mark_gift_rendered($rendered_key);
                 continue;
@@ -4756,37 +4744,37 @@ class MMD_Product_Gifts_V2 {
 
             // Modal mode: show trigger button + hidden modal
             if ($show_as_modal) {
-                echo '<div class="woocommerce-info mmd-cart-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">';
+                echo '<div class="woocommerce-info incv-cart-gift-notice" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white; border: none; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">';
                 echo '<span style="font-size: 1.3em;">🎁</span> ' . esc_html($notice_text) . ' <strong>(' . esc_html($gift_type_text) . ')</strong><br>';
-                echo ( '<button type="button" class="mmd-open-gift-modal-btn" style="margin-top: 10px; background: white; color: #7c3aed; border: none; padding: 10px 24px; border-radius: 24px; font-weight: bold; cursor: pointer; font-size: 14px;">' . esc_html__( 'Choose a gift', 'incentiv' ) . '</button>' );
+                echo ( '<button type="button" class="incv-open-gift-modal-btn" style="margin-top: 10px; background: white; color: #7c3aed; border: none; padding: 10px 24px; border-radius: 24px; font-weight: bold; cursor: pointer; font-size: 14px;">' . esc_html__( 'Choose a gift', 'incentiv' ) . '</button>' );
                 echo '</div>';
             }
 
             // Build the selector content (used both inline and in modal)
-            $container_class = $show_as_modal ? 'mmd-cart-gift-modal-content' : '';
+            $container_class = $show_as_modal ? 'incv-cart-gift-modal-content' : '';
             $container_style = $show_as_modal ? 'display: none;' : 'display: block !important; position: static !important;';
             ?>
             <?php if ($show_as_modal): ?>
-            <div class="mmd-cart-gift-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999; background: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
+            <div class="incv-cart-gift-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999; background: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
                 <div style="background: white; border-radius: 12px; max-width: 700px; width: 90%; max-height: 85vh; overflow-y: auto; position: relative;">
-                    <button type="button" class="mmd-close-gift-modal" style="position: absolute; top: 10px; left: 10px; background: none; border: none; font-size: 24px; cursor: pointer; z-index: 1; color: #999;">&times;</button>
+                    <button type="button" class="incv-close-gift-modal" style="position: absolute; top: 10px; left: 10px; background: none; border: none; font-size: 24px; cursor: pointer; z-index: 1; color: #999;">&times;</button>
             <?php endif; ?>
 
-            <div class="mmd-cart-gift-selection-container mmd-gift-selection-container <?php echo esc_attr($container_class); ?>"
+            <div class="incv-cart-gift-selection-container incv-gift-selection-container <?php echo esc_attr($container_class); ?>"
                  data-trigger-product="<?php echo esc_attr($trigger_product_id); ?>"
                  data-rule-id="<?php echo esc_attr($rule_id); ?>"
                  data-gift-type="<?php echo esc_attr($gift_info['gift_type']); ?>"
                  data-gift-discount="<?php echo esc_attr($gift_info['gift_discount']); ?>"
                  data-selection-type="<?php echo esc_attr($gift_selection_type); ?>"
                  style="<?php echo esc_attr( $container_style ); ?>">
-                <div class="mmd-gift-title">🎁 <?php echo esc_html($notice_text); ?></div>
-                <p class="mmd-gift-subtitle">
+                <div class="incv-gift-title">🎁 <?php echo esc_html($notice_text); ?></div>
+                <p class="incv-gift-subtitle">
                     <?php echo esc_html($gift_type_text); ?> -
                     <?php echo $gift_selection_type === 'multiple' ? esc_html__( 'Choose one or more:', 'incentiv' ) : esc_html__( 'Choose one product:', 'incentiv' ); ?>
                 </p>
 
-                <div class="mmd-gift-products-table">
-                    <table class="mmd-gift-table">
+                <div class="incv-gift-products-table">
+                    <table class="incv-gift-table">
                         <tbody>
                             <?php foreach ($gift_products as $gift_product_id):
                                 $gift_product = wc_get_product($gift_product_id);
@@ -4984,15 +4972,15 @@ class MMD_Product_Gifts_V2 {
                                     $variations_json = wp_json_encode($var_data);
                                 }
                             ?>
-                                <tr class="mmd-gift-product-row mmd-cart-gift-row"
+                                <tr class="incv-gift-product-row incv-cart-gift-row"
                                     data-product-id="<?php echo esc_attr($actual_product_id); ?>"
                                     data-variation-id="<?php echo esc_attr($variation_id); ?>"
                                     data-variable="<?php echo $is_variable ? '1' : '0'; ?>"
                                     <?php if ($variations_json): ?>data-variations="<?php echo esc_attr($variations_json); ?>"<?php endif; ?>>
-                                    <td class="mmd-gift-image-cell">
+                                    <td class="incv-gift-image-cell">
                                         <?php echo wp_kses_post( $gift_product->get_image('thumbnail') ); ?>
                                     </td>
-                                    <td class="mmd-gift-name-cell">
+                                    <td class="incv-gift-name-cell">
                                         <?php echo esc_html($display_name); ?>
                                         <?php if (!$is_variable && !$is_variation):
                                             $regular_price = $gift_product->get_regular_price();
@@ -5013,15 +5001,15 @@ class MMD_Product_Gifts_V2 {
                                             </div>
                                         <?php endif; endif; ?>
                                     </td>
-                                    <td class="mmd-gift-variations-cell">
+                                    <td class="incv-gift-variations-cell">
                                         <?php if ($is_variable && !empty($attribute_selectors)): ?>
-                                            <div class="mmd-cart-gift-attributes" data-product-id="<?php echo esc_attr($gift_product_id); ?>">
+                                            <div class="incv-cart-gift-attributes" data-product-id="<?php echo esc_attr($gift_product_id); ?>">
                                                 <?php foreach ($attribute_selectors as $attr):
                                                     $attr_default = isset($attr['default']) ? $attr['default'] : '';
                                                     ?>
-                                                    <div class="mmd-cart-gift-attr-field" style="margin-bottom: 6px;">
+                                                    <div class="incv-cart-gift-attr-field" style="margin-bottom: 6px;">
                                                         <label style="display: block; font-size: 12px; color: #666; margin-bottom: 2px;"><?php echo esc_html($attr['label']); ?></label>
-                                                        <select class="mmd-cart-gift-attr-select"
+                                                        <select class="incv-cart-gift-attr-select"
                                                                 data-attribute="attribute_<?php echo esc_attr($attr['name']); ?>"
                                                                 style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
                                                             <option value=""<?php echo $attr_default === '' ? '' : ''; ?>><?php esc_html_e( 'Choose', 'incentiv' ); ?> <?php echo esc_html($attr['label']); ?>...</option>
@@ -5034,8 +5022,8 @@ class MMD_Product_Gifts_V2 {
                                             </div>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="mmd-gift-action-cell">
-                                        <button type="button" class="mmd-gift-select-btn mmd-cart-gift-add-btn"
+                                    <td class="incv-gift-action-cell">
+                                        <button type="button" class="incv-gift-select-btn incv-cart-gift-add-btn"
                                                 data-product-id="<?php echo esc_attr($is_variation ? $actual_product_id : $gift_product_id); ?>"
                                                 data-variation-id="<?php echo esc_attr($variation_id); ?>"
                                                 data-trigger-product="<?php echo esc_attr($trigger_product_id); ?>"
@@ -5065,7 +5053,7 @@ class MMD_Product_Gifts_V2 {
      * AJAX handler for adding a gift from cart/checkout page
      */
     public function ajax_add_cart_gift() {
-        if (!check_ajax_referer('mmd_gift_nonce', 'nonce', false)) {
+        if (!check_ajax_referer('incv_gift_nonce', 'nonce', false)) {
             wp_send_json_error(array('message' => 'Security check failed'));
             return;
         }
@@ -5108,12 +5096,12 @@ class MMD_Product_Gifts_V2 {
 
         // Prepare cart item data
         $gift_cart_data = array(
-            'mmd_cart_based_gift' => true,
-            'mmd_is_gift' => true,
-            'mmd_gift_type' => $gift_type,
-            'mmd_gift_discount' => $gift_discount,
-            'mmd_parent_product_id' => $trigger_product_id,
-            'mmd_gift_rule_id' => $rule_id,
+            'incv_cart_based_gift' => true,
+            'incv_is_gift' => true,
+            'incv_gift_type' => $gift_type,
+            'incv_gift_discount' => $gift_discount,
+            'incv_parent_product_id' => $trigger_product_id,
+            'incv_gift_rule_id' => $rule_id,
         );
 
         $cart_item_key = false;
@@ -5131,7 +5119,7 @@ class MMD_Product_Gifts_V2 {
 
             // Debug lines go to the PHP error log only with WP_DEBUG and INCENTIV_DEBUG on.
             $dbg = function ($label, $data = null) {
-                MMD_Helpers::log($label, $data);
+                INCV_Helpers::log($label, $data);
             };
             $dbg('=== ajax_add_cart_gift START ===');
             $dbg('client_attrs (sanitized)', $client_attrs);
@@ -5306,7 +5294,7 @@ class MMD_Product_Gifts_V2 {
                 }
             }
             $error_response = array('message' => $error_message);
-            if (MMD_Helpers::debug_enabled() && MMD_Helpers::can_see_frontend_debug()) {
+            if (INCV_Helpers::debug_enabled() && INCV_Helpers::can_see_frontend_debug()) {
                 $error_response['debug'] = $debug;
             }
             wp_send_json_error($error_response);
@@ -5324,7 +5312,7 @@ class MMD_Product_Gifts_V2 {
      * given rule so the selector re-appears and the customer can pick again.
      */
     public function ajax_switch_cart_gift() {
-        if (!check_ajax_referer('mmd_gift_nonce', 'nonce', false)) {
+        if (!check_ajax_referer('incv_gift_nonce', 'nonce', false)) {
             wp_send_json_error(array('message' => 'Security check failed'));
         }
         if (!WC()->cart) {
@@ -5335,14 +5323,14 @@ class MMD_Product_Gifts_V2 {
 
         $removed = 0;
         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-            $is_gift = !empty($cart_item['mmd_cart_based_gift']) || !empty($cart_item['mmd_is_gift']);
+            $is_gift = !empty($cart_item['incv_cart_based_gift']) || !empty($cart_item['incv_is_gift']);
             if (!$is_gift) continue;
 
             // If a rule_id is specified, only remove gifts belonging to that
             // rule. Empty rule_id means remove every cart-based gift (used
             // when the claimed notice doesn't know which rule it came from).
             if ($rule_id !== '') {
-                $item_rule_id = isset($cart_item['mmd_gift_rule_id']) ? $cart_item['mmd_gift_rule_id'] : '';
+                $item_rule_id = isset($cart_item['incv_gift_rule_id']) ? $cart_item['incv_gift_rule_id'] : '';
                 if ($item_rule_id !== $rule_id) continue;
             }
 
@@ -5376,8 +5364,8 @@ class MMD_Product_Gifts_V2 {
 
         // Get styling
         $styling = array();
-        if (class_exists('MMD_Gift_Rules')) {
-            $gift_rules = MMD_Gift_Rules::get_instance();
+        if (class_exists('INCV_Gift_Rules')) {
+            $gift_rules = INCV_Gift_Rules::get_instance();
             $styling = $gift_rules->get_styling_options();
         }
 
@@ -5385,10 +5373,12 @@ class MMD_Product_Gifts_V2 {
         $bg_color_2 = isset($styling['gift_box_bg_color_2']) ? $styling['gift_box_bg_color_2'] : '#a855f7';
         $text_color = isset($styling['gift_box_text_color']) ? $styling['gift_box_text_color'] : '#ffffff';
 
+        wp_enqueue_style('incv-gift-promo', INCV_PLUGIN_URL . 'assets/gift-promo.css', array(), INCV_VERSION);
+        INCV_Helpers::enqueue_frontend_ui();
         ?>
-        <div class="mmd-gift-promo-notices" style="position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none;">
+        <div class="incv-gift-promo-notices" style="position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none;">
             <?php foreach ($notices as $notice): ?>
-                <div class="mmd-gift-promo-notice" style="
+                <div class="incv-gift-promo-notice" style="
                     background: linear-gradient(135deg, <?php echo esc_attr($bg_color_1); ?> 0%, <?php echo esc_attr($bg_color_2); ?> 100%);
                     color: <?php echo esc_attr($text_color); ?>;
                     padding: 12px 24px;
@@ -5401,9 +5391,9 @@ class MMD_Product_Gifts_V2 {
                     width: 100%;
                     pointer-events: auto;
                     position: relative;
-                    animation: mmdGiftPromoSlideUp 0.5s ease-out;
+                    animation: incvGiftPromoSlideUp 0.5s ease-out;
                 ">
-                    <button class="mmd-gift-promo-close" style="position: absolute; top: 4px; left: 8px; background: none; border: none; color: <?php echo esc_attr($text_color); ?>; font-size: 18px; cursor: pointer; opacity: 0.7; line-height: 1;" onclick="this.parentElement.style.display='none';">&times;</button>
+                    <button type="button" class="incv-gift-promo-close" data-incv-hide="parent" style="position: absolute; top: 4px; left: 8px; background: none; border: none; color: <?php echo esc_attr($text_color); ?>; font-size: 18px; cursor: pointer; opacity: 0.7; line-height: 1;">&times;</button>
                     <span style="font-size: 1.2em;">🎁</span>
                     <?php echo wp_kses_post($notice['text']); ?>
                     <?php if (!empty($notice['link'])): ?>
@@ -5414,16 +5404,7 @@ class MMD_Product_Gifts_V2 {
                 </div>
             <?php endforeach; ?>
         </div>
-        <style>
-            @keyframes mmdGiftPromoSlideUp {
-                from { transform: translateY(20px); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
-            }
-            @media (max-width: 768px) {
-                .mmd-gift-promo-notices { left: 10px; right: 10px; bottom: 10px; }
-                .mmd-gift-promo-notice { font-size: 13px; padding: 10px 18px; }
-            }
-        </style>
+        
         <?php
     }
 
@@ -5434,16 +5415,16 @@ class MMD_Product_Gifts_V2 {
         $notices = array();
 
         // Check dismissal cookie
-        if (isset($_COOKIE['mmd_gift_promo_dismissed']) && $_COOKIE['mmd_gift_promo_dismissed'] === '1') {
+        if (isset($_COOKIE['incv_gift_promo_dismissed']) && $_COOKIE['incv_gift_promo_dismissed'] === '1') {
             return $notices;
         }
 
         // Get all active gift rules
-        if (!class_exists('MMD_Gift_Rules')) {
+        if (!class_exists('INCV_Gift_Rules')) {
             return $notices;
         }
 
-        $gift_rules = MMD_Gift_Rules::get_instance();
+        $gift_rules = INCV_Gift_Rules::get_instance();
         $all_rules = $gift_rules->get_rule_sets();
 
         foreach ($all_rules as $rule) {
@@ -5521,10 +5502,10 @@ class MMD_Product_Gifts_V2 {
 
         // Also check product-level gifts that are active
         // Show a generic promo if there are any active product-level gifts
-        $product_gifts_promo = get_option('mmd_product_gifts_promo_enabled', 'no');
+        $product_gifts_promo = get_option('incv_product_gifts_promo_enabled', 'no');
         if ($product_gifts_promo === 'yes') {
-            $promo_text = get_option('mmd_product_gifts_promo_text', __( 'Selected products come with a free gift!', 'incentiv' ));
-            $promo_link = get_option('mmd_product_gifts_promo_link', '');
+            $promo_text = get_option('incv_product_gifts_promo_text', __( 'Selected products come with a free gift!', 'incentiv' ));
+            $promo_link = get_option('incv_product_gifts_promo_link', '');
             if (!empty($promo_text)) {
                 $notices[] = array(
                     'text' => $promo_text,
@@ -5540,4 +5521,4 @@ class MMD_Product_Gifts_V2 {
     }
 }
 
-MMD_Product_Gifts_V2::get_instance();
+INCV_Product_Gifts_V2::get_instance();

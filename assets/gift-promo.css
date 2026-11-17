@@ -1,0 +1,9 @@
+/* Incentiv gift promo notices (was inline in includes/class-incv-product-gifts-v2.php). */
+@keyframes incvGiftPromoSlideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+@media (max-width: 768px) {
+    .incv-gift-promo-notices { left: 10px; right: 10px; bottom: 10px; }
+    .incv-gift-promo-notice { font-size: 13px; padding: 10px 18px; }
+}

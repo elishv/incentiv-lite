@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Frontend {
+class INCV_Frontend {
 
     /**
      * Cache for active override coupons to avoid repeated lookups
@@ -70,7 +70,7 @@ class MMD_Frontend {
         // with the rule name under the line), so they get no extra totals row: a
         // second "-amount" row above the total read like a double discount.
         // render_allocated_discount_rows() stays available for themes that want it:
-        // add_action('woocommerce_cart_totals_before_order_total', array(MMD_Frontend instance, 'render_allocated_discount_rows'));
+        // add_action('woocommerce_cart_totals_before_order_total', array(INCV_Frontend instance, 'render_allocated_discount_rows'));
         // Auto-apply coupon from URL parameter - run on multiple hooks to ensure it works on all pages
         add_action('init', array($this, 'maybe_apply_coupon_from_url'), 99);
         add_action('wp_loaded', array($this, 'maybe_apply_coupon_from_url'), 20);
@@ -87,7 +87,7 @@ class MMD_Frontend {
         add_filter('woocommerce_cart_subtotal', array($this, 'override_cart_subtotal_display'), 9999, 3);
         add_filter('woocommerce_widget_cart_get_total_html', array($this, 'override_mini_cart_total'), 9999);
 
-        // Visible debug panel (toggle via ?mmd_debug=1 in URL or define MMD_DEBUG_CART)
+        // Visible debug panel (toggle via ?incv_debug=1 in URL or define INCV_DEBUG_CART)
         if ($this->is_debug_enabled()) {
             add_action('woocommerce_before_mini_cart_contents', array($this, 'render_debug_panel'), 999);
             add_action('woocommerce_before_cart', array($this, 'render_debug_panel'), 999);
@@ -157,12 +157,12 @@ class MMD_Frontend {
         add_action('woocommerce_order_status_processing', array($this, 'increment_rule_usage'), 10, 1);
 
         // AJAX handler
-        add_action('wp_ajax_get_refreshed_fragments', array($this, 'handle_refreshed_fragments'));
-        add_action('wp_ajax_nopriv_get_refreshed_fragments', array($this, 'handle_refreshed_fragments'));
+        add_action('wp_ajax_incv_get_refreshed_fragments', array($this, 'handle_refreshed_fragments'));
+        add_action('wp_ajax_nopriv_incv_get_refreshed_fragments', array($this, 'handle_refreshed_fragments'));
 
         // Scripts and styles
         add_action('wp_footer', array($this, 'add_frontend_scripts'));
-        add_action('wp_head', array($this, 'add_frontend_styles'));
+        add_action('wp_enqueue_scripts', array($this, 'add_frontend_styles'));
 
         // Discount badge on product page and archive/shop pages
         add_action('woocommerce_before_single_product_summary', array($this, 'display_discount_badge_on_product'), 11);
@@ -214,7 +214,7 @@ class MMD_Frontend {
         }
 
         // Check if this coupon was explicitly removed by user - don't re-apply
-        $removed_coupon = WC()->session->get('mmd_coupon_removed');
+        $removed_coupon = WC()->session->get('incv_coupon_removed');
         if (!empty($removed_coupon) && strtolower($removed_coupon) === strtolower($coupon_code)) {
             // User removed this coupon, don't auto-apply again
             return;
@@ -222,10 +222,10 @@ class MMD_Frontend {
 
         // Store coupon in session for later use
         $coupon_code_lower = strtolower($coupon_code);
-        WC()->session->set('mmd_pending_coupon', $coupon_code_lower);
-        WC()->session->set('mmd_active_override_coupon', $coupon_code_lower);
+        WC()->session->set('incv_pending_coupon', $coupon_code_lower);
+        WC()->session->set('incv_active_override_coupon', $coupon_code_lower);
         // Also store as original URL coupon for tracking purposes (never cleared until order complete)
-        WC()->session->set('mmd_original_url_coupon', $coupon_code_lower);
+        WC()->session->set('incv_original_url_coupon', $coupon_code_lower);
 
         // WC_Cart::get_cart() triggers _doing_it_wrong before wp_loaded. Defer the
         // cart-touching work to a later hook; session writes above are still safe.
@@ -259,7 +259,7 @@ class MMD_Frontend {
             return;
         }
 
-        $pending_coupon = WC()->session->get('mmd_pending_coupon');
+        $pending_coupon = WC()->session->get('incv_pending_coupon');
         if (!empty($pending_coupon) && WC()->cart) {
             $this->apply_coupon_to_cart($pending_coupon);
         }
@@ -284,7 +284,7 @@ class MMD_Frontend {
                 // Keep the coupon in session for price display purposes
                 // Store it as "active" instead of clearing it
                 if (WC()->session) {
-                    WC()->session->set('mmd_active_override_coupon', $coupon_code);
+                    WC()->session->set('incv_active_override_coupon', $coupon_code);
                 }
             }
         }
@@ -297,7 +297,7 @@ class MMD_Frontend {
         // Get removed coupon to check against
         $removed_coupon = '';
         if (WC()->session) {
-            $removed_coupon = strtolower(WC()->session->get('mmd_coupon_removed') ?: '');
+            $removed_coupon = strtolower(WC()->session->get('incv_coupon_removed') ?: '');
         }
 
         // Check URL first, but respect removed flag
@@ -311,13 +311,13 @@ class MMD_Frontend {
 
         // Check session for pending coupon
         if (WC()->session) {
-            $pending = WC()->session->get('mmd_pending_coupon');
+            $pending = WC()->session->get('incv_pending_coupon');
             if (!empty($pending) && strtolower($pending) !== $removed_coupon) {
                 return strtolower($pending);
             }
 
             // Check for active override coupon (already applied but kept for display)
-            $active = WC()->session->get('mmd_active_override_coupon');
+            $active = WC()->session->get('incv_active_override_coupon');
             if (!empty($active) && strtolower($active) !== $removed_coupon) {
                 return strtolower($active);
             }
@@ -345,21 +345,21 @@ class MMD_Frontend {
         $coupon_code_lower = strtolower($coupon_code);
 
         // Check if this coupon was applied via URL (stored in session)
-        $active = WC()->session->get('mmd_active_override_coupon');
-        $pending = WC()->session->get('mmd_pending_coupon');
+        $active = WC()->session->get('incv_active_override_coupon');
+        $pending = WC()->session->get('incv_pending_coupon');
         $was_url_coupon = false;
 
         if (!empty($active) && strtolower($active) === $coupon_code_lower) {
-            WC()->session->set('mmd_active_override_coupon', '');
+            WC()->session->set('incv_active_override_coupon', '');
             $was_url_coupon = true;
         }
         if (!empty($pending) && strtolower($pending) === $coupon_code_lower) {
-            WC()->session->set('mmd_pending_coupon', '');
+            WC()->session->set('incv_pending_coupon', '');
             $was_url_coupon = true;
         }
 
         // Also check if this coupon matches the original URL coupon (stored separately)
-        $original_url_coupon = WC()->session->get('mmd_original_url_coupon');
+        $original_url_coupon = WC()->session->get('incv_original_url_coupon');
         if (!empty($original_url_coupon) && strtolower($original_url_coupon) === $coupon_code_lower) {
             $was_url_coupon = true;
         }
@@ -381,12 +381,12 @@ class MMD_Frontend {
 
         // If this coupon was applied via URL, mark as removed to prevent re-application
         if ($was_url_coupon) {
-            WC()->session->set('mmd_coupon_removed', $coupon_code_lower);
+            WC()->session->set('incv_coupon_removed', $coupon_code_lower);
             return;
         }
 
         // Also check if this coupon is an override rule coupon - if so, mark as removed
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
         foreach ($rule_sets as $rule_set) {
             if (empty($rule_set['required_coupon_codes'])) {
                 continue;
@@ -398,7 +398,7 @@ class MMD_Frontend {
             foreach ($required_coupons as $required_coupon) {
                 if (strtolower(trim($required_coupon)) === $coupon_code_lower) {
                     // This is an override coupon - mark as explicitly removed
-                    WC()->session->set('mmd_coupon_removed', $coupon_code_lower);
+                    WC()->session->set('incv_coupon_removed', $coupon_code_lower);
                     return;
                 }
             }
@@ -413,10 +413,10 @@ class MMD_Frontend {
             return;
         }
 
-        WC()->session->set('mmd_active_override_coupon', '');
-        WC()->session->set('mmd_pending_coupon', '');
-        WC()->session->set('mmd_original_url_coupon', '');
-        WC()->session->set('mmd_coupon_removed', ''); // Allow coupon to be used again on next visit
+        WC()->session->set('incv_active_override_coupon', '');
+        WC()->session->set('incv_pending_coupon', '');
+        WC()->session->set('incv_original_url_coupon', '');
+        WC()->session->set('incv_coupon_removed', ''); // Allow coupon to be used again on next visit
     }
 
     /**
@@ -428,7 +428,7 @@ class MMD_Frontend {
         // Get the removed coupon (if any) to exclude it
         $removed_coupon = '';
         if (WC()->session) {
-            $removed_coupon = WC()->session->get('mmd_coupon_removed');
+            $removed_coupon = WC()->session->get('incv_coupon_removed');
         }
 
         // Check URL for coupon - but skip if it was explicitly removed
@@ -447,12 +447,12 @@ class MMD_Frontend {
 
         // From session (as fallback) - but skip if removed
         if (WC()->session) {
-            $pending = WC()->session->get('mmd_pending_coupon');
+            $pending = WC()->session->get('incv_pending_coupon');
             if (!empty($pending) && strtolower($pending) !== $removed_coupon) {
                 $coupons[] = strtolower($pending);
             }
 
-            $active = WC()->session->get('mmd_active_override_coupon');
+            $active = WC()->session->get('incv_active_override_coupon');
             if (!empty($active) && strtolower($active) !== $removed_coupon) {
                 $coupons[] = strtolower($active);
             }
@@ -474,7 +474,7 @@ class MMD_Frontend {
 
         $this->active_override_rules_cache = array();
         $potential_coupons = $this->get_all_potential_coupons();
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
 
         foreach ($rule_sets as $rule_set) {
             // Check enabled - handle various boolean formats
@@ -540,7 +540,7 @@ class MMD_Frontend {
         }
 
         foreach ($active_rules as $rule_set) {
-            $qualifying_rule_sets = MMD_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
+            $qualifying_rule_sets = INCV_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
             foreach ($qualifying_rule_sets as $qualifying_set) {
                 if ($qualifying_set['id'] === $rule_set['id']) {
                     return $rule_set; // Return the rule set
@@ -641,7 +641,7 @@ class MMD_Frontend {
      */
     private function get_sale_price_html_for_product($product) {
         try {
-            $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+            $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
             if (empty($rule_sets) || !is_array($rule_sets)) {
                 return null;
             }
@@ -691,12 +691,12 @@ class MMD_Frontend {
                 }
 
                 // Check schedule
-                if (!MMD_Discount_Rules::is_rule_in_schedule_public($rule_set)) {
+                if (!INCV_Discount_Rules::is_rule_in_schedule_public($rule_set)) {
                     continue;
                 }
 
                 // Check if product qualifies
-                $qualifying = MMD_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
+                $qualifying = INCV_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
                 $qualifies = false;
                 foreach ($qualifying as $qs) {
                     if (isset($qs['id']) && isset($rule_set['id']) && $qs['id'] === $rule_set['id']) {
@@ -790,10 +790,10 @@ class MMD_Frontend {
             return;
         }
 
-        $discount_text = MMD_Helpers::format_discount($discount_rule);
+        $discount_text = INCV_Helpers::format_discount($discount_rule);
         $notice_color = !empty($rule_set['notice_color']) ? $rule_set['notice_color'] : '#4CAF50';
 
-        echo '<div class="mmd-override-notice" style="background: #d4edda; border: 2px solid ' . esc_attr($notice_color) . '; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center;">';
+        echo '<div class="incv-override-notice" style="background: #d4edda; border: 2px solid ' . esc_attr($notice_color) . '; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center;">';
         echo '<strong style="color: ' . esc_attr($notice_color) . ';">🎉 ' . esc_html($rule_set['name']) . '</strong><br>';
         echo ( '<span>' . esc_html__( 'A discount of', 'incentiv' ) . ' ' ) . esc_html($discount_text) . ( ' ' . esc_html__( 'is live!', 'incentiv' ) . '</span>' );
         echo '</div>';
@@ -823,10 +823,10 @@ class MMD_Frontend {
         if ($rule_set) {
             $discount_rule = $this->get_override_discount_for_product($product, $rule_set);
             if ($discount_rule) {
-                $discount_text = MMD_Helpers::format_discount($discount_rule);
+                $discount_text = INCV_Helpers::format_discount($discount_rule);
                 $notice_color = !empty($rule_set['notice_color']) ? $rule_set['notice_color'] : '#4CAF50';
 
-                echo '<div class="mmd-override-notice" style="background: #d4edda; border: 2px solid ' . esc_attr($notice_color) . '; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center;">';
+                echo '<div class="incv-override-notice" style="background: #d4edda; border: 2px solid ' . esc_attr($notice_color) . '; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center;">';
                 echo '<strong style="color: ' . esc_attr($notice_color) . ';">🎉 ' . esc_html($rule_set['name']) . '</strong><br>';
                 echo ( '<span>' . esc_html__( 'A discount of', 'incentiv' ) . ' ' ) . esc_html($discount_text) . ( ' ' . esc_html__( 'is live!', 'incentiv' ) . '</span>' );
                 echo '</div>';
@@ -836,7 +836,7 @@ class MMD_Frontend {
 
         // Show quantity discount notices for qualifying products
         $product_id = $product->get_id();
-        $qualifying_rule_sets = MMD_Discount_Rules::get_qualifying_rule_sets_for_product($product_id);
+        $qualifying_rule_sets = INCV_Discount_Rules::get_qualifying_rule_sets_for_product($product_id);
         if (!empty($qualifying_rule_sets)) {
             foreach ($qualifying_rule_sets as $qs) {
                 if (empty($qs['discount_rules'])) {
@@ -859,7 +859,7 @@ class MMD_Frontend {
                     ? $qs['notice_content']
                     : $this->build_default_notice_content($qs['discount_rules'], $qs);
 
-                echo '<div class="woocommerce-info mmd-discount-notice" style="margin-bottom: 10px; background: #f7f6f7; border-' . ( is_rtl() ? 'right' : 'left' ) . ': 4px solid ' . esc_attr($notice_color) . '; padding: 10px; color: #333;">';
+                echo '<div class="woocommerce-info incv-discount-notice" style="margin-bottom: 10px; background: #f7f6f7; border-' . ( is_rtl() ? 'right' : 'left' ) . ': 4px solid ' . esc_attr($notice_color) . '; padding: 10px; color: #333;">';
                 echo '<strong style="color: ' . esc_attr($notice_color) . '; font-size: 14px;">' . esc_html($notice_title) . '</strong><br>';
                 echo '<div style="margin-top: 6px; line-height: 1.5; color: #333; font-size: 13px;">' . wp_kses_post($content) . '</div>';
                 echo '</div>';
@@ -913,8 +913,8 @@ class MMD_Frontend {
         }
 
         // Check both active AND upcoming (scheduled) rules for FOMO badges
-        $qualifying_rules = MMD_Discount_Rules::get_qualifying_rule_sets_for_product($product_id);
-        $upcoming_rules = MMD_Discount_Rules::get_upcoming_rule_sets_for_product($product_id);
+        $qualifying_rules = INCV_Discount_Rules::get_qualifying_rule_sets_for_product($product_id);
+        $upcoming_rules = INCV_Discount_Rules::get_upcoming_rule_sets_for_product($product_id);
         $all_rules = array_merge($qualifying_rules, $upcoming_rules);
 
         if (empty($all_rules)) {
@@ -947,7 +947,7 @@ class MMD_Frontend {
             $bg = isset($rule_set['badge_bg_color']) ? $rule_set['badge_bg_color'] : '#e53935';
             $color = isset($rule_set['badge_text_color']) ? $rule_set['badge_text_color'] : '#ffffff';
 
-            $output .= '<span class="mmd-discount-badge" style="'
+            $output .= '<span class="incv-discount-badge" style="'
                 . 'background:' . esc_attr($bg) . ';'
                 . 'color:' . esc_attr($color) . ';'
                 . '">' . esc_html($text) . '</span>';
@@ -969,7 +969,7 @@ class MMD_Frontend {
             return;
         }
 
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
         $notices = array();
 
         foreach ($rule_sets as $rule_set) {
@@ -986,7 +986,7 @@ class MMD_Frontend {
             if ((isset($rule_set['global_notice_enabled']) ? $rule_set['global_notice_enabled'] : 'no') !== 'yes') {
                 continue;
             }
-            if (!MMD_Discount_Rules::is_rule_in_schedule_public($rule_set)) {
+            if (!INCV_Discount_Rules::is_rule_in_schedule_public($rule_set)) {
                 continue;
             }
             if (empty($rule_set['global_notice_text'])) {
@@ -1034,7 +1034,7 @@ class MMD_Frontend {
         }
 
         // Check dismissal cookie for entire notice bar
-        $bar_id = 'mmd_gn_bar';
+        $bar_id = 'incv_gn_bar';
 
         foreach ($grouped as $position => $group) {
             $container_id = $bar_id . '_' . $position;
@@ -1094,16 +1094,16 @@ class MMD_Frontend {
         // Layout-specific styles
         $layout_css = $this->get_layout_css($layout, $bg, $color);
         ?>
-        <div id="<?php echo esc_attr($container_id); ?>" class="mmd-global-notice mmd-gn-<?php echo esc_attr($layout); ?>" data-mobile-pos="<?php echo esc_attr($mobile_position); ?>" data-desktop-pos="<?php echo esc_attr($position); ?>" style="<?php echo esc_attr( $pos_styles ); ?><?php echo esc_attr( $layout_css ); ?>display:none;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+        <div id="<?php echo esc_attr($container_id); ?>" class="incv-global-notice incv-gn-<?php echo esc_attr($layout); ?>" data-mobile-pos="<?php echo esc_attr($mobile_position); ?>" data-desktop-pos="<?php echo esc_attr($position); ?>" style="<?php echo esc_attr( $pos_styles ); ?><?php echo esc_attr( $layout_css ); ?>display:none;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
             <?php if ($layout === 'marquee'): ?>
             <?php
                 // MARQUEE MODE: All notices scroll together in one continuous strip
                 $marquee_dir = isset($first['global_notice_marquee_direction']) ? $first['global_notice_marquee_direction'] : 'rtl';
-                $marquee_anim = 'mmd-marquee-rtl';
+                $marquee_anim = 'incv-marquee-rtl';
                 if ($marquee_dir === 'ltr') {
-                    $marquee_anim = 'mmd-marquee-ltr';
+                    $marquee_anim = 'incv-marquee-ltr';
                 } elseif ($marquee_dir === 'alternate') {
-                    $marquee_anim = 'mmd-marquee-alt';
+                    $marquee_anim = 'incv-marquee-alt';
                 }
 
                 // Build all notice fragments
@@ -1137,9 +1137,9 @@ class MMD_Frontend {
                 // Speed scales with number of notices (more content = slower scroll)
                 $anim_duration = 15 * max(1, count($group));
             ?>
-            <div class="mmd-gn-slides" style="position:relative;overflow:hidden;">
-                <div class="mmd-gn-slide" style="text-align:center;padding:10px 20px;">
-                    <div class="mmd-gn-marquee" style="overflow:hidden;white-space:nowrap;">
+            <div class="incv-gn-slides" style="position:relative;overflow:hidden;">
+                <div class="incv-gn-slide" style="text-align:center;padding:10px 20px;">
+                    <div class="incv-gn-marquee" style="overflow:hidden;white-space:nowrap;">
                         <span style="display:inline-block;animation:<?php echo esc_attr( $marquee_anim ); ?> <?php echo esc_attr( $anim_duration ); ?>s linear infinite;">
                             <?php echo wp_kses_post( $all_notices ); ?>
                             <?php echo wp_kses_post( $separator ); ?>
@@ -1149,7 +1149,7 @@ class MMD_Frontend {
                 </div>
             </div>
             <?php else: ?>
-            <div class="mmd-gn-slides" style="position:relative;overflow:hidden;">
+            <div class="incv-gn-slides" style="position:relative;overflow:hidden;">
                 <?php foreach ($group as $i => $rule_set):
                     $n_bg = isset($rule_set['global_notice_bg_color']) ? $rule_set['global_notice_bg_color'] : '#2196F3';
                     $n_color = isset($rule_set['global_notice_text_color']) ? $rule_set['global_notice_text_color'] : '#ffffff';
@@ -1170,9 +1170,9 @@ class MMD_Frontend {
                         }
                     }
                 ?>
-                <div class="mmd-gn-slide" data-index="<?php echo esc_attr( $i ); ?>" style="<?php echo ($i > 0) ? 'display:none;' : ''; ?>text-align:center;padding:<?php echo ($n_layout === 'slim') ? '6px 20px' : (($n_layout === 'bold') ? '16px 20px' : '10px 20px'); ?>;<?php echo esc_attr( $slide_layout_css ); ?>transition:opacity 0.4s ease;">
+                <div class="incv-gn-slide" data-index="<?php echo esc_attr( $i ); ?>" style="<?php echo ($i > 0) ? 'display:none;' : ''; ?>text-align:center;padding:<?php echo ($n_layout === 'slim') ? '6px 20px' : (($n_layout === 'bold') ? '16px 20px' : '10px 20px'); ?>;<?php echo esc_attr( $slide_layout_css ); ?>transition:opacity 0.4s ease;">
                     <?php echo wp_kses_post( $icon_html ); ?>
-                    <span class="mmd-gn-text" style="font-size:<?php echo ($n_layout === 'bold') ? '17px' : (($n_layout === 'slim') ? '13px' : '15px'); ?>;font-weight:<?php echo ($n_layout === 'bold') ? '800' : '600'; ?>;"><?php echo wp_kses_post( $n_text ); ?></span>
+                    <span class="incv-gn-text" style="font-size:<?php echo ($n_layout === 'bold') ? '17px' : (($n_layout === 'slim') ? '13px' : '15px'); ?>;font-weight:<?php echo ($n_layout === 'bold') ? '800' : '600'; ?>;"><?php echo wp_kses_post( $n_text ); ?></span>
                     <?php if (!empty($link_url) && !empty($link_text)): ?>
                         <a href="<?php echo esc_url($link_url); ?>" style="color:<?php echo esc_attr($n_color); ?>;background:rgba(255,255,255,0.2);padding:<?php echo ($n_layout === 'slim') ? '2px 10px' : '4px 14px'; ?>;border-radius:4px;text-decoration:none;margin-right:12px;font-size:13px;border:1px solid rgba(255,255,255,0.4);"><?php echo esc_html($link_text); ?></a>
                     <?php endif; ?>
@@ -1181,29 +1181,29 @@ class MMD_Frontend {
             </div>
 
             <?php if ($is_carousel && count($group) > 1): ?>
-            <div class="mmd-gn-dots" style="text-align:center;padding:0 0 6px 0;">
+            <div class="incv-gn-dots" style="text-align:center;padding:0 0 6px 0;">
                 <?php for ($d = 0; $d < count($group); $d++): ?>
-                    <span class="mmd-gn-dot" data-slide="<?php echo esc_attr( $d ); ?>" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:<?php echo ($d === 0) ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)'; ?>;margin:0 3px;cursor:pointer;transition:background 0.3s;"></span>
+                    <span class="incv-gn-dot" data-slide="<?php echo esc_attr( $d ); ?>" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:<?php echo ($d === 0) ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)'; ?>;margin:0 3px;cursor:pointer;transition:background 0.3s;"></span>
                 <?php endfor; ?>
             </div>
             <?php endif; ?>
             <?php endif; ?>
 
             <?php if ($any_dismissible): ?>
-                <button class="mmd-gn-close" style="position:absolute;left:15px;top:50%;transform:translateY(-50%);background:none;border:none;color:inherit;font-size:20px;cursor:pointer;opacity:0.7;padding:0 5px;line-height:1;" aria-label="Close">&times;</button>
+                <button class="incv-gn-close" style="position:absolute;left:15px;top:50%;transform:translateY(-50%);background:none;border:none;color:inherit;font-size:20px;cursor:pointer;opacity:0.7;padding:0 5px;line-height:1;" aria-label="Close">&times;</button>
             <?php endif; ?>
         </div>
 
-        <style>
-            @keyframes mmd-marquee-rtl {
+        <?php ob_start(); ?>
+            @keyframes incv-marquee-rtl {
                 0% { transform: translateX(100%); }
                 100% { transform: translateX(-100%); }
             }
-            @keyframes mmd-marquee-ltr {
+            @keyframes incv-marquee-ltr {
                 0% { transform: translateX(-100%); }
                 100% { transform: translateX(100%); }
             }
-            @keyframes mmd-marquee-alt {
+            @keyframes incv-marquee-alt {
                 0%, 100% { transform: translateX(50%); }
                 50% { transform: translateX(-50%); }
             }
@@ -1227,9 +1227,9 @@ class MMD_Frontend {
                 }
             }
             <?php endif; ?>
-        </style>
+        <?php INCV_Helpers::add_inline_style( ob_get_clean() ); ?>
 
-        <script>
+        <?php ob_start(); ?>
         (function(){
             var id = '<?php echo esc_js($container_id); ?>';
             var pos = '<?php echo esc_js($position); ?>';
@@ -1293,7 +1293,7 @@ class MMD_Frontend {
             });
 
             // Dismiss button
-            var closeBtn = el.querySelector('.mmd-gn-close');
+            var closeBtn = el.querySelector('.incv-gn-close');
             if (closeBtn) {
                 closeBtn.addEventListener('click', function() {
                     el.style.display = 'none';
@@ -1311,8 +1311,8 @@ class MMD_Frontend {
 
             // Carousel logic (only for non-marquee layouts)
             <?php if ($layout !== 'marquee'): ?>
-            var slides = el.querySelectorAll('.mmd-gn-slide');
-            var dots = el.querySelectorAll('.mmd-gn-dot');
+            var slides = el.querySelectorAll('.incv-gn-slide');
+            var dots = el.querySelectorAll('.incv-gn-dot');
             if (slides.length > 1) {
                 var current = 0;
                 var speed = <?php echo intval($rotate_speed); ?> * 1000;
@@ -1344,7 +1344,7 @@ class MMD_Frontend {
             }
             <?php endif; ?>
         })();
-        </script>
+        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
         <?php
     }
 
@@ -1386,7 +1386,7 @@ class MMD_Frontend {
      */
     public function display_override_debug_info() {
         // Check if debug mode is enabled in settings
-        $settings = MMD_Helpers::get_settings();
+        $settings = INCV_Helpers::get_settings();
         $debug_enabled = isset($settings['debug_mode']) && ($settings['debug_mode'] === 'yes' || $settings['debug_mode'] === '1' || $settings['debug_mode'] === true);
 
         if (!$debug_enabled || !is_product() || !current_user_can('manage_woocommerce')) {
@@ -1400,11 +1400,11 @@ class MMD_Frontend {
 
         $potential_coupons = $this->get_all_potential_coupons();
         $active_override_rules = $this->get_active_override_rules();
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
         $qualifies = $this->product_qualifies_for_override($product);
 
-        echo '<div class="mmd-debug-info" style="background: #fff3cd; border: 2px solid #ffc107; padding: 15px; margin: 20px 0; font-size: 12px; direction: ltr; text-align: left;">';
-        echo '<strong style="color: #856404;">🔧 MMD Debug Info (Admin Only):</strong><br><br>';
+        echo '<div class="incv-debug-info" style="background: #fff3cd; border: 2px solid #ffc107; padding: 15px; margin: 20px 0; font-size: 12px; direction: ltr; text-align: left;">';
+        echo '<strong style="color: #856404;">🔧 INCV Debug Info (Admin Only):</strong><br><br>';
 
         echo '<strong>URL Coupons Detected:</strong> ';
         echo !empty($potential_coupons) ? esc_html( implode(', ', $potential_coupons) ) : 'None';
@@ -1446,11 +1446,11 @@ class MMD_Frontend {
      */
     public function display_override_debug_info_footer() {
         // Check if debug mode is enabled in settings
-        $settings = MMD_Helpers::get_settings();
+        $settings = INCV_Helpers::get_settings();
         $debug_enabled = isset($settings['debug_mode']) && ($settings['debug_mode'] === 'yes' || $settings['debug_mode'] === '1' || $settings['debug_mode'] === true);
 
         // Only show the debug panel if debug mode is on AND the user is a logged-in store manager.
-        if (!$debug_enabled || !MMD_Helpers::can_see_frontend_debug()) {
+        if (!$debug_enabled || !INCV_Helpers::can_see_frontend_debug()) {
             return;
         }
 
@@ -1466,12 +1466,13 @@ class MMD_Frontend {
 
         $potential_coupons = $this->get_all_potential_coupons();
         $active_override_rules = $this->get_active_override_rules();
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
         $qualifies = $current_product ? $this->product_qualifies_for_override($current_product) : false;
 
-        echo '<div id="mmd-debug-footer" style="position: fixed; bottom: 0; left: 0; right: 0; background: #fff3cd; border-top: 3px solid #ffc107; padding: 15px; font-size: 12px; direction: ltr; text-align: left; z-index: 999999; max-height: 300px; overflow-y: auto;">';
-        echo '<button onclick="document.getElementById(\'mmd-debug-footer\').style.display=\'none\'" style="position: absolute; top: 5px; right: 10px; background: #ffc107; border: none; padding: 5px 10px; cursor: pointer;">X Close</button>';
-        echo '<strong style="color: #856404; font-size: 14px;">🔧 MMD Debug Info</strong><br><br>';
+        echo '<div id="incv-debug-footer" style="position: fixed; bottom: 0; left: 0; right: 0; background: #fff3cd; border-top: 3px solid #ffc107; padding: 15px; font-size: 12px; direction: ltr; text-align: left; z-index: 999999; max-height: 300px; overflow-y: auto;">';
+        INCV_Helpers::enqueue_frontend_ui();
+        echo '<button type="button" class="incv-debug-close" data-incv-hide="#incv-debug-footer" style="position: absolute; top: 5px; right: 10px; background: #ffc107; border: none; padding: 5px 10px; cursor: pointer;">X Close</button>';
+        echo '<strong style="color: #856404; font-size: 14px;">🔧 INCV Debug Info</strong><br><br>';
 
         echo '<strong>URL Coupons Detected:</strong> ';
         echo !empty($potential_coupons) ? esc_html( implode(', ', $potential_coupons) ) : '<span style="color:red">NONE</span>';
@@ -1528,21 +1529,23 @@ class MMD_Frontend {
         }
 
         // Output JS data for debugging
-        echo '<br><strong>mmdOverrideData (check console):</strong> <span id="mmd-js-data-status">checking...</span>';
-        echo '<script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var status = document.getElementById("mmd-js-data-status");
-                if (typeof mmdOverrideData !== "undefined") {
-                    status.innerHTML = "<span style=\'color:green\'>active=" + mmdOverrideData.active + ", rules=" + mmdOverrideData.rules.length + "</span>";
-                    console.log("MMD Override Data:", mmdOverrideData);
-                    if (mmdOverrideData.rules.length > 0) {
-                        console.log("First rule:", mmdOverrideData.rules[0]);
+        echo '<br><strong>incvOverrideData (check console):</strong> <span id="incv-js-data-status">checking...</span>';
+        INCV_Helpers::add_inline_script(
+            'document.addEventListener("DOMContentLoaded", function() {
+                var status = document.getElementById("incv-js-data-status");
+                if (!status) { return; }
+                if (typeof incvOverrideData !== "undefined") {
+                    status.innerHTML = "<span style=\'color:green\'>active=" + incvOverrideData.active + ", rules=" + incvOverrideData.rules.length + "</span>";
+                    console.log("INCV Override Data:", incvOverrideData);
+                    if (incvOverrideData.rules.length > 0) {
+                        console.log("First rule:", incvOverrideData.rules[0]);
                     }
                 } else {
                     status.innerHTML = "<span style=\'color:red\'>NOT DEFINED!</span>";
                 }
-            });
-        </script>';
+            });',
+            array()
+        );
 
         echo '</div>';
     }
@@ -1585,11 +1588,11 @@ class MMD_Frontend {
             $regular_price = floatval(get_post_meta($product_id, '_regular_price', true));
 
             // Skip gifts - they keep their custom prices
-            if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) {
+            if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) {
                 $subtotal += floatval($cart_item['data']->get_price()) * $cart_item['quantity'];
                 continue;
             }
-            if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) {
+            if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) {
                 $subtotal += floatval($cart_item['data']->get_price()) * $cart_item['quantity'];
                 continue;
             }
@@ -1653,12 +1656,12 @@ class MMD_Frontend {
 
     private function is_debug_enabled() {
         // The debug panel (and its console lines) is for store managers only.
-        if (!MMD_Helpers::can_see_frontend_debug()) return false;
-        if (defined('MMD_DEBUG_CART') && MMD_DEBUG_CART) return true;
+        if (!INCV_Helpers::can_see_frontend_debug()) return false;
+        if (defined('INCV_DEBUG_CART') && INCV_DEBUG_CART) return true;
         // Only store managers can switch the debug panel on from the URL; it is a read-only view toggle.
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-        if (isset($_GET['mmd_debug']) && '1' === sanitize_text_field(wp_unslash($_GET['mmd_debug'])) && current_user_can('manage_woocommerce')) return true;
-        if (WC()->session && WC()->session->get('mmd_debug_enabled')) return true;
+        if (isset($_GET['incv_debug']) && '1' === sanitize_text_field(wp_unslash($_GET['incv_debug'])) && current_user_can('manage_woocommerce')) return true;
+        if (WC()->session && WC()->session->get('incv_debug_enabled')) return true;
         return false;
     }
 
@@ -1666,7 +1669,7 @@ class MMD_Frontend {
      * Render visible debug panel showing exactly what's affecting prices
      */
     public function render_debug_panel() {
-        if (!WC()->cart || !MMD_Helpers::can_see_frontend_debug()) return;
+        if (!WC()->cart || !INCV_Helpers::can_see_frontend_debug()) return;
 
         global $wp_filter;
         $hooks_to_inspect = array(
@@ -1705,7 +1708,7 @@ class MMD_Frontend {
         foreach (WC()->cart->get_cart() as $key => $item) {
             $pid = !empty($item['variation_id']) ? $item['variation_id'] : $item['product_id'];
             $product = $item['data'];
-            $qualifying = MMD_Discount_Rules::get_qualifying_rule_sets($product, $item);
+            $qualifying = INCV_Discount_Rules::get_qualifying_rule_sets($product, $item);
             $items_info[] = array(
                 'product_id' => $item['product_id'],
                 'variation_id' => $item['variation_id'] ?? 0,
@@ -1719,16 +1722,16 @@ class MMD_Frontend {
                 'obj_get_sale' => $product->get_sale_price(),
                 'obj_is_on_sale' => $product->is_on_sale() ? 'YES' : 'no',
                 'qualifying_discount_rules' => array_column($qualifying, 'name'),
-                'mmd_is_gift' => isset($item['mmd_is_gift']) ? 'yes' : 'no',
+                'incv_is_gift' => isset($item['incv_is_gift']) ? 'yes' : 'no',
             );
         }
 
         // Add-ons that run time-boxed events report them here.
-        $special_events_active = (bool) apply_filters('mmd_debug_special_events_active', false);
+        $special_events_active = (bool) apply_filters('incv_debug_special_events_active', false);
 
         $html = '<div style="background:#fffbe6;border:2px solid #f0c000;padding:15px;margin:10px 0;font-family:monospace;font-size:11px;direction:ltr;text-align:left;max-height:500px;overflow:auto;">';
-        $html .= '<strong style="color:#d63638;font-size:14px;">🔍 MMD Cart Debug Panel</strong><br><br>';
-        if (has_filter('mmd_debug_special_events_active')) {
+        $html .= '<strong style="color:#d63638;font-size:14px;">🔍 INCV Cart Debug Panel</strong><br><br>';
+        if (has_filter('incv_debug_special_events_active')) {
             $html .= '<strong>Special Events Active:</strong> ' . ($special_events_active ? '<span style="color:red">YES</span>' : 'no') . '<br>';
         }
         $html .= '<strong>Cart Subtotal:</strong> ' . wc_price(WC()->cart->get_subtotal()) . '<br>';
@@ -1753,13 +1756,13 @@ class MMD_Frontend {
             $html .= '<div style="background:white;padding:6px;margin:3px 0;">';
             $html .= '<strong>' . esc_html($hook) . '</strong><br>';
             foreach ($cbs as $cb) {
-                $color = (strpos($cb, 'MMD_') !== false) ? '#2271b1' : '#666';
+                $color = (strpos($cb, 'INCV_') !== false) ? '#2271b1' : '#666';
                 $html .= '<span style="color:' . $color . ';margin-left:15px;">↳ ' . esc_html($cb) . '</span><br>';
             }
             $html .= '</div>';
         }
 
-        $html .= '<br><em>Add ?mmd_debug=0 to URL to disable.</em>';
+        $html .= '<br><em>Add ?incv_debug=0 to URL to disable.</em>';
         $html .= '</div>';
 
         echo wp_kses_post( $html );
@@ -1797,7 +1800,7 @@ class MMD_Frontend {
 
             // Check if this product qualifies for any active override rule
             foreach ($active_rules as $rule_set) {
-                $qualifying_rule_sets = MMD_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
+                $qualifying_rule_sets = INCV_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
 
                 foreach ($qualifying_rule_sets as $qualifying_set) {
                     if ($qualifying_set['id'] === $rule_set['id']) {
@@ -1881,7 +1884,7 @@ class MMD_Frontend {
         if (empty($breakdown[$cart_item_key])) return false;
 
         // Find the rule(s) by name and check their show_discount_in_cart setting
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
         foreach ($breakdown[$cart_item_key] as $info) {
             foreach ($rule_sets as $rule_set) {
                 if ($rule_set['name'] !== $info['rule_name']) continue;
@@ -1933,14 +1936,14 @@ class MMD_Frontend {
             $messages[] = $msg;
         }
 
-        return '<div class="mmd-cart-item-discount-notice" style="margin-top:4px;font-size:12px;color:#17b26a;font-weight:600;">'
+        return '<div class="incv-cart-item-discount-notice" style="margin-top:4px;font-size:12px;color:#17b26a;font-weight:600;">'
             . implode('<br>', $messages)
             . '</div>';
     }
 
     private function get_cart_display_discount($cart_item) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) return null;
-        if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) return null;
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) return null;
+        if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) return null;
 
         $product = $cart_item['data'];
         $product_id = !empty($cart_item['variation_id']) ? $cart_item['variation_id'] : $cart_item['product_id'];
@@ -1948,7 +1951,7 @@ class MMD_Frontend {
         if ($regular_price <= 0) return null;
 
         $applied_coupons = WC()->cart ? array_map('strtolower', WC()->cart->get_applied_coupons()) : array();
-        $qualifying = MMD_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
+        $qualifying = INCV_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
 
         foreach ($qualifying as $rule_set) {
             if (empty($rule_set['enabled']) || $rule_set['enabled'] !== 'yes') continue;
@@ -1985,8 +1988,8 @@ class MMD_Frontend {
     }
 
     public function override_cart_item_price_display($price, $cart_item, $cart_item_key) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) return $price;
-        if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) return $price;
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) return $price;
+        if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) return $price;
 
         $product_id = !empty($cart_item['variation_id']) ? $cart_item['variation_id'] : $cart_item['product_id'];
         $regular_price = get_post_meta($product_id, '_regular_price', true);
@@ -2004,8 +2007,8 @@ class MMD_Frontend {
      * Override cart item subtotal display - show regular subtotal crossed out + discounted subtotal
      */
     public function override_cart_item_subtotal_display($subtotal, $cart_item, $cart_item_key) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) return $subtotal;
-        if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) return $subtotal;
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) return $subtotal;
+        if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) return $subtotal;
 
         $product_id = !empty($cart_item['variation_id']) ? $cart_item['variation_id'] : $cart_item['product_id'];
         $regular_price = get_post_meta($product_id, '_regular_price', true);
@@ -2032,8 +2035,8 @@ class MMD_Frontend {
      * Override mini cart item quantity display - add price info
      */
     public function override_mini_cart_item_quantity($quantity_html, $cart_item, $cart_item_key) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) return $quantity_html;
-        if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) return $quantity_html;
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) return $quantity_html;
+        if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) return $quantity_html;
 
         $product_id = !empty($cart_item['variation_id']) ? $cart_item['variation_id'] : $cart_item['product_id'];
         $regular_price = get_post_meta($product_id, '_regular_price', true);
@@ -2051,8 +2054,8 @@ class MMD_Frontend {
      * Override checkout order review item quantity display
      */
     public function override_checkout_item_quantity($quantity_html, $cart_item, $cart_item_key) {
-        if (isset($cart_item['mmd_is_gift']) && $cart_item['mmd_is_gift']) return $quantity_html;
-        if (isset($cart_item['mmd_cart_based_gift']) && $cart_item['mmd_cart_based_gift']) return $quantity_html;
+        if (isset($cart_item['incv_is_gift']) && $cart_item['incv_is_gift']) return $quantity_html;
+        if (isset($cart_item['incv_cart_based_gift']) && $cart_item['incv_cart_based_gift']) return $quantity_html;
 
         $product_id = !empty($cart_item['variation_id']) ? $cart_item['variation_id'] : $cart_item['product_id'];
         $regular_price = get_post_meta($product_id, '_regular_price', true);
@@ -2096,7 +2099,7 @@ class MMD_Frontend {
 
         $applied_coupons = array_map('strtolower', WC()->cart->get_applied_coupons());
         $coupon_code = strtolower($coupon->get_code());
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
 
         // Get all coupon codes linked to override rules
         $override_coupon_codes = array();
@@ -2155,7 +2158,7 @@ class MMD_Frontend {
         if (is_admin() && !defined('DOING_AJAX')) {
             return;
         }
-        if (!$cart || !class_exists('MMD_Discount_Allocator')) {
+        if (!$cart || !class_exists('INCV_Discount_Allocator')) {
             return;
         }
         // The gift engine and price filters call back into pricing; don't re-enter.
@@ -2163,7 +2166,7 @@ class MMD_Frontend {
             return;
         }
 
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
         if (empty($rule_sets)) {
             return;
         }
@@ -2174,7 +2177,7 @@ class MMD_Frontend {
             if (!isset($rule_set['enabled']) || $rule_set['enabled'] !== 'yes') {
                 continue;
             }
-            if (MMD_Discount_Allocator::get_mode($rule_set) !== MMD_Discount_Allocator::DEFAULT_MODE) {
+            if (INCV_Discount_Allocator::get_mode($rule_set) !== INCV_Discount_Allocator::DEFAULT_MODE) {
                 $allocating[] = $rule_set;
             }
         }
@@ -2301,7 +2304,7 @@ class MMD_Frontend {
         }
 
         // Get all active rule sets
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
 
         // Get applied coupon codes in cart (lowercase for comparison)
         $applied_coupons = array_map('strtolower', $cart->get_applied_coupons());
@@ -2321,8 +2324,8 @@ class MMD_Frontend {
             // Rules that allocate onto products already applied their discount
             // to the line prices before totals were calculated — adding a cart
             // fee too would discount twice.
-            if (class_exists('MMD_Discount_Allocator')
-                && MMD_Discount_Allocator::get_mode($rule_set) !== MMD_Discount_Allocator::DEFAULT_MODE) {
+            if (class_exists('INCV_Discount_Allocator')
+                && INCV_Discount_Allocator::get_mode($rule_set) !== INCV_Discount_Allocator::DEFAULT_MODE) {
                 continue;
             }
 
@@ -2408,14 +2411,14 @@ class MMD_Frontend {
     }
 
     /**
-     * Should the MMD rule actually apply its DISCOUNT (cart fee)?
+     * Should the INCV rule actually apply its DISCOUNT (cart fee)?
      *
-     * The campaign wizard creates both a native WC coupon AND an MMD
+     * The campaign wizard creates both a native WC coupon AND an INCV
      * discount rule for the same campaign. If the WC coupon has a real
-     * non-zero amount, WC discounts the cart on its own; running the MMD
+     * non-zero amount, WC discounts the cart on its own; running the INCV
      * rule's fee on top of that produces a double 10%.
      *
-     * The MMD rule is still rendered for notices, etc. — this only
+     * The INCV rule is still rendered for notices, etc. — this only
      * suppresses the cart fee.
      */
     private function wc_coupon_already_discounts($rule_set) {
@@ -2557,15 +2560,15 @@ class MMD_Frontend {
                 continue;
             }
             ?>
-            <tr class="mmd-savings-row">
+            <tr class="incv-savings-row">
                 <th>
-                    <span class="mmd-savings-label"><?php echo esc_html($label); ?></span>
+                    <span class="incv-savings-label"><?php echo esc_html($label); ?></span>
                 </th>
                 <td data-title="<?php echo esc_attr($label); ?>">
-                    <span class="mmd-savings-amount">
+                    <span class="incv-savings-amount">
                         &minus;<?php echo wp_kses_post(wc_price($amount)); ?>
                     </span>
-                    <small class="mmd-savings-note"><?php esc_html_e('Already included in the product prices', 'incentiv'); ?></small>
+                    <small class="incv-savings-note"><?php esc_html_e('Already included in the product prices', 'incentiv'); ?></small>
                 </td>
             </tr>
             <?php
@@ -2613,12 +2616,12 @@ class MMD_Frontend {
             return;
         }
 
-        $item->add_meta_data('_mmd_discount_amount', round($total, 2), true);
+        $item->add_meta_data('_incv_discount_amount', round($total, 2), true);
         if ($rule_ids) {
             // Primary rule for this line (used by budget spend + reporting).
-            $item->add_meta_data('_mmd_rule_id', $rule_ids[0], true);
+            $item->add_meta_data('_incv_rule_id', $rule_ids[0], true);
             if (count($rule_ids) > 1) {
-                $item->add_meta_data('_mmd_rule_ids', array_values(array_unique($rule_ids)), true);
+                $item->add_meta_data('_incv_rule_ids', array_values(array_unique($rule_ids)), true);
             }
         }
     }
@@ -2635,7 +2638,7 @@ class MMD_Frontend {
     public function stamp_fee_rule_id($item, $fee_key, $fee, $order) {
         $label = is_object($fee) && isset($fee->name) ? $fee->name : '';
         if ($label && isset($this->pending_fee_rule_map[$label])) {
-            $item->add_meta_data('_mmd_rule_id', $this->pending_fee_rule_map[$label], true);
+            $item->add_meta_data('_incv_rule_id', $this->pending_fee_rule_map[$label], true);
         }
     }
 
@@ -2685,7 +2688,7 @@ class MMD_Frontend {
      * @return bool
      */
     private function fee_belongs_to_rule($fee_name, $rule_set) {
-        $label = MMD_Discount_Rules::get_cart_label($rule_set);
+        $label = INCV_Discount_Rules::get_cart_label($rule_set);
         if ($label === '') {
             return false;
         }
@@ -2721,19 +2724,19 @@ class MMD_Frontend {
     }
 
     private function check_additional_conditions($rule_set, $cart) {
-        // Shoppers blocked by an add-on (filter `mmd_promotions_blocked`) get no promotions.
-        if (MMD_Modules::promotions_blocked('discounts')) {
+        // Shoppers blocked by an add-on (filter `incv_promotions_blocked`) get no promotions.
+        if (INCV_Modules::promotions_blocked('discounts')) {
             return false;
         }
 
         // Budget cap — a campaign that spent its budget stops applying.
-        if (class_exists('MMD_Margin_Guards') && MMD_Margin_Guards::budget_exhausted($rule_set)) {
+        if (class_exists('INCV_Margin_Guards') && INCV_Margin_Guards::budget_exhausted($rule_set)) {
             return false;
         }
 
         // Audience conditions (segments) come from an add-on through the
-        // `mmd_rule_set_matches_audience` filter. Rules without any always match.
-        if (!MMD_Modules::rule_matches_audience($rule_set, $cart)) {
+        // `incv_rule_set_matches_audience` filter. Rules without any always match.
+        if (!INCV_Modules::rule_matches_audience($rule_set, $cart)) {
             return false;
         }
 
@@ -2816,7 +2819,7 @@ class MMD_Frontend {
             return 0;
         }
 
-        $usage_data = get_option('mmd_rule_usage_counts', array());
+        $usage_data = get_option('incv_rule_usage_counts', array());
 
         if ($user_id > 0) {
             $key = $rule_id . '_user_' . $user_id;
@@ -2839,7 +2842,7 @@ class MMD_Frontend {
         $applied_rules = array();
         $fees = WC()->cart ? WC()->cart->get_fees() : array();
 
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
         foreach ($rule_sets as $rule_set) {
             if ($rule_set['enabled'] !== 'yes') {
                 continue;
@@ -2855,7 +2858,7 @@ class MMD_Frontend {
         }
 
         if (!empty($applied_rules)) {
-            $order->update_meta_data('_mmd_applied_discount_rules', $applied_rules);
+            $order->update_meta_data('_incv_applied_discount_rules', $applied_rules);
             $order->save();
         }
     }
@@ -2869,8 +2872,8 @@ class MMD_Frontend {
             return;
         }
 
-        $usage_data = get_option('mmd_rule_usage_counts', array());
-        $applied_rules = $order->get_meta('_mmd_applied_discount_rules');
+        $usage_data = get_option('incv_rule_usage_counts', array());
+        $applied_rules = $order->get_meta('_incv_applied_discount_rules');
 
         if (!empty($applied_rules) && is_array($applied_rules)) {
             foreach ($applied_rules as $rule_id) {
@@ -2885,7 +2888,7 @@ class MMD_Frontend {
                     $usage_data[$user_key] = isset($usage_data[$user_key]) ? $usage_data[$user_key] + 1 : 1;
                 }
             }
-            update_option('mmd_rule_usage_counts', $usage_data);
+            update_option('incv_rule_usage_counts', $usage_data);
         }
     }
 
@@ -2920,7 +2923,7 @@ class MMD_Frontend {
             }
 
             // Check if product qualifies for this specific rule set
-            $qualifying_rule_sets = MMD_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
+            $qualifying_rule_sets = INCV_Discount_Rules::get_qualifying_rule_sets($product, $cart_item);
             $qualifies = false;
 
             foreach ($qualifying_rule_sets as $qualifying_set) {
@@ -2988,7 +2991,7 @@ class MMD_Frontend {
             // Calculate total discount across ALL qualifying items
             $total_discount = 0;
             foreach ($qualifying_items as $item) {
-                $item_discount = MMD_Helpers::calculate_discount_amount($item['price'], $applicable_rule);
+                $item_discount = INCV_Helpers::calculate_discount_amount($item['price'], $applicable_rule);
                 $total_discount += $item_discount;
             }
 
@@ -3024,7 +3027,7 @@ class MMD_Frontend {
             }
 
             // Calculate discount on the first item (cheapest or most expensive)
-            $discount_amount = MMD_Helpers::calculate_discount_amount(
+            $discount_amount = INCV_Helpers::calculate_discount_amount(
                 $qualifying_items[0]['price'],
                 $applicable_rule
             );
@@ -3048,13 +3051,13 @@ class MMD_Frontend {
 
         // Margin guards — respect the rule's per-cart discount ceiling and any
         // remaining campaign budget before the discount reaches the cart.
-        if (class_exists('MMD_Margin_Guards')) {
-            $discount_amount = MMD_Margin_Guards::cap_cart_discount(
+        if (class_exists('INCV_Margin_Guards')) {
+            $discount_amount = INCV_Margin_Guards::cap_cart_discount(
                 $discount_amount,
                 $rule_set,
                 $this->get_working_subtotal($cart)
             );
-            $remaining_budget = MMD_Margin_Guards::budget_remaining($rule_set);
+            $remaining_budget = INCV_Margin_Guards::budget_remaining($rule_set);
             if (!is_null($remaining_budget) && $discount_amount > $remaining_budget) {
                 $discount_amount = $remaining_budget;
             }
@@ -3143,7 +3146,7 @@ class MMD_Frontend {
 
         // The cart line shows exactly the label the merchant set — no generated
         // description is appended to it.
-        $discount_label = MMD_Discount_Rules::get_cart_label($rule_set);
+        $discount_label = INCV_Discount_Rules::get_cart_label($rule_set);
 
         // Apply discount via cart fee. The per-item display shows DB regular price
         // (forced by force_db_price_for_cart_items filter), so the fee is the
@@ -3161,8 +3164,8 @@ class MMD_Frontend {
             // Push the discount onto the participating products themselves so
             // the line totals (and therefore tax, refunds and reports) carry it.
             // No cart fee is added for these rules.
-            $alloc_mode = MMD_Discount_Allocator::get_mode($rule_set);
-            $allocation = MMD_Discount_Allocator::allocate(
+            $alloc_mode = INCV_Discount_Allocator::get_mode($rule_set);
+            $allocation = INCV_Discount_Allocator::allocate(
                 $discount_amount,
                 $qualifying_items,
                 $alloc_mode,
@@ -3172,7 +3175,7 @@ class MMD_Frontend {
             if (!empty($allocation)) {
                 // apply_to_cart returns what was really taken off each line,
                 // which can be less than requested when a margin floor bites.
-                $applied = MMD_Discount_Allocator::apply_to_cart($cart, $allocation, $rule_set);
+                $applied = INCV_Discount_Allocator::apply_to_cart($cart, $allocation, $rule_set);
                 if (!empty($applied)) {
                     $this->record_allocation($rule_set, $applied);
                 }
@@ -3205,7 +3208,7 @@ class MMD_Frontend {
     /**
      * Render the "buy more, save more" tier table on the product page.
      * Matches the v1.9 storefront design: header row + tier rows with the
-     * best tier highlighted. Disable via the `mmd_show_tier_table` filter.
+     * best tier highlighted. Disable via the `incv_show_tier_table` filter.
      */
     public function display_product_tier_table() {
         global $product;
@@ -3214,11 +3217,11 @@ class MMD_Frontend {
             return;
         }
 
-        if (!apply_filters('mmd_show_tier_table', true, $product)) {
+        if (!apply_filters('incv_show_tier_table', true, $product)) {
             return;
         }
 
-        $qualifying_rule_sets = MMD_Discount_Rules::get_qualifying_rule_sets_for_product($product->get_id());
+        $qualifying_rule_sets = INCV_Discount_Rules::get_qualifying_rule_sets_for_product($product->get_id());
         if (empty($qualifying_rule_sets)) {
             return;
         }
@@ -3249,7 +3252,7 @@ class MMD_Frontend {
         $price = floatval($product->get_price());
         $tier_count = count($tiers);
 
-        echo '<div class="mmd-tier-table" style="border:1px solid #eef1f6;border-radius:11px;overflow:hidden;margin:14px 0;font-size:13px;">';
+        echo '<div class="incv-tier-table" style="border:1px solid #eef1f6;border-radius:11px;overflow:hidden;margin:14px 0;font-size:13px;">';
         echo ( '<div style="background:#eef2ff;padding:9px 14px;font-size:12.5px;font-weight:700;color:#3a5bff;display:flex;align-items:center;gap:6px;">' . esc_html__( '📊 Buy more, save more', 'incentiv' ) . '</div>' );
 
         foreach ($tiers as $i => $tier) {
@@ -3295,7 +3298,7 @@ class MMD_Frontend {
             if (!$product) {
                 continue;
             }
-            foreach (MMD_Discount_Rules::get_qualifying_rule_sets($product, $cart_item) as $qualifying_set) {
+            foreach (INCV_Discount_Rules::get_qualifying_rule_sets($product, $cart_item) as $qualifying_set) {
                 if ($qualifying_set['id'] === $rule_set['id']) {
                     $count += intval($cart_item['quantity']);
                     break;
@@ -3314,7 +3317,7 @@ class MMD_Frontend {
         $notice_displayed = true;
 
         // Get all active rule sets
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
 
         // Display notices for each enabled rule set
         foreach ($rule_sets as $rule_set) {
@@ -3331,7 +3334,7 @@ class MMD_Frontend {
             }
 
             // Check if rule is within its scheduled time
-            if (!MMD_Discount_Rules::is_rule_in_schedule_public($rule_set)) {
+            if (!INCV_Discount_Rules::is_rule_in_schedule_public($rule_set)) {
                 continue;
             }
 
@@ -3349,7 +3352,7 @@ class MMD_Frontend {
             // message showed, so a coffee-only cart also showed the shoes
             // rule and an untargeted default rule.) Filterable to restore
             // the old behaviour.
-            $show_without_items = (bool) apply_filters('mmd_show_rule_notice_without_items', false, $rule_set);
+            $show_without_items = (bool) apply_filters('incv_show_rule_notice_without_items', false, $rule_set);
             if (!$show_without_items && $this->get_rule_qualifying_quantity($rule_set) <= 0) {
                 continue;
             }
@@ -3362,7 +3365,7 @@ class MMD_Frontend {
                 ? $rule_set['notice_content']
                 : $this->build_default_notice_content($rule_set['discount_rules'], $rule_set);
 
-            echo '<div class="woocommerce-info mmd-discount-notice" style="margin-bottom: 14px; background: ' . esc_attr($notice_color) . '; border: none; border-radius: 10px; padding: 13px 16px; color: #fff;">';
+            echo '<div class="woocommerce-info incv-discount-notice" style="margin-bottom: 14px; background: ' . esc_attr($notice_color) . '; border: none; border-radius: 10px; padding: 13px 16px; color: #fff;">';
             echo '<strong style="color: #fff; font-size: 15px;">' . esc_html($notice_title) . '</strong>';
             echo '<div style="margin-top: 6px; line-height: 1.6; color: rgba(255,255,255,.94); font-size: 13.5px;">' . wp_kses_post($content) . '</div>';
             echo '</div>';
@@ -3379,7 +3382,7 @@ class MMD_Frontend {
             }
 
             if (!empty($custom_message)) {
-                echo '<div class="woocommerce-info mmd-custom-rule-message" style="margin-bottom: 20px; background: #e8f5e9; border-left: 4px solid ' . esc_attr($notice_color) . '; padding: 12px; color: #333;">';
+                echo '<div class="woocommerce-info incv-custom-rule-message" style="margin-bottom: 20px; background: #e8f5e9; border-left: 4px solid ' . esc_attr($notice_color) . '; padding: 12px; color: #333;">';
                 echo '<div style="line-height: 1.6;">' . wp_kses_post($custom_message) . '</div>';
                 echo '</div>';
             }
@@ -3435,7 +3438,7 @@ class MMD_Frontend {
             $title = __( '🎉 You\'ve reached the highest discount tier!', 'incentiv' );
         }
 
-        echo '<div class="mmd-tier-progress" style="margin-bottom:20px;background:#fff;border:1px solid #e3e8ef;border-radius:14px;padding:16px 18px;box-shadow:0 1px 2px rgba(16,24,40,.04);">';
+        echo '<div class="incv-tier-progress" style="margin-bottom:20px;background:#fff;border:1px solid #e3e8ef;border-radius:14px;padding:16px 18px;box-shadow:0 1px 2px rgba(16,24,40,.04);">';
         echo '<div style="font-size:14px;font-weight:700;color:#101828;margin-bottom:11px;">' . wp_kses_post($title) . '</div>';
         echo '<div style="position:relative;height:10px;background:#eef1f6;border-radius:20px;overflow:hidden;margin-bottom:8px;">';
         echo '<span style="display:block;height:100%;width:' . esc_attr($pct) . '%;background:linear-gradient(90deg,#3a5bff,#7c3aed);border-radius:20px;transition:width .4s ease;"></span>';
@@ -3463,7 +3466,7 @@ class MMD_Frontend {
         if ($discount_mode === 'global') {
             // Global mode - discount applies to ALL matching products
             foreach ($rules as $rule) {
-                $discount_text = MMD_Helpers::format_discount($rule);
+                $discount_text = INCV_Helpers::format_discount($rule);
                 $content .= '• <strong>' . $discount_text . ( '</strong> ' . esc_html__( 'Discount on all products in the promotion', 'incentiv' ) . '<br>' );
             }
             $content .= '<small style="opacity:.85; font-style: italic; display: block; margin-top: 8px;">';
@@ -3474,7 +3477,7 @@ class MMD_Frontend {
             $apply_to_text = $rule_set['apply_to'] === 'cheapest' ? __( 'the cheapest', 'incentiv' ) : __( 'the most expensive', 'incentiv' );
 
             foreach ($rules as $rule) {
-                $discount_text = MMD_Helpers::format_discount($rule);
+                $discount_text = INCV_Helpers::format_discount($rule);
                 $content .= ( __( '• Buy', 'incentiv' ) . ' ' ) . $rule['quantity'] . ( ' ' . esc_html__( 'items, get', 'incentiv' ) . ' <strong>' ) . $discount_text . ( '</strong> ' . esc_html__( 'off the', 'incentiv' ) . ' ' ) . $apply_to_text . '<br>';
             }
             $content .= '<small style="opacity:.85; font-style: italic; display: block; margin-top: 8px;">';
@@ -3497,7 +3500,7 @@ class MMD_Frontend {
         WC()->cart->calculate_totals();
 
         // Get all active rule sets
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
         $fees = WC()->cart->get_fees();
 
         foreach ($fees as $fee) {
@@ -3516,7 +3519,7 @@ class MMD_Frontend {
                 }
 
                 // Check if rule is within its scheduled time
-                if (!MMD_Discount_Rules::is_rule_in_schedule_public($rule_set)) {
+                if (!INCV_Discount_Rules::is_rule_in_schedule_public($rule_set)) {
                     continue;
                 }
 
@@ -3539,7 +3542,7 @@ class MMD_Frontend {
                         }
                     }
 
-                    echo '<div class="mmd-mini-cart-discount" style="padding: 12px 14px; background: #fff; border: 1px solid #e3e8ef; margin: 10px 0; border-radius: 12px; box-shadow: 0 1px 2px rgba(16,24,40,.04);">';
+                    echo '<div class="incv-mini-cart-discount" style="padding: 12px 14px; background: #fff; border: 1px solid #e3e8ef; margin: 10px 0; border-radius: 12px; box-shadow: 0 1px 2px rgba(16,24,40,.04);">';
                     echo '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">';
                     echo '<span style="color: #475467; font-size: 12.5px; font-weight: 600;">✓ ' . esc_html($fee->name) . '</span>';
                     echo '</div>';
@@ -3589,7 +3592,7 @@ class MMD_Frontend {
         }
 
         $fees = $cart->get_fees();
-        $rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+        $rule_sets = INCV_Discount_Rules::get_all_rule_sets();
 
         foreach ($fees as $fee_key => $fee) {
             // Check if fee matches any rule set name
@@ -3650,8 +3653,8 @@ class MMD_Frontend {
 
         // Always output the override script for product pages and cart
         ?>
-        <script type="text/javascript">
-        var mmdOverrideData = <?php echo json_encode($override_data); ?>;
+        <?php ob_start(); ?>
+        var incvOverrideData = <?php echo wp_json_encode( $override_data, INCV_Helpers::JSON_INLINE ); ?>;
 
         // Provide display_modal_message stub if not defined (prevents JS errors from theme)
         if (typeof display_modal_message === 'undefined') {
@@ -3668,7 +3671,7 @@ class MMD_Frontend {
                 $.ajax({
                     url: wc_add_to_cart_params.ajax_url,
                     type: 'POST',
-                    data: {'action': 'get_refreshed_fragments'},
+                    data: {'action': 'incv_get_refreshed_fragments'},
                     success: function(data) {
                         if (data && data.fragments) {
                             $.each(data.fragments, function(key, value) {
@@ -3685,11 +3688,11 @@ class MMD_Frontend {
 
             // Function to apply override-specific fixes
             function applyOverrideFixes() {
-                if (!mmdOverrideData.active || mmdOverrideData.rules.length === 0) {
+                if (!incvOverrideData.active || incvOverrideData.rules.length === 0) {
                     return;
                 }
 
-                var rule = mmdOverrideData.rules[0];
+                var rule = incvOverrideData.rules[0];
                 var discountPercent = rule.type === 'percentage' ? rule.discount : 0;
                 var discountFixed = rule.type === 'fixed' ? rule.discount : 0;
 
@@ -3782,13 +3785,13 @@ class MMD_Frontend {
                     var $this = $(this);
 
                     // Skip if already processed
-                    if ($this.data('mmd-override-processed')) return;
-                    $this.data('mmd-override-processed', true);
-                    $this.attr('data-mmd-processed', 'true'); // For CSS visibility
+                    if ($this.data('incv-override-processed')) return;
+                    $this.data('incv-override-processed', true);
+                    $this.attr('data-incv-processed', 'true'); // For CSS visibility
 
                     var $priceAmount = $this.find('.woocommerce-Price-amount');
                     if ($priceAmount.length === 0) {
-                        $this.attr('data-mmd-processed', 'true'); // Show anyway
+                        $this.attr('data-incv-processed', 'true'); // Show anyway
                         return;
                     }
 
@@ -3796,7 +3799,7 @@ class MMD_Frontend {
                     var regularPrice = parseFloat(priceText.replace(/[^\d.]/g, '')) || 0;
 
                     if (regularPrice <= 0) {
-                        $this.attr('data-mmd-processed', 'true'); // Show anyway
+                        $this.attr('data-incv-processed', 'true'); // Show anyway
                         return;
                     }
 
@@ -3821,8 +3824,8 @@ class MMD_Frontend {
                 // Also update any other bundle price displays
                 $('.bundle-price-total, .bundle-subtotal').each(function() {
                     var $this = $(this);
-                    if ($this.data('mmd-override-processed')) return;
-                    $this.data('mmd-override-processed', true);
+                    if ($this.data('incv-override-processed')) return;
+                    $this.data('incv-override-processed', true);
 
                     var $priceAmount = $this.find('.woocommerce-Price-amount');
                     if ($priceAmount.length === 0) return;
@@ -4057,7 +4060,7 @@ class MMD_Frontend {
                 });
             }
         });
-        </script>
+        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
         <?php
     }
 
@@ -4068,18 +4071,18 @@ class MMD_Frontend {
         // Check if override is active to add price hiding CSS
         $override_active = $this->is_override_active();
         ?>
-        <style>
-            .mmd-discount-notice {
-                animation: mmd-fade-in 0.3s ease-in;
+        <?php ob_start(); ?>
+            .incv-discount-notice {
+                animation: incv-fade-in 0.3s ease-in;
             }
-            @keyframes mmd-fade-in {
+            @keyframes incv-fade-in {
                 from { opacity: 0; transform: translateY(-10px); }
                 to { opacity: 1; transform: translateY(0); }
             }
-            .mmd-mini-cart-discount {
-                animation: mmd-slide-down 0.3s ease-out;
+            .incv-mini-cart-discount {
+                animation: incv-slide-down 0.3s ease-out;
             }
-            @keyframes mmd-slide-down {
+            @keyframes incv-slide-down {
                 from { opacity: 0; max-height: 0; }
                 to { opacity: 1; max-height: 200px; }
             }
@@ -4093,27 +4096,27 @@ class MMD_Frontend {
                 visibility: visible !important;
                 opacity: 1 !important;
             }
-            .mmd-override-notice {
-                animation: mmd-fade-in 0.3s ease-in;
+            .incv-override-notice {
+                animation: incv-fade-in 0.3s ease-in;
             }
             <?php if ($override_active): ?>
             /* Hide prices initially when override is active - prevents flash */
-            .ecosupp-product-bundle-combined .bundle-main-price:not([data-mmd-processed]),
-            .bundle-total-price .bundle-main-price:not([data-mmd-processed]) {
+            .ecosupp-product-bundle-combined .bundle-main-price:not([data-incv-processed]),
+            .bundle-total-price .bundle-main-price:not([data-incv-processed]) {
                 opacity: 0;
                 transition: opacity 0.2s ease-in;
             }
-            .ecosupp-product-bundle-combined .bundle-main-price[data-mmd-processed],
-            .bundle-total-price .bundle-main-price[data-mmd-processed] {
+            .ecosupp-product-bundle-combined .bundle-main-price[data-incv-processed],
+            .bundle-total-price .bundle-main-price[data-incv-processed] {
                 opacity: 1;
             }
             /* Fallback: show price after animation if JS fails */
-            @keyframes mmd-show-price {
+            @keyframes incv-show-price {
                 to { opacity: 1; }
             }
             .ecosupp-product-bundle-combined .bundle-main-price,
             .bundle-total-price .bundle-main-price {
-                animation: mmd-show-price 0.1s ease-in 1.5s forwards;
+                animation: incv-show-price 0.1s ease-in 1.5s forwards;
             }
             <?php endif; ?>
             /* Override discount price styles */
@@ -4142,12 +4145,12 @@ class MMD_Frontend {
                 font-weight: bold !important;
             }
             /* Debug panel styles */
-            #mmd-debug-footer {
+            #incv-debug-footer {
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace !important;
                 box-shadow: 0 -5px 20px rgba(0,0,0,0.3) !important;
             }
             /* Discount badge on product image */
-            .mmd-discount-badge {
+            .incv-discount-badge {
                 position: absolute;
                 top: 10px;
                 right: 10px;
@@ -4162,8 +4165,8 @@ class MMD_Frontend {
                 pointer-events: none;
             }
             /* Ensure parent is positioned for absolute badge */
-            .woocommerce ul.products li.product .mmd-discount-badge,
-            .woocommerce-page ul.products li.product .mmd-discount-badge {
+            .woocommerce ul.products li.product .incv-discount-badge,
+            .woocommerce-page ul.products li.product .incv-discount-badge {
                 position: absolute;
                 top: 10px;
                 right: 10px;
@@ -4174,7 +4177,7 @@ class MMD_Frontend {
             .woocommerce div.product div.images {
                 position: relative;
             }
-        </style>
+        <?php INCV_Helpers::add_inline_style( ob_get_clean() ); ?>
         <?php
     }
 
@@ -4187,7 +4190,7 @@ class MMD_Frontend {
         }
 
         $cart = WC()->cart;
-        $settings = MMD_Helpers::get_settings();
+        $settings = INCV_Helpers::get_settings();
 
         echo '<div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; margin: 20px 0; font-size: 13px; direction: ' . ( is_rtl() ? 'rtl' : 'ltr' ) . ';">';
         echo ( '<strong style="color: #856404;">' . esc_html__( '🔧 Debug info (admins only):', 'incentiv' ) . '</strong><br><br>' );
@@ -4202,7 +4205,7 @@ class MMD_Frontend {
             $product = $cart_item['data'];
             $product_id = $cart_item['product_id'];
             $variation_id = isset($cart_item['variation_id']) ? $cart_item['variation_id'] : 0;
-            $is_qualifying = MMD_Helpers::is_product_qualifying($product, $cart_item);
+            $is_qualifying = INCV_Helpers::is_product_qualifying($product, $cart_item);
 
             echo '<div style="margin-bottom: 10px; padding: 8px; background: white; border-left: 3px solid ' . ($is_qualifying ? '#17b26a' : '#dc3545') . ';">';
             echo '<strong>' . esc_html( $product->get_name() ) . '</strong><br>';

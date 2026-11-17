@@ -7,13 +7,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
+class INCV_Gift_Notice_Widget extends \Elementor\Widget_Base {
 
     /**
      * Get widget name
      */
     public function get_name() {
-        return 'mmd_gift_notice';
+        return 'incv_gift_notice';
     }
 
     /**
@@ -34,7 +34,7 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
      * Get widget categories
      */
     public function get_categories() {
-        return array('mmd-widgets', 'woocommerce-elements');
+        return array('incv-widgets', 'woocommerce-elements');
     }
 
     /**
@@ -183,7 +183,7 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
             array(
                 'name' => 'title_typography',
                 'label' => __('Typography - title', 'incentiv'),
-                'selector' => '{{WRAPPER}} .mmd-gift-title',
+                'selector' => '{{WRAPPER}} .incv-gift-title',
             )
         );
 
@@ -192,7 +192,7 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
             array(
                 'name' => 'content_typography',
                 'label' => __('Typography - content', 'incentiv'),
-                'selector' => '{{WRAPPER}} .mmd-gift-content',
+                'selector' => '{{WRAPPER}} .incv-gift-content',
             )
         );
 
@@ -237,7 +237,7 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
             array(
                 'name' => 'box_shadow',
                 'label' => __('Shadow', 'incentiv'),
-                'selector' => '{{WRAPPER}} .mmd-gift-notice',
+                'selector' => '{{WRAPPER}} .incv-gift-notice',
             )
         );
 
@@ -252,7 +252,7 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
 
         // Get current product
         if (!$product || !is_object($product)) {
-            $product = wc_get_product(get_the_ID());
+            $product = wc_get_product(get_the_ID()); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's own global $product, set for the current product as WooCommerce templates expect.
         }
 
         if (!$product) {
@@ -265,7 +265,7 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
         $settings = $this->get_settings_for_display();
 
         // Check if gift is enabled for this product
-        $enabled = get_post_meta($product->get_id(), '_mmd_gift_enabled', true);
+        $enabled = get_post_meta($product->get_id(), '_incv_gift_enabled', true);
 
         if ($enabled !== '1') {
             if (\Elementor\Plugin::$instance->editor->is_edit_mode()) {
@@ -275,9 +275,9 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
         }
 
         // In-stock gifts only, the same as the product-page and cart pickers.
-        $gift_products = \MMD_Product_Gifts_V2::get_notice_gift_products($product->get_id());
-        $gift_type = get_post_meta($product->get_id(), '_mmd_gift_type', true);
-        $gift_discount = get_post_meta($product->get_id(), '_mmd_gift_discount', true);
+        $gift_products = \INCV_Product_Gifts_V2::get_notice_gift_products($product->get_id());
+        $gift_type = get_post_meta($product->get_id(), '_incv_gift_type', true);
+        $gift_discount = get_post_meta($product->get_id(), '_incv_gift_discount', true);
 
         if (empty($gift_products)) {
             return;
@@ -313,22 +313,22 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
         }
 
         ?>
-        <div class="mmd-gift-notice elementor-widget-mmd-gift-notice" style="<?php echo esc_attr($background_style . $padding_style . $border_radius . $text_color); ?>">
-            <div class="mmd-gift-title" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">
+        <div class="incv-gift-notice elementor-widget-incv-gift-notice" style="<?php echo esc_attr($background_style . $padding_style . $border_radius . $text_color); ?>">
+            <div class="incv-gift-title" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">
                 <?php echo esc_html($settings['title']); ?>
             </div>
 
             <?php if ($settings['show_products'] === 'yes'): ?>
-                <div class="mmd-gift-content" style="font-size: 14px;">
+                <div class="incv-gift-content" style="font-size: 14px;">
                     <p><?php esc_html_e( 'Buy this product and get', 'incentiv' ); ?> <?php echo esc_html($gift_text); ?> <?php esc_html_e( 'on:', 'incentiv' ); ?></p>
 
                     <?php if ($settings['show_images'] === 'yes'): ?>
-                        <div class="mmd-gift-products-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px;">
+                        <div class="incv-gift-products-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px;">
                             <?php foreach ($gift_products as $gift_product_id):
                                 $gift_product = wc_get_product($gift_product_id);
                                 if ($gift_product):
                             ?>
-                                <div class="mmd-gift-product-item" style="text-align: center;">
+                                <div class="incv-gift-product-item" style="text-align: center;">
                                     <?php echo wp_kses_post( $gift_product->get_image('thumbnail') ); ?>
                                     <div style="font-size: 12px; margin-top: 5px;"><?php echo esc_html($gift_product->get_name()); ?></div>
                                 </div>
@@ -352,7 +352,7 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
                     <?php endif; ?>
                 </div>
             <?php else: ?>
-                <div class="mmd-gift-content" style="font-size: 14px;">
+                <div class="incv-gift-content" style="font-size: 14px;">
                     <?php esc_html_e( 'Buy this product and get', 'incentiv' ); ?> <?php echo esc_html($gift_text); ?>!
                 </div>
             <?php endif; ?>
@@ -382,11 +382,11 @@ class MMD_Gift_Notice_Widget extends \Elementor\Widget_Base {
         var textColor = 'color: ' + settings.text_color + ';';
         #>
 
-        <div class="mmd-gift-notice" style="{{{ backgroundStyle + paddingStyle + borderRadius + textColor }}}">
-            <div class="mmd-gift-title" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">
+        <div class="incv-gift-notice" style="{{{ backgroundStyle + paddingStyle + borderRadius + textColor }}}">
+            <div class="incv-gift-title" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">
                 {{{ settings.title }}}
             </div>
-            <div class="mmd-gift-content" style="font-size: 14px;">
+            <div class="incv-gift-content" style="font-size: 14px;">
                 <# if (settings.show_products === 'yes') { #>
                     <p><?php esc_html_e( 'Buy this product and get a free gift on the selected products!', 'incentiv' ); ?></p>
                 <# } else { #>

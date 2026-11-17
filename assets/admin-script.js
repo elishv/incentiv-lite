@@ -4,14 +4,14 @@ jQuery(document).ready(function($) {
 
     // Color picker
     if ($.fn.wpColorPicker) {
-        $('.mmd-color-picker').wpColorPicker();
+        $('.incv-color-picker').wpColorPicker();
     }
 
     // Selection method toggle
     $('#selection_method').on('change', function() {
         var method = $(this).val();
 
-        $('.mmd-section').hide();
+        $('.incv-section').hide();
 
         if (method === 'category') {
             $('#category_section').show();
@@ -25,28 +25,28 @@ jQuery(document).ready(function($) {
     // Add discount rule
     $('#add_discount_rule').on('click', function() {
         var container = $('#discount_rules_container');
-        var index = container.find('.mmd-discount-rule').length;
+        var index = container.find('.incv-discount-rule').length;
 
-        var ruleHtml = '<div class="mmd-discount-rule">' +
-            '<div class="mmd-rule-fields">' +
-            ( '<div class="mmd-field"><label>' + __( 'Quantity', 'incentiv' ) + '</label>' ) +
-            '<input type="number" name="mmd_settings[discount_rules][' + index + '][quantity]" value="" min="1" placeholder="3"></div>' +
-            ( '<div class="mmd-field"><label>' + __( 'Discount', 'incentiv' ) + '</label>' ) +
-            '<input type="number" name="mmd_settings[discount_rules][' + index + '][discount]" value="" min="0" step="0.01" placeholder="30"></div>' +
-            ( '<div class="mmd-field"><label>' + __( 'Type', 'incentiv' ) + '</label>' ) +
-            '<select name="mmd_settings[discount_rules][' + index + '][type]">' +
+        var ruleHtml = '<div class="incv-discount-rule">' +
+            '<div class="incv-rule-fields">' +
+            ( '<div class="incv-field"><label>' + __( 'Quantity', 'incentiv' ) + '</label>' ) +
+            '<input type="number" name="incv_settings[discount_rules][' + index + '][quantity]" value="" min="1" placeholder="3"></div>' +
+            ( '<div class="incv-field"><label>' + __( 'Discount', 'incentiv' ) + '</label>' ) +
+            '<input type="number" name="incv_settings[discount_rules][' + index + '][discount]" value="" min="0" step="0.01" placeholder="30"></div>' +
+            ( '<div class="incv-field"><label>' + __( 'Type', 'incentiv' ) + '</label>' ) +
+            '<select name="incv_settings[discount_rules][' + index + '][type]">' +
             ( '<option value="percentage">' + __( 'Percentage (%)', 'incentiv' ) + '</option>' ) +
             ( '<option value="fixed">' + __( 'Fixed amount (₪)', 'incentiv' ) + '</option></select></div>' ) +
-            ( '<button type="button" class="button mmd-remove-rule" title="' + __( 'Remove', 'incentiv' ) + '">🗑️<span class="screen-reader-text">' + __( 'Remove', 'incentiv' ) + '</span></button>' ) +
+            ( '<button type="button" class="button incv-remove-rule" title="' + __( 'Remove', 'incentiv' ) + '">🗑️<span class="screen-reader-text">' + __( 'Remove', 'incentiv' ) + '</span></button>' ) +
             '</div></div>';
 
         container.append(ruleHtml);
     });
 
     // Remove discount rule
-    $(document).on('click', '.mmd-remove-rule', function() {
+    $(document).on('click', '.incv-remove-rule', function() {
         if (confirm(__( 'Are you sure you want to remove this rule?', 'incentiv' ))) {
-            $(this).closest('.mmd-discount-rule').fadeOut(300, function() {
+            $(this).closest('.incv-discount-rule').fadeOut(300, function() {
                 $(this).remove();
             });
         }
@@ -58,7 +58,7 @@ jQuery(document).ready(function($) {
         var errorMessage = '';
 
         // Check if discount rules are valid
-        $('.mmd-discount-rule').each(function() {
+        $('.incv-discount-rule').each(function() {
             var quantity = $(this).find('input[name*="[quantity]"]').val();
             var discount = $(this).find('input[name*="[discount]"]').val();
 
@@ -110,11 +110,11 @@ jQuery(document).ready(function($) {
     }
 
     function wizardTierRow(i, tier, showType) {
-        return '<div class="mmd-wz-tier" data-i="' + i + '" style="display:grid;grid-template-columns:auto 1fr 1fr auto;gap:10px;align-items:center;background:#f8fafc;border:1px solid #eef1f6;border-radius:10px;padding:11px 13px;margin-bottom:9px;">' +
+        return '<div class="incv-wz-tier" data-i="' + i + '" style="display:grid;grid-template-columns:auto 1fr 1fr auto;gap:10px;align-items:center;background:#f8fafc;border:1px solid #eef1f6;border-radius:10px;padding:11px 13px;margin-bottom:9px;">' +
             '<span style="width:26px;height:26px;border-radius:7px;background:' + (i === 2 ? '#7c3aed' : '#3a5bff') + ';color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;">' + (i + 1) + '</span>' +
-            ( '<div><div style="font-size:11px;color:#98a2b3;margin-bottom:2px;">' + __( 'Quantity ≥', 'incentiv' ) + '</div><input type="number" min="1" class="mmd-wz-qty" value="' ) + tier.qty + '" style="width:100%;padding:7px 9px;border:1px solid #d0d7e2;border-radius:7px;font-weight:700;"></div>' +
-            ( '<div><div style="font-size:11px;color:#98a2b3;margin-bottom:2px;">' + __( 'Discount %', 'incentiv' ) + '</div><input type="number" min="0" max="100" class="mmd-wz-disc" value="' ) + tier.disc + '" style="width:100%;padding:7px 9px;border:1px solid #d0d7e2;border-radius:7px;font-weight:700;"></div>' +
-            '<button type="button" class="mmd-wz-del" style="width:30px;height:30px;border-radius:7px;border:none;background:#feecea;color:#f04438;cursor:pointer;font-weight:700;">✕</button>' +
+            ( '<div><div style="font-size:11px;color:#98a2b3;margin-bottom:2px;">' + __( 'Quantity ≥', 'incentiv' ) + '</div><input type="number" min="1" class="incv-wz-qty" value="' ) + tier.qty + '" style="width:100%;padding:7px 9px;border:1px solid #d0d7e2;border-radius:7px;font-weight:700;"></div>' +
+            ( '<div><div style="font-size:11px;color:#98a2b3;margin-bottom:2px;">' + __( 'Discount %', 'incentiv' ) + '</div><input type="number" min="0" max="100" class="incv-wz-disc" value="' ) + tier.disc + '" style="width:100%;padding:7px 9px;border:1px solid #d0d7e2;border-radius:7px;font-weight:700;"></div>' +
+            '<button type="button" class="incv-wz-del" style="width:30px;height:30px;border-radius:7px;border:none;background:#feecea;color:#f04438;cursor:pointer;font-weight:700;">✕</button>' +
             '</div>';
     }
 
@@ -122,42 +122,42 @@ jQuery(document).ready(function($) {
         var h = '';
         if (step === 1) {
             h += ( '<h3>' + __( 'What kind of discount do you want to create?', 'incentiv' ) + '</h3><p>' + __( 'Choose the template that best fits your promotion.', 'incentiv' ) + '</p>' );
-            h += '<div class="mmd-wizard-type-grid">';
+            h += '<div class="incv-wizard-type-grid">';
             wizardTypes.forEach(function(t) {
                 var active = wizardState.type === t.id ? ' active' : '';
-                h += '<div class="mmd-wizard-type-card' + active + '" data-type="' + t.id + '">' +
-                    '<span class="mmd-type-check"><span class="msr">check</span></span>' +
+                h += '<div class="incv-wizard-type-card' + active + '" data-type="' + t.id + '">' +
+                    '<span class="incv-type-check"><span class="msr">check</span></span>' +
                     '<span class="msr" style="color:' + t.color + ';">' + t.icon + '</span>' +
-                    '<div class="mmd-type-title">' + t.title + '</div>' +
-                    '<div class="mmd-type-desc">' + t.desc + '</div></div>';
+                    '<div class="incv-type-title">' + t.title + '</div>' +
+                    '<div class="incv-type-desc">' + t.desc + '</div></div>';
             });
             h += '</div>';
         } else if (step === 2) {
             h += ( '<h3>' + __( 'Rule name and product selection', 'incentiv' ) + '</h3><p>' + __( 'How will you recognise this rule, and which products does it apply to?', 'incentiv' ) + '</p>' );
-            h += ( '<label class="mmd-form-label">' + __( 'Rule name', 'incentiv' ) + '</label>' ) +
-                '<input type="text" id="mmd-wz-name" value="' + $('<i>').text(wizardState.name).html() + ( '" placeholder="' + __( 'e.g. Buy 3 coffees, the cheapest is free', 'incentiv' ) + '" style="width:100%;padding:10px 12px;border:1px solid #d0d7e2;border-radius:9px;font-size:14px;margin-bottom:16px;">' );
-            h += ( '<label class="mmd-form-label">' + __( 'Product selection method', 'incentiv' ) + '</label>' );
-            h += '<div class="mmd-select-cards" style="margin-bottom:14px;">';
+            h += ( '<label class="incv-form-label">' + __( 'Rule name', 'incentiv' ) + '</label>' ) +
+                '<input type="text" id="incv-wz-name" value="' + $('<i>').text(wizardState.name).html() + ( '" placeholder="' + __( 'e.g. Buy 3 coffees, the cheapest is free', 'incentiv' ) + '" style="width:100%;padding:10px 12px;border:1px solid #d0d7e2;border-radius:9px;font-size:14px;margin-bottom:16px;">' );
+            h += ( '<label class="incv-form-label">' + __( 'Product selection method', 'incentiv' ) + '</label>' );
+            h += '<div class="incv-select-cards" style="margin-bottom:14px;">';
             [ { id: 'all', icon: 'select_all', label: __( 'All products', 'incentiv' ) },
               { id: 'category', icon: 'category', label: __( 'Categories', 'incentiv' ) },
               { id: 'product_ids', icon: 'inventory_2', label: __( 'Products', 'incentiv' ) },
               { id: 'attribute', icon: 'tune', label: __( 'Attribute', 'incentiv' ) } ].forEach(function(m) {
                 var active = wizardState.method === m.id ? ' active' : '';
-                h += '<div class="mmd-select-card' + active + '" data-method="' + m.id + '"><span class="msr">' + m.icon + '</span><span class="mmd-select-card-label">' + m.label + '</span></div>';
+                h += '<div class="incv-select-card' + active + '" data-method="' + m.id + '"><span class="msr">' + m.icon + '</span><span class="incv-select-card-label">' + m.label + '</span></div>';
             });
             h += '</div>';
             var cats = wizardCollectCategories();
             if (cats.length) {
-                h += '<div id="mmd-wz-cats" style="' + (wizardState.method === 'category' ? '' : 'display:none;') + '">';
-                h += ( '<label class="mmd-form-label">' + __( 'Select categories', 'incentiv' ) + '</label><div style="display:flex;flex-wrap:wrap;gap:7px;">' );
+                h += '<div id="incv-wz-cats" style="' + (wizardState.method === 'category' ? '' : 'display:none;') + '">';
+                h += ( '<label class="incv-form-label">' + __( 'Select categories', 'incentiv' ) + '</label><div style="display:flex;flex-wrap:wrap;gap:7px;">' );
                 cats.forEach(function(c) {
-                    var on = wizardState.categories.indexOf(String(c.id)) !== -1 ? ' mmd-chip-active' : '';
-                    h += '<span class="mmd-chip mmd-wz-cat' + on + '" data-id="' + c.id + '">' + c.label + '</span>';
+                    var on = wizardState.categories.indexOf(String(c.id)) !== -1 ? ' incv-chip-active' : '';
+                    h += '<span class="incv-chip incv-wz-cat' + on + '" data-id="' + c.id + '">' + c.label + '</span>';
                 });
                 h += '</div></div>';
             }
             if (wizardState.method === 'product_ids' || wizardState.method === 'attribute') {
-                h += ( '<div class="mmd-wizard-tip">' + __( 'You will finish the exact product or attribute selection in the form after the wizard.', 'incentiv' ) + '</div>' );
+                h += ( '<div class="incv-wizard-tip">' + __( 'You will finish the exact product or attribute selection in the form after the wizard.', 'incentiv' ) + '</div>' );
             }
         } else if (step === 3) {
             if (wizardState.type === 'global') {
@@ -165,10 +165,10 @@ jQuery(document).ready(function($) {
                 h += wizardTierRow(0, wizardState.tiers[0] || { qty: 1, disc: 10 });
             } else {
                 h += ( '<h3>' + __( 'Set the discount tiers', 'incentiv' ) + '</h3><p>' + __( 'How many units earn how much discount? The discount applies to the cheapest item. 100% = free.', 'incentiv' ) + '</p>' );
-                h += '<div id="mmd-wz-tiers">';
+                h += '<div id="incv-wz-tiers">';
                 wizardState.tiers.forEach(function(t, i) { h += wizardTierRow(i, t); });
                 h += '</div>';
-                h += ( '<button type="button" id="mmd-wz-add-tier" class="mmd-btn mmd-btn-dashed"><span class="msr">add</span>' + _x( 'Add tier', 'rule', 'incentiv' ) + '</button>' );
+                h += ( '<button type="button" id="incv-wz-add-tier" class="incv-btn incv-btn-dashed"><span class="msr">add</span>' + _x( 'Add tier', 'rule', 'incentiv' ) + '</button>' );
             }
         } else if (step === 4) {
             var typeInfo = wizardTypes.filter(function(t) { return t.id === wizardState.type; })[0];
@@ -181,34 +181,34 @@ jQuery(document).ready(function($) {
             h += ( '<div style="display:flex;justify-content:space-between;padding:13px 16px;"><span style="color:#667085;">' + __( 'Tiers', 'incentiv' ) + '</span><span style="display:flex;gap:5px;flex-wrap:wrap;">' );
             wizardState.tiers.forEach(function(t) {
                 var free = parseFloat(t.disc) >= 100;
-                h += '<span class="mmd-tier-chip' + (free ? ' mmd-tier-chip-purple' : '') + '">' + t.qty + '+ = ' + (free ? __( 'Free', 'incentiv' ) : t.disc + '%') + '</span>';
+                h += '<span class="incv-tier-chip' + (free ? ' incv-tier-chip-purple' : '') + '">' + t.qty + '+ = ' + (free ? __( 'Free', 'incentiv' ) : t.disc + '%') + '</span>';
             });
             h += '</span></div></div>';
-            h += ( '<div class="mmd-wizard-tip" style="background:#e9f9f0;border-color:#17b26a;color:#155724;margin-top:14px;">' + __( 'All set! Clicking "Create rule" fills in the form with your settings. There you can fine-tune messages, design and conditions, and then save.', 'incentiv' ) + '</div>' );
+            h += ( '<div class="incv-wizard-tip" style="background:#e9f9f0;border-color:#17b26a;color:#155724;margin-top:14px;">' + __( 'All set! Clicking "Create rule" fills in the form with your settings. There you can fine-tune messages, design and conditions, and then save.', 'incentiv' ) + '</div>' );
         }
-        return '<div style="animation:mmdRise .25s ease both;">' + h + '</div>';
+        return '<div style="animation:incvRise .25s ease both;">' + h + '</div>';
     }
 
     function wizardSyncStepUI() {
-        $('.mmd-wizard-step').each(function() {
+        $('.incv-wizard-step').each(function() {
             var n = parseInt($(this).data('step'), 10);
             $(this).toggleClass('active', n === wizardCurrentStep).toggleClass('completed', n < wizardCurrentStep);
         });
-        $('#mmd-wizard-prev').toggle(wizardCurrentStep > 1);
-        $('#mmd-wizard-next').toggle(wizardCurrentStep < wizardTotalSteps);
-        $('#mmd-wizard-finish').toggle(wizardCurrentStep === wizardTotalSteps);
-        $('#mmd-wizard-title').text(__( 'Discount rule wizard', 'incentiv' ));
-        $('#mmd-wizard-body').html(wizardStepHtml(wizardCurrentStep));
+        $('#incv-wizard-prev').toggle(wizardCurrentStep > 1);
+        $('#incv-wizard-next').toggle(wizardCurrentStep < wizardTotalSteps);
+        $('#incv-wizard-finish').toggle(wizardCurrentStep === wizardTotalSteps);
+        $('#incv-wizard-title').text(__( 'Discount rule wizard', 'incentiv' ));
+        $('#incv-wizard-body').html(wizardStepHtml(wizardCurrentStep));
     }
 
     function wizardReadStepValues() {
         if (wizardCurrentStep === 2) {
-            wizardState.name = $('#mmd-wz-name').val() || '';
+            wizardState.name = $('#incv-wz-name').val() || '';
         } else if (wizardCurrentStep === 3) {
             var tiers = [];
-            $('#mmd-wizard-body .mmd-wz-tier').each(function() {
-                var qty = parseInt($(this).find('.mmd-wz-qty').val(), 10);
-                var disc = parseFloat($(this).find('.mmd-wz-disc').val());
+            $('#incv-wizard-body .incv-wz-tier').each(function() {
+                var qty = parseInt($(this).find('.incv-wz-qty').val(), 10);
+                var disc = parseFloat($(this).find('.incv-wz-disc').val());
                 if (qty > 0 && !isNaN(disc)) tiers.push({ qty: qty, disc: disc });
             });
             if (tiers.length) {
@@ -222,12 +222,12 @@ jQuery(document).ready(function($) {
         wizardCurrentStep = 1;
         // Prefill name from form if present
         if (!wizardState.name) wizardState.name = $('#rule_name').val() || '';
-        $('#mmd-wizard-overlay').fadeIn(150);
+        $('#incv-wizard-overlay').fadeIn(150);
         wizardSyncStepUI();
     }
 
     function hideWizard() {
-        $('#mmd-wizard-overlay').fadeOut(150);
+        $('#incv-wizard-overlay').fadeOut(150);
     }
 
     // Apply the wizard state into the real form
@@ -259,11 +259,11 @@ jQuery(document).ready(function($) {
         if ($container.length) {
             $container.empty();
             wizardState.tiers.forEach(function(t, i) {
-                var row = '<div class="mmd-discount-rule"><div class="mmd-rule-fields">' +
-                    ( '<div class="mmd-field"><label>' + __( 'Quantity ≥', 'incentiv' ) + '</label><input type="number" name="discount_rules[' ) + i + '][quantity]" value="' + t.qty + '" min="1"></div>' +
-                    ( '<div class="mmd-field"><label>' + __( 'Discount', 'incentiv' ) + '</label><input type="number" name="discount_rules[' ) + i + '][discount]" value="' + t.disc + '" min="0" step="0.01"></div>' +
-                    ( '<div class="mmd-field"><label>' + __( 'Type', 'incentiv' ) + '</label><select name="discount_rules[' ) + i + ( '][type]"><option value="percentage" selected>' + __( 'Percentage %', 'incentiv' ) + '</option><option value="fixed">' + __( 'Fixed amount ₪', 'incentiv' ) + '</option></select></div>' ) +
-                    '<button type="button" class="mmd-remove-rule">✕</button>' +
+                var row = '<div class="incv-discount-rule"><div class="incv-rule-fields">' +
+                    ( '<div class="incv-field"><label>' + __( 'Quantity ≥', 'incentiv' ) + '</label><input type="number" name="discount_rules[' ) + i + '][quantity]" value="' + t.qty + '" min="1"></div>' +
+                    ( '<div class="incv-field"><label>' + __( 'Discount', 'incentiv' ) + '</label><input type="number" name="discount_rules[' ) + i + '][discount]" value="' + t.disc + '" min="0" step="0.01"></div>' +
+                    ( '<div class="incv-field"><label>' + __( 'Type', 'incentiv' ) + '</label><select name="discount_rules[' ) + i + ( '][type]"><option value="percentage" selected>' + __( 'Percentage %', 'incentiv' ) + '</option><option value="fixed">' + __( 'Fixed amount ₪', 'incentiv' ) + '</option></select></div>' ) +
+                    '<button type="button" class="incv-remove-rule">✕</button>' +
                     '</div></div>';
                 $container.append(row);
             });
@@ -272,18 +272,18 @@ jQuery(document).ready(function($) {
 
         // Land on the right step: timed promos go to conditions (schedule),
         // everything else goes to the summary step to review what was filled.
-        if (typeof window.mmdShowEditorStep === 'function') {
-            window.mmdShowEditorStep(wizardState.type === 'timed' ? 3 : 5);
+        if (typeof window.incvShowEditorStep === 'function') {
+            window.incvShowEditorStep(wizardState.type === 'timed' ? 3 : 5);
         } else {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         if (wizardState.type === 'timed') {
-            var $schedCard = $('.mmd-card').filter(function() { return $(this).find('.mmd-card-title .dashicons-calendar-alt').length > 0; }).first();
+            var $schedCard = $('.incv-card').filter(function() { return $(this).find('.incv-card-title .dashicons-calendar-alt').length > 0; }).first();
             if ($schedCard.length) {
-                $schedCard.addClass('mmd-wizard-highlight');
+                $schedCard.addClass('incv-wizard-highlight');
                 setTimeout(function() { $('html, body').animate({ scrollTop: $schedCard.offset().top - 120 }, 300); }, 250);
-                setTimeout(function() { $schedCard.removeClass('mmd-wizard-highlight'); }, 3500);
+                setTimeout(function() { $schedCard.removeClass('incv-wizard-highlight'); }, 3500);
             }
         }
     }
@@ -292,57 +292,57 @@ jQuery(document).ready(function($) {
     // (the Wizard button on the rules list is a PJAX link).
     function maybeAutoLaunchWizard() {
         var urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('action') === 'new' && urlParams.get('skip_wizard') !== '1' && $('#mmd-wizard-overlay').length) {
+        if (urlParams.get('action') === 'new' && urlParams.get('skip_wizard') !== '1' && $('#incv-wizard-overlay').length) {
             wizardState.name = '';
             showWizard();
         }
     }
     maybeAutoLaunchWizard();
-    $(document).on('mmd:pjax:after', maybeAutoLaunchWizard);
+    $(document).on('incv:pjax:after', maybeAutoLaunchWizard);
 
-    $(document).on('click', '#mmd-launch-wizard', function(e) { e.preventDefault(); showWizard(); });
+    $(document).on('click', '#incv-launch-wizard', function(e) { e.preventDefault(); showWizard(); });
 
     // Step interactions (delegated inside the wizard body)
-    $(document).on('click', '.mmd-wizard-type-card', function() {
+    $(document).on('click', '.incv-wizard-type-card', function() {
         wizardState.type = $(this).data('type');
         if (wizardState.type === 'global') {
             wizardState.tiers = [ { qty: 1, disc: 15 } ];
         } else if (wizardState.type === 'gift' && wizardState.tiers.length < 2) {
             wizardState.tiers = [ { qty: 2, disc: 0 }, { qty: 3, disc: 100 } ];
         }
-        $('.mmd-wizard-type-card').removeClass('active');
+        $('.incv-wizard-type-card').removeClass('active');
         $(this).addClass('active');
     });
 
-    $(document).on('click', '#mmd-wizard-body .mmd-select-card', function() {
+    $(document).on('click', '#incv-wizard-body .incv-select-card', function() {
         wizardState.method = $(this).data('method');
-        $('#mmd-wizard-body .mmd-select-card').removeClass('active');
+        $('#incv-wizard-body .incv-select-card').removeClass('active');
         $(this).addClass('active');
-        $('#mmd-wz-cats').toggle(wizardState.method === 'category');
+        $('#incv-wz-cats').toggle(wizardState.method === 'category');
     });
 
-    $(document).on('click', '.mmd-wz-cat', function() {
+    $(document).on('click', '.incv-wz-cat', function() {
         var id = String($(this).data('id'));
         var idx = wizardState.categories.indexOf(id);
         if (idx === -1) wizardState.categories.push(id); else wizardState.categories.splice(idx, 1);
-        $(this).toggleClass('mmd-chip-active');
+        $(this).toggleClass('incv-chip-active');
     });
 
-    $(document).on('click', '#mmd-wz-add-tier', function() {
+    $(document).on('click', '#incv-wz-add-tier', function() {
         wizardReadStepValues();
         var last = wizardState.tiers[wizardState.tiers.length - 1] || { qty: 2, disc: 20 };
         wizardState.tiers.push({ qty: last.qty + 1, disc: Math.min(100, last.disc + 20) });
-        $('#mmd-wizard-body').html(wizardStepHtml(3));
+        $('#incv-wizard-body').html(wizardStepHtml(3));
     });
 
-    $(document).on('click', '.mmd-wz-del', function() {
+    $(document).on('click', '.incv-wz-del', function() {
         wizardReadStepValues();
-        var i = $(this).closest('.mmd-wz-tier').index('#mmd-wizard-body .mmd-wz-tier');
+        var i = $(this).closest('.incv-wz-tier').index('#incv-wizard-body .incv-wz-tier');
         if (wizardState.tiers.length > 1) wizardState.tiers.splice(i, 1);
-        $('#mmd-wizard-body').html(wizardStepHtml(3));
+        $('#incv-wizard-body').html(wizardStepHtml(3));
     });
 
-    $(document).on('click', '#mmd-wizard-next', function() {
+    $(document).on('click', '#incv-wizard-next', function() {
         wizardReadStepValues();
         if (wizardCurrentStep < wizardTotalSteps) {
             wizardCurrentStep++;
@@ -350,7 +350,7 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $(document).on('click', '#mmd-wizard-prev', function() {
+    $(document).on('click', '#incv-wizard-prev', function() {
         wizardReadStepValues();
         if (wizardCurrentStep > 1) {
             wizardCurrentStep--;
@@ -358,17 +358,17 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $(document).on('click', '#mmd-wizard-finish', function() {
+    $(document).on('click', '#incv-wizard-finish', function() {
         wizardReadStepValues();
         wizardApplyToForm();
         hideWizard();
     });
 
-    $(document).on('click', '.mmd-wizard-close, .mmd-wizard-backdrop', function() { hideWizard(); });
+    $(document).on('click', '.incv-wizard-close, .incv-wizard-backdrop', function() { hideWizard(); });
 
     // Close wizard on Escape key
     $(document).on('keydown', function(e) {
-        if (e.key === 'Escape' && $('#mmd-wizard-overlay').is(':visible')) {
+        if (e.key === 'Escape' && $('#incv-wizard-overlay').is(':visible')) {
             hideWizard();
         }
     });
@@ -377,7 +377,7 @@ jQuery(document).ready(function($) {
     // EXAMPLE RULES IMPORT
     // ==========================================
 
-    $(document).on('click', '.mmd-import-example', function() {
+    $(document).on('click', '.incv-import-example', function() {
         var $btn = $(this);
         var example = $btn.data('example');
         var nonce = $btn.data('nonce');
@@ -394,13 +394,13 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_import_example_rule',
+                action: 'incv_import_example_rule',
                 example: example,
                 nonce: nonce
             },
             success: function(response) {
                 if (response.success) {
-                    $btn.addClass('mmd-imported').text(__( 'Imported!', 'incentiv' ));
+                    $btn.addClass('incv-imported').text(__( 'Imported!', 'incentiv' ));
                     // Reload after short delay to show updated rules list
                     setTimeout(function() {
                         window.location.reload();

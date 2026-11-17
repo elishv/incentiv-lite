@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Cart_Notes {
+class INCV_Cart_Notes {
 
     private static $instance = null;
 
@@ -25,8 +25,8 @@ class MMD_Cart_Notes {
         add_action('woocommerce_after_cart_table', array($this, 'display_cart_note_field'));
 
         // Save cart note to session
-        add_action('wp_ajax_mmd_save_cart_note', array($this, 'ajax_save_cart_note'));
-        add_action('wp_ajax_nopriv_mmd_save_cart_note', array($this, 'ajax_save_cart_note'));
+        add_action('wp_ajax_incv_save_cart_note', array($this, 'ajax_save_cart_note'));
+        add_action('wp_ajax_nopriv_incv_save_cart_note', array($this, 'ajax_save_cart_note'));
 
         // Add cart note to order
         add_action('woocommerce_checkout_create_order', array($this, 'save_cart_note_to_order'), 10, 2);
@@ -45,12 +45,12 @@ class MMD_Cart_Notes {
      * Display cart note field in cart
      */
     public function display_cart_note_field() {
-        $cart_note = WC()->session->get('mmd_cart_note', '');
+        $cart_note = WC()->session->get('incv_cart_note', '');
 
         // Get styling options
         $styling = array();
-        if (class_exists('MMD_Gift_Rules')) {
-            $gift_rules = MMD_Gift_Rules::get_instance();
+        if (class_exists('INCV_Gift_Rules')) {
+            $gift_rules = INCV_Gift_Rules::get_instance();
             $styling = $gift_rules->get_styling_options();
         }
 
@@ -67,21 +67,21 @@ class MMD_Cart_Notes {
         $focus_border = isset($styling['cart_note_focus_border']) ? $styling['cart_note_focus_border'] : '#7c3aed';
 
         ?>
-        <style>
-            .mmd-cart-note-container #mmd-cart-note::placeholder {
+        <?php ob_start(); ?>
+            .incv-cart-note-container #incv-cart-note::placeholder {
                 color: <?php echo esc_attr($placeholder_color); ?>;
             }
-            .mmd-cart-note-container #mmd-cart-note:focus {
+            .incv-cart-note-container #incv-cart-note:focus {
                 border-color: <?php echo esc_attr($focus_border); ?> !important;
                 outline: none;
             }
-        </style>
-        <div class="mmd-cart-note-container" style="margin-top: 20px;">
+        <?php INCV_Helpers::add_inline_style( ob_get_clean() ); ?>
+        <div class="incv-cart-note-container" style="margin-top: 20px;">
             <h3 style="font-size: <?php echo esc_attr($label_size); ?>px; color: <?php echo esc_attr($text_color); ?>;"><?php esc_html_e( 'Order note', 'incentiv' ); ?></h3>
             <p class="description" style="font-size: <?php echo esc_attr($input_size); ?>px; color: <?php echo esc_attr($text_color); ?>;"><?php esc_html_e( 'Add a special note to your order (optional)', 'incentiv' ); ?></p>
             <textarea
-                id="mmd-cart-note"
-                name="mmd_cart_note"
+                id="incv-cart-note"
+                name="incv_cart_note"
                 rows="3"
                 placeholder="<?php esc_attr_e( 'For example: please add an extra straw, or: this is a gift, please wrap it nicely...', 'incentiv' ); ?>"
                 style="width: 100%; padding: <?php echo esc_attr($padding); ?>px; border: <?php echo esc_attr($border_width); ?>px solid <?php echo esc_attr($border_color); ?>; border-radius: <?php echo esc_attr($border_radius); ?>px; background-color: <?php echo esc_attr($bg_color); ?>; color: <?php echo esc_attr($text_color); ?>; font-size: <?php echo esc_attr($input_size); ?>px;"
@@ -98,10 +98,10 @@ class MMD_Cart_Notes {
             return;
         }
 
-        wp_enqueue_script('mmd-cart-notes', MMD_PLUGIN_URL . 'assets/cart-notes.js', array('jquery'), '1.0.0', true);
-        wp_localize_script('mmd-cart-notes', 'mmdCartNotes', array(
+        wp_enqueue_script('incv-cart-notes', INCV_PLUGIN_URL . 'assets/cart-notes.js', array('jquery'), '1.0.0', true);
+        wp_localize_script('incv-cart-notes', 'incvCartNotes', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('mmd_cart_notes_nonce'),
+            'nonce' => wp_create_nonce('incv_cart_notes_nonce'),
         ));
     }
 
@@ -109,11 +109,11 @@ class MMD_Cart_Notes {
      * AJAX: Save cart note to session
      */
     public function ajax_save_cart_note() {
-        check_ajax_referer('mmd_cart_notes_nonce', 'nonce');
+        check_ajax_referer('incv_cart_notes_nonce', 'nonce');
 
         $cart_note = isset($_POST['cart_note']) ? sanitize_textarea_field(wp_unslash($_POST['cart_note'])) : '';
 
-        WC()->session->set('mmd_cart_note', $cart_note);
+        WC()->session->set('incv_cart_note', $cart_note);
 
         wp_send_json_success(array('message' => 'Cart note saved'));
     }
@@ -122,24 +122,24 @@ class MMD_Cart_Notes {
      * Save cart note to order
      */
     public function save_cart_note_to_order($order, $data) {
-        $cart_note = WC()->session->get('mmd_cart_note', '');
+        $cart_note = WC()->session->get('incv_cart_note', '');
 
         if (!empty($cart_note)) {
-            $order->update_meta_data('_mmd_cart_note', $cart_note);
+            $order->update_meta_data('_incv_cart_note', $cart_note);
         }
 
         // Clear session
-        WC()->session->set('mmd_cart_note', '');
+        WC()->session->set('incv_cart_note', '');
     }
 
     /**
      * Display cart note in order admin
      */
     public function display_cart_note_in_admin($order) {
-        $cart_note = $order->get_meta('_mmd_cart_note');
+        $cart_note = $order->get_meta('_incv_cart_note');
 
         if (!empty($cart_note)) {
-            echo '<div class="mmd-order-cart-note" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">';
+            echo '<div class="incv-order-cart-note" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">';
             echo ( '<h3 style="margin-top: 0;">' . esc_html__( '📝 Customer note', 'incentiv' ) . '</h3>' );
             echo '<p style="margin: 0; white-space: pre-wrap;">' . esc_html($cart_note) . '</p>';
             echo '</div>';
@@ -150,7 +150,7 @@ class MMD_Cart_Notes {
      * Display cart note in order emails
      */
     public function display_cart_note_in_email($order, $sent_to_admin, $plain_text) {
-        $cart_note = $order->get_meta('_mmd_cart_note');
+        $cart_note = $order->get_meta('_incv_cart_note');
 
         if (empty($cart_note)) {
             return;
@@ -171,4 +171,4 @@ class MMD_Cart_Notes {
 }
 
 // Initialize
-MMD_Cart_Notes::get_instance();
+INCV_Cart_Notes::get_instance();

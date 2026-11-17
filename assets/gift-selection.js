@@ -5,9 +5,9 @@
 jQuery(document).ready(function($) {
     var __ = wp.i18n.__;
     // Debug output only when the site runs with WP_DEBUG and INCENTIV_DEBUG on.
-    var mmdLog = (window.mmdGiftData && window.mmdGiftData.debug && window.console) ? console.log.bind(console) : function() {};
+    var incvLog = (window.incvGiftData && window.incvGiftData.debug && window.console) ? console.log.bind(console) : function() {};
     // Prevent modal/popup initialization on gift selection container
-    const container = $('.mmd-gift-selection-container');
+    const container = $('.incv-gift-selection-container');
 
     if (container.length > 0) {
         // Remove any modal-related classes that might be added by theme
@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
 
         // Reposition: move gift container right before form.cart if it's not already near it
         var $form = $('form.cart').first();
-        if ($form.length && !$form.find('.mmd-gift-selection-container').length) {
+        if ($form.length && !$form.find('.incv-gift-selection-container').length) {
             // Check if container is a sibling or inside the same parent as form
             var containerParent = container.parent()[0];
             var formParent = $form.parent()[0];
@@ -46,17 +46,17 @@ jQuery(document).ready(function($) {
     function ensureGiftFieldsExist() {
         var form = $('form.cart');
         if (!form.length) return;
-        if (!form.find('#mmd_selected_gift_product').length) {
-            form.append('<input type="hidden" name="mmd_selected_gift_product" id="mmd_selected_gift_product" value="">');
+        if (!form.find('#incv_selected_gift_product').length) {
+            form.append('<input type="hidden" name="incv_selected_gift_product" id="incv_selected_gift_product" value="">');
         }
-        if (!form.find('#mmd_selected_gift_variation').length) {
-            form.append('<input type="hidden" name="mmd_selected_gift_variation" id="mmd_selected_gift_variation" value="">');
+        if (!form.find('#incv_selected_gift_variation').length) {
+            form.append('<input type="hidden" name="incv_selected_gift_variation" id="incv_selected_gift_variation" value="">');
         }
-        if (!form.find('#mmd_selected_gift_attributes').length) {
-            form.append('<input type="hidden" name="mmd_selected_gift_attributes" id="mmd_selected_gift_attributes" value="">');
+        if (!form.find('#incv_selected_gift_attributes').length) {
+            form.append('<input type="hidden" name="incv_selected_gift_attributes" id="incv_selected_gift_attributes" value="">');
         }
-        if (!form.find('#mmd_selected_gifts_container').length) {
-            form.append('<div id="mmd_selected_gifts_container"></div>');
+        if (!form.find('#incv_selected_gifts_container').length) {
+            form.append('<div id="incv_selected_gifts_container"></div>');
         }
     }
 
@@ -85,18 +85,18 @@ jQuery(document).ready(function($) {
     function updateQuantityIndicator() {
         if (totalQuantityLimit > 0 && allowQuantity && selectionType === 'multiple') {
             const currentTotal = getTotalSelectedQuantity();
-            let indicator = $('.mmd-total-quantity-indicator');
+            let indicator = $('.incv-total-quantity-indicator');
 
             if (!indicator.length) {
-                container.find('.mmd-gift-subtitle').after(
-                    '<div class="mmd-total-quantity-indicator" style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 4px; margin-bottom: 10px; font-size: 14px;">' +
-                    '<span class="mmd-quantity-current">0</span> / <span class="mmd-quantity-limit">' + totalQuantityLimit + ( '</span> ' + __( 'Selected', 'incentiv' ) ) +
+                container.find('.incv-gift-subtitle').after(
+                    '<div class="incv-total-quantity-indicator" style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 4px; margin-bottom: 10px; font-size: 14px;">' +
+                    '<span class="incv-quantity-current">0</span> / <span class="incv-quantity-limit">' + totalQuantityLimit + ( '</span> ' + __( 'Selected', 'incentiv' ) ) +
                     '</div>'
                 );
-                indicator = $('.mmd-total-quantity-indicator');
+                indicator = $('.incv-total-quantity-indicator');
             }
 
-            indicator.find('.mmd-quantity-current').text(currentTotal);
+            indicator.find('.incv-quantity-current').text(currentTotal);
 
             // Visual feedback when approaching limit
             if (currentTotal >= totalQuantityLimit) {
@@ -110,8 +110,8 @@ jQuery(document).ready(function($) {
     }
 
     // Handle +/- buttons for quantity inputs
-    $(document).on('click', '.mmd-quantity-plus', function() {
-        const input = $(this).siblings('.mmd-quantity-input-wrapper').find('input[type="number"]');
+    $(document).on('click', '.incv-quantity-plus', function() {
+        const input = $(this).siblings('.incv-quantity-input-wrapper').find('input[type="number"]');
         const currentVal = parseInt(input.val()) || 0;
         const max = parseInt(input.attr('max')) || 999;
 
@@ -120,8 +120,8 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $(document).on('click', '.mmd-quantity-minus', function() {
-        const input = $(this).siblings('.mmd-quantity-input-wrapper').find('input[type="number"]');
+    $(document).on('click', '.incv-quantity-minus', function() {
+        const input = $(this).siblings('.incv-quantity-input-wrapper').find('input[type="number"]');
         const currentVal = parseInt(input.val()) || 0;
         const min = parseInt(input.attr('min')) || 0;
 
@@ -131,28 +131,28 @@ jQuery(document).ready(function($) {
     });
 
     // Update button states based on quantity value
-    $(document).on('input change', '.mmd-gift-quantity-input, .mmd-gift-variation-quantity-input', function() {
+    $(document).on('input change', '.incv-gift-quantity-input, .incv-gift-variation-quantity-input', function() {
         const input = $(this);
         const currentVal = parseInt(input.val()) || 0;
         const min = parseInt(input.attr('min')) || 0;
         const max = parseInt(input.attr('max')) || 999;
-        const quantityControl = input.closest('.mmd-quantity-control');
+        const quantityControl = input.closest('.incv-quantity-control');
 
         // Update minus button state
-        quantityControl.find('.mmd-quantity-minus').prop('disabled', currentVal <= min);
+        quantityControl.find('.incv-quantity-minus').prop('disabled', currentVal <= min);
 
         // Update plus button state
-        quantityControl.find('.mmd-quantity-plus').prop('disabled', currentVal >= max);
+        quantityControl.find('.incv-quantity-plus').prop('disabled', currentVal >= max);
     });
 
     // Handle quantity inputs (when allow-quantity is enabled)
     if (allowQuantity && selectionType === 'multiple') {
         // Handle variation-specific quantity inputs (for expanded variations)
-        $(document).on('change', '.mmd-gift-variation-quantity-input', function() {
+        $(document).on('change', '.incv-gift-variation-quantity-input', function() {
             const productId = $(this).data('product-id');
             const variationId = $(this).data('variation-id');
             const requestedQuantity = parseInt($(this).val()) || 0;
-            const productRow = $(this).closest('.mmd-gift-product-row');
+            const productRow = $(this).closest('.incv-gift-product-row');
             const attributes = $(this).data('attributes') || {};
 
             // Create a unique key for this variation
@@ -204,14 +204,14 @@ jQuery(document).ready(function($) {
 
             updateHiddenFields();
             updateQuantityIndicator();
-            mmdLog('Variation quantity changed for product', productId, 'variation', variationId, ':', requestedQuantity);
+            incvLog('Variation quantity changed for product', productId, 'variation', variationId, ':', requestedQuantity);
         });
 
         // Handle product-level quantity inputs (for simple products and variable with selected variations)
-        $(document).on('change', '.mmd-gift-quantity-input', function() {
+        $(document).on('change', '.incv-gift-quantity-input', function() {
             const productId = $(this).data('product-id');
             const requestedQuantity = parseInt($(this).val()) || 0;
-            const productRow = $(this).closest('.mmd-gift-product-row');
+            const productRow = $(this).closest('.incv-gift-product-row');
             const isVariable = productRow.data('variable') === 1;
 
             // Check total quantity limit first
@@ -241,10 +241,10 @@ jQuery(document).ready(function($) {
                 // Quantity selected
                 if (isVariable) {
                     // For variable products, check if variation is already selected
-                    const variationsContainer = productRow.find('.mmd-variation-selectors');
+                    const variationsContainer = productRow.find('.incv-variation-selectors');
                     if (!variationsContainer.data('loaded')) {
                         // Variations not loaded yet - auto-trigger the selection button
-                        const selectBtn = productRow.find('.mmd-gift-variable-btn');
+                        const selectBtn = productRow.find('.incv-gift-variable-btn');
                         if (selectBtn.length) {
                             selectBtn.trigger('click');
                             // Keep the quantity value the user entered
@@ -279,15 +279,15 @@ jQuery(document).ready(function($) {
 
             updateHiddenFields();
             updateQuantityIndicator();
-            mmdLog('Quantity changed for product', productId, ':', quantity);
+            incvLog('Quantity changed for product', productId, ':', quantity);
         });
 
         // For variable products in quantity mode, handle variation selection differently
-        $(document).on('change', '.mmd-variation-attribute', function() {
-            const variationsContainer = $(this).closest('.mmd-variation-selectors');
-            const productRow = variationsContainer.closest('.mmd-gift-product-row');
+        $(document).on('change', '.incv-variation-attribute', function() {
+            const variationsContainer = $(this).closest('.incv-variation-selectors');
+            const productRow = variationsContainer.closest('.incv-gift-product-row');
             const productId = productRow.data('product-id');
-            const quantityInput = productRow.find('.mmd-gift-quantity-input');
+            const quantityInput = productRow.find('.incv-gift-quantity-input');
 
             // Check if all attributes selected
             const allSelected = checkAllAttributesSelected(variationsContainer);
@@ -309,16 +309,16 @@ jQuery(document).ready(function($) {
                         updateHiddenFields();
                     }
 
-                    mmdLog('Variation selected for product', productId, ':', matchedVariation.variation_id);
+                    incvLog('Variation selected for product', productId, ':', matchedVariation.variation_id);
                 }
             }
         });
     }
 
     // Handle simple product selection
-    $(document).on('click', '.mmd-gift-select-btn[data-simple-product]', function() {
+    $(document).on('click', '.incv-gift-select-btn[data-simple-product]', function() {
         const productId = $(this).data('simple-product');
-        const productRow = $(this).closest('.mmd-gift-product-row');
+        const productRow = $(this).closest('.incv-gift-product-row');
 
         if (selectionType === 'single') {
             // Single selection mode
@@ -330,11 +330,11 @@ jQuery(document).ready(function($) {
             } else {
                 // Clear all previous selections
                 selectedGifts = {};
-                $('.mmd-gift-product-row').removeClass('selected');
-                $('.mmd-gift-select-btn').removeClass('selected').text(__( 'Choose', 'incentiv' ));
+                $('.incv-gift-product-row').removeClass('selected');
+                $('.incv-gift-select-btn').removeClass('selected').text(__( 'Choose', 'incentiv' ));
 
                 // Get quantity from input if available
-                const quantityInput = productRow.find('.mmd-gift-quantity-input');
+                const quantityInput = productRow.find('.incv-gift-quantity-input');
                 const quantity = quantityInput.length ? parseInt(quantityInput.val()) || 1 : 1;
 
                 // Select this one
@@ -352,8 +352,8 @@ jQuery(document).ready(function($) {
             }
 
             // Update hidden fields for single mode
-            $('#mmd_selected_gift_product').val(productId);
-            $('#mmd_selected_gift_variation').val('');
+            $('#incv_selected_gift_product').val(productId);
+            $('#incv_selected_gift_variation').val('');
         } else {
             // Multiple selection mode
             if (selectedGifts[productId]) {
@@ -373,9 +373,9 @@ jQuery(document).ready(function($) {
     });
 
     // Handle pre-filtered variation selection (from attribute-filtered gift products)
-    $(document).on('click', '.mmd-gift-variation-select-btn', function() {
+    $(document).on('click', '.incv-gift-variation-select-btn', function() {
         const $btn = $(this);
-        const $row = $btn.closest('.mmd-gift-product-row');
+        const $row = $btn.closest('.incv-gift-product-row');
         const productId = $btn.data('product-id');
         const variationId = $btn.data('variation-id');
         const presetAttributes = $btn.data('preset-attributes') || {};
@@ -383,7 +383,7 @@ jQuery(document).ready(function($) {
         ensureGiftFieldsExist();
 
         // Check if there are remaining attribute selects that need values
-        const $remainingSelects = $row.find('.mmd-variation-remaining-select');
+        const $remainingSelects = $row.find('.incv-variation-remaining-select');
         if ($remainingSelects.length > 0) {
             let allFilled = true;
             const mergedAttributes = Object.assign({}, presetAttributes);
@@ -405,8 +405,8 @@ jQuery(document).ready(function($) {
             // All attributes selected - proceed with merged attributes
             if (selectionType === 'single') {
                 selectedGifts = {};
-                $('.mmd-gift-product-row').removeClass('selected');
-                $('.mmd-gift-select-btn').removeClass('selected').text(__( 'Choose', 'incentiv' ));
+                $('.incv-gift-product-row').removeClass('selected');
+                $('.incv-gift-select-btn').removeClass('selected').text(__( 'Choose', 'incentiv' ));
 
                 selectedGifts[productId] = {
                     variation_id: variationId,
@@ -416,9 +416,9 @@ jQuery(document).ready(function($) {
                 $row.addClass('selected');
                 $btn.addClass('selected').text(__( '✓ Selected', 'incentiv' ));
 
-                $('#mmd_selected_gift_product').val(productId);
-                $('#mmd_selected_gift_variation').val(variationId);
-                $('#mmd_selected_gift_attributes').val(JSON.stringify(mergedAttributes));
+                $('#incv_selected_gift_product').val(productId);
+                $('#incv_selected_gift_variation').val(variationId);
+                $('#incv_selected_gift_attributes').val(JSON.stringify(mergedAttributes));
             } else {
                 if (selectedGifts[variationId]) {
                     delete selectedGifts[variationId];
@@ -438,8 +438,8 @@ jQuery(document).ready(function($) {
             // No remaining attributes - variation is fully specified
             if (selectionType === 'single') {
                 selectedGifts = {};
-                $('.mmd-gift-product-row').removeClass('selected');
-                $('.mmd-gift-select-btn').removeClass('selected').text(__( 'Choose', 'incentiv' ));
+                $('.incv-gift-product-row').removeClass('selected');
+                $('.incv-gift-select-btn').removeClass('selected').text(__( 'Choose', 'incentiv' ));
 
                 selectedGifts[productId] = {
                     variation_id: variationId,
@@ -449,9 +449,9 @@ jQuery(document).ready(function($) {
                 $row.addClass('selected');
                 $btn.addClass('selected').text(__( '✓ Selected', 'incentiv' ));
 
-                $('#mmd_selected_gift_product').val(productId);
-                $('#mmd_selected_gift_variation').val(variationId);
-                $('#mmd_selected_gift_attributes').val(JSON.stringify(presetAttributes));
+                $('#incv_selected_gift_product').val(productId);
+                $('#incv_selected_gift_variation').val(variationId);
+                $('#incv_selected_gift_attributes').val(JSON.stringify(presetAttributes));
             } else {
                 if (selectedGifts[variationId]) {
                     delete selectedGifts[variationId];
@@ -474,13 +474,13 @@ jQuery(document).ready(function($) {
     });
 
     // Handle variable product selection - show variations inline
-    $(document).on('click', '.mmd-gift-variable-btn', function() {
-        const productRow = $(this).closest('.mmd-gift-product-row');
+    $(document).on('click', '.incv-gift-variable-btn', function() {
+        const productRow = $(this).closest('.incv-gift-product-row');
         const productId = productRow.data('product-id');
-        const variationsContainer = productRow.find('.mmd-variation-selectors');
+        const variationsContainer = productRow.find('.incv-variation-selectors');
         const button = $(this);
 
-        mmdLog('Loading variations for product:', productId);
+        incvLog('Loading variations for product:', productId);
 
         // If already showing, this will enable/confirm selection
         if (variationsContainer.is(':visible') && variationsContainer.data('loaded')) {
@@ -496,18 +496,18 @@ jQuery(document).ready(function($) {
         const variationInfo = productRow.data('variation-info');
 
         if (!variationInfo || !variationInfo.attributes || !variationInfo.variations) {
-            console.error('MMD: No variation data preloaded for product', productId);
+            console.error('INCV: No variation data preloaded for product', productId);
             alert(__( 'No options are available for this product', 'incentiv' ));
             return;
         }
 
-        mmdLog('MMD: Using preloaded variation data');
-        mmdLog('MMD: Building attribute selectors for', variationInfo.attributes.length, 'attributes');
-        mmdLog('MMD: Total variations available:', variationInfo.variations.length);
+        incvLog('INCV: Using preloaded variation data');
+        incvLog('INCV: Building attribute selectors for', variationInfo.attributes.length, 'attributes');
+        incvLog('INCV: Total variations available:', variationInfo.variations.length);
 
         // Check if we have attributes
         if (variationInfo.attributes.length === 0) {
-            console.error('MMD: No attributes in preloaded data');
+            console.error('INCV: No attributes in preloaded data');
             alert(__( 'No options are available for this product', 'incentiv' ));
             return;
         }
@@ -532,31 +532,31 @@ jQuery(document).ready(function($) {
             // If all variations have the same non-empty value, it's fixed
             if (uniqueValues.size === 1) {
                 fixedAttributes[attr.name] = Array.from(uniqueValues)[0];
-                mmdLog('Detected fixed attribute:', attr.name, '=', fixedAttributes[attr.name]);
+                incvLog('Detected fixed attribute:', attr.name, '=', fixedAttributes[attr.name]);
             }
         });
 
         // Build attribute selectors inline
         variationInfo.attributes.forEach(function(attr, index) {
-            mmdLog('Building selector for attribute:', attr.name, 'with', attr.options.length, 'options');
+            incvLog('Building selector for attribute:', attr.name, 'with', attr.options.length, 'options');
 
             // Check if this attribute has a fixed value across all variations
             if (fixedAttributes[attr.name]) {
                 // Pre-select and hide this attribute
                 autoSelectAttributes[attr.name] = fixedAttributes[attr.name];
-                mmdLog('Auto-selecting fixed attribute', attr.name, ':', fixedAttributes[attr.name]);
-                html += '<input type="hidden" class="mmd-variation-attribute" data-attribute-name="' + attr.name + '" value="' + fixedAttributes[attr.name] + '">';
+                incvLog('Auto-selecting fixed attribute', attr.name, ':', fixedAttributes[attr.name]);
+                html += '<input type="hidden" class="incv-variation-attribute" data-attribute-name="' + attr.name + '" value="' + fixedAttributes[attr.name] + '">';
             } else if (attr.options.length === 1) {
                 // Auto-select the only option and hide the selector
                 var optionValue = typeof attr.options[0] === 'object' ? attr.options[0].value : attr.options[0];
                 autoSelectAttributes[attr.name] = optionValue;
-                mmdLog('Auto-selecting single option for', attr.name, ':', optionValue);
-                html += '<input type="hidden" class="mmd-variation-attribute" data-attribute-name="' + attr.name + '" value="' + optionValue + '">';
+                incvLog('Auto-selecting single option for', attr.name, ':', optionValue);
+                html += '<input type="hidden" class="incv-variation-attribute" data-attribute-name="' + attr.name + '" value="' + optionValue + '">';
             } else {
                 hasVisibleSelectors = true;
-                html += '<div class="mmd-attribute-field">';
+                html += '<div class="incv-attribute-field">';
                 html += '<label>' + attr.label + ':</label>';
-                html += '<select class="mmd-variation-attribute" data-attribute-name="' + attr.name + '">';
+                html += '<select class="incv-variation-attribute" data-attribute-name="' + attr.name + '">';
                 html += ( '<option value="">' + __( 'Choose...', 'incentiv' ) + '</option>' );
 
                 attr.options.forEach(function(option) {
@@ -585,12 +585,12 @@ jQuery(document).ready(function($) {
         // Check for default variation and pre-select it
         const defaultVariationId = productRow.data('default-variation');
         if (defaultVariationId) {
-            mmdLog('Pre-selecting default variation:', defaultVariationId);
+            incvLog('Pre-selecting default variation:', defaultVariationId);
             // Find the default variation in variations data
             const defaultVariation = variationInfo.variations.find(v => v.variation_id == defaultVariationId);
             if (defaultVariation) {
                 // Pre-select attributes for this variation
-                variationsContainer.find('.mmd-variation-attribute').each(function() {
+                variationsContainer.find('.incv-variation-attribute').each(function() {
                     const attrName = $(this).data('attribute-name');
                     const attrValue = defaultVariation.attributes[attrName];
                     if (attrValue) {
@@ -620,18 +620,18 @@ jQuery(document).ready(function($) {
 
         // If all attributes are auto-selected (no visible selectors), auto-select the variation
         if (!hasVisibleSelectors && Object.keys(autoSelectAttributes).length > 0) {
-            mmdLog('All attributes auto-selected, selecting variation automatically...');
+            incvLog('All attributes auto-selected, selecting variation automatically...');
             button.text(__( '✓ Selected', 'incentiv' )).addClass('selected ready');
             selectVariation(productRow, variationsContainer);
         } else {
             button.text(__( 'Confirm', 'incentiv' ));
-            mmdLog('Variation selectors built and displayed successfully from preloaded data');
+            incvLog('Variation selectors built and displayed successfully from preloaded data');
         }
     });
 
     // Helper function to check if all attributes are selected
     function checkAllAttributesSelected(variationsContainer) {
-        const attributes = variationsContainer.find('.mmd-variation-attribute');
+        const attributes = variationsContainer.find('.incv-variation-attribute');
         let allSelected = true;
 
         attributes.each(function() {
@@ -646,7 +646,7 @@ jQuery(document).ready(function($) {
 
     // Helper function to get selected attributes
     function getSelectedAttributes(variationsContainer) {
-        const attributes = variationsContainer.find('.mmd-variation-attribute');
+        const attributes = variationsContainer.find('.incv-variation-attribute');
         const selectedAttributes = {};
 
         attributes.each(function() {
@@ -680,14 +680,14 @@ jQuery(document).ready(function($) {
     function findMatchingVariation(variationsContainer, selectedAttributes) {
         const variations = variationsContainer.data('variations');
 
-        mmdLog('Searching through', variations.length, 'variations');
-        mmdLog('Looking for attributes:', selectedAttributes);
+        incvLog('Searching through', variations.length, 'variations');
+        incvLog('Looking for attributes:', selectedAttributes);
 
         for (let i = 0; i < variations.length; i++) {
             const variation = variations[i];
             let matches = true;
 
-            mmdLog('Checking variation', variation.variation_id, 'with attributes:', variation.attributes);
+            incvLog('Checking variation', variation.variation_id, 'with attributes:', variation.attributes);
 
             // Check if all selected attributes match the variation
             for (let selectedAttrName in selectedAttributes) {
@@ -717,7 +717,7 @@ jQuery(document).ready(function($) {
             }
 
             if (matches) {
-                mmdLog('Found matching variation:', variation.variation_id);
+                incvLog('Found matching variation:', variation.variation_id);
                 return variation;
             }
         }
@@ -744,7 +744,7 @@ jQuery(document).ready(function($) {
         const giftProductId = variationsContainer.data('product-id');
         const variationId = matchedVariation.variation_id;
 
-        mmdLog('Selecting variation:', {
+        incvLog('Selecting variation:', {
             giftProductId: giftProductId,
             variationId: variationId,
             attributes: selectedAttributes
@@ -753,11 +753,11 @@ jQuery(document).ready(function($) {
         if (selectionType === 'single') {
             // Clear all previous selections
             selectedGifts = {};
-            $('.mmd-gift-product-row').removeClass('selected');
-            $('.mmd-gift-select-btn').removeClass('selected').text(__( 'Choose', 'incentiv' ));
+            $('.incv-gift-product-row').removeClass('selected');
+            $('.incv-gift-select-btn').removeClass('selected').text(__( 'Choose', 'incentiv' ));
 
             // Get quantity from input if available
-            const quantityInput = productRow.find('.mmd-gift-quantity-input');
+            const quantityInput = productRow.find('.incv-gift-quantity-input');
             const quantity = quantityInput.length ? parseInt(quantityInput.val()) || 1 : 1;
 
             // Select this variation
@@ -771,16 +771,16 @@ jQuery(document).ready(function($) {
                 selectedGifts[giftProductId] = variationId;
             }
             productRow.addClass('selected');
-            productRow.find('.mmd-gift-select-btn').addClass('selected').text(__( '✓ Selected', 'incentiv' ));
+            productRow.find('.incv-gift-select-btn').addClass('selected').text(__( '✓ Selected', 'incentiv' ));
 
             // Update hidden fields for single mode
-            $('#mmd_selected_gift_product').val(giftProductId);
-            $('#mmd_selected_gift_variation').val(variationId);
+            $('#incv_selected_gift_product').val(giftProductId);
+            $('#incv_selected_gift_variation').val(variationId);
 
             // Store selected attributes as raw JSON (let serialization handle encoding)
-            $('#mmd_selected_gift_attributes').val(JSON.stringify(selectedAttributes));
+            $('#incv_selected_gift_attributes').val(JSON.stringify(selectedAttributes));
 
-            mmdLog('Updated hidden fields - product:', giftProductId, 'variation:', variationId, 'quantity:', quantity, 'attributes:', selectedAttributes);
+            incvLog('Updated hidden fields - product:', giftProductId, 'variation:', variationId, 'quantity:', quantity, 'attributes:', selectedAttributes);
         } else {
             // Multiple selection mode
             selectedGifts[giftProductId] = {
@@ -788,23 +788,23 @@ jQuery(document).ready(function($) {
                 attributes: selectedAttributes
             };
             productRow.addClass('selected');
-            productRow.find('.mmd-gift-select-btn').addClass('selected').text(__( '✓ Selected', 'incentiv' ));
+            productRow.find('.incv-gift-select-btn').addClass('selected').text(__( '✓ Selected', 'incentiv' ));
         }
 
         updateHiddenFields();
     }
 
     // Handle attribute selection change - auto-select when all attributes are chosen
-    $(document).on('change', '.mmd-variation-attribute', function() {
-        const productRow = $(this).closest('.mmd-gift-product-row');
-        const variationsContainer = $(this).closest('.mmd-variation-selectors');
-        const button = productRow.find('.mmd-gift-variable-btn');
+    $(document).on('change', '.incv-variation-attribute', function() {
+        const productRow = $(this).closest('.incv-gift-product-row');
+        const variationsContainer = $(this).closest('.incv-variation-selectors');
+        const button = productRow.find('.incv-gift-variable-btn');
 
         const allSelected = checkAllAttributesSelected(variationsContainer);
 
         if (allSelected) {
             // Auto-select the variation immediately
-            mmdLog('All attributes selected, auto-selecting variation...');
+            incvLog('All attributes selected, auto-selecting variation...');
             button.prop('disabled', false).text(__( 'Confirm', 'incentiv' )).addClass('ready');
 
             // Automatically select the variation
@@ -818,7 +818,7 @@ jQuery(document).ready(function($) {
     function updateHiddenFields() {
         if (selectionType === 'multiple') {
             // Clear container
-            $('#mmd_selected_gifts_container').empty();
+            $('#incv_selected_gifts_container').empty();
 
             // Add hidden fields for each selected gift
             let index = 0;
@@ -841,21 +841,21 @@ jQuery(document).ready(function($) {
                     quantity = typeof giftData === 'object' && giftData.quantity ? giftData.quantity : 1;
                 }
 
-                $('#mmd_selected_gifts_container').append(
-                    '<input type="hidden" name="mmd_selected_gift_products[' + index + '][product_id]" value="' + productId + '">' +
-                    '<input type="hidden" name="mmd_selected_gift_products[' + index + '][variation_id]" value="' + variationId + '">' +
-                    '<input type="hidden" name="mmd_selected_gift_products[' + index + '][quantity]" value="' + quantity + '">' +
-                    '<input type="hidden" name="mmd_selected_gift_products[' + index + '][attributes]" value="' + JSON.stringify(attributes) + '">'
+                $('#incv_selected_gifts_container').append(
+                    '<input type="hidden" name="incv_selected_gift_products[' + index + '][product_id]" value="' + productId + '">' +
+                    '<input type="hidden" name="incv_selected_gift_products[' + index + '][variation_id]" value="' + variationId + '">' +
+                    '<input type="hidden" name="incv_selected_gift_products[' + index + '][quantity]" value="' + quantity + '">' +
+                    '<input type="hidden" name="incv_selected_gift_products[' + index + '][attributes]" value="' + JSON.stringify(attributes) + '">'
                 );
                 index++;
             }
         }
         // For single mode, fields are already updated in the selection handlers
 
-        mmdLog('Hidden fields updated. Selection type:', selectionType, 'Allow quantity:', allowQuantity);
-        mmdLog('Gift product:', $('#mmd_selected_gift_product').val());
-        mmdLog('Gift variation:', $('#mmd_selected_gift_variation').val());
-        mmdLog('Gift attributes:', $('#mmd_selected_gift_attributes').val());
+        incvLog('Hidden fields updated. Selection type:', selectionType, 'Allow quantity:', allowQuantity);
+        incvLog('Gift product:', $('#incv_selected_gift_product').val());
+        incvLog('Gift variation:', $('#incv_selected_gift_variation').val());
+        incvLog('Gift attributes:', $('#incv_selected_gift_attributes').val());
     }
 
     // Visual feedback on add to cart button
@@ -864,7 +864,7 @@ jQuery(document).ready(function($) {
         // Handle form submission validation
         originalAddToCartForm.on('submit', function(e) {
             // Check if gift is enabled and selected
-            const giftContainer = $('.mmd-gift-selection-container');
+            const giftContainer = $('.incv-gift-selection-container');
             if (giftContainer.length) {
                 const hasSelection = Object.keys(selectedGifts).length > 0;
 
@@ -897,15 +897,15 @@ jQuery(document).ready(function($) {
                     ensureHiddenFieldsSet();
                 }
 
-                mmdLog('Form submitting with gift selection:', selectedGifts);
-                mmdLog('Form data being sent - Product:', $('#mmd_selected_gift_product').val(), 'Variation:', $('#mmd_selected_gift_variation').val());
+                incvLog('Form submitting with gift selection:', selectedGifts);
+                incvLog('Form data being sent - Product:', $('#incv_selected_gift_product').val(), 'Variation:', $('#incv_selected_gift_variation').val());
             }
         });
 
         // Handle WooCommerce AJAX add to cart for variable products
         // This needs to run BEFORE WooCommerce's handler
         $(document).on('click', '.single_add_to_cart_button:not(.disabled)', function(e) {
-            const giftContainer = $('.mmd-gift-selection-container');
+            const giftContainer = $('.incv-gift-selection-container');
             if (giftContainer.length) {
                 const hasSelection = Object.keys(selectedGifts).length > 0;
 
@@ -941,16 +941,16 @@ jQuery(document).ready(function($) {
                     ensureHiddenFieldsSet();
                 }
 
-                mmdLog('Add to cart clicked with gift selection:', selectedGifts);
-                mmdLog('Form data being sent - Product:', $('#mmd_selected_gift_product').val(), 'Variation:', $('#mmd_selected_gift_variation').val());
+                incvLog('Add to cart clicked with gift selection:', selectedGifts);
+                incvLog('Form data being sent - Product:', $('#incv_selected_gift_product').val(), 'Variation:', $('#incv_selected_gift_variation').val());
 
                 // Log the actual form data that will be sent
                 const formData = originalAddToCartForm.serializeArray();
-                mmdLog('Serialized form data:', formData);
-                const giftProduct = formData.find(item => item.name === 'mmd_selected_gift_product');
-                const giftVariation = formData.find(item => item.name === 'mmd_selected_gift_variation');
-                mmdLog('Gift product in form data:', giftProduct ? giftProduct.value : 'NOT FOUND');
-                mmdLog('Gift variation in form data:', giftVariation ? giftVariation.value : 'NOT FOUND');
+                incvLog('Serialized form data:', formData);
+                const giftProduct = formData.find(item => item.name === 'incv_selected_gift_product');
+                const giftVariation = formData.find(item => item.name === 'incv_selected_gift_variation');
+                incvLog('Gift product in form data:', giftProduct ? giftProduct.value : 'NOT FOUND');
+                incvLog('Gift variation in form data:', giftVariation ? giftVariation.value : 'NOT FOUND');
             }
         });
     }
@@ -958,45 +958,45 @@ jQuery(document).ready(function($) {
     // WoodMart AJAX Add to Cart Compatibility
     // Hook into WoodMart's AJAX add to cart to ensure gift data is included
     $(document).on('click', '.single_add_to_cart_button', function(e) {
-        const giftContainer = $('.mmd-gift-selection-container');
+        const giftContainer = $('.incv-gift-selection-container');
 
         if (giftContainer.length) {
             // Ensure hidden fields are set before any AJAX processing
             ensureHiddenFieldsSet();
 
             // Store gift data in a global variable that can be accessed by AJAX handlers
-            window.mmdGiftSelectionData = {
-                product: $('#mmd_selected_gift_product').val(),
-                variation: $('#mmd_selected_gift_variation').val(),
-                attributes: $('#mmd_selected_gift_attributes').val()
+            window.incvGiftSelectionData = {
+                product: $('#incv_selected_gift_product').val(),
+                variation: $('#incv_selected_gift_variation').val(),
+                attributes: $('#incv_selected_gift_attributes').val()
             };
 
-            mmdLog('MMD Gift: Prepared gift data for AJAX:', window.mmdGiftSelectionData);
+            incvLog('INCV Gift: Prepared gift data for AJAX:', window.incvGiftSelectionData);
         }
     });
 
     // Hook into WooCommerce's add to cart AJAX to append gift data
     $(document).on('adding_to_cart', function(e, $button, data) {
-        mmdLog('MMD Gift: WooCommerce adding_to_cart event fired');
-        const giftContainer = $('.mmd-gift-selection-container');
+        incvLog('INCV Gift: WooCommerce adding_to_cart event fired');
+        const giftContainer = $('.incv-gift-selection-container');
 
-        if (giftContainer.length && window.mmdGiftSelectionData) {
+        if (giftContainer.length && window.incvGiftSelectionData) {
             // Add gift data to the AJAX request
-            if (window.mmdGiftSelectionData.product) {
-                data.mmd_selected_gift_product = window.mmdGiftSelectionData.product;
-                mmdLog('MMD Gift: Added gift product to AJAX data:', window.mmdGiftSelectionData.product);
+            if (window.incvGiftSelectionData.product) {
+                data.incv_selected_gift_product = window.incvGiftSelectionData.product;
+                incvLog('INCV Gift: Added gift product to AJAX data:', window.incvGiftSelectionData.product);
             }
-            if (window.mmdGiftSelectionData.variation) {
-                data.mmd_selected_gift_variation = window.mmdGiftSelectionData.variation;
-                mmdLog('MMD Gift: Added gift variation to AJAX data:', window.mmdGiftSelectionData.variation);
+            if (window.incvGiftSelectionData.variation) {
+                data.incv_selected_gift_variation = window.incvGiftSelectionData.variation;
+                incvLog('INCV Gift: Added gift variation to AJAX data:', window.incvGiftSelectionData.variation);
             }
-            if (window.mmdGiftSelectionData.attributes) {
-                data.mmd_selected_gift_attributes = window.mmdGiftSelectionData.attributes;
-                mmdLog('MMD Gift: Added gift attributes to AJAX data');
+            if (window.incvGiftSelectionData.attributes) {
+                data.incv_selected_gift_attributes = window.incvGiftSelectionData.attributes;
+                incvLog('INCV Gift: Added gift attributes to AJAX data');
             }
 
             // Also add individual gift attributes for compatibility
-                    const attributesJson = window.mmdGiftSelectionData.attributes;
+                    const attributesJson = window.incvGiftSelectionData.attributes;
                     if (attributesJson) {
                         const attributes = parseGiftAttributes(attributesJson);
 
@@ -1004,10 +1004,10 @@ jQuery(document).ready(function($) {
                             for (let attrName in attributes) {
                                 const attrValue = attributes[attrName];
                                 data['gift_' + attrName] = attrValue;
-                                mmdLog('MMD Gift: Added individual gift attribute:', 'gift_' + attrName, '=', attrValue);
+                                incvLog('INCV Gift: Added individual gift attribute:', 'gift_' + attrName, '=', attrValue);
                             }
                         } else {
-                            console.error('MMD Gift: Error parsing gift attributes for AJAX');
+                            console.error('INCV Gift: Error parsing gift attributes for AJAX');
                         }
                     }
         }
@@ -1034,12 +1034,12 @@ jQuery(document).ready(function($) {
                 ));
 
             if (isAddToCartRequest) {
-                const giftContainer = $('.mmd-gift-selection-container');
+                const giftContainer = $('.incv-gift-selection-container');
 
-                if (giftContainer.length && window.mmdGiftSelectionData) {
-                    mmdLog('MMD Gift: AJAX prefilter - Intercepted add to cart request');
-                    mmdLog('MMD Gift: Request URL:', options.url);
-                    mmdLog('MMD Gift: Request method:', options.type);
+                if (giftContainer.length && window.incvGiftSelectionData) {
+                    incvLog('INCV Gift: AJAX prefilter - Intercepted add to cart request');
+                    incvLog('INCV Gift: Request URL:', options.url);
+                    incvLog('INCV Gift: Request method:', options.type);
 
                     // Convert data to object/string without re-encoding existing params
                     let dataObj = {};
@@ -1052,17 +1052,17 @@ jQuery(document).ready(function($) {
                         dataObj = Object.assign({}, options.data);
                     } else if (options.data instanceof FormData) {
                         // Handle FormData objects (used by some themes)
-                        mmdLog('MMD Gift: AJAX data is FormData, appending gift data');
-                        if (window.mmdGiftSelectionData.product && !options.data.has('mmd_selected_gift_product')) {
-                            options.data.append('mmd_selected_gift_product', window.mmdGiftSelectionData.product);
+                        incvLog('INCV Gift: AJAX data is FormData, appending gift data');
+                        if (window.incvGiftSelectionData.product && !options.data.has('incv_selected_gift_product')) {
+                            options.data.append('incv_selected_gift_product', window.incvGiftSelectionData.product);
                         }
-                        if (window.mmdGiftSelectionData.variation && !options.data.has('mmd_selected_gift_variation')) {
-                            options.data.append('mmd_selected_gift_variation', window.mmdGiftSelectionData.variation);
+                        if (window.incvGiftSelectionData.variation && !options.data.has('incv_selected_gift_variation')) {
+                            options.data.append('incv_selected_gift_variation', window.incvGiftSelectionData.variation);
                         }
-                        if (window.mmdGiftSelectionData.attributes && !options.data.has('mmd_selected_gift_attributes')) {
-                            options.data.append('mmd_selected_gift_attributes', window.mmdGiftSelectionData.attributes);
+                        if (window.incvGiftSelectionData.attributes && !options.data.has('incv_selected_gift_attributes')) {
+                            options.data.append('incv_selected_gift_attributes', window.incvGiftSelectionData.attributes);
                         }
-                        mmdLog('MMD Gift: AJAX prefilter - Added gift data to FormData');
+                        incvLog('INCV Gift: AJAX prefilter - Added gift data to FormData');
                         return; // Exit early for FormData
                     }
 
@@ -1070,37 +1070,37 @@ jQuery(document).ready(function($) {
                     if (typeof originalOptions.data === 'string' || typeof options.data === 'string') {
                         // Append to query string while preserving existing encoding
                         const separator = dataString && !dataString.endsWith('&') ? '&' : '';
-                        if (window.mmdGiftSelectionData.product) {
-                            dataString += separator + 'mmd_selected_gift_product=' + encodeURIComponent(window.mmdGiftSelectionData.product);
+                        if (window.incvGiftSelectionData.product) {
+                            dataString += separator + 'incv_selected_gift_product=' + encodeURIComponent(window.incvGiftSelectionData.product);
                         }
-                        if (window.mmdGiftSelectionData.variation) {
-                            dataString += (dataString && !dataString.endsWith('&') ? '&' : '') + 'mmd_selected_gift_variation=' + encodeURIComponent(window.mmdGiftSelectionData.variation);
+                        if (window.incvGiftSelectionData.variation) {
+                            dataString += (dataString && !dataString.endsWith('&') ? '&' : '') + 'incv_selected_gift_variation=' + encodeURIComponent(window.incvGiftSelectionData.variation);
                         }
-                        if (window.mmdGiftSelectionData.attributes) {
-                            dataString += (dataString && !dataString.endsWith('&') ? '&' : '') + 'mmd_selected_gift_attributes=' + encodeURIComponent(window.mmdGiftSelectionData.attributes);
+                        if (window.incvGiftSelectionData.attributes) {
+                            dataString += (dataString && !dataString.endsWith('&') ? '&' : '') + 'incv_selected_gift_attributes=' + encodeURIComponent(window.incvGiftSelectionData.attributes);
                         }
 
                         options.data = dataString;
-                        mmdLog('MMD Gift: Converted data to query string');
+                        incvLog('INCV Gift: Converted data to query string');
                     } else {
-                        if (window.mmdGiftSelectionData.product) {
-                            dataObj.mmd_selected_gift_product = window.mmdGiftSelectionData.product;
-                            mmdLog('MMD Gift: Added gift product to AJAX data:', window.mmdGiftSelectionData.product);
+                        if (window.incvGiftSelectionData.product) {
+                            dataObj.incv_selected_gift_product = window.incvGiftSelectionData.product;
+                            incvLog('INCV Gift: Added gift product to AJAX data:', window.incvGiftSelectionData.product);
                         }
-                        if (window.mmdGiftSelectionData.variation) {
-                            dataObj.mmd_selected_gift_variation = window.mmdGiftSelectionData.variation;
-                            mmdLog('MMD Gift: Added gift variation to AJAX data:', window.mmdGiftSelectionData.variation);
+                        if (window.incvGiftSelectionData.variation) {
+                            dataObj.incv_selected_gift_variation = window.incvGiftSelectionData.variation;
+                            incvLog('INCV Gift: Added gift variation to AJAX data:', window.incvGiftSelectionData.variation);
                         }
-                        if (window.mmdGiftSelectionData.attributes) {
-                            dataObj.mmd_selected_gift_attributes = window.mmdGiftSelectionData.attributes;
-                            mmdLog('MMD Gift: Added gift attributes to AJAX data');
-                            mmdLog('MMD Gift: Attributes value:', window.mmdGiftSelectionData.attributes);
+                        if (window.incvGiftSelectionData.attributes) {
+                            dataObj.incv_selected_gift_attributes = window.incvGiftSelectionData.attributes;
+                            incvLog('INCV Gift: Added gift attributes to AJAX data');
+                            incvLog('INCV Gift: Attributes value:', window.incvGiftSelectionData.attributes);
                         }
 
                         options.data = dataObj;
                     }
 
-                    mmdLog('MMD Gift: AJAX prefilter - Final modified data:', options.data);
+                    incvLog('INCV Gift: AJAX prefilter - Final modified data:', options.data);
                 }
             }
         });
@@ -1142,21 +1142,21 @@ jQuery(document).ready(function($) {
                     variationId = giftData || 0;
                 }
 
-                $('#mmd_selected_gift_product').val(productId);
-                $('#mmd_selected_gift_variation').val(variationId || '');
+                $('#incv_selected_gift_product').val(productId);
+                $('#incv_selected_gift_variation').val(variationId || '');
                 if (Object.keys(attributes).length > 0) {
-                    $('#mmd_selected_gift_attributes').val(JSON.stringify(attributes));
+                    $('#incv_selected_gift_attributes').val(JSON.stringify(attributes));
                 }
 
                 // Also store in global for AJAX compatibility
-                window.mmdGiftSelectionData = {
+                window.incvGiftSelectionData = {
                     product: productId,
                     variation: variationId || '',
                     attributes: Object.keys(attributes).length > 0 ? JSON.stringify(attributes) : ''
                 };
 
                 // Get the stored attributes from the hidden field and add them as individual fields
-                const attributesJson = $('#mmd_selected_gift_attributes').val();
+                const attributesJson = $('#incv_selected_gift_attributes').val();
                 if (attributesJson) {
                     try {
                         const attributes = parseGiftAttributes(attributesJson);
@@ -1174,7 +1174,7 @@ jQuery(document).ready(function($) {
                                     .attr('name', 'gift_' + attrName)
                                     .val(attrValue);
                                 originalAddToCartForm.append(hiddenField);
-                                mmdLog('Added gift attribute field:', 'gift_' + attrName, '=', attrValue);
+                                incvLog('Added gift attribute field:', 'gift_' + attrName, '=', attrValue);
                             }
                         } else {
                             console.error('Error parsing gift attributes');
@@ -1184,7 +1184,7 @@ jQuery(document).ready(function($) {
                     }
                 }
 
-                mmdLog('Ensured hidden fields set: product=' + productId + ', variation=' + variationId);
+                incvLog('Ensured hidden fields set: product=' + productId + ', variation=' + variationId);
                 break; // Only one selection in single mode
             }
         } else {
@@ -1201,48 +1201,48 @@ jQuery(document).ready(function($) {
 
     // Handle the chained gift add-to-cart
     function handleChainedGiftAddition() {
-        mmdLog('MMD Gift: Main product added to cart, checking for gift selection...');
+        incvLog('INCV Gift: Main product added to cart, checking for gift selection...');
 
         // Prevent duplicate calls
         if (giftAdditionInProgress) {
-            mmdLog('MMD Gift: Gift addition already in progress, skipping duplicate call');
+            incvLog('INCV Gift: Gift addition already in progress, skipping duplicate call');
             return;
         }
 
-        const giftContainer = $('.mmd-gift-selection-container');
+        const giftContainer = $('.incv-gift-selection-container');
         if (!giftContainer.length) {
-            mmdLog('MMD Gift: No gift container found, skipping');
+            incvLog('INCV Gift: No gift container found, skipping');
             return;
         }
 
         const hasSelection = Object.keys(selectedGifts).length > 0;
         if (!hasSelection) {
-            mmdLog('MMD Gift: No gift selected, skipping');
+            incvLog('INCV Gift: No gift selected, skipping');
             return;
         }
 
         // Get the parent product ID
         const parentProductId = giftContainer.data('parent-product-id');
         if (!parentProductId) {
-            console.error('MMD Gift: Parent product ID not found');
+            console.error('INCV Gift: Parent product ID not found');
             return;
         }
 
         // Mark as in progress
         giftAdditionInProgress = true;
 
-        mmdLog('MMD Gift: Gift selected, triggering chained add-to-cart...');
-        mmdLog('MMD Gift: Selection type:', selectionType);
+        incvLog('INCV Gift: Gift selected, triggering chained add-to-cart...');
+        incvLog('INCV Gift: Selection type:', selectionType);
 
         // Handle based on selection type
         if (selectionType === 'single') {
             // Single gift selection
-            const giftProductId = $('#mmd_selected_gift_product').val();
-            const giftVariationId = $('#mmd_selected_gift_variation').val();
-            const giftAttributesJson = $('#mmd_selected_gift_attributes').val();
+            const giftProductId = $('#incv_selected_gift_product').val();
+            const giftVariationId = $('#incv_selected_gift_variation').val();
+            const giftAttributesJson = $('#incv_selected_gift_attributes').val();
 
             if (!giftProductId) {
-                console.error('MMD Gift: No gift product ID found');
+                console.error('INCV Gift: No gift product ID found');
                 giftAdditionInProgress = false;
                 return;
             }
@@ -1256,7 +1256,7 @@ jQuery(document).ready(function($) {
             addGiftToCart(parentProductId, giftProductId, giftVariationId, giftAttributesJson, quantity);
         } else {
             // Multiple gift selection - chain AJAX calls sequentially
-            mmdLog('MMD Gift: Adding multiple gifts:', selectedGifts);
+            incvLog('INCV Gift: Adding multiple gifts:', selectedGifts);
 
             // Build array of gifts to add
             const giftsToAdd = [];
@@ -1299,15 +1299,15 @@ jQuery(document).ready(function($) {
         // Only fire chained addition if gift data wasn't already in the form POST
         // (server-side handler would have processed it)
         var $form = $('form.cart');
-        var giftFieldVal = $form.length ? $form.find('#mmd_selected_gift_product').val() : '';
+        var giftFieldVal = $form.length ? $form.find('#incv_selected_gift_product').val() : '';
         if (giftFieldVal && giftFieldVal.length > 0) {
             // Form had gift data with actual values - server already handled the gift addition
             // Clear selection state and field to prevent any future double-add
             selectedGifts = {};
             giftAdditionInProgress = false;
-            $form.find('#mmd_selected_gift_product').val('');
-            $form.find('#mmd_selected_gift_variation').val('');
-            $form.find('#mmd_selected_gift_attributes').val('');
+            $form.find('#incv_selected_gift_product').val('');
+            $form.find('#incv_selected_gift_variation').val('');
+            $form.find('#incv_selected_gift_attributes').val('');
             return;
         }
         // No gift data in form fields - use JS AJAX fallback
@@ -1316,7 +1316,7 @@ jQuery(document).ready(function($) {
 
     // Hook into WoodMart-specific event
     $(document).on('wdShopPageUpdated', function() {
-        mmdLog('MMD Gift: WoodMart shop page updated event detected');
+        incvLog('INCV Gift: WoodMart shop page updated event detected');
         handleChainedGiftAddition();
     });
 
@@ -1325,7 +1325,7 @@ jQuery(document).ready(function($) {
         // Check if this is a WoodMart add to cart request
         if (settings.data && typeof settings.data === 'string' &&
             settings.data.indexOf('woodmart_ajax_add_to_cart') > -1) {
-            mmdLog('MMD Gift: Detected successful WoodMart AJAX add to cart');
+            incvLog('INCV Gift: Detected successful WoodMart AJAX add to cart');
             // Small delay to ensure cart is updated
             setTimeout(handleChainedGiftAddition, 300);
         }
@@ -1335,7 +1335,7 @@ jQuery(document).ready(function($) {
     function addMultipleGiftsSequentially(parentProductId, giftsToAdd, currentIndex) {
         // Base case: all gifts added
         if (currentIndex >= giftsToAdd.length) {
-            mmdLog('MMD Gift: All gifts added successfully!');
+            incvLog('INCV Gift: All gifts added successfully!');
             giftAdditionInProgress = false;
             // Clear selection to prevent double-add
             selectedGifts = {};
@@ -1359,18 +1359,18 @@ jQuery(document).ready(function($) {
 
         // Get current gift to add
         const gift = giftsToAdd[currentIndex];
-        mmdLog('MMD Gift: Adding gift ' + (currentIndex + 1) + ' of ' + giftsToAdd.length);
-        mmdLog('MMD Gift: Gift product ID:', gift.productId);
+        incvLog('INCV Gift: Adding gift ' + (currentIndex + 1) + ' of ' + giftsToAdd.length);
+        incvLog('INCV Gift: Gift product ID:', gift.productId);
 
         const attributesJson = JSON.stringify(gift.attributes);
 
         // Add this gift, then recursively add the next one on success
         $.ajax({
-            url: mmdGiftData.ajaxurl,
+            url: incvGiftData.ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_add_gift_to_cart',
-                nonce: mmdGiftData.nonce,
+                action: 'incv_add_gift_to_cart',
+                nonce: incvGiftData.nonce,
                 parent_product_id: parentProductId,
                 gift_product_id: gift.productId,
                 gift_variation_id: gift.variationId || 0,
@@ -1378,23 +1378,23 @@ jQuery(document).ready(function($) {
                 quantity: gift.quantity || 1
             },
             success: function(response) {
-                mmdLog('MMD Gift: AJAX response for gift ' + (currentIndex + 1) + ':', response);
+                incvLog('INCV Gift: AJAX response for gift ' + (currentIndex + 1) + ':', response);
 
                 if (response.success) {
-                    mmdLog('MMD Gift: Successfully added gift ' + (currentIndex + 1) + ' to cart!');
+                    incvLog('INCV Gift: Successfully added gift ' + (currentIndex + 1) + ' to cart!');
                     // Add next gift (don't reset flag - let base case handle it)
                     addMultipleGiftsSequentially(parentProductId, giftsToAdd, currentIndex + 1);
                 } else {
-                    console.error('MMD Gift: Failed to add gift ' + (currentIndex + 1) + ' to cart:', response.data);
+                    console.error('INCV Gift: Failed to add gift ' + (currentIndex + 1) + ' to cart:', response.data);
                     alert(( __( 'Error adding gift', 'incentiv' ) + ' ' ) + (currentIndex + 1) + ( ' ' + __( 'to cart:', 'incentiv' ) + ' ' ) + (response.data && response.data.message ? response.data.message : __( 'Unknown error', 'incentiv' )));
                     // Continue with next gift anyway (don't reset flag - let base case handle it)
                     addMultipleGiftsSequentially(parentProductId, giftsToAdd, currentIndex + 1);
                 }
             },
             error: function(xhr, status, error) {
-                console.error('MMD Gift: AJAX error for gift ' + (currentIndex + 1) + ':', error);
-                console.error('MMD Gift: Status:', status);
-                console.error('MMD Gift: Response:', xhr.responseText);
+                console.error('INCV Gift: AJAX error for gift ' + (currentIndex + 1) + ':', error);
+                console.error('INCV Gift: Status:', status);
+                console.error('INCV Gift: Response:', xhr.responseText);
 
                 alert(( __( 'Error adding gift', 'incentiv' ) + ' ' ) + (currentIndex + 1) + ( ' ' + __( 'to cart.', 'incentiv' ) ));
                 // Continue with next gift anyway (don't reset flag - let base case handle it)
@@ -1407,21 +1407,21 @@ jQuery(document).ready(function($) {
     function addGiftToCart(parentProductId, giftProductId, giftVariationId, giftAttributesJson, quantity) {
         quantity = quantity || 1; // Default to 1 if not specified
 
-        mmdLog('MMD Gift: Adding gift to cart via AJAX...');
-        mmdLog('MMD Gift: Parent product ID:', parentProductId);
-        mmdLog('MMD Gift: Gift product ID:', giftProductId);
-        mmdLog('MMD Gift: Gift variation ID:', giftVariationId);
-        mmdLog('MMD Gift: Gift attributes:', giftAttributesJson);
-        mmdLog('MMD Gift: Quantity:', quantity);
+        incvLog('INCV Gift: Adding gift to cart via AJAX...');
+        incvLog('INCV Gift: Parent product ID:', parentProductId);
+        incvLog('INCV Gift: Gift product ID:', giftProductId);
+        incvLog('INCV Gift: Gift variation ID:', giftVariationId);
+        incvLog('INCV Gift: Gift attributes:', giftAttributesJson);
+        incvLog('INCV Gift: Quantity:', quantity);
 
         // Call our dedicated AJAX endpoint to add the gift
         // The server will find the parent cart item automatically
         $.ajax({
-            url: mmdGiftData.ajaxurl,
+            url: incvGiftData.ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_add_gift_to_cart',
-                nonce: mmdGiftData.nonce,
+                action: 'incv_add_gift_to_cart',
+                nonce: incvGiftData.nonce,
                 parent_product_id: parentProductId,
                 gift_product_id: giftProductId,
                 gift_variation_id: giftVariationId || 0,
@@ -1429,11 +1429,11 @@ jQuery(document).ready(function($) {
                 quantity: quantity
             },
             success: function(response) {
-                mmdLog('MMD Gift: AJAX response:', response);
+                incvLog('INCV Gift: AJAX response:', response);
                 giftAdditionInProgress = false; // Reset flag
 
                 if (response.success) {
-                    mmdLog('MMD Gift: Successfully added gift to cart!');
+                    incvLog('INCV Gift: Successfully added gift to cart!');
                     // Clear selection to prevent double-add
                     selectedGifts = {};
                     // Force immediate cart fragments refresh
@@ -1452,14 +1452,14 @@ jQuery(document).ready(function($) {
                     $(document.body).trigger('wc_fragment_refresh');
                     $(document.body).trigger('update_checkout');
                 } else {
-                    console.error('MMD Gift: Failed to add gift to cart:', response.data);
+                    console.error('INCV Gift: Failed to add gift to cart:', response.data);
                     alert(( __( 'Error adding the gift to the cart:', 'incentiv' ) + ' ' ) + (response.data && response.data.message ? response.data.message : __( 'Unknown error', 'incentiv' )));
                 }
             },
             error: function(xhr, status, error) {
-                console.error('MMD Gift: AJAX error:', error);
-                console.error('MMD Gift: Status:', status);
-                console.error('MMD Gift: Response:', xhr.responseText);
+                console.error('INCV Gift: AJAX error:', error);
+                console.error('INCV Gift: Status:', status);
+                console.error('INCV Gift: Response:', xhr.responseText);
                 giftAdditionInProgress = false; // Reset flag
 
                 alert(__( 'Error adding the gift to the cart. Please try again or contact support.', 'incentiv' ));
@@ -1481,7 +1481,7 @@ jQuery(document).ready(function($) {
             const startIndex = (page - 1) * productsPerPage;
             const endIndex = startIndex + productsPerPage;
 
-            container.find('.mmd-gift-product-row').each(function() {
+            container.find('.incv-gift-product-row').each(function() {
                 const index = parseInt($(this).data('product-index'));
                 if (index >= startIndex && index < endIndex) {
                     $(this).show();
@@ -1491,13 +1491,13 @@ jQuery(document).ready(function($) {
             });
 
             // Update pagination buttons and info
-            container.find('.mmd-current-page').text(currentPage);
-            container.find('.mmd-total-pages').text(totalPages);
-            container.find('.mmd-pagination-prev').prop('disabled', currentPage <= 1);
-            container.find('.mmd-pagination-next').prop('disabled', currentPage >= totalPages);
+            container.find('.incv-current-page').text(currentPage);
+            container.find('.incv-total-pages').text(totalPages);
+            container.find('.incv-pagination-prev').prop('disabled', currentPage <= 1);
+            container.find('.incv-pagination-next').prop('disabled', currentPage >= totalPages);
         }
 
-        container.on('click', '.mmd-pagination-next', function() {
+        container.on('click', '.incv-pagination-next', function() {
             if (currentPage < totalPages) {
                 showPage(currentPage + 1);
                 // Scroll to top of gift container
@@ -1507,7 +1507,7 @@ jQuery(document).ready(function($) {
             }
         });
 
-        container.on('click', '.mmd-pagination-prev', function() {
+        container.on('click', '.incv-pagination-prev', function() {
             if (currentPage > 1) {
                 showPage(currentPage - 1);
                 $('html, body').animate({
@@ -1527,7 +1527,7 @@ jQuery(document).ready(function($) {
         var selectedAttrs = {};
 
         // Include pre-selected attributes from the gift rule (hidden from UI)
-        var $btn = $row.find('.mmd-cart-gift-add-btn');
+        var $btn = $row.find('.incv-cart-gift-add-btn');
         var preSelected = $btn.data('pre-selected');
         if (preSelected && typeof preSelected === 'object') {
             for (var key in preSelected) {
@@ -1536,7 +1536,7 @@ jQuery(document).ready(function($) {
         }
 
         // Include user-selected attributes from dropdowns
-        $row.find('.mmd-cart-gift-attr-select').each(function() {
+        $row.find('.incv-cart-gift-attr-select').each(function() {
             var attrName = $(this).data('attribute');
             var attrVal = $(this).val();
             if (attrName && attrVal) {
@@ -1567,10 +1567,10 @@ jQuery(document).ready(function($) {
     }
 
     // Handle attribute change - filter dependent attributes and resolve variation
-    $(document).on('change', '.mmd-cart-gift-attr-select', function() {
+    $(document).on('change', '.incv-cart-gift-attr-select', function() {
         var $select = $(this);
-        var $row = $select.closest('.mmd-cart-gift-row');
-        var $btn = $row.find('.mmd-cart-gift-add-btn');
+        var $row = $select.closest('.incv-cart-gift-row');
+        var $btn = $row.find('.incv-cart-gift-add-btn');
 
         $select.css('border-color', '');
 
@@ -1586,7 +1586,7 @@ jQuery(document).ready(function($) {
         var currentVal = $select.val();
 
         // For each other attribute select, filter options
-        $row.find('.mmd-cart-gift-attr-select').each(function() {
+        $row.find('.incv-cart-gift-attr-select').each(function() {
             var $otherSelect = $(this);
             var otherAttr = $otherSelect.data('attribute');
             if (otherAttr === currentAttr) return;
@@ -1598,7 +1598,7 @@ jQuery(document).ready(function($) {
             variationsData.forEach(function(v) {
                 // Check if this variation matches all other selected attributes
                 var matches = true;
-                $row.find('.mmd-cart-gift-attr-select').each(function() {
+                $row.find('.incv-cart-gift-attr-select').each(function() {
                     var attr = $(this).data('attribute');
                     var val = $(this).val();
                     if (attr === otherAttr || !val) return;
@@ -1638,11 +1638,11 @@ jQuery(document).ready(function($) {
     });
 
     // Handle "Add to cart" buttons
-    $(document).on('click', '.mmd-cart-gift-add-btn', function(e) {
+    $(document).on('click', '.incv-cart-gift-add-btn', function(e) {
         e.preventDefault();
         var $btn = $(this);
-        var $row = $btn.closest('.mmd-cart-gift-row');
-        var $container = $btn.closest('.mmd-cart-gift-selection-container');
+        var $row = $btn.closest('.incv-cart-gift-row');
+        var $container = $btn.closest('.incv-cart-gift-selection-container');
 
         var productId = $btn.data('product-id');
         var variationId = $btn.data('variation-id') || 0;
@@ -1659,7 +1659,7 @@ jQuery(document).ready(function($) {
         // "X attribute is required" because WC can't add a variable parent
         // without a variation.
         if (isVariable && !variationId) {
-            var $attrSelects = $row.find('.mmd-cart-gift-attr-select');
+            var $attrSelects = $row.find('.incv-cart-gift-attr-select');
 
             // If there ARE visible dropdowns, require all of them to be picked.
             if ($attrSelects.length) {
@@ -1690,7 +1690,7 @@ jQuery(document).ready(function($) {
         }
 
         // Legacy: single variation select
-        var $varSelect = $row.find('.mmd-cart-gift-variation-select');
+        var $varSelect = $row.find('.incv-cart-gift-variation-select');
         if ($varSelect.length && !variationId) {
             variationId = parseInt($varSelect.val());
             if (!variationId) {
@@ -1712,18 +1712,18 @@ jQuery(document).ready(function($) {
                 attrPayload['attribute_' + psKey] = preSelected[psKey];
             }
         }
-        $row.find('.mmd-cart-gift-attr-select').each(function() {
+        $row.find('.incv-cart-gift-attr-select').each(function() {
             var k = $(this).data('attribute');
             var v = $(this).val();
             if (k && v) attrPayload[k] = v;
         });
 
         $.ajax({
-            url: mmdGiftData.ajaxurl,
+            url: incvGiftData.ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_add_cart_gift',
-                nonce: mmdGiftData.nonce,
+                action: 'incv_add_cart_gift',
+                nonce: incvGiftData.nonce,
                 product_id: productId,
                 variation_id: variationId,
                 trigger_product_id: triggerProduct,
@@ -1735,7 +1735,7 @@ jQuery(document).ready(function($) {
             success: function(response) {
                 if (response.success) {
                     // Close modal if open
-                    $('.mmd-cart-gift-modal-overlay').fadeOut(300);
+                    $('.incv-cart-gift-modal-overlay').fadeOut(300);
 
                     $container.html(
                         '<div style="text-align: center; padding: 20px;">' +
@@ -1762,12 +1762,12 @@ jQuery(document).ready(function($) {
                         // we can see exactly what payload WC rejected and which
                         // keys it was looking for.
                         try {
-                            console.error('[MMD gift add failed]', msg);
-                            console.error('[MMD gift add debug]', response.data.debug);
-                            console.error('[MMD] sent_attributes:', response.data.debug.sent_attributes);
-                            console.error('[MMD] client_attrs:', response.data.debug.client_attrs);
-                            console.error('[MMD] wc_expected_keys:', response.data.debug.wc_expected_keys);
-                            console.error('[MMD] wc_variation_attrs_helper:', response.data.debug.wc_variation_attrs_helper);
+                            console.error('[INCV gift add failed]', msg);
+                            console.error('[INCV gift add debug]', response.data.debug);
+                            console.error('[INCV] sent_attributes:', response.data.debug.sent_attributes);
+                            console.error('[INCV] client_attrs:', response.data.debug.client_attrs);
+                            console.error('[INCV] wc_expected_keys:', response.data.debug.wc_expected_keys);
+                            console.error('[INCV] wc_variation_attrs_helper:', response.data.debug.wc_variation_attrs_helper);
                         } catch (e) {}
                     }
                     alert(msg);
@@ -1783,7 +1783,7 @@ jQuery(document).ready(function($) {
 
     // ===== "Switch gift" button: removes the currently-claimed gift so
     // the selector re-appears and the customer can pick a different one. =====
-    $(document).on('click', '.mmd-switch-gift-btn', function(e) {
+    $(document).on('click', '.incv-switch-gift-btn', function(e) {
         e.preventDefault();
         var $btn = $(this);
         var ruleId = $btn.data('rule-id') || '';
@@ -1791,11 +1791,11 @@ jQuery(document).ready(function($) {
         $btn.prop('disabled', true).text(__( 'Removing...', 'incentiv' ));
 
         $.ajax({
-            url: mmdGiftData.ajaxurl,
+            url: incvGiftData.ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_switch_cart_gift',
-                nonce: mmdGiftData.nonce,
+                action: 'incv_switch_cart_gift',
+                nonce: incvGiftData.nonce,
                 rule_id: ruleId
             },
             success: function(response) {
@@ -1816,23 +1816,23 @@ jQuery(document).ready(function($) {
     });
 
     // ===== Modal handlers =====
-    $(document).on('click', '.mmd-open-gift-modal-btn', function() {
-        $(this).closest('.mmd-cart-gift-notice').next('.mmd-cart-gift-modal-overlay').css('display', 'flex').hide().fadeIn(300);
+    $(document).on('click', '.incv-open-gift-modal-btn', function() {
+        $(this).closest('.incv-cart-gift-notice').next('.incv-cart-gift-modal-overlay').css('display', 'flex').hide().fadeIn(300);
     });
 
-    $(document).on('click', '.mmd-close-gift-modal', function() {
-        $(this).closest('.mmd-cart-gift-modal-overlay').fadeOut(300);
+    $(document).on('click', '.incv-close-gift-modal', function() {
+        $(this).closest('.incv-cart-gift-modal-overlay').fadeOut(300);
     });
 
-    $(document).on('click', '.mmd-cart-gift-modal-overlay', function(e) {
-        if ($(e.target).hasClass('mmd-cart-gift-modal-overlay')) {
+    $(document).on('click', '.incv-cart-gift-modal-overlay', function(e) {
+        if ($(e.target).hasClass('incv-cart-gift-modal-overlay')) {
             $(this).fadeOut(300);
         }
     });
 
     $(document).on('keydown', function(e) {
         if (e.key === 'Escape') {
-            $('.mmd-cart-gift-modal-overlay:visible').fadeOut(300);
+            $('.incv-cart-gift-modal-overlay:visible').fadeOut(300);
         }
     });
 });

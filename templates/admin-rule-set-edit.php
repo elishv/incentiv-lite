@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template included from a class method; its variables are local to that method, not globals.
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -78,7 +79,7 @@ $default_fields = array(
 if ($is_new) {
     $rule_set = $default_fields;
 } else {
-    $rule_set = MMD_Discount_Rules::get_rule_set($rule_set_id);
+    $rule_set = INCV_Discount_Rules::get_rule_set($rule_set_id);
     if (!$rule_set) {
         wp_die(esc_html__( 'Rule not found', 'incentiv' ));
     }
@@ -89,32 +90,32 @@ $categories = get_terms(array('taxonomy' => 'product_cat', 'hide_empty' => false
 $attributes = wc_get_attribute_taxonomies();
 ?>
 
-<div class="wrap mmd-admin-wrap">
-    <?php include MMD_PLUGIN_DIR . 'templates/admin-nav-tabs.php'; ?>
-    <div class="mmd-editor-head">
-        <a href="<?php echo esc_url( admin_url('admin.php?page=mix-match-discounts') ); ?>" class="mmd-back-btn" title="<?php esc_attr_e( 'Back to list', 'incentiv' ); ?>"><span class="msr mmd-dir-icon">arrow_forward</span></a>
-        <div class="mmd-editor-head-titles">
+<div class="wrap incv-admin-wrap incv-rule-set-editor">
+    <?php include INCV_PLUGIN_DIR . 'templates/admin-nav-tabs.php'; ?>
+    <div class="incv-editor-head">
+        <a href="<?php echo esc_url( admin_url('admin.php?page=incv-discount-rules') ); ?>" class="incv-back-btn" title="<?php esc_attr_e( 'Back to list', 'incentiv' ); ?>"><span class="msr incv-dir-icon">arrow_forward</span></a>
+        <div class="incv-editor-head-titles">
             <h2><?php if ($is_new): ?><?php esc_html_e( 'New discount rule', 'incentiv' ); ?><?php else: ?><?php echo wp_kses_post( __( 'Edit rule &middot;', 'incentiv' ) ); ?> <?php echo esc_html($rule_set['name']); ?><?php endif; ?></h2>
-            <?php if (!$is_new): ?><div class="mmd-editor-id"><?php echo esc_html($rule_set['id']); ?></div><?php endif; ?>
+            <?php if (!$is_new): ?><div class="incv-editor-id"><?php echo esc_html($rule_set['id']); ?></div><?php endif; ?>
         </div>
     </div>
 
-    <form method="post" action="" data-mmd-autosave="rule" data-mmd-record-id="<?php echo esc_attr($rule_set['id']); ?>">
-        <?php wp_nonce_field('mmd_save_rule_set'); ?>
+    <form method="post" action="" data-incv-autosave="rule" data-incv-record-id="<?php echo esc_attr($rule_set['id']); ?>">
+        <?php wp_nonce_field('incv_save_rule_set'); ?>
         <input type="hidden" name="rule_set_id" value="<?php echo esc_attr($rule_set['id']); ?>">
 
-        <div class="mmd-editor-grid">
-        <div class="mmd-editor-main">
-        <div class="mmd-admin-container">
+        <div class="incv-editor-grid">
+        <div class="incv-editor-main">
+        <div class="incv-admin-container">
 
             <!-- Step navigation (filled by JS) -->
-            <div class="mmd-stepper" id="mmd-rule-stepper">
-                <div class="mmd-stepper-steps" id="mmd-rule-stepper-steps"></div>
-                <div class="mmd-stepper-actions">
-                    <button type="button" class="mmd-btn mmd-btn-outline" id="mmd-launch-wizard">
+            <div class="incv-stepper" id="incv-rule-stepper">
+                <div class="incv-stepper-steps" id="incv-rule-stepper-steps"></div>
+                <div class="incv-stepper-actions">
+                    <button type="button" class="incv-btn incv-btn-outline" id="incv-launch-wizard">
                         <span class="msr">auto_awesome</span> <?php esc_html_e( 'Wizard', 'incentiv' ); ?>
                     </button>
-                    <button type="button" class="mmd-btn mmd-btn-neutral" id="mmd-open-preview">
+                    <button type="button" class="incv-btn incv-btn-neutral" id="incv-open-preview">
                         <span class="msr">visibility</span> <?php esc_html_e( 'Test on products', 'incentiv' ); ?>
                     </button>
                 </div>
@@ -122,12 +123,12 @@ $attributes = wc_get_attribute_taxonomies();
 
             <?php
             // Always include the wizard template (overlay starts hidden, opened on demand via the toolbar button)
-            include MMD_PLUGIN_DIR . 'templates/admin-rule-wizard.php';
+            include INCV_PLUGIN_DIR . 'templates/admin-rule-wizard.php';
             ?>
 
             <!-- Basic Settings -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Basic settings', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-clipboard"></span> <?php esc_html_e( 'Basic settings', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -159,9 +160,9 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="enabled"><?php echo esc_html_x( 'Enable this rule', 'discount', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="enabled" id="enabled" <?php echo (($rule_set['enabled'] ?? '') === 'yes' || (isset($rule_set['status']) && $rule_set['status'] === 'draft')) ? 'checked' : ''; ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php echo esc_html_x( 'Turn off to disable the rule temporarily without deleting it', 'discount', 'incentiv' ); ?></p>
                         </td>
@@ -200,7 +201,7 @@ $attributes = wc_get_attribute_taxonomies();
                         </th>
                         <td>
                             <?php
-                            $alloc_modes = class_exists('MMD_Discount_Allocator') ? MMD_Discount_Allocator::get_modes() : array();
+                            $alloc_modes = class_exists('INCV_Discount_Allocator') ? INCV_Discount_Allocator::get_modes() : array();
                             $alloc_current = isset($rule_set['discount_allocation']) ? $rule_set['discount_allocation'] : 'fee';
                             ?>
                             <select name="discount_allocation" id="discount_allocation" class="regular-text">
@@ -211,7 +212,7 @@ $attributes = wc_get_attribute_taxonomies();
                                 <?php endforeach; ?>
                             </select>
                             <?php foreach ($alloc_modes as $mode_key => $mode): ?>
-                                <p class="description mmd-alloc-help" data-mode="<?php echo esc_attr($mode_key); ?>"
+                                <p class="description incv-alloc-help" data-mode="<?php echo esc_attr($mode_key); ?>"
                                    style="<?php echo $alloc_current === $mode_key ? '' : 'display:none;'; ?>">
                                     <?php echo esc_html($mode['help']); ?>
                                 </p>
@@ -225,8 +226,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Product Selection -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-cart"></span> <?php esc_html_e( 'Product selection', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-cart"></span> <?php esc_html_e( 'Product selection', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -246,7 +247,7 @@ $attributes = wc_get_attribute_taxonomies();
                 </table>
 
                 <!-- Category Selection -->
-                <div id="category_section" class="mmd-section" style="display: <?php echo $rule_set['selection_method'] === 'category' ? 'block' : 'none'; ?>;">
+                <div id="category_section" class="incv-section" style="display: <?php echo $rule_set['selection_method'] === 'category' ? 'block' : 'none'; ?>;">
                     <h3><?php esc_html_e( 'Categories', 'incentiv' ); ?></h3>
                     <table class="form-table">
                         <tr>
@@ -254,7 +255,7 @@ $attributes = wc_get_attribute_taxonomies();
                                 <label><?php esc_html_e( 'Included categories', 'incentiv' ); ?></label>
                             </th>
                             <td>
-                                <div class="mmd-checkbox-group">
+                                <div class="incv-checkbox-group">
                                     <?php foreach ($categories as $category): ?>
                                         <label>
                                             <input type="checkbox" name="included_categories[]" value="<?php echo esc_attr($category->slug); ?>" <?php checked(in_array($category->slug, $rule_set['included_categories'])); ?>>
@@ -271,7 +272,7 @@ $attributes = wc_get_attribute_taxonomies();
                                 <label><?php esc_html_e( 'Excluded categories', 'incentiv' ); ?></label>
                             </th>
                             <td>
-                                <div class="mmd-checkbox-group">
+                                <div class="incv-checkbox-group">
                                     <?php foreach ($categories as $category): ?>
                                         <label>
                                             <input type="checkbox" name="excluded_categories[]" value="<?php echo esc_attr($category->slug); ?>" <?php checked(in_array($category->slug, $rule_set['excluded_categories'])); ?>>
@@ -288,7 +289,7 @@ $attributes = wc_get_attribute_taxonomies();
                                 <label for="excluded_products_from_categories"><?php esc_html_e( 'Products/variations excluded from the categories', 'incentiv' ); ?></label>
                             </th>
                             <td>
-                                <select name="excluded_products_from_categories[]" id="excluded_products_from_categories" class="mmd-product-search-multiple" multiple style="width: 100%;">
+                                <select name="excluded_products_from_categories[]" id="excluded_products_from_categories" class="incv-product-search-multiple" multiple style="width: 100%;">
                                     <?php
                                     if (!empty($rule_set['excluded_products_from_categories'])) {
                                         foreach ($rule_set['excluded_products_from_categories'] as $product_id) {
@@ -311,9 +312,9 @@ $attributes = wc_get_attribute_taxonomies();
                                 <label for="limit_to_variations"><?php esc_html_e( 'Limit to specific variations', 'incentiv' ); ?></label>
                             </th>
                             <td>
-                                <label class="mmd-switch">
+                                <label class="incv-switch">
                                     <input type="checkbox" name="limit_to_variations" id="limit_to_variations" <?php checked(!empty($rule_set['limit_to_variations']) ? $rule_set['limit_to_variations'] : 'no', 'yes'); ?>>
-                                    <span class="mmd-slider"></span>
+                                    <span class="incv-slider"></span>
                                 </label>
                                 <p class="description"><?php esc_html_e( 'Enable to choose only specific variations from the selected categories', 'incentiv' ); ?></p>
                             </td>
@@ -352,7 +353,7 @@ $attributes = wc_get_attribute_taxonomies();
                 </div>
 
                 <!-- Product IDs Selection -->
-                <div id="product_ids_section" class="mmd-section" style="display: <?php echo $rule_set['selection_method'] === 'product_ids' ? 'block' : 'none'; ?>;">
+                <div id="product_ids_section" class="incv-section" style="display: <?php echo $rule_set['selection_method'] === 'product_ids' ? 'block' : 'none'; ?>;">
                     <h3><?php esc_html_e( 'Product IDs', 'incentiv' ); ?></h3>
                     <table class="form-table">
                         <tr>
@@ -360,7 +361,7 @@ $attributes = wc_get_attribute_taxonomies();
                                 <label for="included_products"><?php esc_html_e( 'Included products/variations', 'incentiv' ); ?></label>
                             </th>
                             <td>
-                                <select name="included_products[]" id="included_products" class="mmd-product-search-multiple" multiple style="width: 100%;">
+                                <select name="included_products[]" id="included_products" class="incv-product-search-multiple" multiple style="width: 100%;">
                                     <?php
                                     if (!empty($rule_set['included_products'])) {
                                         foreach ($rule_set['included_products'] as $product_id) {
@@ -383,7 +384,7 @@ $attributes = wc_get_attribute_taxonomies();
                                 <label for="excluded_products"><?php echo esc_html_x( 'Excluded products/variations', 'discount', 'incentiv' ); ?></label>
                             </th>
                             <td>
-                                <select name="excluded_products[]" id="excluded_products" class="mmd-product-search-multiple" multiple style="width: 100%;">
+                                <select name="excluded_products[]" id="excluded_products" class="incv-product-search-multiple" multiple style="width: 100%;">
                                     <?php
                                     if (!empty($rule_set['excluded_products'])) {
                                         foreach ($rule_set['excluded_products'] as $product_id) {
@@ -404,7 +405,7 @@ $attributes = wc_get_attribute_taxonomies();
                 </div>
 
                 <!-- Attribute Selection -->
-                <div id="attribute_section" class="mmd-section" style="display: <?php echo $rule_set['selection_method'] === 'attribute' ? 'block' : 'none'; ?>;">
+                <div id="attribute_section" class="incv-section" style="display: <?php echo $rule_set['selection_method'] === 'attribute' ? 'block' : 'none'; ?>;">
                     <h3><?php esc_html_e( 'Attributes', 'incentiv' ); ?></h3>
                     <table class="form-table">
                         <tr>
@@ -448,8 +449,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Discount Rules (NOT gifts - this is for quantity-based discounts only) -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-money-alt"></span> <?php esc_html_e( 'Discount rules', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-money-alt"></span> <?php esc_html_e( 'Discount rules', 'incentiv' ); ?></h2>
 
                 <!-- Quantity mode description -->
                 <div id="discount_rules_quantity_desc" style="<?php echo ($rule_set['discount_mode'] === 'global') ? 'display:none;' : ''; ?>">
@@ -458,13 +459,13 @@ $attributes = wc_get_attribute_taxonomies();
                     </p>
 
                     <!-- BOGO / Quick Presets -->
-                    <div class="mmd-preset-box">
+                    <div class="incv-preset-box">
                         <strong><?php esc_html_e( 'Quick fill', 'incentiv' ); ?></strong>
-                        <button type="button" class="button button-small mmd-preset-btn" data-preset="bogo50">BOGO 50%</button>
-                        <button type="button" class="button button-small mmd-preset-btn" data-preset="bogo_free"><?php esc_html_e( 'Buy 1 get 1 free', 'incentiv' ); ?></button>
-                        <button type="button" class="button button-small mmd-preset-btn" data-preset="buy4get1"><?php esc_html_e( 'Buy 4 get 1 free', 'incentiv' ); ?></button>
-                        <button type="button" class="button button-small mmd-preset-btn" data-preset="tiered"><?php esc_html_e( 'Tiered discounts', 'incentiv' ); ?></button>
-                        <button type="button" class="button button-small mmd-preset-btn" data-preset="buy3_30"><?php esc_html_e( 'Buy 3 get 30%', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-preset-btn" data-preset="bogo50">BOGO 50%</button>
+                        <button type="button" class="button button-small incv-preset-btn" data-preset="bogo_free"><?php esc_html_e( 'Buy 1 get 1 free', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-preset-btn" data-preset="buy4get1"><?php esc_html_e( 'Buy 4 get 1 free', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-preset-btn" data-preset="tiered"><?php esc_html_e( 'Tiered discounts', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-preset-btn" data-preset="buy3_30"><?php esc_html_e( 'Buy 3 get 30%', 'incentiv' ); ?></button>
                     </div>
                 </div>
 
@@ -475,14 +476,14 @@ $attributes = wc_get_attribute_taxonomies();
                     </p>
 
                     <!-- Global Quick Presets -->
-                    <div class="mmd-preset-box">
+                    <div class="incv-preset-box">
                         <strong><?php esc_html_e( 'Quick fill', 'incentiv' ); ?></strong>
-                        <button type="button" class="button button-small mmd-global-preset-btn" data-discount="5" data-type="percentage"><?php esc_html_e( '5% off', 'incentiv' ); ?></button>
-                        <button type="button" class="button button-small mmd-global-preset-btn" data-discount="10" data-type="percentage"><?php esc_html_e( '10% off', 'incentiv' ); ?></button>
-                        <button type="button" class="button button-small mmd-global-preset-btn" data-discount="15" data-type="percentage"><?php esc_html_e( '15% off', 'incentiv' ); ?></button>
-                        <button type="button" class="button button-small mmd-global-preset-btn" data-discount="20" data-type="percentage"><?php esc_html_e( '20% off', 'incentiv' ); ?></button>
-                        <button type="button" class="button button-small mmd-global-preset-btn" data-discount="25" data-type="percentage"><?php esc_html_e( '25% off', 'incentiv' ); ?></button>
-                        <button type="button" class="button button-small mmd-global-preset-btn" data-discount="50" data-type="percentage"><?php esc_html_e( '50% off', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-global-preset-btn" data-discount="5" data-type="percentage"><?php esc_html_e( '5% off', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-global-preset-btn" data-discount="10" data-type="percentage"><?php esc_html_e( '10% off', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-global-preset-btn" data-discount="15" data-type="percentage"><?php esc_html_e( '15% off', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-global-preset-btn" data-discount="20" data-type="percentage"><?php esc_html_e( '20% off', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-global-preset-btn" data-discount="25" data-type="percentage"><?php esc_html_e( '25% off', 'incentiv' ); ?></button>
+                        <button type="button" class="button button-small incv-global-preset-btn" data-discount="50" data-type="percentage"><?php esc_html_e( '50% off', 'incentiv' ); ?></button>
                     </div>
                 </div>
 
@@ -494,19 +495,19 @@ $attributes = wc_get_attribute_taxonomies();
                     }
                     foreach ($rules as $index => $rule):
                     ?>
-                        <div class="mmd-discount-rule">
-                            <div class="mmd-rule-fields">
-                                <div class="mmd-field mmd-quantity-field" style="<?php echo ($rule_set['discount_mode'] === 'global') ? 'display:none;' : ''; ?>">
+                        <div class="incv-discount-rule">
+                            <div class="incv-rule-fields">
+                                <div class="incv-field incv-quantity-field" style="<?php echo ($rule_set['discount_mode'] === 'global') ? 'display:none;' : ''; ?>">
                                     <label><?php esc_html_e( 'Quantity', 'incentiv' ); ?></label>
                                     <input type="number" name="discount_rules[<?php echo esc_html( $index ); ?>][quantity]" value="<?php echo esc_attr($rule['quantity']); ?>" min="1" placeholder="3">
                                 </div>
 
-                                <div class="mmd-field">
+                                <div class="incv-field">
                                     <label><?php esc_html_e( 'Discount', 'incentiv' ); ?></label>
                                     <input type="number" name="discount_rules[<?php echo esc_html( $index ); ?>][discount]" value="<?php echo esc_attr($rule['discount']); ?>" min="0" step="0.01" placeholder="30">
                                 </div>
 
-                                <div class="mmd-field">
+                                <div class="incv-field">
                                     <label><?php esc_html_e( 'Type', 'incentiv' ); ?></label>
                                     <select name="discount_rules[<?php echo esc_html( $index ); ?>][type]">
                                         <option value="percentage" <?php selected($rule['type'], 'percentage'); ?>><?php esc_html_e( 'Percentage (%)', 'incentiv' ); ?></option>
@@ -514,7 +515,7 @@ $attributes = wc_get_attribute_taxonomies();
                                     </select>
                                 </div>
 
-                                                <button type="button" class="button mmd-remove-rule"><span class="dashicons dashicons-trash" style="font-size:14px;width:14px;height:14px;vertical-align:middle;" aria-hidden="true"></span><span class="screen-reader-text"><?php esc_html_e( 'Remove', 'incentiv' ); ?></span></button>
+                                                <button type="button" class="button incv-remove-rule"><span class="dashicons dashicons-trash" style="font-size:14px;width:14px;height:14px;vertical-align:middle;" aria-hidden="true"></span><span class="screen-reader-text"><?php esc_html_e( 'Remove', 'incentiv' ); ?></span></button>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -531,8 +532,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Coupon Settings -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-tickets-alt"></span> <?php esc_html_e( 'Coupon settings', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-tickets-alt"></span> <?php esc_html_e( 'Coupon settings', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -540,9 +541,9 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="coupon_required"><?php esc_html_e( 'Requires a coupon', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="coupon_required" id="coupon_required" <?php checked(!empty($rule_set['coupon_required']) ? $rule_set['coupon_required'] : 'no', 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php esc_html_e( 'Enable if the discount should only apply when a specific coupon is entered', 'incentiv' ); ?></p>
                         </td>
@@ -563,9 +564,9 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="override_other_discounts"><?php esc_html_e( 'Cancel other discounts', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="override_other_discounts" id="override_other_discounts" <?php checked(!empty($rule_set['override_other_discounts']) ? $rule_set['override_other_discounts'] : 'no', 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php esc_html_e( 'When this rule is active, it cancels other quantity discounts on the qualifying products. This discount will be the only one that applies.', 'incentiv' ); ?></p>
                         </td>
@@ -574,8 +575,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Customer Notice Settings -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-megaphone"></span> <?php esc_html_e( 'Customer messages', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-megaphone"></span> <?php esc_html_e( 'Customer messages', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -583,9 +584,9 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="notice_enabled"><?php esc_html_e( 'Show a message to the customer', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="notice_enabled" id="notice_enabled" <?php checked(!empty($rule_set['notice_enabled']) ? $rule_set['notice_enabled'] : 'yes', 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php esc_html_e( 'Show a discount message on the product page', 'incentiv' ); ?></p>
                         </td>
@@ -626,9 +627,9 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="show_in_mini_cart"><?php echo esc_html_x( 'Show in the mini cart', 'rule', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="show_in_mini_cart" id="show_in_mini_cart" <?php checked(!empty($rule_set['show_in_mini_cart']) ? $rule_set['show_in_mini_cart'] : 'yes', 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php esc_html_e( 'Show the discount in the mini cart as well', 'incentiv' ); ?></p>
                         </td>
@@ -637,8 +638,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Custom Messages Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-format-chat"></span> <?php esc_html_e( 'Custom messages', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-format-chat"></span> <?php esc_html_e( 'Custom messages', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -663,8 +664,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Shipping Method Condition Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-car"></span> <?php esc_html_e( 'Shipping method condition', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-car"></span> <?php esc_html_e( 'Shipping method condition', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -682,8 +683,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Cart Total Conditions Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-money-alt"></span> <?php esc_html_e( 'Cart total conditions', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-money-alt"></span> <?php esc_html_e( 'Cart total conditions', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -717,8 +718,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- User Role Conditions Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-admin-users"></span> <?php esc_html_e( 'User role conditions', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-admin-users"></span> <?php esc_html_e( 'User role conditions', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -746,13 +747,13 @@ $attributes = wc_get_attribute_taxonomies();
 
             <?php
             // Extra cards from add-ons (for example audience targeting in Incentiv Pro).
-            do_action('mmd_rule_editor_cards', $rule_set);
+            do_action('incv_rule_editor_cards', $rule_set);
             ?>
 
             <!-- Margin Guards & Limits Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-shield"></span> <?php esc_html_e( 'Profit guards and caps', 'incentiv' ); ?></h2>
-                <div class="mmd-card-tip">
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-shield"></span> <?php esc_html_e( 'Profit guards and caps', 'incentiv' ); ?></h2>
+                <div class="incv-card-tip">
                     <span class="msr">lightbulb</span>
                     <span><?php esc_html_e( 'The safety layer that makes aggressive promotions sustainable. Leave empty for no limit.', 'incentiv' ); ?></span>
                 </div>
@@ -770,20 +771,20 @@ $attributes = wc_get_attribute_taxonomies();
                         <th scope="row"><label for="budget_cap"><?php esc_html_e( 'Campaign budget (₪)', 'incentiv' ); ?></label></th>
                         <td>
                             <input type="number" min="0" step="0.01" name="budget_cap" id="budget_cap" class="regular-text" style="width:160px;" value="<?php echo esc_attr(isset($rule_set['budget_cap']) ? $rule_set['budget_cap'] : ''); ?>">
-                            <?php if (!$is_new && class_exists('MMD_Margin_Guards')):
-                                $spent = MMD_Margin_Guards::get_rule_spend($rule_set['id']);
+                            <?php if (!$is_new && class_exists('INCV_Margin_Guards')):
+                                $spent = INCV_Margin_Guards::get_rule_spend($rule_set['id']);
                                 $cap = isset($rule_set['budget_cap']) && $rule_set['budget_cap'] !== '' ? floatval($rule_set['budget_cap']) : 0;
                                 $pct = $cap > 0 ? min(100, round($spent / $cap * 100)) : 0;
                             ?>
-                                <div class="mmd-budget-meter">
-                                    <div class="mmd-budget-bar"><span style="width:<?php echo esc_attr($pct); ?>%;"></span></div>
-                                    <div class="mmd-budget-text">
+                                <div class="incv-budget-meter">
+                                    <div class="incv-budget-bar"><span style="width:<?php echo esc_attr($pct); ?>%;"></span></div>
+                                    <div class="incv-budget-text">
                                         <?php esc_html_e( 'Used up', 'incentiv' ); ?> <strong><?php echo esc_html(number_format_i18n($spent, 2)); ?> ₪</strong>
                                         <?php if ($cap > 0): ?> <?php esc_html_e( 'of', 'incentiv' ); ?> <?php echo esc_html(number_format_i18n($cap, 2)); ?> ₪ (<?php echo esc_html($pct); ?>%)<?php endif; ?>
                                     </div>
                                 </div>
                                 <?php if (!empty($rule_set['paused_reason']) && $rule_set['paused_reason'] === 'budget'): ?>
-                                    <p class="description" style="color:var(--mmd-danger);font-weight:700;"><?php esc_html_e( 'The rule was paused automatically: the budget has been used up.', 'incentiv' ); ?></p>
+                                    <p class="description" style="color:var(--incv-danger);font-weight:700;"><?php esc_html_e( 'The rule was paused automatically: the budget has been used up.', 'incentiv' ); ?></p>
                                 <?php endif; ?>
                             <?php endif; ?>
                             <p class="description"><?php esc_html_e( 'When the total discount the rule has given reaches the budget, the rule is paused automatically.', 'incentiv' ); ?></p>
@@ -794,7 +795,7 @@ $attributes = wc_get_attribute_taxonomies();
                         <td>
                             <input type="number" min="0" max="99" step="0.1" name="margin_floor_percent" id="margin_floor_percent" class="small-text" value="<?php echo esc_attr(isset($rule_set['margin_floor_percent']) ? $rule_set['margin_floor_percent'] : ''); ?>">
                             <p class="description">
-                                <?php esc_html_e( 'The discount won\'t take an item below this profit margin. Calculated against the product cost (', 'incentiv' ); ?><code>_mmd_cost</code> <?php esc_html_e( 'or a Cost of Goods plugin). An item without cost data isn\'t limited.', 'incentiv' ); ?>
+                                <?php esc_html_e( 'The discount won\'t take an item below this profit margin. Calculated against the product cost (', 'incentiv' ); ?><code>_incv_cost</code> <?php esc_html_e( 'or a Cost of Goods plugin). An item without cost data isn\'t limited.', 'incentiv' ); ?>
                             </p>
                         </td>
                     </tr>
@@ -810,8 +811,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Schedule Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-calendar-alt"></span> <?php esc_html_e( 'Discount scheduling', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-calendar-alt"></span> <?php esc_html_e( 'Discount scheduling', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -883,8 +884,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Usage Limits Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-lock"></span> <?php esc_html_e( 'Usage limits', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-lock"></span> <?php esc_html_e( 'Usage limits', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -909,8 +910,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Discount Badge Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-tag"></span> <?php esc_html_e( 'Discount badge', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-tag"></span> <?php esc_html_e( 'Discount badge', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -918,9 +919,9 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="badge_enabled"><?php esc_html_e( 'Show a discount badge on the product', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="badge_enabled" id="badge_enabled" <?php checked($rule_set['badge_enabled'], 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php esc_html_e( 'Show a badge on the product image when it belongs to an active discount rule', 'incentiv' ); ?></p>
                         </td>
@@ -944,7 +945,7 @@ $attributes = wc_get_attribute_taxonomies();
                             <input type="color" name="badge_bg_color" id="badge_bg_color" value="<?php echo esc_attr($rule_set['badge_bg_color']); ?>">
                             <input type="color" name="badge_text_color" id="badge_text_color" value="<?php echo esc_attr($rule_set['badge_text_color']); ?>">
                             <span style="margin-right: 10px;"><?php esc_html_e( 'Background / text colour', 'incentiv' ); ?></span>
-                            <span class="mmd-badge-preview" style="display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; background: <?php echo esc_attr($rule_set['badge_bg_color']); ?>; color: <?php echo esc_attr($rule_set['badge_text_color']); ?>; margin-right: 10px;"><?php echo esc_html($rule_set['badge_text']); ?></span>
+                            <span class="incv-badge-preview" style="display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; background: <?php echo esc_attr($rule_set['badge_bg_color']); ?>; color: <?php echo esc_attr($rule_set['badge_text_color']); ?>; margin-right: 10px;"><?php echo esc_html($rule_set['badge_text']); ?></span>
                             <p class="description"><?php esc_html_e( 'Choose a background colour and a text colour for the badge', 'incentiv' ); ?></p>
                         </td>
                     </tr>
@@ -969,8 +970,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Sale Price Display Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-money-alt"></span> <?php esc_html_e( 'Sale price display', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-money-alt"></span> <?php esc_html_e( 'Sale price display', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -978,15 +979,15 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="show_sale_price"><?php esc_html_e( 'Show sale price', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="show_sale_price" id="show_sale_price" <?php checked(isset($rule_set['show_sale_price']) ? $rule_set['show_sale_price'] : 'no', 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php esc_html_e( 'Show the regular price struck through + the discounted price on the product (like a regular WooCommerce sale)', 'incentiv' ); ?></p>
                         </td>
                     </tr>
 
-                    <tr class="mmd-sale-price-setting" style="<?php echo (isset($rule_set['show_sale_price']) && $rule_set['show_sale_price'] === 'yes') ? '' : 'display:none;'; ?>">
+                    <tr class="incv-sale-price-setting" style="<?php echo (isset($rule_set['show_sale_price']) && $rule_set['show_sale_price'] === 'yes') ? '' : 'display:none;'; ?>">
                         <th scope="row">
                             <label for="show_sale_price_on"><?php esc_html_e( 'Where to show', 'incentiv' ); ?></label>
                         </th>
@@ -999,7 +1000,7 @@ $attributes = wc_get_attribute_taxonomies();
                         </td>
                     </tr>
 
-                    <tr class="mmd-sale-price-setting" style="<?php echo (isset($rule_set['show_sale_price']) && $rule_set['show_sale_price'] === 'yes') ? '' : 'display:none;'; ?>">
+                    <tr class="incv-sale-price-setting" style="<?php echo (isset($rule_set['show_sale_price']) && $rule_set['show_sale_price'] === 'yes') ? '' : 'display:none;'; ?>">
                         <th scope="row">
                             <label for="sale_price_tier"><?php esc_html_e( 'Which discount tier to show', 'incentiv' ); ?></label>
                         </th>
@@ -1017,9 +1018,9 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="show_discount_in_cart"><?php esc_html_e( 'Show discount in cart', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="show_discount_in_cart" id="show_discount_in_cart" <?php checked(isset($rule_set['show_discount_in_cart']) ? $rule_set['show_discount_in_cart'] : 'no', 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description">
                                 <?php esc_html_e( 'When off (default): cart items, the mini cart and checkout show the regular price. The discount is only shown as a "You saved" / "Discount" line in the cart totals.', 'incentiv' ); ?><br>
@@ -1031,11 +1032,11 @@ $attributes = wc_get_attribute_taxonomies();
                 </table>
             </div>
 
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-format-image"></span> <?php esc_html_e( 'Display banner', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-format-image"></span> <?php esc_html_e( 'Display banner', 'incentiv' ); ?></h2>
                 <p class="description" style="margin-bottom:15px;">
-                    <?php esc_html_e( 'A banner image shown for products that match this rule. It can be shown with a shortcode', 'incentiv' ); ?> <code>[mmd_rule_banner]</code> <?php esc_html_e( 'on the product page, or with an Elementor widget.', 'incentiv' ); ?><br>
-                    Banner image displayed for products matching this rule. Available via shortcode <code>[mmd_rule_banner]</code> on a product page, or via the Elementor widget.
+                    <?php esc_html_e( 'A banner image shown for products that match this rule. It can be shown with a shortcode', 'incentiv' ); ?> <code>[incv_rule_banner]</code> <?php esc_html_e( 'on the product page, or with an Elementor widget.', 'incentiv' ); ?><br>
+                    Banner image displayed for products matching this rule. Available via shortcode <code>[incv_rule_banner]</code> on a product page, or via the Elementor widget.
                 </p>
 
                 <table class="form-table">
@@ -1046,7 +1047,7 @@ $attributes = wc_get_attribute_taxonomies();
                             $banner_id = isset($rule_set['banner_image_id']) ? intval($rule_set['banner_image_id']) : 0;
                             $banner_url_attr = $banner_id ? wp_get_attachment_image_url($banner_id, 'large') : (isset($rule_set['banner_image_url']) ? $rule_set['banner_image_url'] : '');
                             ?>
-                            <div class="mmd-banner-image-wrapper">
+                            <div class="incv-banner-image-wrapper">
                                 <input type="hidden" name="banner_image_id" id="banner_image_id" value="<?php echo esc_attr($banner_id); ?>">
                                 <img id="banner_image_preview" src="<?php echo esc_url($banner_url_attr); ?>" style="max-width:400px;display:<?php echo $banner_url_attr ? 'block' : 'none'; ?>;margin-bottom:10px;border:1px solid #ddd;border-radius:4px;">
                                 <p>
@@ -1076,17 +1077,17 @@ $attributes = wc_get_attribute_taxonomies();
                     <tr>
                         <th scope="row"><label><?php esc_html_e( 'Shortcode', 'incentiv' ); ?></label></th>
                         <td>
-                            <code>[mmd_rule_banner]</code>
+                            <code>[incv_rule_banner]</code>
                             <p class="description"><?php esc_html_e( 'Place the shortcode on a product page. It shows the banner of the first rule that matches the current product.', 'incentiv' ); ?><br>Place this shortcode on a product page. It displays the banner of the first rule that matches the current product.</p>
                             <p>
-                                <strong><?php esc_html_e( 'Also available:', 'incentiv' ); ?></strong> <code>[mmd_rule_banner rule_id="<?php echo esc_attr(isset($rule_set['id']) ? $rule_set['id'] : ''); ?>"]</code> <?php esc_html_e( '— shows the banner of this specific rule.', 'incentiv' ); ?><br>
+                                <strong><?php esc_html_e( 'Also available:', 'incentiv' ); ?></strong> <code>[incv_rule_banner rule_id="<?php echo esc_attr(isset($rule_set['id']) ? $rule_set['id'] : ''); ?>"]</code> <?php esc_html_e( '— shows the banner of this specific rule.', 'incentiv' ); ?><br>
                                 Also: pass <code>rule_id</code> to force display of this specific rule's banner.
                             </p>
                         </td>
                     </tr>
                 </table>
 
-                <script>
+                <?php ob_start(); ?>
                 jQuery(function($) {
                     var frame;
                     $('#banner_image_upload_btn').on('click', function(e) {
@@ -1112,24 +1113,14 @@ $attributes = wc_get_attribute_taxonomies();
                         $(this).hide();
                     });
                 });
-                </script>
+                <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
             </div>
 
-            <script>
-            jQuery(function($) {
-                $('#show_sale_price').on('change', function() {
-                    if ($(this).is(':checked')) {
-                        $('.mmd-sale-price-setting').show();
-                    } else {
-                        $('.mmd-sale-price-setting').hide();
-                    }
-                });
-            });
-            </script>
+            
 
             <!-- Global Notice Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-megaphone"></span> <?php esc_html_e( 'Site-wide message', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-megaphone"></span> <?php esc_html_e( 'Site-wide message', 'incentiv' ); ?></h2>
                 <p class="description" style="margin-top:-5px;"><?php esc_html_e( 'When several rules have a site-wide message, the messages rotate automatically in a carousel', 'incentiv' ); ?></p>
 
                 <table class="form-table">
@@ -1138,9 +1129,9 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="global_notice_enabled"><?php esc_html_e( 'Show message on the site', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="global_notice_enabled" id="global_notice_enabled" <?php checked($rule_set['global_notice_enabled'], 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php esc_html_e( 'Show a message bar (banner) to all visitors when the discount rule is active', 'incentiv' ); ?></p>
                         </td>
@@ -1161,63 +1152,63 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="global_notice_icon"><?php esc_html_e( 'Icon', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <div class="mmd-icon-picker-wrap">
+                            <div class="incv-icon-picker-wrap">
                                 <input type="text" name="global_notice_icon" id="global_notice_icon" value="<?php echo esc_attr($rule_set['global_notice_icon']); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Click to pick an icon', 'incentiv' ); ?>" readonly style="cursor:pointer;max-width:300px;">
-                                <button type="button" class="button" id="mmd_clear_icon" title="<?php esc_attr_e( 'Clear icon', 'incentiv' ); ?>"><span class="dashicons dashicons-no-alt" style="font-size:16px;width:16px;height:16px;vertical-align:middle;"></span></button>
-                                <span id="mmd_icon_preview" style="font-size:24px;vertical-align:middle;margin-right:10px;"><?php echo esc_html($rule_set['global_notice_icon']); ?></span>
+                                <button type="button" class="button" id="incv_clear_icon" title="<?php esc_attr_e( 'Clear icon', 'incentiv' ); ?>"><span class="dashicons dashicons-no-alt" style="font-size:16px;width:16px;height:16px;vertical-align:middle;"></span></button>
+                                <span id="incv_icon_preview" style="font-size:24px;vertical-align:middle;margin-right:10px;"><?php echo esc_html($rule_set['global_notice_icon']); ?></span>
                             </div>
-                            <div id="mmd_icon_picker" class="mmd-icon-picker" style="display:none;">
-                                <div class="mmd-icon-picker-tabs">
-                                    <button type="button" class="button mmd-icon-tab active" data-tab="emoji">Emoji</button>
-                                    <button type="button" class="button mmd-icon-tab" data-tab="dashicons">Dashicons</button>
+                            <div id="incv_icon_picker" class="incv-icon-picker" style="display:none;">
+                                <div class="incv-icon-picker-tabs">
+                                    <button type="button" class="button incv-icon-tab active" data-tab="emoji">Emoji</button>
+                                    <button type="button" class="button incv-icon-tab" data-tab="dashicons">Dashicons</button>
                                 </div>
-                                <div class="mmd-icon-picker-search">
-                                    <input type="text" id="mmd_icon_search" placeholder="<?php esc_attr_e( 'Search...', 'incentiv' ); ?>" class="regular-text" style="width:100%;margin:8px 0;">
+                                <div class="incv-icon-picker-search">
+                                    <input type="text" id="incv_icon_search" placeholder="<?php esc_attr_e( 'Search...', 'incentiv' ); ?>" class="regular-text" style="width:100%;margin:8px 0;">
                                 </div>
-                                <div class="mmd-icon-tab-content" id="mmd_emoji_tab">
-                                    <div class="mmd-icon-category">
+                                <div class="incv-icon-tab-content" id="incv_emoji_tab">
+                                    <div class="incv-icon-category">
                                         <strong><?php esc_html_e( 'Recommended for promotions', 'incentiv' ); ?></strong>
-                                        <div class="mmd-icon-grid">
+                                        <div class="incv-icon-grid">
                                             <?php
                                             $popular_emojis = array('🔥','🎁','⚡','🏷️','💰','🛍️','💎','✨','🎉','🎊','💥','🌟','⭐','🏆','🎯','💸','🤑','📢','🔔','💡','❤️','🎀','🎈','🛒','📦','🆓','💯','🔖','🎟️','🏅');
                                             foreach ($popular_emojis as $emoji): ?>
-                                                <span class="mmd-icon-option mmd-emoji-option" data-value="<?php echo esc_attr($emoji); ?>" title="<?php echo esc_attr($emoji); ?>"><?php echo esc_html( $emoji ); ?></span>
+                                                <span class="incv-icon-option incv-emoji-option" data-value="<?php echo esc_attr($emoji); ?>" title="<?php echo esc_attr($emoji); ?>"><?php echo esc_html( $emoji ); ?></span>
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
-                                    <div class="mmd-icon-category">
+                                    <div class="incv-icon-category">
                                         <strong><?php esc_html_e( 'Faces', 'incentiv' ); ?></strong>
-                                        <div class="mmd-icon-grid">
+                                        <div class="incv-icon-grid">
                                             <?php
                                             $face_emojis = array('😍','🤩','😎','🥳','😊','🤗','😱','🫣','🤫','🤭');
                                             foreach ($face_emojis as $emoji): ?>
-                                                <span class="mmd-icon-option mmd-emoji-option" data-value="<?php echo esc_attr($emoji); ?>"><?php echo esc_html( $emoji ); ?></span>
+                                                <span class="incv-icon-option incv-emoji-option" data-value="<?php echo esc_attr($emoji); ?>"><?php echo esc_html( $emoji ); ?></span>
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
-                                    <div class="mmd-icon-category">
+                                    <div class="incv-icon-category">
                                         <strong><?php esc_html_e( 'Arrows', 'incentiv' ); ?></strong>
-                                        <div class="mmd-icon-grid">
+                                        <div class="incv-icon-grid">
                                             <?php
                                             $arrow_emojis = array('➡️','⬅️','⬆️','⬇️','↗️','↘️','🔄','↩️','👉','👈','👆','👇');
                                             foreach ($arrow_emojis as $emoji): ?>
-                                                <span class="mmd-icon-option mmd-emoji-option" data-value="<?php echo esc_attr($emoji); ?>"><?php echo esc_html( $emoji ); ?></span>
+                                                <span class="incv-icon-option incv-emoji-option" data-value="<?php echo esc_attr($emoji); ?>"><?php echo esc_html( $emoji ); ?></span>
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
-                                    <div class="mmd-icon-category">
+                                    <div class="incv-icon-category">
                                         <strong><?php esc_html_e( 'Symbols', 'incentiv' ); ?></strong>
-                                        <div class="mmd-icon-grid">
+                                        <div class="incv-icon-grid">
                                             <?php
                                             $symbol_emojis = array('✅','❌','⚠️','ℹ️','❓','❗','✳️','🔴','🟢','🔵','🟡','🟠','🟣','⚫','⚪','🔶','🔷','🔸','🔹','💠');
                                             foreach ($symbol_emojis as $emoji): ?>
-                                                <span class="mmd-icon-option mmd-emoji-option" data-value="<?php echo esc_attr($emoji); ?>"><?php echo esc_html( $emoji ); ?></span>
+                                                <span class="incv-icon-option incv-emoji-option" data-value="<?php echo esc_attr($emoji); ?>"><?php echo esc_html( $emoji ); ?></span>
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mmd-icon-tab-content" id="mmd_dashicons_tab" style="display:none;">
-                                    <div class="mmd-icon-grid mmd-dashicons-grid">
+                                <div class="incv-icon-tab-content" id="incv_dashicons_tab" style="display:none;">
+                                    <div class="incv-icon-grid incv-dashicons-grid">
                                         <?php
                                         $dashicon_list = array(
                                             'megaphone' => 'megaphone', 'cart' => 'cart', 'tag' => 'tag', 'money-alt' => 'money',
@@ -1230,7 +1221,7 @@ $attributes = wc_get_attribute_taxonomies();
                                             'store' => 'store', 'admin-home' => 'home', 'groups' => 'groups', 'visibility' => 'eye',
                                         );
                                         foreach ($dashicon_list as $icon => $label): ?>
-                                            <span class="mmd-icon-option mmd-dashicon-option" data-value="dashicons-<?php echo esc_attr($icon); ?>" title="<?php echo esc_attr($label); ?>"><span class="dashicons dashicons-<?php echo esc_attr($icon); ?>"></span></span>
+                                            <span class="incv-icon-option incv-dashicon-option" data-value="dashicons-<?php echo esc_attr($icon); ?>" title="<?php echo esc_attr($label); ?>"><span class="dashicons dashicons-<?php echo esc_attr($icon); ?>"></span></span>
                                         <?php endforeach; ?>
                                     </div>
                                 </div>
@@ -1247,7 +1238,7 @@ $attributes = wc_get_attribute_taxonomies();
                             <input type="color" name="global_notice_bg_color" id="global_notice_bg_color" value="<?php echo esc_attr($rule_set['global_notice_bg_color']); ?>">
                             <input type="color" name="global_notice_text_color" id="global_notice_text_color" value="<?php echo esc_attr($rule_set['global_notice_text_color']); ?>">
                             <span style="margin-right: 10px;"><?php esc_html_e( 'Background / text', 'incentiv' ); ?></span>
-                            <div class="mmd-global-notice-preview" style="display: inline-block; padding: 8px 20px; border-radius: 0; font-size: 14px; font-weight: 600; background: <?php echo esc_attr($rule_set['global_notice_bg_color']); ?>; color: <?php echo esc_attr($rule_set['global_notice_text_color']); ?>; margin-top: 8px;">
+                            <div class="incv-global-notice-preview" style="display: inline-block; padding: 8px 20px; border-radius: 0; font-size: 14px; font-weight: 600; background: <?php echo esc_attr($rule_set['global_notice_bg_color']); ?>; color: <?php echo esc_attr($rule_set['global_notice_text_color']); ?>; margin-top: 8px;">
                                 <?php echo esc_html($rule_set['global_notice_text'] ?: esc_html__( '🔥 Special offer! Buy 3 and get 30% off', 'incentiv' )); ?>
                             </div>
                         </td>
@@ -1357,9 +1348,9 @@ $attributes = wc_get_attribute_taxonomies();
                             <label for="global_notice_dismissible"><?php esc_html_e( 'Dismissible', 'incentiv' ); ?></label>
                         </th>
                         <td>
-                            <label class="mmd-switch">
+                            <label class="incv-switch">
                                 <input type="checkbox" name="global_notice_dismissible" id="global_notice_dismissible" <?php checked($rule_set['global_notice_dismissible'], 'yes'); ?>>
-                                <span class="mmd-slider"></span>
+                                <span class="incv-slider"></span>
                             </label>
                             <p class="description"><?php esc_html_e( 'Let visitors close the message', 'incentiv' ); ?></p>
                         </td>
@@ -1385,8 +1376,8 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
             <!-- Rule Exclusion Card -->
-            <div class="mmd-card">
-                <h2 class="mmd-card-title"><span class="dashicons dashicons-dismiss"></span> <?php esc_html_e( 'Exclude based on other rules', 'incentiv' ); ?></h2>
+            <div class="incv-card">
+                <h2 class="incv-card-title"><span class="dashicons dashicons-dismiss"></span> <?php esc_html_e( 'Exclude based on other rules', 'incentiv' ); ?></h2>
 
                 <table class="form-table">
                     <tr>
@@ -1395,7 +1386,7 @@ $attributes = wc_get_attribute_taxonomies();
                         </th>
                         <td>
                             <?php
-                            $all_rule_sets = MMD_Discount_Rules::get_all_rule_sets();
+                            $all_rule_sets = INCV_Discount_Rules::get_all_rule_sets();
                             $current_excluded = isset($rule_set['excluded_by_rules']) && is_array($rule_set['excluded_by_rules']) ? $rule_set['excluded_by_rules'] : array();
                             ?>
                             <select name="excluded_by_rules[]" id="excluded_by_rules" multiple class="regular-text" style="min-height: 120px; width: 100%; max-width: 600px;">
@@ -1417,60 +1408,60 @@ $attributes = wc_get_attribute_taxonomies();
             </div>
 
         </div>
-        </div><!-- /.mmd-editor-main -->
+        </div><!-- /.incv-editor-main -->
 
         <!-- Sticky live preview -->
-        <aside class="mmd-editor-preview" id="mmd-live-preview">
-            <div class="mmd-preview-label"><span class="msr">visibility</span><?php echo wp_kses_post( __( 'Live preview', 'incentiv' ) ); ?></div>
+        <aside class="incv-editor-preview" id="incv-live-preview">
+            <div class="incv-preview-label"><span class="msr">visibility</span><?php echo wp_kses_post( __( 'Live preview', 'incentiv' ) ); ?></div>
 
-            <div class="mmd-preview-product-card">
-                <div class="mmd-preview-hero">
+            <div class="incv-preview-product-card">
+                <div class="incv-preview-hero">
                     <span class="msr">local_cafe</span>
-                    <span class="mmd-preview-badge"><?php esc_html_e( 'Quantity deal', 'incentiv' ); ?></span>
+                    <span class="incv-preview-badge"><?php esc_html_e( 'Quantity deal', 'incentiv' ); ?></span>
                 </div>
-                <div class="mmd-preview-body">
-                    <div class="mmd-preview-name mmd-lp-rule-name"><?php echo esc_html($rule_set['name'] ? $rule_set['name'] : esc_html__( 'My rule', 'incentiv' )); ?></div>
-                    <div class="mmd-preview-price"><?php echo function_exists('wc_price') ? wp_kses_post(wc_price(42)) : '42.00'; ?></div>
-                    <div class="mmd-lp-tiers-wrap">
-                        <div class="mmd-preview-tiers">
-                            <div class="mmd-preview-tiers-head"><span class="msr">savings</span><?php echo esc_html_x( 'Buy more, save more', 'preview', 'incentiv' ); ?></div>
-                            <div class="mmd-lp-tiers-body"></div>
+                <div class="incv-preview-body">
+                    <div class="incv-preview-name incv-lp-rule-name"><?php echo esc_html($rule_set['name'] ? $rule_set['name'] : esc_html__( 'My rule', 'incentiv' )); ?></div>
+                    <div class="incv-preview-price"><?php echo function_exists('wc_price') ? wp_kses_post(wc_price(42)) : '42.00'; ?></div>
+                    <div class="incv-lp-tiers-wrap">
+                        <div class="incv-preview-tiers">
+                            <div class="incv-preview-tiers-head"><span class="msr">savings</span><?php echo esc_html_x( 'Buy more, save more', 'preview', 'incentiv' ); ?></div>
+                            <div class="incv-lp-tiers-body"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="mmd-preview-cartmsg mmd-lp-cartmsg">
-                <div class="mmd-preview-cartmsg-title"><span class="msr">shopping_cart</span><?php esc_html_e( 'Cart message', 'incentiv' ); ?></div>
-                <div class="mmd-preview-notice mmd-lp-cartmsg-box"></div>
+            <div class="incv-preview-cartmsg incv-lp-cartmsg">
+                <div class="incv-preview-cartmsg-title"><span class="msr">shopping_cart</span><?php esc_html_e( 'Cart message', 'incentiv' ); ?></div>
+                <div class="incv-preview-notice incv-lp-cartmsg-box"></div>
             </div>
         </aside>
-        </div><!-- /.mmd-editor-grid -->
+        </div><!-- /.incv-editor-grid -->
 
-        <p class="submit mmd-rule-submit-bar">
-            <button type="button" class="mmd-btn mmd-btn-outline" id="mmd-step-prev"><span class="msr mmd-dir-icon">arrow_forward</span> <?php esc_html_e( 'Previous', 'incentiv' ); ?></button>
-            <span id="mmd-step-indicator" style="font-size:12.5px;font-weight:700;color:var(--mmd-text-muted);"></span>
-            <button type="button" class="mmd-btn mmd-btn-primary" id="mmd-step-next"><?php esc_html_e( 'Next', 'incentiv' ); ?> <span class="msr mmd-dir-icon">arrow_back</span></button>
+        <p class="submit incv-rule-submit-bar">
+            <button type="button" class="incv-btn incv-btn-outline" id="incv-step-prev"><span class="msr incv-dir-icon">arrow_forward</span> <?php esc_html_e( 'Previous', 'incentiv' ); ?></button>
+            <span id="incv-step-indicator" style="font-size:12.5px;font-weight:700;color:var(--incv-text-muted);"></span>
+            <button type="button" class="incv-btn incv-btn-primary" id="incv-step-next"><?php esc_html_e( 'Next', 'incentiv' ); ?> <span class="msr incv-dir-icon">arrow_back</span></button>
             <span style="flex:1;"></span>
-            <span id="mmd-draft-status" class="mmd-draft-status" aria-live="polite"></span>
-            <button type="button" id="mmd-save-draft" class="mmd-btn mmd-btn-outline" style="padding:10px 18px;"><span class="msr">save</span> <?php esc_html_e( 'Save draft', 'incentiv' ); ?></button>
-            <button type="submit" name="mmd_save_rule_set" class="mmd-btn mmd-btn-green" style="padding:10px 20px;"><span class="msr">check</span> <?php esc_html_e( 'Publish rule', 'incentiv' ); ?></button>
-            <a href="<?php echo esc_url( admin_url('admin.php?page=mix-match-discounts') ); ?>" class="mmd-btn mmd-btn-ghost"><?php esc_html_e( 'Cancel', 'incentiv' ); ?></a>
+            <span id="incv-draft-status" class="incv-draft-status" aria-live="polite"></span>
+            <button type="button" id="incv-save-draft" class="incv-btn incv-btn-outline" style="padding:10px 18px;"><span class="msr">save</span> <?php esc_html_e( 'Save draft', 'incentiv' ); ?></button>
+            <button type="submit" name="incv_save_rule_set" class="incv-btn incv-btn-green" style="padding:10px 20px;"><span class="msr">check</span> <?php esc_html_e( 'Publish rule', 'incentiv' ); ?></button>
+            <a href="<?php echo esc_url( admin_url('admin.php?page=incv-discount-rules') ); ?>" class="incv-btn incv-btn-ghost"><?php esc_html_e( 'Cancel', 'incentiv' ); ?></a>
         </p>
 
         <!-- Preview modal -->
-        <div id="mmd-preview-modal" class="mmd-preview-modal" style="display:none;" aria-hidden="true">
-            <div class="mmd-preview-overlay" data-close></div>
-            <div class="mmd-preview-dialog" role="dialog" aria-labelledby="mmd-preview-title">
-                <div class="mmd-preview-header">
-                    <h2 id="mmd-preview-title"><?php esc_html_e( 'Rule preview', 'incentiv' ); ?></h2>
-                    <button type="button" class="mmd-preview-close button-link" data-close aria-label="<?php esc_attr_e( 'Close', 'incentiv' ); ?>">
+        <div id="incv-preview-modal" class="incv-preview-modal" style="display:none;" aria-hidden="true">
+            <div class="incv-preview-overlay" data-close></div>
+            <div class="incv-preview-dialog" role="dialog" aria-labelledby="incv-preview-title">
+                <div class="incv-preview-header">
+                    <h2 id="incv-preview-title"><?php esc_html_e( 'Rule preview', 'incentiv' ); ?></h2>
+                    <button type="button" class="incv-preview-close button-link" data-close aria-label="<?php esc_attr_e( 'Close', 'incentiv' ); ?>">
                         <span class="dashicons dashicons-no-alt"></span>
                     </button>
                 </div>
-                <div class="mmd-preview-body">
+                <div class="incv-preview-body">
                     <p class="description"><?php esc_html_e( 'Choose one or more products to see how the rule affects them in the cart (before saving).', 'incentiv' ); ?><br>Select one or more products to see how this rule would apply (without saving).</p>
-                    <table class="widefat striped" id="mmd-preview-products-table">
+                    <table class="widefat striped" id="incv-preview-products-table">
                         <thead>
                             <tr>
                                 <th><?php esc_html_e( 'Product', 'incentiv' ); ?></th>
@@ -1482,142 +1473,35 @@ $attributes = wc_get_attribute_taxonomies();
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="mmd-preview-empty">
+                            <tr class="incv-preview-empty">
                                 <td colspan="6" style="text-align:center;color:#646970;padding:24px;"><?php esc_html_e( 'No products selected yet. Click "Add product" to start.', 'incentiv' ); ?><br>No products selected yet. Click "Add product".</td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th colspan="3"><?php echo esc_html_x( 'Total', 'preview', 'incentiv' ); ?></th>
-                                <th id="mmd-preview-total-after">—</th>
-                                <th id="mmd-preview-total-saved">—</th>
+                                <th id="incv-preview-total-after">—</th>
+                                <th id="incv-preview-total-saved">—</th>
                                 <th></th>
                             </tr>
                         </tfoot>
                     </table>
                     <p>
-                        <button type="button" class="button" id="mmd-preview-add">
+                        <button type="button" class="button" id="incv-preview-add">
                             <span class="dashicons dashicons-plus"></span> <?php esc_html_e( 'Add product', 'incentiv' ); ?>
                         </button>
                     </p>
-                    <div class="mmd-preview-summary"></div>
+                    <div class="incv-preview-summary"></div>
                 </div>
-                <div class="mmd-preview-footer">
+                <div class="incv-preview-footer">
                     <button type="button" class="button" data-close><?php esc_html_e( 'Close', 'incentiv' ); ?></button>
                 </div>
             </div>
         </div>
 
-        <style>
-        /* Step visibility */
-        .mmd-card[data-mmd-step]:not(.is-step-active) { display: none; }
+        
 
-        /* ---- MMD Rule Toolbar ---- */
-        .mmd-rule-toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0 0 16px;
-            padding: 10px 14px;
-            background: #fff;
-            border: 1px solid var(--mmd-border);
-            border-radius: var(--mmd-radius-md);
-            position: sticky;
-            top: 32px;
-            z-index: 10;
-            box-shadow: var(--mmd-shadow-sm);
-        }
-        .mmd-rule-toolbar-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-        .mmd-rule-toolbar-actions .button .dashicons { font-size: 16px; width: 16px; height: 16px; vertical-align: middle; }
-        .mmd-rule-toolbar-jump { display: flex; gap: 8px; align-items: center; }
-        .mmd-rule-toolbar-jump label { color: var(--mmd-text-muted); font-size: 12.5px; font-weight: 600; }
-        .mmd-rule-toolbar-jump select { min-width: 200px; }
-
-        /* ---- Collapsible Cards ---- */
-        .mmd-card { padding: 0 !important; overflow: hidden; transition: box-shadow 0.15s ease; }
-        .mmd-card:hover { box-shadow: var(--mmd-shadow-md); }
-        .mmd-card-title {
-            user-select: none;
-            display: flex !important;
-            align-items: center;
-            gap: 10px;
-            margin: 0 !important;
-            padding: 16px 20px !important;
-            background: #fff;
-            border-bottom: 1px solid transparent;
-            position: relative;
-            font-size: 15px;
-            font-weight: 700;
-        }
-        .mmd-card.is-open .mmd-card-title { border-bottom-color: var(--mmd-border-light); }
-        .mmd-card-body { padding: 16px 20px 20px; display: none; }
-        .mmd-card.is-open .mmd-card-body { display: block; }
-        .mmd-card.has-search-hit { box-shadow: 0 0 0 2px var(--mmd-primary); }
-
-        /* Sticky save bar */
-        .mmd-rule-submit-bar {
-            position: sticky;
-            bottom: 0;
-            background: rgba(238, 241, 246, .92);
-            backdrop-filter: blur(4px);
-            padding: 12px 0;
-            margin: 20px 0 0;
-            border-top: 1px solid var(--mmd-border);
-            z-index: 9;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        /* ---- Preview Modal ---- */
-        .mmd-preview-modal { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; font-family: var(--mmd-font); }
-        .mmd-preview-overlay { position: absolute; inset: 0; background: rgba(16,24,40,0.55); backdrop-filter: blur(2px); }
-        .mmd-preview-dialog { position: relative; width: 90%; max-width: 900px; max-height: 90vh; background: #fff; border-radius: 18px; box-shadow: 0 30px 70px rgba(16,24,40,0.4); display: flex; flex-direction: column; overflow: hidden; }
-        .mmd-preview-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; background: var(--mmd-grad-brand); color: #fff; }
-        .mmd-preview-header h2 { margin: 0; font-size: 17px; font-weight: 800; color: #fff; }
-        .mmd-preview-close { padding: 4px; color: #fff !important; }
-        .mmd-preview-body { padding: 20px; overflow-y: auto; flex: 1; }
-        .mmd-preview-footer { padding: 12px 20px; border-top: 1px solid var(--mmd-border-light); display: flex; justify-content: flex-end; gap: 8px; background: #fafbfc; }
-        #mmd-preview-products-table th, #mmd-preview-products-table td { padding: 8px 10px; vertical-align: middle; }
-        #mmd-preview-products-table .mmd-preview-product-search { width: 100%; }
-        #mmd-preview-products-table input[type="number"] { width: 70px; }
-        .mmd-preview-summary { margin-top: 16px; padding: 13px 15px; background: var(--mmd-success-light); border-radius: 10px; font-size: 13px; }
-        .mmd-preview-summary strong { color: var(--mmd-success); }
-
-        /* Mobile */
-        @media (max-width: 782px) {
-            .mmd-rule-toolbar {
-                position: static;
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .mmd-rule-toolbar-actions, .mmd-rule-toolbar-jump { justify-content: center; }
-            .mmd-rule-toolbar-jump select { flex: 1; }
-            .mmd-card-title { padding: 12px 14px !important; font-size: 14px; }
-            .mmd-card-body { padding: 12px 14px 16px; }
-            .form-table th { padding-bottom: 4px; width: auto; display: block; }
-            .form-table td { padding-top: 0; display: block; }
-            input[type="text"], input[type="number"], input[type="url"], select, textarea {
-                width: 100%;
-                max-width: 100%;
-                box-sizing: border-box;
-            }
-            .mmd-rule-submit-bar { margin: 16px 0 0; padding: 12px 10px; }
-            .mmd-preview-dialog { width: 100%; max-width: 100%; max-height: 100vh; border-radius: 0; }
-            #mmd-preview-products-table thead { display: none; }
-            #mmd-preview-products-table tr { display: block; padding: 12px 0; border-bottom: 1px solid var(--mmd-border-light); }
-            #mmd-preview-products-table td { display: flex; justify-content: space-between; padding: 4px 0; border: 0; }
-            #mmd-preview-products-table td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: var(--mmd-text-light);
-            }
-        }
-        </style>
-
-        <script>
+        <?php ob_start(); ?>
         jQuery(function($) {
             // ====================================================================
             // Tips per section (matched by title keyword)
@@ -1691,7 +1575,7 @@ $attributes = wc_get_attribute_taxonomies();
                 {
                     keywords: [<?php echo wp_json_encode( __( 'Display banner', 'incentiv' ) ); ?>, 'Display Banner'],
                     title: <?php echo wp_json_encode( __( 'A visual banner on the product page', 'incentiv' ) ); ?>,
-                    text: ( <?php echo wp_json_encode( __( 'Upload a banner image shown to the customer on the product page. Use the shortcode', 'incentiv' ) ); ?> + ' <code>[mmd_rule_banner]<\/code> ' + <?php echo wp_json_encode( __( 'anywhere, or the Elementor widget.', 'incentiv' ) ); ?> )
+                    text: ( <?php echo wp_json_encode( __( 'Upload a banner image shown to the customer on the product page. Use the shortcode', 'incentiv' ) ); ?> + ' <code>[incv_rule_banner]<\/code> ' + <?php echo wp_json_encode( __( 'anywhere, or the Elementor widget.', 'incentiv' ) ); ?> )
                 },
                 {
                     keywords: [<?php echo wp_json_encode( __( 'Site-wide message', 'incentiv' ) ); ?>, 'Global Site Notice'],
@@ -1706,7 +1590,7 @@ $attributes = wc_get_attribute_taxonomies();
             ];
 
             function getTipForCard($card) {
-                var title = $card.find('.mmd-card-title').first().text();
+                var title = $card.find('.incv-card-title').first().text();
                 for (var i = 0; i < tipMap.length; i++) {
                     for (var j = 0; j < tipMap[i].keywords.length; j++) {
                         if (title.indexOf(tipMap[i].keywords[j]) !== -1) {
@@ -1719,33 +1603,33 @@ $attributes = wc_get_attribute_taxonomies();
 
             // Build card structure (tip box + body wrapper) for each card
             var cardIndex = 0;
-            $('.mmd-admin-container > .mmd-card').each(function() {
+            $('.incv-admin-container > .incv-card').each(function() {
                 var $card = $(this);
                 cardIndex++;
 
                 // Skip the toolbar (it's a different element)
-                if ($card.hasClass('mmd-rule-toolbar')) return;
+                if ($card.hasClass('incv-rule-toolbar')) return;
 
                 // Get title and content
-                var $title = $card.find('.mmd-card-title').first();
+                var $title = $card.find('.incv-card-title').first();
                 if (!$title.length) return;
 
-                // Wrap everything after the title in .mmd-card-body
-                var $body = $('<div class="mmd-card-body"></div>');
+                // Wrap everything after the title in .incv-card-body
+                var $body = $('<div class="incv-card-body"></div>');
                 $title.nextAll().appendTo($body);
 
                 // Add tip box at the top of body
                 var tip = getTipForCard($card);
                 if (tip) {
-                    var $tip = $('<div class="mmd-card-tip"><span class="dashicons dashicons-lightbulb"></span> <strong>' + tip.title + '</strong> ' + tip.text + '</div>');
+                    var $tip = $('<div class="incv-card-tip"><span class="dashicons dashicons-lightbulb"></span> <strong>' + tip.title + '</strong> ' + tip.text + '</div>');
                     $body.prepend($tip);
                 }
 
                 // Generate stable ID
                 var titleText = $title.text().trim();
-                var sectionId = 'mmd-section-' + cardIndex;
+                var sectionId = 'incv-section-' + cardIndex;
                 $card.attr('id', sectionId);
-                $card.attr('data-mmd-card-title', titleText);
+                $card.attr('data-incv-card-title', titleText);
 
                 $card.append($body);
             });
@@ -1759,8 +1643,8 @@ $attributes = wc_get_attribute_taxonomies();
                   keywords: [<?php echo wp_json_encode( __( 'Basic settings', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'Product selection', 'incentiv' ) ); ?>] },
                 { id: 2, label: <?php echo wp_json_encode( _x( 'Discount tiers', 'step', 'incentiv' ) ); ?>, icon: 'stairs',
                   keywords: [<?php echo wp_json_encode( __( 'Discount rules', 'incentiv' ) ); ?>, 'Discount Rules', <?php echo wp_json_encode( __( 'Coupon settings', 'incentiv' ) ); ?>] },
-                { id: 3, label: <?php echo wp_json_encode( MMD_Modules::is_active( 'segments' ) ? __( 'Conditions and audiences', 'incentiv' ) : __( 'Conditions', 'incentiv' ) ); ?>, icon: 'rule',
-                  keywords: [<?php echo wp_json_encode( __( 'Shipping method condition', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'Cart total conditions', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'User role conditions', 'incentiv' ) ); ?>, <?php if ( MMD_Modules::is_active( 'segments' ) ) { echo wp_json_encode( __( 'Target audiences and segmentation', 'incentiv' ) ) . ', '; } ?><?php echo wp_json_encode( __( 'Profit guards and caps', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'Discount scheduling', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'Usage limits', 'incentiv' ) ); ?>] },
+                { id: 3, label: <?php echo wp_json_encode( INCV_Modules::is_active( 'segments' ) ? __( 'Conditions and audiences', 'incentiv' ) : __( 'Conditions', 'incentiv' ) ); ?>, icon: 'rule',
+                  keywords: [<?php echo wp_json_encode( __( 'Shipping method condition', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'Cart total conditions', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'User role conditions', 'incentiv' ) ); ?>, <?php if ( INCV_Modules::is_active( 'segments' ) ) { echo wp_json_encode( __( 'Target audiences and segmentation', 'incentiv' ) ) . ', '; } ?><?php echo wp_json_encode( __( 'Profit guards and caps', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'Discount scheduling', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'Usage limits', 'incentiv' ) ); ?>] },
                 { id: 4, label: <?php echo wp_json_encode( __( 'Messages and display', 'incentiv' ) ); ?>, icon: 'campaign',
                   keywords: [<?php echo wp_json_encode( __( 'Customer messages', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'Custom messages', 'incentiv' ) ); ?>, <?php echo wp_json_encode( __( 'Discount badge', 'incentiv' ) ); ?>, 'Discount Badge', <?php echo wp_json_encode( __( 'Sale price display', 'incentiv' ) ); ?>, 'Sale Price Display', <?php echo wp_json_encode( __( 'Display banner', 'incentiv' ) ); ?>, 'Display Banner', <?php echo wp_json_encode( __( 'Site-wide message', 'incentiv' ) ); ?>, 'Global Site Notice'] },
                 { id: 5, label: <?php echo wp_json_encode( __( 'Summary and save', 'incentiv' ) ); ?>, icon: 'check_circle',
@@ -1769,10 +1653,10 @@ $attributes = wc_get_attribute_taxonomies();
             var currentStep = 1;
 
             // All cards stay open inside their step
-            $('.mmd-admin-container > .mmd-card').addClass('is-open');
+            $('.incv-admin-container > .incv-card').addClass('is-open');
 
             function stepForCard($card) {
-                var title = $card.attr('data-mmd-card-title') || '';
+                var title = $card.attr('data-incv-card-title') || '';
                 for (var i = 0; i < STEPS.length; i++) {
                     for (var j = 0; j < STEPS[i].keywords.length; j++) {
                         if (title.indexOf(STEPS[i].keywords[j]) !== -1) return STEPS[i].id;
@@ -1781,17 +1665,17 @@ $attributes = wc_get_attribute_taxonomies();
                 return 1;
             }
 
-            $('.mmd-admin-container > .mmd-card').each(function() {
-                $(this).attr('data-mmd-step', stepForCard($(this)));
+            $('.incv-admin-container > .incv-card').each(function() {
+                $(this).attr('data-incv-step', stepForCard($(this)));
             });
 
             // Summary card (step 5) — built from live form values
-            var $summaryCard = $('<div class="mmd-card is-open" data-mmd-step="5" id="mmd-step-summary">' +
-                ( '<h2 class="mmd-card-title"><span class="msr" style="color:var(--mmd-success);">check_circle<\/span> ' + <?php echo wp_json_encode( __( 'Rule summary', 'incentiv' ) ); ?> + '<\/h2>' ) +
-                '<div class="mmd-card-body"><div id="mmd-summary-rows"></div>' +
-                ( '<div class="mmd-card-tip" style="margin-top:14px;background:var(--mmd-success-light);border-right-color:var(--mmd-success);">' + <?php echo wp_json_encode( _x( 'Check that everything is right, then save. You can go back to any step by clicking its number above.', 'rule', 'incentiv' ) ); ?> + '<\/div>' ) +
+            var $summaryCard = $('<div class="incv-card is-open" data-incv-step="5" id="incv-step-summary">' +
+                ( '<h2 class="incv-card-title"><span class="msr" style="color:var(--incv-success);">check_circle<\/span> ' + <?php echo wp_json_encode( __( 'Rule summary', 'incentiv' ) ); ?> + '<\/h2>' ) +
+                '<div class="incv-card-body"><div id="incv-summary-rows"></div>' +
+                ( '<div class="incv-card-tip" style="margin-top:14px;background:var(--incv-success-light);border-right-color:var(--incv-success);">' + <?php echo wp_json_encode( _x( 'Check that everything is right, then save. You can go back to any step by clicking its number above.', 'rule', 'incentiv' ) ); ?> + '<\/div>' ) +
                 '</div></div>');
-            $('.mmd-admin-container').append($summaryCard);
+            $('.incv-admin-container').append($summaryCard);
 
             function esc(t) { return $('<i>').text(t == null ? '' : t).html(); }
 
@@ -1799,7 +1683,7 @@ $attributes = wc_get_attribute_taxonomies();
                 var mode = $('#discount_mode').val() === 'global' ? <?php echo wp_json_encode( __( 'Global: on all items', 'incentiv' ) ); ?> : <?php echo wp_json_encode( __( 'Tiered: by quantity', 'incentiv' ) ); ?>;
                 var methodLabels = { all: <?php echo wp_json_encode( __( 'All products', 'incentiv' ) ); ?>, category: <?php echo wp_json_encode( __( 'By categories', 'incentiv' ) ); ?>, product_ids: <?php echo wp_json_encode( __( 'Selected products', 'incentiv' ) ); ?>, attribute: <?php echo wp_json_encode( __( 'By attribute', 'incentiv' ) ); ?> };
                 var tiers = [];
-                $('#discount_rules_container .mmd-discount-rule').each(function() {
+                $('#discount_rules_container .incv-discount-rule').each(function() {
                     var q = $(this).find('input[name*="[quantity]"]').val();
                     var d = $(this).find('input[name*="[discount]"]').val();
                     var t = $(this).find('select[name*="[type]"]').val();
@@ -1823,51 +1707,51 @@ $attributes = wc_get_attribute_taxonomies();
 
                 var html = '';
                 rows.forEach(function(r) {
-                    html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--mmd-border-lighter);font-size:13.5px;">' +
-                        '<span style="color:var(--mmd-text-muted);flex:none;">' + esc(r[0]) + '</span>' +
-                        '<span style="font-weight:700;color:var(--mmd-ink);text-align:left;">' + esc(r[1]) + '</span>' +
-                        '<button type="button" class="mmd-icon-btn mmd-summary-edit" data-step="' + r[2] + ( '" title="' + <?php echo wp_json_encode( __( 'Edit', 'incentiv' ) ); ?> + '" style="flex:none;width:28px;height:28px;"><span class="msr" style="font-size:15px;">edit<\/span><\/button>' ) +
+                    html += '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--incv-border-lighter);font-size:13.5px;">' +
+                        '<span style="color:var(--incv-text-muted);flex:none;">' + esc(r[0]) + '</span>' +
+                        '<span style="font-weight:700;color:var(--incv-ink);text-align:left;">' + esc(r[1]) + '</span>' +
+                        '<button type="button" class="incv-icon-btn incv-summary-edit" data-step="' + r[2] + ( '" title="' + <?php echo wp_json_encode( __( 'Edit', 'incentiv' ) ); ?> + '" style="flex:none;width:28px;height:28px;"><span class="msr" style="font-size:15px;">edit<\/span><\/button>' ) +
                         '</div>';
                 });
-                $('#mmd-summary-rows').html(html);
+                $('#incv-summary-rows').html(html);
             }
 
             function renderStepper() {
                 var html = '';
                 STEPS.forEach(function(s) {
                     var cls = s.id === currentStep ? ' active' : (s.id < currentStep ? ' completed' : '');
-                    html += '<button type="button" class="mmd-stepper-step' + cls + '" data-step="' + s.id + '">' +
-                        '<span class="mmd-step-num">' + (s.id < currentStep ? '✓' : s.id) + '</span>' +
-                        '<span class="mmd-step-label">' + s.label + '</span></button>';
+                    html += '<button type="button" class="incv-stepper-step' + cls + '" data-step="' + s.id + '">' +
+                        '<span class="incv-step-num">' + (s.id < currentStep ? '✓' : s.id) + '</span>' +
+                        '<span class="incv-step-label">' + s.label + '</span></button>';
                 });
-                $('#mmd-rule-stepper-steps').html(html);
+                $('#incv-rule-stepper-steps').html(html);
             }
 
             function showStep(n, scroll) {
                 currentStep = Math.max(1, Math.min(STEPS.length, n));
-                $('.mmd-admin-container > .mmd-card[data-mmd-step]').each(function() {
-                    $(this).toggleClass('is-step-active', parseInt($(this).attr('data-mmd-step'), 10) === currentStep);
+                $('.incv-admin-container > .incv-card[data-incv-step]').each(function() {
+                    $(this).toggleClass('is-step-active', parseInt($(this).attr('data-incv-step'), 10) === currentStep);
                 });
                 if (currentStep === STEPS.length) buildSummary();
                 renderStepper();
-                $('#mmd-step-prev').prop('disabled', currentStep === 1);
-                $('#mmd-step-next').toggle(currentStep < STEPS.length);
-                $('#mmd-step-indicator').text(( <?php echo wp_json_encode( __( 'Step', 'incentiv' ) ); ?> + ' ' ) + currentStep + ( ' ' + <?php echo wp_json_encode( __( 'of', 'incentiv' ) ); ?> + ' ' ) + STEPS.length);
+                $('#incv-step-prev').prop('disabled', currentStep === 1);
+                $('#incv-step-next').toggle(currentStep < STEPS.length);
+                $('#incv-step-indicator').text(( <?php echo wp_json_encode( __( 'Step', 'incentiv' ) ); ?> + ' ' ) + currentStep + ( ' ' + <?php echo wp_json_encode( __( 'of', 'incentiv' ) ); ?> + ' ' ) + STEPS.length);
                 if (history.replaceState) history.replaceState(null, '', '#step=' + currentStep);
-                $(document).trigger('mmd:substep');
+                $(document).trigger('incv:substep');
                 if (scroll !== false) window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            $(document).on('click', '.mmd-stepper-step', function() { showStep(parseInt($(this).data('step'), 10)); });
-            $(document).on('click', '.mmd-summary-edit', function() { showStep(parseInt($(this).data('step'), 10)); });
-            $(document).on('click', '#mmd-step-next', function() { showStep(currentStep + 1); });
-            $(document).on('click', '#mmd-step-prev', function() { showStep(currentStep - 1); });
+            $(document).on('click', '.incv-stepper-step', function() { showStep(parseInt($(this).data('step'), 10)); });
+            $(document).on('click', '.incv-summary-edit', function() { showStep(parseInt($(this).data('step'), 10)); });
+            $(document).on('click', '#incv-step-next', function() { showStep(currentStep + 1); });
+            $(document).on('click', '#incv-step-prev', function() { showStep(currentStep - 1); });
 
             // Jump to the step that contains an invalid field (native capture)
             document.querySelectorAll('form').forEach(function(formEl) {
                 formEl.addEventListener('invalid', function(e) {
-                    var card = e.target.closest('.mmd-card[data-mmd-step]');
-                    if (card) showStep(parseInt(card.getAttribute('data-mmd-step'), 10), false);
+                    var card = e.target.closest('.incv-card[data-incv-step]');
+                    if (card) showStep(parseInt(card.getAttribute('data-incv-step'), 10), false);
                 }, true);
             });
 
@@ -1876,12 +1760,12 @@ $attributes = wc_get_attribute_taxonomies();
             showStep(stepMatch ? parseInt(stepMatch[1], 10) : 1, false);
 
             // Let the guided wizard (admin-script.js) drive the stepper
-            window.mmdShowEditorStep = showStep;
+            window.incvShowEditorStep = showStep;
 
             // ====================================================================
             // Preview modal
             // ====================================================================
-            var $modal = $('#mmd-preview-modal');
+            var $modal = $('#incv-preview-modal');
             var $tbody = $modal.find('tbody');
             var allProducts = []; // Will be loaded via AJAX
             var productSearchPromise = null;
@@ -1895,8 +1779,8 @@ $attributes = wc_get_attribute_taxonomies();
                     method: 'POST',
                     dataType: 'json',
                     data: {
-                        action: 'mmd_preview_products_search',
-                        nonce: '<?php echo esc_attr( wp_create_nonce('mmd_preview_products_search') ); ?>'
+                        action: 'incv_preview_products_search',
+                        nonce: '<?php echo esc_attr( wp_create_nonce('incv_preview_products_search') ); ?>'
                     },
                     success: function(resp) {
                         if (resp && resp.success && Array.isArray(resp.data)) {
@@ -1909,16 +1793,16 @@ $attributes = wc_get_attribute_taxonomies();
                     },
                     error: function(xhr, status, err) {
                         productLoadError = ( <?php echo wp_json_encode( __( 'AJAX error:', 'incentiv' ) ); ?> + ' ' ) + (err || status || <?php echo wp_json_encode( __( 'Unknown', 'incentiv' ) ); ?>) + ' (HTTP ' + (xhr ? xhr.status : '?') + ')';
-                        console.error('MMD preview AJAX failed', xhr, status, err);
+                        console.error('INCV preview AJAX failed', xhr, status, err);
                         productSearchPromise.reject(productLoadError);
                     }
                 });
                 return productSearchPromise.promise();
             }
 
-            $('#mmd-open-preview').on('click', function() {
+            $('#incv-open-preview').on('click', function() {
                 $modal.show().attr('aria-hidden', 'false');
-                if ($tbody.find('tr.mmd-preview-row').length === 0) {
+                if ($tbody.find('tr.incv-preview-row').length === 0) {
                     addPreviewRow();
                 }
             });
@@ -1948,7 +1832,7 @@ $attributes = wc_get_attribute_taxonomies();
             function collectDiscountTiers() {
                 var tiers = [];
                 $('input[name^="discount_rules"][name$="[quantity]"]').each(function() {
-                    var $row = $(this).closest('tr, .mmd-discount-row');
+                    var $row = $(this).closest('tr, .incv-discount-row');
                     var qty = parseInt($(this).val() || 0, 10);
                     var $discountInput = $row.find('input[name$="[discount]"]').first();
                     var $typeInput = $row.find('select[name$="[type]"], input[name$="[type]"]').first();
@@ -1985,18 +1869,18 @@ $attributes = wc_get_attribute_taxonomies();
             }
 
             function addPreviewRow() {
-                $tbody.find('.mmd-preview-empty').remove();
-                var $row = $('<tr class="mmd-preview-row">' +
-                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'Product', 'incentiv' ) ); ?> + '"><select class="mmd-preview-product-search" style="width:100%;"><option value="">' + <?php echo wp_json_encode( __( '— Loading products —', 'incentiv' ) ); ?> + '<\/option><\/select><\/td>' ) +
-                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'Quantity', 'incentiv' ) ); ?> + '"><input type="number" class="mmd-preview-qty" min="1" value="1"><\/td>' ) +
-                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'Unit price', 'incentiv' ) ); ?> + '" class="mmd-preview-unit-price">—<\/td>' ) +
-                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'After discount', 'incentiv' ) ); ?> + '" class="mmd-preview-after">—<\/td>' ) +
-                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'Savings', 'incentiv' ) ); ?> + '" class="mmd-preview-savings">—<\/td>' ) +
-                    ( '<td><button type="button" class="button button-link-delete mmd-preview-remove" aria-label="' + <?php echo wp_json_encode( __( 'Remove', 'incentiv' ) ); ?> + '"><span class="dashicons dashicons-trash"><\/span><\/button><\/td>' ) +
+                $tbody.find('.incv-preview-empty').remove();
+                var $row = $('<tr class="incv-preview-row">' +
+                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'Product', 'incentiv' ) ); ?> + '"><select class="incv-preview-product-search" style="width:100%;"><option value="">' + <?php echo wp_json_encode( __( '— Loading products —', 'incentiv' ) ); ?> + '<\/option><\/select><\/td>' ) +
+                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'Quantity', 'incentiv' ) ); ?> + '"><input type="number" class="incv-preview-qty" min="1" value="1"><\/td>' ) +
+                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'Unit price', 'incentiv' ) ); ?> + '" class="incv-preview-unit-price">—<\/td>' ) +
+                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'After discount', 'incentiv' ) ); ?> + '" class="incv-preview-after">—<\/td>' ) +
+                    ( '<td data-label="' + <?php echo wp_json_encode( __( 'Savings', 'incentiv' ) ); ?> + '" class="incv-preview-savings">—<\/td>' ) +
+                    ( '<td><button type="button" class="button button-link-delete incv-preview-remove" aria-label="' + <?php echo wp_json_encode( __( 'Remove', 'incentiv' ) ); ?> + '"><span class="dashicons dashicons-trash"><\/span><\/button><\/td>' ) +
                     '</tr>');
                 $tbody.append($row);
 
-                var $select = $row.find('.mmd-preview-product-search');
+                var $select = $row.find('.incv-preview-product-search');
                 loadProducts().done(function() {
                     fillProductSelect($select);
                 }).fail(function(err) {
@@ -2004,23 +1888,23 @@ $attributes = wc_get_attribute_taxonomies();
                 });
             }
 
-            $('#mmd-preview-add').on('click', addPreviewRow);
+            $('#incv-preview-add').on('click', addPreviewRow);
 
-            $tbody.on('click', '.mmd-preview-remove', function() {
+            $tbody.on('click', '.incv-preview-remove', function() {
                 $(this).closest('tr').remove();
-                if ($tbody.find('tr.mmd-preview-row').length === 0) {
-                    $tbody.append(( '<tr class="mmd-preview-empty"><td colspan="6" style="text-align:center;color:#646970;padding:24px;">' + <?php echo wp_json_encode( __( 'No products selected yet.', 'incentiv' ) ); ?> + '<\/td><\/tr>' ));
+                if ($tbody.find('tr.incv-preview-row').length === 0) {
+                    $tbody.append(( '<tr class="incv-preview-empty"><td colspan="6" style="text-align:center;color:#646970;padding:24px;">' + <?php echo wp_json_encode( __( 'No products selected yet.', 'incentiv' ) ); ?> + '<\/td><\/tr>' ));
                 }
                 recalculatePreview();
             });
 
             // Listen to native change AND select2 change events
-            $tbody.on('change input', '.mmd-preview-product-search, .mmd-preview-qty', function() {
+            $tbody.on('change input', '.incv-preview-product-search, .incv-preview-qty', function() {
                 recalculatePreview();
             });
 
             function getPriceForRow($row) {
-                var $sel = $row.find('.mmd-preview-product-search');
+                var $sel = $row.find('.incv-preview-product-search');
                 var val = $sel.val();
                 if (!val) return 0;
                 // Read data-price from the matching <option>, fall back to attr (in case Select2 wraps the select differently)
@@ -2033,26 +1917,26 @@ $attributes = wc_get_attribute_taxonomies();
                 var rule = buildRuleSnapshot();
 
                 var units = [];
-                $tbody.find('.mmd-preview-row').each(function() {
+                $tbody.find('.incv-preview-row').each(function() {
                     var $row = $(this);
                     var price = getPriceForRow($row);
-                    var qty = parseInt($row.find('.mmd-preview-qty').val() || 0, 10);
+                    var qty = parseInt($row.find('.incv-preview-qty').val() || 0, 10);
                     if (price > 0 && qty > 0) {
-                        $row.find('.mmd-preview-unit-price').text(price.toFixed(2) + ' ₪');
+                        $row.find('.incv-preview-unit-price').text(price.toFixed(2) + ' ₪');
                         for (var i = 0; i < qty; i++) {
                             units.push({ rowKey: $row, price: price });
                         }
                     } else {
-                        $row.find('.mmd-preview-unit-price').text('—');
-                        $row.find('.mmd-preview-after').text('—');
-                        $row.find('.mmd-preview-savings').text('—');
+                        $row.find('.incv-preview-unit-price').text('—');
+                        $row.find('.incv-preview-after').text('—');
+                        $row.find('.incv-preview-savings').text('—');
                     }
                 });
 
                 if (units.length === 0) {
-                    $('#mmd-preview-total-after').text('—');
-                    $('#mmd-preview-total-saved').text('—');
-                    $('.mmd-preview-summary').empty();
+                    $('#incv-preview-total-after').text('—');
+                    $('#incv-preview-total-saved').text('—');
+                    $('.incv-preview-summary').empty();
                     return;
                 }
 
@@ -2106,16 +1990,16 @@ $attributes = wc_get_attribute_taxonomies();
                     totalAfter = units.reduce(function(s, u) { return s + u.price; }, 0) - totalSaved;
                     // Mark target row's first unit
                     var $tRow = target.rowKey;
-                    var rowQty = $tRow.find('.mmd-preview-qty').val();
+                    var rowQty = $tRow.find('.incv-preview-qty').val();
                     var rowPrice = getPriceForRow($tRow);
                     var lineRegular = rowPrice * rowQty;
                     var lineAfter = lineRegular - (target.price - disc);
-                    $tRow.find('.mmd-preview-after').text((lineAfter / rowQty).toFixed(2) + ( ' ' + <?php echo wp_json_encode( __( '₪ (1 item)', 'incentiv' ) ); ?> ));
-                    $tRow.find('.mmd-preview-savings').text((target.price - disc).toFixed(2) + ' ₪');
+                    $tRow.find('.incv-preview-after').text((lineAfter / rowQty).toFixed(2) + ( ' ' + <?php echo wp_json_encode( __( '₪ (1 item)', 'incentiv' ) ); ?> ));
+                    $tRow.find('.incv-preview-savings').text((target.price - disc).toFixed(2) + ' ₪');
                 }
 
-                $('#mmd-preview-total-after').text(totalAfter.toFixed(2) + ' ₪');
-                $('#mmd-preview-total-saved').text(totalSaved.toFixed(2) + ' ₪');
+                $('#incv-preview-total-after').text(totalAfter.toFixed(2) + ' ₪');
+                $('#incv-preview-total-saved').text(totalSaved.toFixed(2) + ' ₪');
 
                 var modeText = rule.discount_mode === 'global'
                     ? <?php echo wp_json_encode( __( 'Global (on all items)', 'incentiv' ) ); ?>
@@ -2128,12 +2012,12 @@ $attributes = wc_get_attribute_taxonomies();
             }
 
             function clearRowDiscounts() {
-                $tbody.find('.mmd-preview-row').each(function() {
+                $tbody.find('.incv-preview-row').each(function() {
                     var $row = $(this);
                     var price = getPriceForRow($row);
                     if (price > 0) {
-                        $row.find('.mmd-preview-after').text(price.toFixed(2) + ' ₪');
-                        $row.find('.mmd-preview-savings').text('0 ₪');
+                        $row.find('.incv-preview-after').text(price.toFixed(2) + ' ₪');
+                        $row.find('.incv-preview-savings').text('0 ₪');
                     }
                 });
             }
@@ -2149,8 +2033,8 @@ $attributes = wc_get_attribute_taxonomies();
                         if (tier.type === 'percentage') return Math.max(0, p * (1 - tier.discount / 100));
                         return Math.max(0, p - tier.discount);
                     })(info.price);
-                    info.$row.find('.mmd-preview-after').text(perUnitAfter.toFixed(2) + ' ₪');
-                    info.$row.find('.mmd-preview-savings').text(((info.price - perUnitAfter) * info.qty).toFixed(2) + ' ₪');
+                    info.$row.find('.incv-preview-after').text(perUnitAfter.toFixed(2) + ' ₪');
+                    info.$row.find('.incv-preview-savings').text(((info.price - perUnitAfter) * info.qty).toFixed(2) + ' ₪');
                 });
             }
 
@@ -2159,62 +2043,62 @@ $attributes = wc_get_attribute_taxonomies();
                 if (saved > 0) {
                     html += ( '<div style="margin-top:6px;"><strong>' + <?php echo wp_json_encode( _x( 'You saved', 'preview', 'incentiv' ) ); ?> + ' ' ) + saved.toFixed(2) + ( ' ₪.<\/strong> ' + <?php echo wp_json_encode( __( 'Total to pay:', 'incentiv' ) ); ?> + ' ' ) + total.toFixed(2) + ' ₪.</div>';
                 }
-                $('.mmd-preview-summary').html(html);
+                $('.incv-preview-summary').html(html);
             }
         });
-        </script>
+        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
     </form>
 
-    <?php if ( ! $is_new && class_exists( 'MMD_Rule_Diagnostic' ) ) : ?>
-    <div id="mmd-rule-diagnostic" class="mmd-card mmd-diag-card">
-        <div class="mmd-diag-head">
+    <?php if ( ! $is_new && class_exists( 'INCV_Rule_Diagnostic' ) ) : ?>
+    <div id="incv-rule-diagnostic" class="incv-card incv-diag-card">
+        <div class="incv-diag-head">
             <span class="msr">bug_report</span>
-            <div class="mmd-diag-head-text">
+            <div class="incv-diag-head-text">
                 <strong><?php esc_html_e( 'Rule diagnostics tool', 'incentiv' ); ?></strong>
                 <span><?php esc_html_e( 'A developer tool. Only enable it to troubleshoot problems.', 'incentiv' ); ?></span>
             </div>
-            <label class="mmd-switch" title="<?php esc_attr_e( 'Turn the diagnostics tool on/off', 'incentiv' ); ?>">
-                <input type="checkbox" id="mmd-diag-toggle">
-                <span class="mmd-slider"></span>
+            <label class="incv-switch" title="<?php esc_attr_e( 'Turn the diagnostics tool on/off', 'incentiv' ); ?>">
+                <input type="checkbox" id="incv-diag-toggle">
+                <span class="incv-slider"></span>
             </label>
         </div>
-        <div id="mmd-diag-body" class="mmd-diag-body" style="display:none;">
+        <div id="incv-diag-body" class="incv-diag-body" style="display:none;">
             <p class="description"><?php esc_html_e( 'If the rule causes a critical error on the site, click "Run diagnostics" to get a JSON with all the relevant information, and paste it when you report the problem.', 'incentiv' ); ?></p>
-            <div class="mmd-diag-actions">
-                <button type="button" class="mmd-btn mmd-btn-primary" id="mmd-diag-run"><span class="msr">search</span> <?php esc_html_e( 'Run diagnostics', 'incentiv' ); ?></button>
-                <button type="button" class="mmd-btn mmd-btn-outline" id="mmd-diag-copy" style="display:none;"><span class="msr">content_copy</span> <?php esc_html_e( 'Copy JSON', 'incentiv' ); ?></button>
-                <span id="mmd-diag-status"></span>
+            <div class="incv-diag-actions">
+                <button type="button" class="incv-btn incv-btn-primary" id="incv-diag-run"><span class="msr">search</span> <?php esc_html_e( 'Run diagnostics', 'incentiv' ); ?></button>
+                <button type="button" class="incv-btn incv-btn-outline" id="incv-diag-copy" style="display:none;"><span class="msr">content_copy</span> <?php esc_html_e( 'Copy JSON', 'incentiv' ); ?></button>
+                <span id="incv-diag-status"></span>
             </div>
 
-            <div id="mmd-diag-product-test" class="mmd-diag-subcard" style="display:none;">
+            <div id="incv-diag-product-test" class="incv-diag-subcard" style="display:none;">
                 <strong><?php esc_html_e( 'Test against a specific product', 'incentiv' ); ?></strong>
-                <div class="mmd-diag-product-row">
-                    <input type="number" id="mmd-diag-product-id" placeholder="<?php esc_attr_e( 'Product ID', 'incentiv' ); ?>" min="1">
-                    <button type="button" class="mmd-btn mmd-btn-outline" id="mmd-diag-product-run"><?php esc_html_e( 'Test product', 'incentiv' ); ?></button>
+                <div class="incv-diag-product-row">
+                    <input type="number" id="incv-diag-product-id" placeholder="<?php esc_attr_e( 'Product ID', 'incentiv' ); ?>" min="1">
+                    <button type="button" class="incv-btn incv-btn-outline" id="incv-diag-product-run"><?php esc_html_e( 'Test product', 'incentiv' ); ?></button>
                 </div>
                 <p class="description"><?php esc_html_e( 'Enter a product ID to see whether the rule applies to it and what its price is.', 'incentiv' ); ?></p>
             </div>
 
-            <div id="mmd-diag-summary" style="display:none;"></div>
+            <div id="incv-diag-summary" style="display:none;"></div>
 
-            <textarea id="mmd-diag-output" rows="16" readonly class="mmd-diag-output" style="display:none;"></textarea>
+            <textarea id="incv-diag-output" rows="16" readonly class="incv-diag-output" style="display:none;"></textarea>
         </div>
     </div>
 
-    <script>
+    <?php ob_start(); ?>
     (function ($) {
         var ruleSetId = <?php echo wp_json_encode( $rule_set['id'] ); ?>;
-        var nonce     = <?php echo wp_json_encode( wp_create_nonce( 'mmd_rule_diagnostic' ) ); ?>;
-        var $output   = $('#mmd-diag-output');
-        var $status   = $('#mmd-diag-status');
-        var $summary  = $('#mmd-diag-summary');
-        var $copy     = $('#mmd-diag-copy');
-        var $productPanel = $('#mmd-diag-product-test');
+        var nonce     = <?php echo wp_json_encode( wp_create_nonce( 'incv_rule_diagnostic' ) ); ?>;
+        var $output   = $('#incv-diag-output');
+        var $status   = $('#incv-diag-status');
+        var $summary  = $('#incv-diag-summary');
+        var $copy     = $('#incv-diag-copy');
+        var $productPanel = $('#incv-diag-product-test');
         var lastJson  = '';
 
         // Enable/disable (collapse) the diagnostic tool
-        $('#mmd-diag-toggle').on('change', function () {
-            $('#mmd-diag-body').stop(true, true).slideToggle(150, this.checked ? undefined : function () {});
+        $('#incv-diag-toggle').on('change', function () {
+            $('#incv-diag-body').stop(true, true).slideToggle(150, this.checked ? undefined : function () {});
         });
 
         function setStatus(text, isError) {
@@ -2291,17 +2175,17 @@ $attributes = wc_get_attribute_taxonomies();
             });
         }
 
-        $('#mmd-diag-run').on('click', function () {
-            runRequest('mmd_rule_diagnostic_run');
+        $('#incv-diag-run').on('click', function () {
+            runRequest('incv_rule_diagnostic_run');
         });
 
-        $('#mmd-diag-product-run').on('click', function () {
-            var pid = parseInt($('#mmd-diag-product-id').val(), 10);
+        $('#incv-diag-product-run').on('click', function () {
+            var pid = parseInt($('#incv-diag-product-id').val(), 10);
             if (!pid) {
                 setStatus('Enter a product ID first.', true);
                 return;
             }
-            runRequest('mmd_rule_diagnostic_product', { product_id: pid });
+            runRequest('incv_rule_diagnostic_product', { product_id: pid });
         });
 
         $copy.on('click', function () {
@@ -2328,11 +2212,11 @@ $attributes = wc_get_attribute_taxonomies();
             }
         }
     })(jQuery);
-    </script>
+    <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
     <?php endif; ?>
 </div>
 
-<script>
+<?php ob_start(); ?>
 jQuery(document).ready(function($) {
     // Load shipping methods dynamically
     (function() {
@@ -2340,8 +2224,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_get_shipping_methods',
-                nonce: '<?php echo esc_attr( wp_create_nonce('mmd_gift_rules_nonce') ); ?>'
+                action: 'incv_get_shipping_methods',
+                nonce: '<?php echo esc_attr( wp_create_nonce('incv_gift_rules_nonce') ); ?>'
             },
             success: function(response) {
                 if (response.success && response.data) {
@@ -2365,13 +2249,13 @@ jQuery(document).ready(function($) {
             $('#apply_to_row').hide();
             $('#discount_rules_quantity_desc').hide();
             $('#discount_rules_global_desc').show();
-            $('.mmd-quantity-field').hide();
+            $('.incv-quantity-field').hide();
             $('#discount_rules_help_text').html(<?php echo wp_json_encode( __( 'In global mode, the first discount applies to all products. You can add more tiers with a quantity to increase the discount (for example: buy 3+ get 20% instead of 15%).', 'incentiv' ) ); ?>);
         } else {
             $('#apply_to_row').show();
             $('#discount_rules_quantity_desc').show();
             $('#discount_rules_global_desc').hide();
-            $('.mmd-quantity-field').show();
+            $('.incv-quantity-field').show();
             $('#discount_rules_help_text').html(<?php echo wp_json_encode( __( 'Set different discounts for different quantities. The highest matching discount applies.', 'incentiv' ) ); ?>);
         }
     }
@@ -2380,39 +2264,39 @@ jQuery(document).ready(function($) {
     // Allocation selector — show only the active mode's explanation.
     $('#discount_allocation').on('change', function () {
         var mode = $(this).val();
-        $('.mmd-alloc-help').each(function () {
+        $('.incv-alloc-help').each(function () {
             $(this).toggle($(this).data('mode') === mode);
         });
     });
 
     // Global preset buttons
-    $(document).on('click', '.mmd-global-preset-btn', function() {
+    $(document).on('click', '.incv-global-preset-btn', function() {
         var discount = $(this).data('discount');
         var type = $(this).data('type');
 
         // Clear existing rules and set single rule
         $('#discount_rules_container').html('');
-        var ruleHtml = '<div class="mmd-discount-rule"><div class="mmd-rule-fields">' +
-            '<div class="mmd-field mmd-quantity-field" style="display:none;">' +
+        var ruleHtml = '<div class="incv-discount-rule"><div class="incv-rule-fields">' +
+            '<div class="incv-field incv-quantity-field" style="display:none;">' +
             ( '<label>' + <?php echo wp_json_encode( __( 'Quantity', 'incentiv' ) ); ?> + '<\/label>' ) +
             '<input type="number" name="discount_rules[0][quantity]" value="1" min="1" placeholder="1">' +
             '</div>' +
-            ( '<div class="mmd-field"><label>' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label>' ) +
+            ( '<div class="incv-field"><label>' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label>' ) +
             '<input type="number" name="discount_rules[0][discount]" value="' + discount + '" min="0" step="0.01">' +
             '</div>' +
-            ( '<div class="mmd-field"><label>' + <?php echo wp_json_encode( __( 'Type', 'incentiv' ) ); ?> + '<\/label>' ) +
+            ( '<div class="incv-field"><label>' + <?php echo wp_json_encode( __( 'Type', 'incentiv' ) ); ?> + '<\/label>' ) +
             '<select name="discount_rules[0][type]">' +
             '<option value="percentage"' + (type === 'percentage' ? ' selected' : '') + ( '>' + <?php echo wp_json_encode( __( 'Percentage (%)', 'incentiv' ) ); ?> + '<\/option>' ) +
             '<option value="fixed"' + (type === 'fixed' ? ' selected' : '') + ( '>' + <?php echo wp_json_encode( __( 'Fixed amount (₪)', 'incentiv' ) ); ?> + '<\/option>' ) +
             '</select></div>' +
-            ( '<button type="button" class="button mmd-remove-rule"><span class="dashicons dashicons-trash" style="font-size:14px;width:14px;height:14px;vertical-align:middle;"><\/span><span class="screen-reader-text">' + <?php echo wp_json_encode( __( 'Remove', 'incentiv' ) ); ?> + '<\/span><\/button>' ) +
+            ( '<button type="button" class="button incv-remove-rule"><span class="dashicons dashicons-trash" style="font-size:14px;width:14px;height:14px;vertical-align:middle;"><\/span><span class="screen-reader-text">' + <?php echo wp_json_encode( __( 'Remove', 'incentiv' ) ); ?> + '<\/span><\/button>' ) +
             '</div></div>';
         $('#discount_rules_container').html(ruleHtml);
     });
 
     // Show/hide sections based on selection method
     $('#selection_method').on('change', function() {
-        $('.mmd-section').hide();
+        $('.incv-section').hide();
         var method = $(this).val();
         if (method === 'category') {
             $('#category_section').show();
@@ -2425,40 +2309,40 @@ jQuery(document).ready(function($) {
 
     // Add discount rule
     $('#add_discount_rule').on('click', function() {
-        var index = $('.mmd-discount-rule').length;
+        var index = $('.incv-discount-rule').length;
         var isGlobal = $('#discount_mode').val() === 'global';
         var qtyDisplay = isGlobal ? ' style="display:none;"' : '';
-        var html = '<div class="mmd-discount-rule">' +
-            '<div class="mmd-rule-fields">' +
-            '<div class="mmd-field mmd-quantity-field"' + qtyDisplay + ( '><label>' + <?php echo wp_json_encode( __( 'Quantity', 'incentiv' ) ); ?> + '<\/label><input type="number" name="discount_rules[' ) + index + '][quantity]" min="1" placeholder="' + (isGlobal ? '1' : '3') + '" value="' + (isGlobal ? '1' : '') + '"></div>' +
-            ( '<div class="mmd-field"><label>' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label><input type="number" name="discount_rules[' ) + index + '][discount]" min="0" step="0.01" placeholder="30"></div>' +
-            ( '<div class="mmd-field"><label>' + <?php echo wp_json_encode( __( 'Type', 'incentiv' ) ); ?> + '<\/label><select name="discount_rules[' ) + index + ( '][type]"><option value="percentage">' + <?php echo wp_json_encode( __( 'Percentage (%)', 'incentiv' ) ); ?> + '<\/option><option value="fixed">' + <?php echo wp_json_encode( __( 'Fixed amount (₪)', 'incentiv' ) ); ?> + '<\/option><\/select><\/div>' ) +
-            ( '<button type="button" class="button mmd-remove-rule"><span class="dashicons dashicons-trash" style="font-size:14px;width:14px;height:14px;vertical-align:middle;"><\/span><span class="screen-reader-text">' + <?php echo wp_json_encode( __( 'Remove', 'incentiv' ) ); ?> + '<\/span><\/button>' ) +
+        var html = '<div class="incv-discount-rule">' +
+            '<div class="incv-rule-fields">' +
+            '<div class="incv-field incv-quantity-field"' + qtyDisplay + ( '><label>' + <?php echo wp_json_encode( __( 'Quantity', 'incentiv' ) ); ?> + '<\/label><input type="number" name="discount_rules[' ) + index + '][quantity]" min="1" placeholder="' + (isGlobal ? '1' : '3') + '" value="' + (isGlobal ? '1' : '') + '"></div>' +
+            ( '<div class="incv-field"><label>' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label><input type="number" name="discount_rules[' ) + index + '][discount]" min="0" step="0.01" placeholder="30"></div>' +
+            ( '<div class="incv-field"><label>' + <?php echo wp_json_encode( __( 'Type', 'incentiv' ) ); ?> + '<\/label><select name="discount_rules[' ) + index + ( '][type]"><option value="percentage">' + <?php echo wp_json_encode( __( 'Percentage (%)', 'incentiv' ) ); ?> + '<\/option><option value="fixed">' + <?php echo wp_json_encode( __( 'Fixed amount (₪)', 'incentiv' ) ); ?> + '<\/option><\/select><\/div>' ) +
+            ( '<button type="button" class="button incv-remove-rule"><span class="dashicons dashicons-trash" style="font-size:14px;width:14px;height:14px;vertical-align:middle;"><\/span><span class="screen-reader-text">' + <?php echo wp_json_encode( __( 'Remove', 'incentiv' ) ); ?> + '<\/span><\/button>' ) +
             '</div></div>';
         $('#discount_rules_container').append(html);
     });
 
     // Remove discount rule
-    $(document).on('click', '.mmd-remove-rule', function() {
-        if ($('.mmd-discount-rule').length > 1) {
-            $(this).closest('.mmd-discount-rule').remove();
+    $(document).on('click', '.incv-remove-rule', function() {
+        if ($('.incv-discount-rule').length > 1) {
+            $(this).closest('.incv-discount-rule').remove();
         } else {
             alert(<?php echo wp_json_encode( __( 'There must be at least one discount tier', 'incentiv' ) ); ?>);
         }
     });
 
     // Initialize Select2 for product search (includes variations)
-    $('.mmd-product-search-multiple').select2({
+    $('.incv-product-search-multiple').select2({
         ajax: {
             url: ajaxurl,
             dataType: 'json',
             delay: 250,
             data: function(params) {
                 return {
-                    action: 'mmd_search_products',
+                    action: 'incv_search_products',
                     q: params.term,
                     include_variations: '1',
-                    nonce: '<?php echo esc_attr( wp_create_nonce('mmd_search_products') ); ?>'
+                    nonce: '<?php echo esc_attr( wp_create_nonce('incv_search_products') ); ?>'
                 };
             },
             processResults: function(data) {
@@ -2521,8 +2405,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'mmd_get_products_by_categories',
-                nonce: '<?php echo esc_attr( wp_create_nonce('mmd_search_products') ); ?>',
+                action: 'incv_get_products_by_categories',
+                nonce: '<?php echo esc_attr( wp_create_nonce('incv_search_products') ); ?>',
                 categories: categories
             },
             success: function(response) {
@@ -2625,7 +2509,7 @@ jQuery(document).ready(function($) {
     });
 
     // BOGO / Quick Presets
-    $(document).on('click', '.mmd-preset-btn', function() {
+    $(document).on('click', '.incv-preset-btn', function() {
         var preset = $(this).data('preset');
         var rules = [];
 
@@ -2658,12 +2542,12 @@ jQuery(document).ready(function($) {
 
             // Add preset rules
             rules.forEach(function(rule, index) {
-                var html = '<div class="mmd-discount-rule">' +
-                    '<div class="mmd-rule-fields">' +
-                    ( '<div class="mmd-field"><label>' + <?php echo wp_json_encode( __( 'Quantity', 'incentiv' ) ); ?> + '<\/label><input type="number" name="discount_rules[' ) + index + '][quantity]" value="' + rule.quantity + '" min="1"></div>' +
-                    ( '<div class="mmd-field"><label>' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label><input type="number" name="discount_rules[' ) + index + '][discount]" value="' + rule.discount + '" min="0" step="0.01"></div>' +
-                    ( '<div class="mmd-field"><label>' + <?php echo wp_json_encode( __( 'Type', 'incentiv' ) ); ?> + '<\/label><select name="discount_rules[' ) + index + '][type]"><option value="percentage"' + (rule.type === 'percentage' ? ' selected' : '') + ( '>' + <?php echo wp_json_encode( __( 'Percentage (%)', 'incentiv' ) ); ?> + '<\/option><option value="fixed"' ) + (rule.type === 'fixed' ? ' selected' : '') + ( '>' + <?php echo wp_json_encode( __( 'Fixed amount (₪)', 'incentiv' ) ); ?> + '<\/option><\/select><\/div>' ) +
-                    ( '<button type="button" class="button mmd-remove-rule"><span class="dashicons dashicons-trash" style="font-size:14px;width:14px;height:14px;vertical-align:middle;"><\/span><span class="screen-reader-text">' + <?php echo wp_json_encode( __( 'Remove', 'incentiv' ) ); ?> + '<\/span><\/button>' ) +
+                var html = '<div class="incv-discount-rule">' +
+                    '<div class="incv-rule-fields">' +
+                    ( '<div class="incv-field"><label>' + <?php echo wp_json_encode( __( 'Quantity', 'incentiv' ) ); ?> + '<\/label><input type="number" name="discount_rules[' ) + index + '][quantity]" value="' + rule.quantity + '" min="1"></div>' +
+                    ( '<div class="incv-field"><label>' + <?php echo wp_json_encode( __( 'Discount', 'incentiv' ) ); ?> + '<\/label><input type="number" name="discount_rules[' ) + index + '][discount]" value="' + rule.discount + '" min="0" step="0.01"></div>' +
+                    ( '<div class="incv-field"><label>' + <?php echo wp_json_encode( __( 'Type', 'incentiv' ) ); ?> + '<\/label><select name="discount_rules[' ) + index + '][type]"><option value="percentage"' + (rule.type === 'percentage' ? ' selected' : '') + ( '>' + <?php echo wp_json_encode( __( 'Percentage (%)', 'incentiv' ) ); ?> + '<\/option><option value="fixed"' ) + (rule.type === 'fixed' ? ' selected' : '') + ( '>' + <?php echo wp_json_encode( __( 'Fixed amount (₪)', 'incentiv' ) ); ?> + '<\/option><\/select><\/div>' ) +
+                    ( '<button type="button" class="button incv-remove-rule"><span class="dashicons dashicons-trash" style="font-size:14px;width:14px;height:14px;vertical-align:middle;"><\/span><span class="screen-reader-text">' + <?php echo wp_json_encode( __( 'Remove', 'incentiv' ) ); ?> + '<\/span><\/button>' ) +
                     '</div></div>';
                 $('#discount_rules_container').append(html);
             });
@@ -2675,7 +2559,7 @@ jQuery(document).ready(function($) {
         var text = $('#badge_text').val() || <?php echo wp_json_encode( __( 'Promotion', 'incentiv' ) ); ?>;
         var bg = $('#badge_bg_color').val();
         var color = $('#badge_text_color').val();
-        $('.mmd-badge-preview').text(text).css({ background: bg, color: color });
+        $('.incv-badge-preview').text(text).css({ background: bg, color: color });
     }
     $('#badge_text, #badge_bg_color, #badge_text_color').on('input change', updateBadgePreview);
 
@@ -2684,7 +2568,7 @@ jQuery(document).ready(function($) {
         var text = $('#global_notice_text').val() || <?php echo wp_json_encode( __( '🔥 Special offer! Buy 3 and get 30% off', 'incentiv' ) ); ?>;
         var bg = $('#global_notice_bg_color').val();
         var color = $('#global_notice_text_color').val();
-        $('.mmd-global-notice-preview').text(text).css({ background: bg, color: color });
+        $('.incv-global-notice-preview').text(text).css({ background: bg, color: color });
     }
     $('#global_notice_text, #global_notice_bg_color, #global_notice_text_color').on('input change', updateGlobalNoticePreview);
 
@@ -2709,9 +2593,9 @@ jQuery(document).ready(function($) {
     // Icon Picker
     (function() {
         var $input = $('#global_notice_icon');
-        var $picker = $('#mmd_icon_picker');
-        var $preview = $('#mmd_icon_preview');
-        var $search = $('#mmd_icon_search');
+        var $picker = $('#incv_icon_picker');
+        var $preview = $('#incv_icon_preview');
+        var $search = $('#incv_icon_search');
 
         // Toggle picker on input click
         $input.on('click', function(e) {
@@ -2720,27 +2604,27 @@ jQuery(document).ready(function($) {
         });
 
         // Clear icon
-        $('#mmd_clear_icon').on('click', function() {
+        $('#incv_clear_icon').on('click', function() {
             $input.val('');
             $preview.html('');
             $picker.hide();
         });
 
         // Tab switching
-        $('.mmd-icon-tab').on('click', function() {
+        $('.incv-icon-tab').on('click', function() {
             var tab = $(this).data('tab');
-            $('.mmd-icon-tab').removeClass('active');
+            $('.incv-icon-tab').removeClass('active');
             $(this).addClass('active');
-            $('.mmd-icon-tab-content').hide();
+            $('.incv-icon-tab-content').hide();
             if (tab === 'emoji') {
-                $('#mmd_emoji_tab').show();
+                $('#incv_emoji_tab').show();
             } else {
-                $('#mmd_dashicons_tab').show();
+                $('#incv_dashicons_tab').show();
             }
         });
 
         // Emoji selection
-        $(document).on('click', '.mmd-emoji-option', function() {
+        $(document).on('click', '.incv-emoji-option', function() {
             var val = $(this).data('value');
             $input.val(val);
             $preview.html(val);
@@ -2749,7 +2633,7 @@ jQuery(document).ready(function($) {
         });
 
         // Dashicon selection
-        $(document).on('click', '.mmd-dashicon-option', function() {
+        $(document).on('click', '.incv-dashicon-option', function() {
             var val = $(this).data('value');
             $input.val(val);
             $preview.html('<span class="dashicons ' + val + '"></span>');
@@ -2760,7 +2644,7 @@ jQuery(document).ready(function($) {
         // Search filter
         $search.on('input', function() {
             var query = $(this).val().toLowerCase();
-            $('.mmd-icon-option').each(function() {
+            $('.incv-icon-option').each(function() {
                 var text = ($(this).data('value') + ' ' + ($(this).attr('title') || '')).toLowerCase();
                 $(this).toggle(text.indexOf(query) !== -1 || query === '');
             });
@@ -2768,7 +2652,7 @@ jQuery(document).ready(function($) {
 
         // Close picker on outside click
         $(document).on('click', function(e) {
-            if (!$(e.target).closest('#mmd_icon_picker, #global_notice_icon').length) {
+            if (!$(e.target).closest('#incv_icon_picker, #global_notice_icon').length) {
                 $picker.hide();
             }
         });
@@ -2779,16 +2663,16 @@ jQuery(document).ready(function($) {
         });
     })();
 });
-</script>
+<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
 
 
-<script>
+<?php ob_start(); ?>
 // ====================================================================
 // Server-side drafts — "<?php echo esc_js( __( 'Save draft', 'incentiv' ) ); ?>" + automatic draft save for new /
 // draft rules. Publishing (the green button) clears the draft flag.
 // ====================================================================
 jQuery(function ($) {
-    var $form = $('form[data-mmd-autosave="rule"]').first();
+    var $form = $('form[data-incv-autosave="rule"]').first();
     if (!$form.length) { return; }
 
     var initialStatus = <?php echo json_encode(isset($rule_set['status']) ? $rule_set['status'] : ''); ?>;
@@ -2796,9 +2680,9 @@ jQuery(function ($) {
     // Auto-draft only when nothing live is at stake: a brand-new rule or one
     // already in draft. Editing a live rule keeps the localStorage safety net.
     var draftContext = isNew || initialStatus === 'draft';
-    if (draftContext) { $form.data('mmdServerDraftActive', true); }
+    if (draftContext) { $form.data('incvServerDraftActive', true); }
 
-    var $status = $('#mmd-draft-status');
+    var $status = $('#incv-draft-status');
     var saving = false, published = false;
 
     function stamp(msg) {
@@ -2815,19 +2699,19 @@ jQuery(function ($) {
         if (manual) { $status.text(<?php echo wp_json_encode( __( 'Saving…', 'incentiv' ) ); ?>).addClass('is-visible'); }
 
         var payload = $form.serialize()
-            + '&action=mmd_save_rule_draft'
-            + '&nonce=' + encodeURIComponent((window.mmdUi && mmdUi.nonce) || '');
+            + '&action=incv_save_rule_draft'
+            + '&nonce=' + encodeURIComponent((window.incvUi && incvUi.nonce) || '');
 
-        $.post((window.mmdUi && mmdUi.ajaxurl) || ajaxurl, payload)
+        $.post((window.incvUi && incvUi.ajaxurl) || ajaxurl, payload)
             .done(function (resp) {
                 saving = false;
                 if (!resp || !resp.success) { if (manual) { stamp(<?php echo wp_json_encode( __( 'Save failed', 'incentiv' ) ); ?>); } return; }
                 var id = resp.data.id;
                 if (id && !$('input[name="rule_set_id"]').val()) {
                     $('input[name="rule_set_id"]').val(id);
-                    $form.attr('data-mmd-record-id', id);
+                    $form.attr('data-incv-record-id', id);
                     draftContext = true;
-                    $form.data('mmdServerDraftActive', true);
+                    $form.data('incvServerDraftActive', true);
                     // Reflect in the URL so a reload re-opens this draft
                     try {
                         var u = new URL(window.location.href);
@@ -2837,19 +2721,19 @@ jQuery(function ($) {
                     } catch (e) {}
                 }
                 // Real draft persisted — drop the localStorage fallback copy
-                if (window.mmdClearAutosave) { window.mmdClearAutosave(); }
+                if (window.incvClearAutosave) { window.incvClearAutosave(); }
                 stamp(<?php echo wp_json_encode( __( 'Draft saved', 'incentiv' ) ); ?>);
             })
             .fail(function () { saving = false; if (manual) { stamp(<?php echo wp_json_encode( __( 'Save failed', 'incentiv' ) ); ?>); } });
     }
 
-    $('#mmd-save-draft').on('click', function () { saveDraft(true); });
+    $('#incv-save-draft').on('click', function () { saveDraft(true); });
 
     // Publishing clears everything so we don't keep re-saving a draft
-    $form.on('submit', function () { published = true; if (window.mmdClearAutosave) { window.mmdClearAutosave(); } });
+    $form.on('submit', function () { published = true; if (window.incvClearAutosave) { window.incvClearAutosave(); } });
 
     // Automatic drafts for new / draft rules (registered so PJAX clears it)
-    (window.mmdSetInterval || setInterval)(function () { saveDraft(false); }, 12000);
-    $(window).on('beforeunload.mmdpjax', function () { if (draftContext) { saveDraft(false); } });
+    (window.incvSetInterval || setInterval)(function () { saveDraft(false); }, 12000);
+    $(window).on('beforeunload.incvpjax', function () { if (draftContext) { saveDraft(false); } });
 });
-</script>
+<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>

@@ -8,10 +8,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Cart_Gift_Selection_Widget extends \Elementor\Widget_Base {
+class INCV_Cart_Gift_Selection_Widget extends \Elementor\Widget_Base {
 
     public function get_name() {
-        return 'mmd_cart_gift_selection';
+        return 'incv_cart_gift_selection';
     }
 
     public function get_title() {
@@ -23,7 +23,7 @@ class MMD_Cart_Gift_Selection_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_categories() {
-        return array('mmd-widgets', 'woocommerce-elements');
+        return array('incv-widgets', 'woocommerce-elements');
     }
 
     public function get_keywords() {
@@ -71,7 +71,7 @@ class MMD_Cart_Gift_Selection_Widget extends \Elementor\Widget_Base {
         }
 
         // Trigger the actual cart gift selection
-        do_action('mmd_render_cart_gift_selection');
+        do_action('incv_render_cart_gift_selection');
     }
 
     protected function content_template() {

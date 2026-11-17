@@ -5,7 +5,7 @@ Tags: discounts, quantity discounts, gifts, promotions
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 WC requires at least: 4.0
 WC tested up to: 11.2
 License: GPLv2 or later
@@ -42,6 +42,8 @@ Incentiv Pro is a separate add-on, sold on [a-in.co.il](https://a-in.co.il/plugi
 * Electronics: discounts on large quantities.
 * Fashion: buy 5 items, get one free.
 * Any product where you want to encourage buying in quantity.
+
+Incentiv is an independent plugin by All-IN. It is not affiliated with, endorsed by or sponsored by WooCommerce or Automattic. WooCommerce is a trademark of its respective owner.
 
 == Installation ==
 
@@ -92,13 +94,19 @@ Incentiv does not contact any external service.
 
 == Changelog ==
 
+= 2.2.0 =
+* Code: every function, class, constant, option, hook, shortcode, AJAX action and script handle now uses the `incv` / `INCV_` prefix (the old `mmd` prefix was too short for WordPress.org). A one-time migration copies existing `mmd_*` options and `_mmd_*` / `mmd_*` meta to the new names on update, and leaves the old data in place. On sites that had the old data, the `[mmd_gift_selection]` and `[mmd_rule_banner]` shortcodes and the old Elementor widgets keep working.
+* Code: all inline scripts and styles are now loaded through the WordPress script and style APIs (`wp_enqueue_script`, `wp_add_inline_script`, `wp_add_inline_style`), and inline `onclick` handlers were replaced with script files.
+* Code: the AJAX fragments action is now `incv_get_refreshed_fragments`.
+* Removed an unused legacy file (the first-generation product gifts class).
+
 = 2.1.0 =
 * Fixed: the product-page gift picker no longer offers out-of-stock gifts (the cart picker already left them out).
 * Fixed: the Elementor Gift notice widget no longer lists out-of-stock gifts.
-* Fixed: the cart page showed the gift offer twice (gift picker and gift bar) and showed messages from rules that had no products in the cart. Each message now shows once, and only for rules the cart can use (filter `mmd_show_rule_notice_without_items` restores the old behaviour). Gift debug data is printed to the browser console only in debug mode.
+* Fixed: the cart page showed the gift offer twice (gift picker and gift bar) and showed messages from rules that had no products in the cart. Each message now shows once, and only for rules the cart can use (filter `incv_show_rule_notice_without_items` restores the old behaviour). Gift debug data is printed to the browser console only in debug mode.
 * Incentiv is now the complete free core. Special events, per-rule attribution with CSV export and the email digest, audience targeting, promotion protection, smart coupons and the smart rule builder moved to the separate Incentiv Pro add-on.
 * Your data is kept: settings and rule fields that belong to Pro are left untouched, and a rule with audience conditions waits (does not apply) until Pro is active again, so a targeted offer never turns into an offer for everyone.
-* Developers: a module registry and new hooks (`mmd_register_modules`, `mmd_admin_tabs`, `mmd_rule_editor_cards`, `mmd_dashboard_sections`, `mmd_promotions_blocked`, `mmd_rule_set_matches_audience`, `mmd_sanitize_rule_set`, `mmd_flow_builder_flows`).
+* Developers: a module registry and new hooks (`incv_register_modules`, `incv_admin_tabs`, `incv_rule_editor_cards`, `incv_dashboard_sections`, `incv_promotions_blocked`, `incv_rule_set_matches_audience`, `incv_sanitize_rule_set`, `incv_flow_builder_flows`).
 
 = 2.0.1 =
 * Fixed: the cart no longer looks double-discounted. A discount added as a cart line (the default) is now shown only in that line, with no extra strike-through on the product row and no reduced Subtotal. Discounts allocated onto products are shown only in the product prices, with no extra "already included" row above the total. Totals were always correct.
@@ -125,12 +133,15 @@ Incentiv does not contact any external service.
 * Reports and attribution: per-rule metrics, lift, CSV export and an email digest.
 * Rule Diagnostic and Storefront view in the admin.
 * Elementor widgets: event banner, gift selection and events.
-* Shortcodes: mmd_gift_selection, mmd_rule_banner.
+* Shortcodes: incv_gift_selection, incv_rule_banner.
 
 = 1.0.0 =
 * Initial release: quantity discounts, flexible product selection, custom messages, debug mode.
 
 == Upgrade Notice ==
+
+= 2.2.0 =
+Internal prefix change from mmd to incv for WordPress.org. Your settings, rules and gift data are copied to the new names automatically on update. Update Incentiv Pro to a version that supports 2.2.0 at the same time.
 
 = 2.1.0 =
 Special events, advanced analytics, audience targeting, promotion protection, smart coupons and the smart rule builder are now part of Incentiv Pro. Their data is kept. Sites on the paid build keep every module.

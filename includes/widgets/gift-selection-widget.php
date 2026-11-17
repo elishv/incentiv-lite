@@ -9,10 +9,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Gift_Selection_Widget extends \Elementor\Widget_Base {
+class INCV_Gift_Selection_Widget extends \Elementor\Widget_Base {
 
     public function get_name() {
-        return 'mmd_gift_selection';
+        return 'incv_gift_selection';
     }
 
     public function get_title() {
@@ -24,7 +24,7 @@ class MMD_Gift_Selection_Widget extends \Elementor\Widget_Base {
     }
 
     public function get_categories() {
-        return array('mmd-widgets', 'woocommerce-elements');
+        return array('incv-widgets', 'woocommerce-elements');
     }
 
     public function get_keywords() {
@@ -124,7 +124,7 @@ class MMD_Gift_Selection_Widget extends \Elementor\Widget_Base {
         if (!$product || !is_object($product)) {
             $post_id = get_the_ID();
             if ($post_id) {
-                $product = wc_get_product($post_id);
+                $product = wc_get_product($post_id); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's own global $product, set for the current product as WooCommerce templates expect.
             }
         }
 
@@ -132,7 +132,7 @@ class MMD_Gift_Selection_Widget extends \Elementor\Widget_Base {
         if (!$product || !is_object($product)) {
             $queried = get_queried_object();
             if ($queried && isset($queried->ID) && get_post_type($queried->ID) === 'product') {
-                $product = wc_get_product($queried->ID);
+                $product = wc_get_product($queried->ID); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce's own global $product, set for the current product as WooCommerce templates expect.
             }
         }
 
@@ -147,7 +147,7 @@ class MMD_Gift_Selection_Widget extends \Elementor\Widget_Base {
         $this->ensure_gift_scripts_loaded();
 
         // Use the singleton instance directly
-        $gifts_v2 = MMD_Product_Gifts_V2::get_instance();
+        $gifts_v2 = INCV_Product_Gifts_V2::get_instance();
         $gifts_v2->display_gift_selection();
     }
 
@@ -171,7 +171,7 @@ class MMD_Gift_Selection_Widget extends \Elementor\Widget_Base {
         $this->ensure_gift_scripts_loaded();
 
         // Trigger the cart gift selection display
-        $gifts_v2 = MMD_Product_Gifts_V2::get_instance();
+        $gifts_v2 = INCV_Product_Gifts_V2::get_instance();
         $gifts_v2->display_cart_gift_selection();
     }
 
@@ -179,18 +179,18 @@ class MMD_Gift_Selection_Widget extends \Elementor\Widget_Base {
      * Ensure gift selection scripts and styles are loaded
      */
     private function ensure_gift_scripts_loaded() {
-        if (!wp_script_is('mmd-gift-selection', 'enqueued')) {
-            $js_version = filemtime(MMD_PLUGIN_DIR . 'assets/gift-selection.js');
-            $css_version = filemtime(MMD_PLUGIN_DIR . 'assets/gift-selection.css');
+        if (!wp_script_is('incv-gift-selection', 'enqueued')) {
+            $js_version = filemtime(INCV_PLUGIN_DIR . 'assets/gift-selection.js');
+            $css_version = filemtime(INCV_PLUGIN_DIR . 'assets/gift-selection.css');
 
-            wp_enqueue_style('mmd-gift-selection', MMD_PLUGIN_URL . 'assets/gift-selection.css', array(), $css_version);
-            wp_enqueue_script('mmd-gift-selection', MMD_PLUGIN_URL . 'assets/gift-selection.js', array('jquery', 'wp-i18n'), $js_version, true);
-            wp_set_script_translations('mmd-gift-selection', 'incentiv', MMD_PLUGIN_DIR . 'languages');
+            wp_enqueue_style('incv-gift-selection', INCV_PLUGIN_URL . 'assets/gift-selection.css', array(), $css_version);
+            wp_enqueue_script('incv-gift-selection', INCV_PLUGIN_URL . 'assets/gift-selection.js', array('jquery', 'wp-i18n'), $js_version, true);
+            wp_set_script_translations('incv-gift-selection', 'incentiv', INCV_PLUGIN_DIR . 'languages');
 
-            wp_localize_script('mmd-gift-selection', 'mmdGiftData', array(
+            wp_localize_script('incv-gift-selection', 'incvGiftData', array(
                 'ajaxurl' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('mmd_gift_nonce'),
-                'debug' => MMD_Helpers::debug_enabled() && MMD_Helpers::can_see_frontend_debug(),
+                'nonce' => wp_create_nonce('incv_gift_nonce'),
+                'debug' => INCV_Helpers::debug_enabled() && INCV_Helpers::can_see_frontend_debug(),
             ));
         }
     }

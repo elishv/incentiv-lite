@@ -2,14 +2,14 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Incentiv – Advanced Promotions for WooCommerce 2.1.0\n"
+"Project-Id-Version: Incentiv – Advanced Promotions for WooCommerce 2.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/incentiv\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-01T13:51:42+00:00\n"
+"POT-Creation-Date: 2026-11-17T06:22:15+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: incentiv\n"
@@ -39,1417 +39,1402 @@ msgstr ""
 msgid "https://a-in.co.il/"
 msgstr ""
 
-#: incentiv.php:79
-msgid "Mix & Match Quantity Discounts"
+#: incentiv.php:83
+#: includes/class-incv-elementor-widget.php:24
+msgid "Incentiv"
 msgstr ""
 
-#: incentiv.php:79
+#: incentiv.php:83
 msgid "Requires the WooCommerce plugin to be installed and active."
 msgstr ""
 
-#: incentiv.php:145
+#: incentiv.php:149
 #: includes/widgets/cart-gift-selection-widget.php:37
 #: assets/flow-builder.js:159
 msgid "Settings"
 msgstr ""
 
-#: incentiv.php:150
+#: incentiv.php:154
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: incentiv.php:191
-#: includes/class-mmd-discount-rules.php:77
-#: includes/class-mmd-frontend.php:872
-#: includes/class-mmd-frontend.php:3351
-#: includes/class-mmd-helpers.php:29
+#: incentiv.php:198
+#: includes/class-incv-discount-rules.php:77
+#: includes/class-incv-frontend.php:857
+#: includes/class-incv-frontend.php:3361
+#: includes/class-incv-helpers.php:144
 #: templates/admin-rule-set-edit.php:31
 #: templates/admin-rule-set-edit.php:599
 #: templates/admin-storefront.php:32
 msgid "☕ Buy more and save!"
 msgstr ""
 
-#: incentiv.php:194
-#: includes/class-mmd-helpers.php:32
+#: incentiv.php:201
+#: includes/class-incv-helpers.php:147
 #: templates/admin-storefront.php:63
 msgid "☕ Quantity discount"
 msgstr ""
 
-#: includes/class-mmd-admin.php:63
+#: includes/class-incv-admin.php:64
 msgid "Powered by"
 msgstr ""
 
-#: includes/class-mmd-admin.php:63
+#: includes/class-incv-admin.php:64
 msgid "· Every reason to buy more ·"
 msgstr ""
 
 #. translators: Plugin brand name, used as the admin page title. Keep it as is unless the brand has a localized name.
 #. translators: Plugin brand name in the admin menu. Keep it as is unless the brand has a localized name.
-#: includes/class-mmd-admin.php:79
-#: includes/class-mmd-admin.php:81
+#: includes/class-incv-admin.php:80
+#: includes/class-incv-admin.php:82
 msgctxt "admin menu label (brand name)"
 msgid "Incentiv"
 msgstr ""
 
-#: includes/class-mmd-admin.php:92
-#: includes/class-mmd-admin.php:93
+#: includes/class-incv-admin.php:93
+#: includes/class-incv-admin.php:94
 #: templates/admin-dashboard.php:140
 msgid "Quantity discounts"
 msgstr ""
 
-#: includes/class-mmd-admin.php:102
-#: includes/class-mmd-admin.php:103
-#: includes/class-mmd-modules.php:109
+#: includes/class-incv-admin.php:103
+#: includes/class-incv-admin.php:104
+#: includes/class-incv-modules.php:109
 #: templates/admin-dashboard.php:75
 msgid "Dashboard"
 msgstr ""
 
-#: includes/class-mmd-admin.php:116
-#: includes/class-mmd-admin.php:117
-#: includes/class-mmd-modules.php:114
+#: includes/class-incv-admin.php:117
+#: includes/class-incv-admin.php:118
+#: includes/class-incv-modules.php:114
 #: templates/admin-storefront.php:181
 msgid "Customer view"
 msgstr ""
 
-#: includes/class-mmd-admin.php:130
-#: includes/class-mmd-admin.php:131
-#: includes/class-mmd-modules.php:113
+#: includes/class-incv-admin.php:131
+#: includes/class-incv-admin.php:132
+#: includes/class-incv-modules.php:113
 msgid "Documentation"
 msgstr ""
 
-#: includes/class-mmd-admin.php:349
+#: includes/class-incv-admin.php:358
 msgid "Buy a quantity, get a percentage off"
 msgstr ""
 
-#: includes/class-mmd-admin.php:350
+#: includes/class-incv-admin.php:359
 msgid "From a set quantity, the cheapest item gets a percentage off."
 msgstr ""
 
-#: includes/class-mmd-admin.php:352
-#: includes/class-mmd-admin.php:361
+#: includes/class-incv-admin.php:361
+#: includes/class-incv-admin.php:370
 msgid "From quantity"
 msgstr ""
 
-#: includes/class-mmd-admin.php:353
-#: includes/class-mmd-admin.php:369
-#: includes/class-mmd-admin.php:378
+#: includes/class-incv-admin.php:362
+#: includes/class-incv-admin.php:378
+#: includes/class-incv-admin.php:387
 msgid "Discount percentage"
 msgstr ""
 
-#: includes/class-mmd-admin.php:358
+#: includes/class-incv-admin.php:367
 msgid "Cheapest is free"
 msgstr ""
 
-#: includes/class-mmd-admin.php:359
+#: includes/class-incv-admin.php:368
 msgid "When customers buy the quantity you set, the cheapest item is free."
 msgstr ""
 
-#: includes/class-mmd-admin.php:366
+#: includes/class-incv-admin.php:375
 msgid "Store-wide discount"
 msgstr ""
 
-#: includes/class-mmd-admin.php:367
+#: includes/class-incv-admin.php:376
 msgid "A percentage off all participating products, regardless of quantity."
 msgstr ""
 
-#: includes/class-mmd-admin.php:374
+#: includes/class-incv-admin.php:383
 msgid "Over an amount: discount"
 msgstr ""
 
-#: includes/class-mmd-admin.php:375
+#: includes/class-incv-admin.php:384
 msgid "When the cart total passes a threshold you set, a percentage discount is applied."
 msgstr ""
 
-#: includes/class-mmd-admin.php:377
+#: includes/class-incv-admin.php:386
 msgid "Minimum cart total"
 msgstr ""
 
-#: includes/class-mmd-admin.php:474
+#: includes/class-incv-admin.php:483
 msgid "Unknown template"
 msgstr ""
 
-#: includes/class-mmd-admin.php:494
+#: includes/class-incv-admin.php:503
 msgid "No discount set"
 msgstr ""
 
-#: includes/class-mmd-admin.php:605
+#: includes/class-incv-admin.php:615
 msgid "Rule imported successfully"
 msgstr ""
 
-#: includes/class-mmd-admin.php:607
+#: includes/class-incv-admin.php:617
 msgid "Failed to import rule"
 msgstr ""
 
-#: includes/class-mmd-admin.php:782
-#: includes/class-mmd-frontend.php:961
+#: includes/class-incv-admin.php:792
+#: includes/class-incv-frontend.php:946
 #: templates/admin-rule-set-edit.php:49
 #: templates/admin-rule-set-edit.php:934
-#: templates/admin-rule-set-edit.php:2674
+#: templates/admin-rule-set-edit.php:2558
 #: templates/admin-storefront.php:35
-#: assets/admin-ui.js:422
+#: assets/admin-ui.js:437
 msgid "Promotion"
 msgstr ""
 
-#: includes/class-mmd-admin.php:834
+#: includes/class-incv-admin.php:845
 msgid "The discount rule was saved."
 msgstr ""
 
-#: includes/class-mmd-admin.php:835
+#: includes/class-incv-admin.php:846
 msgid "The discount rule was deleted."
 msgstr ""
 
-#: includes/class-mmd-admin.php:836
+#: includes/class-incv-admin.php:847
 msgid "The discount rule was duplicated."
 msgstr ""
 
-#: includes/class-mmd-admin.php:837
+#: includes/class-incv-admin.php:848
 msgid "The example rule was imported."
 msgstr ""
 
-#: includes/class-mmd-ajax.php:186
+#: includes/class-incv-ajax.php:190
 msgid "Out of stock"
 msgstr ""
 
-#: includes/class-mmd-ajax.php:188
+#: includes/class-incv-ajax.php:192
 msgid "In stock"
 msgstr ""
 
-#: includes/class-mmd-ajax.php:199
+#: includes/class-incv-ajax.php:203
 msgid "None of the selected products is a variable product"
 msgstr ""
 
-#: includes/class-mmd-cart-notes.php:80
+#: includes/class-incv-cart-notes.php:80
 #: templates/admin-gift-styling.php:340
 msgid "Order note"
 msgstr ""
 
-#: includes/class-mmd-cart-notes.php:81
+#: includes/class-incv-cart-notes.php:81
 msgid "Add a special note to your order (optional)"
 msgstr ""
 
-#: includes/class-mmd-cart-notes.php:86
+#: includes/class-incv-cart-notes.php:86
 msgid "For example: please add an extra straw, or: this is a gift, please wrap it nicely..."
 msgstr ""
 
-#: includes/class-mmd-cart-notes.php:143
-#: includes/class-mmd-cart-notes.php:166
+#: includes/class-incv-cart-notes.php:143
+#: includes/class-incv-cart-notes.php:166
 msgid "📝 Customer note"
 msgstr ""
 
-#: includes/class-mmd-cart-notes.php:161
+#: includes/class-incv-cart-notes.php:161
 msgid "📝 Customer note:"
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:36
+#: includes/class-incv-discount-allocator.php:36
 msgid "Discount line in the cart (default)"
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:37
+#: includes/class-incv-discount-allocator.php:37
 msgid "The discount is shown as a separate line in the cart totals and is not split across products."
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:40
+#: includes/class-incv-discount-allocator.php:40
 msgid "Proportional to product value"
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:41
+#: includes/class-incv-discount-allocator.php:41
 msgid "The discount is split across the participating products in proportion to each line's value. Recommended for refunds and accurate reports."
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:44
+#: includes/class-incv-discount-allocator.php:44
 msgid "Evenly across lines"
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:45
+#: includes/class-incv-discount-allocator.php:45
 msgid "Every participating product line gets the same discount amount."
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:48
+#: includes/class-incv-discount-allocator.php:48
 msgid "Evenly across units"
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:49
+#: includes/class-incv-discount-allocator.php:49
 msgid "Every participating unit gets the same discount amount."
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:52
+#: includes/class-incv-discount-allocator.php:52
 msgid "Concentrated on the target product"
 msgstr ""
 
-#: includes/class-mmd-discount-allocator.php:53
+#: includes/class-incv-discount-allocator.php:53
 msgid "The whole discount is attributed to the cheapest or most expensive product, according to the \"Apply discount to\" setting."
 msgstr ""
 
-#: includes/class-mmd-discount-rules.php:51
+#: includes/class-incv-discount-rules.php:51
 msgid "Default quantity discounts"
 msgstr ""
 
-#: includes/class-mmd-discount-rules.php:78
+#: includes/class-incv-discount-rules.php:78
 #: templates/admin-rule-set-edit.php:32
 #: templates/admin-rule-set-edit.php:609
 msgid "Buy more and get a special discount!"
 msgstr ""
 
-#: includes/class-mmd-discount-rules.php:158
-#: includes/class-mmd-gift-rules.php:456
+#: includes/class-incv-discount-rules.php:158
+#: includes/class-incv-gift-rules.php:450
 msgid "(copy)"
 msgstr ""
 
-#: includes/class-mmd-elementor-widget.php:24
-msgid "Incentiv"
-msgstr ""
-
-#: includes/class-mmd-example-rules.php:20
+#: includes/class-incv-example-rules.php:20
 msgid "Buy 3 get 30% off"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:22
+#: includes/class-incv-example-rules.php:22
 msgid "30% off the cheapest item when buying 3 items from the same category"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:26
+#: includes/class-incv-example-rules.php:26
 msgid "Buy 3 Get 30% Off"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:47
+#: includes/class-incv-example-rules.php:47
 msgid "Buy 3 and Save!"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:48
+#: includes/class-incv-example-rules.php:48
 msgid "Buy 3 items and get 30% off the cheapest one!"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:69
+#: includes/class-incv-example-rules.php:69
 msgid "Tiered quantity discounts"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:71
+#: includes/class-incv-example-rules.php:71
 msgid "The discount grows with the quantity: 10% for 2, 20% for 3, 30% for 4, free for 5"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:75
+#: includes/class-incv-example-rules.php:75
 msgid "Tiered Volume Discount"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:99
+#: includes/class-incv-example-rules.php:99
 msgid "Volume Discounts!"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:100
+#: includes/class-incv-example-rules.php:100
 msgid "Buy more, save more! 2=10%, 3=20%, 4=30%, 5=FREE"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:121
+#: includes/class-incv-example-rules.php:121
 msgid "Buy 1 get 1 at 50% off"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:123
+#: includes/class-incv-example-rules.php:123
 msgid "Buy one item and get the second at half price"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:127
+#: includes/class-incv-example-rules.php:127
 msgid "BOGO 50% Off"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:148
+#: includes/class-incv-example-rules.php:148
 msgid "BOGO Deal!"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:149
+#: includes/class-incv-example-rules.php:149
 msgid "Buy one, get the second at 50% off!"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:170
+#: includes/class-incv-example-rules.php:170
 msgid "Fixed discount for buying in quantity"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:172
+#: includes/class-incv-example-rules.php:172
 msgid "A fixed amount off: 10 ₪ for 2 items, 25 ₪ for 3, 50 ₪ for 5"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:176
+#: includes/class-incv-example-rules.php:176
 msgid "Fixed Bulk Discount"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:199
+#: includes/class-incv-example-rules.php:199
 msgid "Bulk Savings!"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:200
+#: includes/class-incv-example-rules.php:200
 msgid "Buy in bulk and save! 2 items=$10 off, 3=$25, 5=$50"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:221
+#: includes/class-incv-example-rules.php:221
 msgid "VIP discount with a coupon"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:223
+#: includes/class-incv-example-rules.php:223
 msgid "An exclusive 40% discount that is only activated with a VIP coupon code"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:227
+#: includes/class-incv-example-rules.php:227
 msgid "VIP Coupon 40% Off"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:248
+#: includes/class-incv-example-rules.php:248
 msgid "VIP Exclusive!"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:249
+#: includes/class-incv-example-rules.php:249
 msgid "Use coupon VIP40 and get 40% off when buying 2+!"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:270
-#: templates/admin-gift-rule-edit.php:1033
+#: includes/class-incv-example-rules.php:270
+#: templates/admin-gift-rule-edit.php:1027
 #: templates/admin-rule-set-edit.php:465
 msgid "Buy 4 get 1 free"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:272
+#: includes/class-incv-example-rules.php:272
 msgid "Buy 5 items and get the cheapest one free (100% off)"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:276
+#: includes/class-incv-example-rules.php:276
 msgid "Buy 4 Get 1 Free"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:297
+#: includes/class-incv-example-rules.php:297
 msgid "Buy 4 Get 1 Free!"
 msgstr ""
 
-#: includes/class-mmd-example-rules.php:298
+#: includes/class-incv-example-rules.php:298
 msgid "Add 5 items to your cart and get the cheapest one for free!"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:34
-#: includes/class-mmd-flow-builder.php:35
-#: includes/class-mmd-modules.php:111
+#: includes/class-incv-flow-builder.php:34
+#: includes/class-incv-flow-builder.php:35
+#: includes/class-incv-modules.php:111
 msgid "Flows"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:117
+#: includes/class-incv-flow-builder.php:118
 msgid "Please give the flow a name"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:120
+#: includes/class-incv-flow-builder.php:121
 msgid "The flow is empty. Add at least one step"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:177
+#: includes/class-incv-flow-builder.php:178
 msgid "Add at least one action: a discount or a gift"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:228
+#: includes/class-incv-flow-builder.php:229
 msgid "(gift)"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:245
+#: includes/class-incv-flow-builder.php:246
 msgid "You have a gift! Choose a product from the list 🎁"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:301
+#: includes/class-incv-flow-builder.php:302
 #: templates/admin-documentation.php:140
 #: templates/admin-gift-rule-edit.php:161
-#: templates/admin-gift-rule-edit.php:2134
+#: templates/admin-gift-rule-edit.php:2122
 #: templates/admin-gift-rules-list.php:18
 #: templates/admin-page.php:59
 #: templates/admin-rule-set-edit.php:238
-#: templates/admin-rule-set-edit.php:1800
+#: templates/admin-rule-set-edit.php:1683
 #: templates/admin-rule-sets.php:54
 #: assets/admin-script.js:141
 #: assets/admin-script.js:175
 msgid "All products"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:302
+#: includes/class-incv-flow-builder.php:303
 #: assets/admin-script.js:175
 msgid "Selected categories"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:303
-#: templates/admin-gift-rule-edit.php:2134
-#: templates/admin-rule-set-edit.php:1800
+#: includes/class-incv-flow-builder.php:304
+#: templates/admin-gift-rule-edit.php:2122
+#: templates/admin-rule-set-edit.php:1683
 #: templates/admin-rule-sets.php:56
 #: assets/admin-script.js:175
 msgid "Selected products"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:304
+#: includes/class-incv-flow-builder.php:305
 #: templates/admin-documentation.php:155
 #: templates/admin-gift-rule-edit.php:164
-#: templates/admin-gift-rule-edit.php:2134
+#: templates/admin-gift-rule-edit.php:2122
 #: templates/admin-page.php:62
 #: templates/admin-rule-set-edit.php:241
-#: templates/admin-rule-set-edit.php:1800
+#: templates/admin-rule-set-edit.php:1683
 #: templates/admin-rule-sets.php:57
 #: assets/admin-script.js:175
 msgid "By attribute"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:317
+#: includes/class-incv-flow-builder.php:318
 msgid "Customer adds"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:317
-#: includes/class-mmd-product-gifts-v2.php:4411
+#: includes/class-incv-flow-builder.php:318
+#: includes/class-incv-product-gifts-v2.php:4398
 #: assets/flow-builder.js:112
 msgid "+ items"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:320
-#: includes/class-mmd-flow-builder.php:349
+#: includes/class-incv-flow-builder.php:321
+#: includes/class-incv-flow-builder.php:350
 msgid "Cart over"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:320
-#: includes/class-mmd-flow-builder.php:349
+#: includes/class-incv-flow-builder.php:321
+#: includes/class-incv-flow-builder.php:350
 msgid "Threshold"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:323
-#: includes/class-mmd-flow-builder.php:354
+#: includes/class-incv-flow-builder.php:324
+#: includes/class-incv-flow-builder.php:355
 msgid "Enters code"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:323
-#: includes/class-mmd-flow-builder.php:354
-#: includes/class-mmd-flow-builder.php:360
+#: includes/class-incv-flow-builder.php:324
+#: includes/class-incv-flow-builder.php:355
+#: includes/class-incv-flow-builder.php:361
 #: assets/flow-builder.js:22
 #: assets/flow-builder.js:34
 msgid "Customer interaction"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:330
+#: includes/class-incv-flow-builder.php:331
 msgid "Cheapest is free! 🎁"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:331
-#: templates/admin-rule-set-edit.php:2124
+#: includes/class-incv-flow-builder.php:332
+#: templates/admin-rule-set-edit.php:2008
 msgid "% off"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:331
-#: includes/class-mmd-frontend.php:2522
-#: includes/class-mmd-product-gifts-v2.php:4393
+#: includes/class-incv-flow-builder.php:332
+#: includes/class-incv-frontend.php:2532
+#: includes/class-incv-product-gifts-v2.php:4380
 #: includes/widgets/gift-notice-widget.php:44
 #: templates/admin-flows.php:100
-#: templates/admin-gift-rule-edit.php:1053
-#: templates/admin-gift-rule-edit.php:1548
-#: templates/admin-gift-rule-edit.php:1598
+#: templates/admin-gift-rule-edit.php:1047
+#: templates/admin-gift-rule-edit.php:1536
+#: templates/admin-gift-rule-edit.php:1586
 #: templates/admin-page.php:199
 #: templates/admin-rule-set-edit.php:505
-#: templates/admin-rule-set-edit.php:2399
-#: templates/admin-rule-set-edit.php:2433
-#: templates/admin-rule-set-edit.php:2663
+#: templates/admin-rule-set-edit.php:2283
+#: templates/admin-rule-set-edit.php:2317
+#: templates/admin-rule-set-edit.php:2547
 #: assets/admin-script.js:34
 #: assets/admin-script.js:264
 #: assets/flow-builder.js:30
 msgid "Discount"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:332
+#: includes/class-incv-flow-builder.php:333
 msgid "on all items"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:332
+#: includes/class-incv-flow-builder.php:333
 msgid "on the cheapest item"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:351
+#: includes/class-incv-flow-builder.php:352
 msgid "Customer buys a participating product"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:358
+#: includes/class-incv-flow-builder.php:359
 msgid "Gift added automatically 🎁"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:358
+#: includes/class-incv-flow-builder.php:359
 #: templates/admin-gift-rule-edit.php:485
 #: assets/flow-builder.js:124
 msgctxt "flow"
 msgid "Gift products"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:358
-#: includes/class-mmd-product-gifts-v2.php:385
+#: includes/class-incv-flow-builder.php:359
+#: includes/class-incv-product-gifts-v2.php:361
 #: templates/admin-documentation.php:145
 #: templates/admin-gift-rule-edit.php:162
 #: templates/admin-gift-rule-edit.php:476
-#: templates/admin-gift-rule-edit.php:2134
-#: templates/admin-gift-rule-edit.php:2135
+#: templates/admin-gift-rule-edit.php:2122
+#: templates/admin-gift-rule-edit.php:2123
 #: templates/admin-page.php:60
 #: templates/admin-rule-set-edit.php:239
-#: templates/admin-rule-set-edit.php:1800
+#: templates/admin-rule-set-edit.php:1683
 #: templates/admin-rule-sets.php:55
 msgid "By categories"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:360
+#: includes/class-incv-flow-builder.php:361
 #: assets/flow-builder.js:34
 msgid "Customer chooses a gift"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:361
+#: includes/class-incv-flow-builder.php:362
 msgid "The gift is added for free 🎁"
 msgstr ""
 
-#: includes/class-mmd-flow-builder.php:361
+#: includes/class-incv-flow-builder.php:362
 #: assets/flow-builder.js:122
 msgid "Products to choose from"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:248
+#: includes/class-incv-frontend.php:245
 msgid "Coupon added - the discount will apply in the cart"
 msgstr ""
 
 #. translators: %s: coupon code
-#: includes/class-mmd-frontend.php:251
+#: includes/class-incv-frontend.php:248
 #, php-format
 msgid "Coupon %s added - the discount will apply in the cart"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:813
-#: includes/class-mmd-frontend.php:846
-#: includes/class-mmd-frontend.php:3259
-#: includes/class-mmd-frontend.php:3261
-#: includes/class-mmd-product-gifts-v2.php:1643
-#: includes/class-mmd-product-gifts-v2.php:1645
-#: includes/class-mmd-product-gifts-v2.php:3447
-#: includes/class-mmd-product-gifts-v2.php:3449
-#: includes/class-mmd-product-gifts-v2.php:3511
-#: includes/class-mmd-product-gifts-v2.php:3513
-#: includes/class-mmd-product-gifts-v2.php:3545
-#: includes/class-mmd-product-gifts-v2.php:3547
-#: includes/class-mmd-product-gifts-v2.php:3580
-#: includes/class-mmd-product-gifts-v2.php:3582
-#: includes/class-mmd-product-gifts-v2.php:4430
-#: includes/class-mmd-product-gifts-v2.php:4432
-#: includes/class-mmd-product-gifts-v2.php:4726
-#: includes/class-mmd-product-gifts-v2.php:4728
-#: includes/class-mmd-product-gifts-v2.php:5483
-#: includes/class-mmd-product-gifts-v2.php:5485
-#: includes/class-mmd-product-gifts.php:459
-#: includes/class-mmd-product-gifts.php:461
+#: includes/class-incv-frontend.php:798
+#: includes/class-incv-frontend.php:831
+#: includes/class-incv-frontend.php:3269
+#: includes/class-incv-frontend.php:3271
+#: includes/class-incv-product-gifts-v2.php:1621
+#: includes/class-incv-product-gifts-v2.php:1623
+#: includes/class-incv-product-gifts-v2.php:3434
+#: includes/class-incv-product-gifts-v2.php:3436
+#: includes/class-incv-product-gifts-v2.php:3498
+#: includes/class-incv-product-gifts-v2.php:3500
+#: includes/class-incv-product-gifts-v2.php:3532
+#: includes/class-incv-product-gifts-v2.php:3534
+#: includes/class-incv-product-gifts-v2.php:3567
+#: includes/class-incv-product-gifts-v2.php:3569
+#: includes/class-incv-product-gifts-v2.php:4417
+#: includes/class-incv-product-gifts-v2.php:4419
+#: includes/class-incv-product-gifts-v2.php:4711
+#: includes/class-incv-product-gifts-v2.php:4713
+#: includes/class-incv-product-gifts-v2.php:5464
+#: includes/class-incv-product-gifts-v2.php:5466
 #: includes/widgets/gift-notice-widget.php:310
 #: includes/widgets/gift-notice-widget.php:312
 msgid "A discount of"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:813
-#: includes/class-mmd-frontend.php:846
+#: includes/class-incv-frontend.php:798
+#: includes/class-incv-frontend.php:831
 msgid "is live!"
 msgstr ""
 
 #. translators: 1: rule name, 2: discount amount included in this line.
-#: includes/class-mmd-frontend.php:1906
+#: includes/class-incv-frontend.php:1916
 #, php-format
 msgid "%1$s: %2$s off"
 msgstr ""
 
 #. translators: %s: discounted unit price.
-#: includes/class-mmd-frontend.php:1915
-#: includes/class-mmd-frontend.php:1923
+#: includes/class-incv-frontend.php:1925
+#: includes/class-incv-frontend.php:1933
 #, php-format
 msgid "One item at %s"
 msgstr ""
 
 #. translators: 1: number of items, 2: discounted unit price.
-#: includes/class-mmd-frontend.php:1918
+#: includes/class-incv-frontend.php:1928
 #, php-format
 msgid "%1$d items at %2$s each"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:2117
+#: includes/class-incv-frontend.php:2127
 msgid "This coupon cannot be combined with the current coupon."
 msgstr ""
 
-#: includes/class-mmd-frontend.php:2561
+#: includes/class-incv-frontend.php:2571
 msgid "Already included in the product prices"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3246
+#: includes/class-incv-frontend.php:3256
 msgid "📊 Buy more, save more"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3255
-#: assets/admin-ui.js:383
+#: includes/class-incv-frontend.php:3265
+#: assets/admin-ui.js:398
 msgid "Cheapest is free! 🎉"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3258
+#: includes/class-incv-frontend.php:3268
 #: templates/admin-storefront.php:165
 msgid "· You save"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3269
-#: includes/class-mmd-frontend.php:3424
+#: includes/class-incv-frontend.php:3279
+#: includes/class-incv-frontend.php:3434
 #: templates/admin-storefront.php:159
 #: templates/admin-storefront.php:162
 #: templates/admin-storefront.php:165
-#: assets/admin-ui.js:412
+#: assets/admin-ui.js:427
 msgid "units"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3422
-#: includes/class-mmd-frontend.php:3424
+#: includes/class-incv-frontend.php:3432
+#: includes/class-incv-frontend.php:3434
 msgid "Add"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3422
+#: includes/class-incv-frontend.php:3432
 msgid "more unit and the cheapest is"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3422
+#: includes/class-incv-frontend.php:3432
 msgid "more units and the cheapest is"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3422
-#: includes/class-mmd-product-gifts-v2.php:4403
-#: includes/class-mmd-product-gifts-v2.php:4999
+#: includes/class-incv-frontend.php:3432
+#: includes/class-incv-product-gifts-v2.php:4390
+#: includes/class-incv-product-gifts-v2.php:4984
 #: templates/admin-storefront.php:277
 msgid "Free!"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3424
+#: includes/class-incv-frontend.php:3434
 msgid "1 more unit"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3424
+#: includes/class-incv-frontend.php:3434
 msgid "to reach the next discount tier!"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3428
+#: includes/class-incv-frontend.php:3438
 msgid "🎉 You've reached the highest discount tier!"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3442
+#: includes/class-incv-frontend.php:3452
 #: templates/admin-storefront.php:286
 msgid "pcs ·"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3442
-#: includes/class-mmd-helpers.php:69
+#: includes/class-incv-frontend.php:3452
+#: includes/class-incv-helpers.php:184
 #: templates/admin-storefront.php:286
 #: assets/admin-script.js:184
 msgid "Free"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3460
+#: includes/class-incv-frontend.php:3470
 msgid "Discount on all products in the promotion"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3463
+#: includes/class-incv-frontend.php:3473
 msgid "* The discount applies to all matching products in the cart."
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3467
-#: templates/admin-rule-set-edit.php:2121
+#: includes/class-incv-frontend.php:3477
+#: templates/admin-rule-set-edit.php:2005
 msgid "the cheapest"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3467
-#: templates/admin-rule-set-edit.php:2121
+#: includes/class-incv-frontend.php:3477
+#: templates/admin-rule-set-edit.php:2005
 msgid "the most expensive"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3471
+#: includes/class-incv-frontend.php:3481
 msgid "• Buy"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3471
+#: includes/class-incv-frontend.php:3481
 msgid "items, get"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3471
+#: includes/class-incv-frontend.php:3481
 msgid "off the"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3474
+#: includes/class-incv-frontend.php:3484
 msgid "* You can mix different products. The discount applies to the item that is"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3540
+#: includes/class-incv-frontend.php:3550
 msgid "You saved"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:3698
-#: includes/class-mmd-frontend.php:3701
-#: templates/admin-rule-set-edit.php:1480
-#: templates/admin-rule-set-edit.php:1993
+#: includes/class-incv-frontend.php:3704
+#: includes/class-incv-frontend.php:3707
+#: templates/admin-rule-set-edit.php:1470
+#: templates/admin-rule-set-edit.php:1877
 msgid "Savings"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4190
+#: includes/class-incv-frontend.php:4196
 msgid "🔧 Debug info (admins only):"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4192
+#: includes/class-incv-frontend.php:4198
 msgid "Selection method:"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4193
+#: includes/class-incv-frontend.php:4199
 msgid "Apply to:"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4194
+#: includes/class-incv-frontend.php:4200
 msgid "Number of discount tiers:"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4196
+#: includes/class-incv-frontend.php:4202
 msgid "Products in cart:"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4210
+#: includes/class-incv-frontend.php:4216
 msgid "| Qty:"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4211
+#: includes/class-incv-frontend.php:4217
 msgid "| Price:"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4212
+#: includes/class-incv-frontend.php:4218
 msgid "Eligible:"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4212
+#: includes/class-incv-frontend.php:4218
 msgid "Yes ✓"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4212
+#: includes/class-incv-frontend.php:4218
 msgid "No ✗"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4218
+#: includes/class-incv-frontend.php:4224
 msgid "Attributes:"
 msgstr ""
 
-#: includes/class-mmd-frontend.php:4228
+#: includes/class-incv-frontend.php:4234
 msgid "Categories:"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:56
-#: includes/class-mmd-gift-rules.php:57
+#: includes/class-incv-gift-rules.php:49
+#: includes/class-incv-gift-rules.php:50
 #: templates/admin-gift-rules-list.php:36
 msgid "Gift management"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:65
-#: includes/class-mmd-gift-rules.php:66
+#: includes/class-incv-gift-rules.php:58
+#: includes/class-incv-gift-rules.php:59
 msgid "Gift design"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:192
-#: includes/class-mmd-product-gifts-v2.php:1661
-#: includes/widgets/gift-selection-widget.php:202
+#: includes/class-incv-gift-rules.php:185
+#: includes/class-incv-product-gifts-v2.php:1639
+#: includes/widgets/gift-selection-widget.php:203
 #: templates/admin-gift-styling.php:32
 #: templates/admin-gift-styling.php:326
 #: templates/admin-gift-styling.php:402
 msgid "🎁 Choose your gift!"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:193
-#: includes/class-mmd-product-gifts-v2.php:1662
+#: includes/class-incv-gift-rules.php:186
+#: includes/class-incv-product-gifts-v2.php:1640
 #: templates/admin-gift-styling.php:40
 msgid "Buy this product and get {gift_type} on {selection_type}:"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:194
-#: includes/class-mmd-product-gifts-v2.php:2989
+#: includes/class-incv-gift-rules.php:187
+#: includes/class-incv-product-gifts-v2.php:2978
 #: templates/admin-gift-styling.php:51
 #: templates/admin-storefront.php:258
 msgid "🎁 Gift"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:379
+#: includes/class-incv-gift-rules.php:373
 msgid "Untitled draft"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:538
+#: includes/class-incv-gift-rules.php:533
 msgid "Rest of the world -"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:600
-#: includes/class-mmd-product-gifts-v2.php:264
-#: includes/class-mmd-product-gifts-v2.php:3504
-#: includes/class-mmd-product-gifts-v2.php:3537
+#: includes/class-incv-gift-rules.php:597
+#: includes/class-incv-product-gifts-v2.php:261
+#: includes/class-incv-product-gifts-v2.php:3491
+#: includes/class-incv-product-gifts-v2.php:3524
 #: templates/admin-gift-rule-edit.php:18
 msgid "You have a gift! Add a product from the participating categories to get a discount"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:622
-#: includes/class-mmd-product-gifts-v2.php:5502
+#: includes/class-incv-gift-rules.php:619
+#: includes/class-incv-product-gifts-v2.php:5483
 #: templates/admin-gift-rule-edit.php:49
-#: templates/admin-gift-rule-edit.php:972
-#: templates/admin-gift-rule-edit.php:1931
+#: templates/admin-gift-rule-edit.php:966
+#: templates/admin-gift-rule-edit.php:1919
 msgid "View products"
 msgstr ""
 
-#: includes/class-mmd-gift-rules.php:628
-#: includes/class-mmd-product-gifts-v2.php:4361
-#: includes/class-mmd-product-gifts-v2.php:4470
+#: includes/class-incv-gift-rules.php:625
+#: includes/class-incv-product-gifts-v2.php:4348
+#: includes/class-incv-product-gifts-v2.php:4457
 #: templates/admin-gift-rule-edit.php:55
-#: templates/admin-gift-rule-edit.php:1098
-#: templates/admin-gift-rule-edit.php:1937
+#: templates/admin-gift-rule-edit.php:1092
+#: templates/admin-gift-rule-edit.php:1925
 msgid "💰 Buy in quantity and save!"
 msgstr ""
 
-#: includes/class-mmd-modules.php:110
+#: includes/class-incv-modules.php:110
 #: templates/admin-page.php:181
 #: templates/admin-rule-set-edit.php:452
-#: templates/admin-rule-set-edit.php:1637
-#: templates/admin-rule-set-edit.php:1761
+#: templates/admin-rule-set-edit.php:1520
+#: templates/admin-rule-set-edit.php:1644
 #: templates/admin-rule-sets.php:74
 msgid "Discount rules"
 msgstr ""
 
-#: includes/class-mmd-modules.php:112
+#: includes/class-incv-modules.php:112
 msgid "Gifts"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:214
+#: includes/class-incv-product-gifts-v2.php:211
 msgid "🎁 Gift and discounted product settings"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:299
+#: includes/class-incv-product-gifts-v2.php:275
 msgid "⚙️ Set up a gift or discounted product for this product"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:308
+#: includes/class-incv-product-gifts-v2.php:284
 msgid "Enable gifts/discounts for this product"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:310
+#: includes/class-incv-product-gifts-v2.php:286
 msgid "When a customer buys this product, they can choose a gift or a discounted product from the list you set"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:314
+#: includes/class-incv-product-gifts-v2.php:290
 msgid "Choose a benefit type"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:319
-#: includes/class-mmd-product-gifts-v2.php:1641
-#: includes/class-mmd-product-gifts-v2.php:3445
-#: includes/class-mmd-product-gifts-v2.php:3509
-#: includes/class-mmd-product-gifts-v2.php:3543
-#: includes/class-mmd-product-gifts-v2.php:3578
-#: includes/class-mmd-product-gifts-v2.php:4428
-#: includes/class-mmd-product-gifts-v2.php:4724
-#: includes/class-mmd-product-gifts-v2.php:5481
-#: includes/class-mmd-product-gifts.php:457
+#: includes/class-incv-product-gifts-v2.php:295
+#: includes/class-incv-product-gifts-v2.php:1619
+#: includes/class-incv-product-gifts-v2.php:3432
+#: includes/class-incv-product-gifts-v2.php:3496
+#: includes/class-incv-product-gifts-v2.php:3530
+#: includes/class-incv-product-gifts-v2.php:3565
+#: includes/class-incv-product-gifts-v2.php:4415
+#: includes/class-incv-product-gifts-v2.php:4709
+#: includes/class-incv-product-gifts-v2.php:5462
 #: includes/widgets/gift-notice-widget.php:308
 #: templates/admin-gift-rule-edit.php:349
-#: templates/admin-gift-rule-edit.php:1180
-#: templates/admin-gift-rule-edit.php:2132
+#: templates/admin-gift-rule-edit.php:1173
+#: templates/admin-gift-rule-edit.php:2120
 #: templates/admin-gift-rules-list.php:25
 msgid "Free gift"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:320
+#: includes/class-incv-product-gifts-v2.php:296
 msgid "The customer gets a product at no charge"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:325
-#: includes/class-mmd-product-gifts.php:109
+#: includes/class-incv-product-gifts-v2.php:301
 #: templates/admin-gift-rule-edit.php:358
-#: templates/admin-gift-rule-edit.php:1181
-#: templates/admin-gift-rule-edit.php:2132
+#: templates/admin-gift-rule-edit.php:1174
+#: templates/admin-gift-rule-edit.php:2120
 #: templates/admin-gift-rules-list.php:26
 msgid "Percentage discount"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:326
+#: includes/class-incv-product-gifts-v2.php:302
 msgid "A percentage off the product"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:331
+#: includes/class-incv-product-gifts-v2.php:307
 #: templates/admin-gift-rule-edit.php:367
-#: templates/admin-gift-rule-edit.php:2132
+#: templates/admin-gift-rule-edit.php:2120
 #: templates/admin-gift-rules-list.php:27
 msgid "Fixed discount"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:332
+#: includes/class-incv-product-gifts-v2.php:308
 msgid "A fixed amount in shekels"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:338
+#: includes/class-incv-product-gifts-v2.php:314
 msgid "Discount rate"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:340
+#: includes/class-incv-product-gifts-v2.php:316
 msgid "Enter a discount percentage (50 = 50%) or a fixed amount in shekels"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:345
+#: includes/class-incv-product-gifts-v2.php:321
 #: templates/admin-gift-rule-edit.php:388
 msgid "How the gift is given"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:350
+#: includes/class-incv-product-gifts-v2.php:326
 #: templates/admin-gift-rule-edit.php:396
 msgid "On the product page"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:351
+#: includes/class-incv-product-gifts-v2.php:327
 msgid "The customer chooses a gift on the product page"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:357
+#: includes/class-incv-product-gifts-v2.php:333
 #: templates/admin-gift-rule-edit.php:405
 msgid "Gift in the cart"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:358
+#: includes/class-incv-product-gifts-v2.php:334
 msgid "The customer adds a product from the store and the discount is applied automatically"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:366
+#: includes/class-incv-product-gifts-v2.php:342
 #: templates/admin-gift-rule-edit.php:416
-#: templates/admin-rule-set-edit.php:1444
-#: templates/admin-rule-set-edit.php:1821
+#: templates/admin-rule-set-edit.php:1434
+#: templates/admin-rule-set-edit.php:1704
 #: templates/admin-storefront.php:328
 msgid "Cart message"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:368
+#: includes/class-incv-product-gifts-v2.php:344
 msgid "A message shown to the customer in the cart when they qualify for a gift"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:373
+#: includes/class-incv-product-gifts-v2.php:349
 #: templates/admin-gift-rule-edit.php:471
 msgid "Gift product source"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:378
+#: includes/class-incv-product-gifts-v2.php:354
 #: templates/admin-gift-rule-edit.php:475
-#: templates/admin-gift-rule-edit.php:2135
+#: templates/admin-gift-rule-edit.php:2123
 #: templates/admin-gift-rules-list.php:19
 msgid "Specific products"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:379
+#: includes/class-incv-product-gifts-v2.php:355
 msgid "Choose specific products as gifts"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:386
+#: includes/class-incv-product-gifts-v2.php:362
 msgid "The customer chooses from categories"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:394
+#: includes/class-incv-product-gifts-v2.php:370
 msgid "Choose products available as a gift/discount"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:407
+#: includes/class-incv-product-gifts-v2.php:383
 msgid "For variable products, the customer chooses the variation they want."
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:412
+#: includes/class-incv-product-gifts-v2.php:388
 msgid "🏷️ Gift categories"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:422
+#: includes/class-incv-product-gifts-v2.php:398
 msgid "No product categories available"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:425
+#: includes/class-incv-product-gifts-v2.php:401
 msgid "The customer can choose one product from all products in these categories"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:429
+#: includes/class-incv-product-gifts-v2.php:405
 msgid "🔍 Filter by attribute (optional):"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:431
+#: includes/class-incv-product-gifts-v2.php:407
 #: templates/admin-gift-rule-edit.php:532
 msgid "-- No attribute filter --"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:438
+#: includes/class-incv-product-gifts-v2.php:414
 msgid "Choose an attribute to filter the gift products by (for example: weight, size)"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:442
+#: includes/class-incv-product-gifts-v2.php:418
 msgid "Attribute values for gifts:"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:446
+#: includes/class-incv-product-gifts-v2.php:422
 #: templates/admin-gift-rule-edit.php:551
 msgid "Choose which attribute values are available as gifts (for example: only 100 g)"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:452
+#: includes/class-incv-product-gifts-v2.php:428
 msgid "🚫 Exclude products from gifts"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:453
+#: includes/class-incv-product-gifts-v2.php:429
 #: templates/admin-gift-rule-edit.php:622
 msgid "Set which products are not available as gifts even though they are in the selected categories"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:456
+#: includes/class-incv-product-gifts-v2.php:432
 msgid "Exclude categories:"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:470
+#: includes/class-incv-product-gifts-v2.php:446
 msgid "Exclude tags:"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:480
+#: includes/class-incv-product-gifts-v2.php:456
 #: templates/admin-gift-rule-edit.php:655
 msgid "No product tags available"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:486
+#: includes/class-incv-product-gifts-v2.php:462
 msgid "Exclude specific products:"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:501
+#: includes/class-incv-product-gifts-v2.php:477
 #: templates/admin-gift-rule-edit.php:681
 msgid "Search and select specific products or variations that will not be available as gifts"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:506
-#: templates/admin-gift-rule-edit.php:862
+#: includes/class-incv-product-gifts-v2.php:482
+#: templates/admin-gift-rule-edit.php:856
 msgid "Selection type"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:511
+#: includes/class-incv-product-gifts-v2.php:487
 msgid "Single product selection"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:512
+#: includes/class-incv-product-gifts-v2.php:488
 msgid "The customer can choose only one product"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:518
+#: includes/class-incv-product-gifts-v2.php:494
 msgid "Multiple selection"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:519
+#: includes/class-incv-product-gifts-v2.php:495
 msgid "The customer can choose several products"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:523
+#: includes/class-incv-product-gifts-v2.php:499
 msgid "Choose whether the customer can pick only one product or several products from the list"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:529
-#: templates/admin-gift-rule-edit.php:875
+#: includes/class-incv-product-gifts-v2.php:505
+#: templates/admin-gift-rule-edit.php:869
 msgid "Allow quantity selection"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:531
+#: includes/class-incv-product-gifts-v2.php:507
 msgid "When enabled, the customer can choose a quantity for each gift product"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:535
-#: templates/admin-gift-rule-edit.php:888
+#: includes/class-incv-product-gifts-v2.php:511
+#: templates/admin-gift-rule-edit.php:882
 msgid "Maximum quantity"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:537
+#: includes/class-incv-product-gifts-v2.php:513
 msgid "The maximum quantity the customer can choose for each gift product (1-100)"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:543
-#: includes/class-mmd-product-gifts.php:140
+#: includes/class-incv-product-gifts-v2.php:519
 msgid "Limit to specific variations of the gift products"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:545
+#: includes/class-incv-product-gifts-v2.php:521
 msgid "Tick this option to choose manually which variations are available as gifts. If unticked, all variations are available."
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:549
+#: includes/class-incv-product-gifts-v2.php:525
 msgid "🎯 Choose allowed variations"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:551
-#: includes/class-mmd-product-gifts-v2.php:743
-#: includes/class-mmd-product-gifts.php:147
-#: includes/class-mmd-product-gifts.php:182
+#: includes/class-incv-product-gifts-v2.php:527
+#: includes/class-incv-product-gifts-v2.php:719
 msgid "Select a variable product above to show its variations"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:556
+#: includes/class-incv-product-gifts-v2.php:532
 msgid "💡 How does it work?"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:558
+#: includes/class-incv-product-gifts-v2.php:534
 msgid "The customer sees the available products on the product page"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:559
+#: includes/class-incv-product-gifts-v2.php:535
 msgid "They choose one product, and if it is variable, the variation they want"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:560
+#: includes/class-incv-product-gifts-v2.php:536
 msgid "The chosen product is added to the cart automatically with the configured discount"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:561
+#: includes/class-incv-product-gifts-v2.php:537
 msgid "The gift is shown in the cart, the mini cart and the checkout page"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:698
+#: includes/class-incv-product-gifts-v2.php:674
 msgid "Search products to exclude..."
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:757
+#: includes/class-incv-product-gifts-v2.php:733
 msgid "Loading variations..."
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:763
-#: templates/admin-gift-rule-edit.php:2044
+#: includes/class-incv-product-gifts-v2.php:739
+#: templates/admin-gift-rule-edit.php:2032
 #: templates/admin-gift-styling.php:499
-#: templates/admin-rule-set-edit.php:1965
+#: templates/admin-rule-set-edit.php:1849
 msgid "Error:"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:767
+#: includes/class-incv-product-gifts-v2.php:743
 msgid "Error loading variations"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:906
-#: includes/class-mmd-product-gifts.php:292
+#: includes/class-incv-product-gifts-v2.php:883
 msgid "Search products..."
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1648
+#: includes/class-incv-product-gifts-v2.php:1626
 msgid "one or more products of your choice"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1648
+#: includes/class-incv-product-gifts-v2.php:1626
 msgid "a product of your choice"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1651
+#: includes/class-incv-product-gifts-v2.php:1629
 msgctxt "gift box subtitle"
 msgid "a free gift"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1691
-#: includes/class-mmd-product-gifts-v2.php:2049
+#: includes/class-incv-product-gifts-v2.php:1669
+#: includes/class-incv-product-gifts-v2.php:2027
 msgid "&laquo; Previous"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1692
-#: includes/class-mmd-product-gifts-v2.php:2050
+#: includes/class-incv-product-gifts-v2.php:1670
+#: includes/class-incv-product-gifts-v2.php:2028
 msgid "Page"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1692
-#: includes/class-mmd-product-gifts-v2.php:2050
-#: templates/admin-gift-rule-edit.php:2179
+#: includes/class-incv-product-gifts-v2.php:1670
+#: includes/class-incv-product-gifts-v2.php:2028
+#: templates/admin-gift-rule-edit.php:2167
 #: templates/admin-rule-set-edit.php:782
-#: templates/admin-rule-set-edit.php:1855
-#: assets/gift-selection.js:882
-#: assets/gift-selection.js:925
+#: templates/admin-rule-set-edit.php:1738
+#: assets/gift-selection.js:884
+#: assets/gift-selection.js:927
 msgid "of"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1693
-#: includes/class-mmd-product-gifts-v2.php:2051
+#: includes/class-incv-product-gifts-v2.php:1671
+#: includes/class-incv-product-gifts-v2.php:2029
 msgid "Next &raquo;"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1874
-#: includes/class-mmd-product-gifts-v2.php:1934
-#: includes/class-mmd-product-gifts-v2.php:2012
+#: includes/class-incv-product-gifts-v2.php:1852
+#: includes/class-incv-product-gifts-v2.php:1912
+#: includes/class-incv-product-gifts-v2.php:1990
 msgid "Decrease quantity"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1885
-#: includes/class-mmd-product-gifts-v2.php:1944
-#: includes/class-mmd-product-gifts-v2.php:2021
+#: includes/class-incv-product-gifts-v2.php:1863
+#: includes/class-incv-product-gifts-v2.php:1922
+#: includes/class-incv-product-gifts-v2.php:1999
 msgid "Increase quantity"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1889
-#: includes/class-mmd-product-gifts-v2.php:1950
-#: includes/class-mmd-product-gifts-v2.php:2027
+#: includes/class-incv-product-gifts-v2.php:1867
+#: includes/class-incv-product-gifts-v2.php:1928
+#: includes/class-incv-product-gifts-v2.php:2005
 msgid "Choose quantity"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:1921
-#: includes/class-mmd-product-gifts-v2.php:1956
-#: includes/class-mmd-product-gifts-v2.php:2031
-#: includes/class-mmd-product-gifts-v2.php:2035
-#: includes/class-mmd-product-gifts-v2.php:5022
-#: templates/admin-gift-rule-edit.php:1141
+#: includes/class-incv-product-gifts-v2.php:1899
+#: includes/class-incv-product-gifts-v2.php:1934
+#: includes/class-incv-product-gifts-v2.php:2009
+#: includes/class-incv-product-gifts-v2.php:2013
+#: includes/class-incv-product-gifts-v2.php:5007
+#: templates/admin-gift-rule-edit.php:1135
 #: templates/admin-gift-rules-list.php:152
 #: templates/admin-gift-styling.php:330
 #: templates/admin-gift-styling.php:334
 #: templates/admin-storefront.php:317
-#: assets/gift-selection.js:327
-#: assets/gift-selection.js:332
-#: assets/gift-selection.js:361
-#: assets/gift-selection.js:407
-#: assets/gift-selection.js:424
-#: assets/gift-selection.js:440
-#: assets/gift-selection.js:457
-#: assets/gift-selection.js:755
+#: assets/gift-selection.js:329
+#: assets/gift-selection.js:334
+#: assets/gift-selection.js:363
+#: assets/gift-selection.js:409
+#: assets/gift-selection.js:426
+#: assets/gift-selection.js:442
+#: assets/gift-selection.js:459
+#: assets/gift-selection.js:757
 msgid "Choose"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:2957
-#: includes/class-mmd-product-gifts-v2.php:2995
-#: includes/class-mmd-product-gifts.php:489
+#: includes/class-incv-product-gifts-v2.php:2946
+#: includes/class-incv-product-gifts-v2.php:2984
 msgid "🎁 Free gift"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:2959
-#: includes/class-mmd-product-gifts.php:491
-#: includes/class-mmd-product-gifts.php:493
+#: includes/class-incv-product-gifts-v2.php:2948
 msgid "🎁 Discounted product"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:2997
-#: includes/class-mmd-product-gifts-v2.php:2999
+#: includes/class-incv-product-gifts-v2.php:2986
+#: includes/class-incv-product-gifts-v2.php:2988
 msgid "🎁 Discount"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:3011
+#: includes/class-incv-product-gifts-v2.php:3000
 msgid "Switch gift"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:3026
-#: includes/class-mmd-product-gifts.php:512
+#: includes/class-incv-product-gifts-v2.php:3015
 msgid "This product is a gift and cannot be removed manually"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:3456
-#: includes/class-mmd-product-gifts-v2.php:4734
+#: includes/class-incv-product-gifts-v2.php:3443
+#: includes/class-incv-product-gifts-v2.php:4719
 msgid "✅ Your gift was added to the cart! ("
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:3589
+#: includes/class-incv-product-gifts-v2.php:3576
 msgid "Gift added!"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:3664
+#: includes/class-incv-product-gifts-v2.php:3651
 msgid "You have a gift! Choose a product"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:3817
-#: includes/class-mmd-product-gifts-v2.php:3851
+#: includes/class-incv-product-gifts-v2.php:3804
+#: includes/class-incv-product-gifts-v2.php:3838
 msgid "You have a gift! Add a product from the participating categories"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4373
+#: includes/class-incv-product-gifts-v2.php:4360
 msgid "on all products"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4375
+#: includes/class-incv-product-gifts-v2.php:4362
 msgid "on the cheapest one"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4377
+#: includes/class-incv-product-gifts-v2.php:4364
 msgid "on the most expensive"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4392
-#: templates/admin-gift-rule-edit.php:1226
+#: includes/class-incv-product-gifts-v2.php:4379
+#: templates/admin-gift-rule-edit.php:1219
 #: templates/admin-page.php:194
 #: templates/admin-rule-set-edit.php:500
-#: templates/admin-rule-set-edit.php:1477
-#: templates/admin-rule-set-edit.php:1990
-#: templates/admin-rule-set-edit.php:2396
-#: templates/admin-rule-set-edit.php:2432
-#: templates/admin-rule-set-edit.php:2662
+#: templates/admin-rule-set-edit.php:1467
+#: templates/admin-rule-set-edit.php:1874
+#: templates/admin-rule-set-edit.php:2280
+#: templates/admin-rule-set-edit.php:2316
+#: templates/admin-rule-set-edit.php:2546
 #: assets/admin-script.js:32
 msgid "Quantity"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4394
+#: includes/class-incv-product-gifts-v2.php:4381
 msgctxt "label"
 msgid "Applies to"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4437
+#: includes/class-incv-product-gifts-v2.php:4424
 msgid "🎁 Plus:"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4437
+#: includes/class-incv-product-gifts-v2.php:4424
 msgid "on a selected product!"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4505
+#: includes/class-incv-product-gifts-v2.php:4492
 msgid "✅ Active discount:"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4505
+#: includes/class-incv-product-gifts-v2.php:4492
 msgid "items in cart)"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4511
+#: includes/class-incv-product-gifts-v2.php:4498
 msgid "⬆️ Add"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4511
+#: includes/class-incv-product-gifts-v2.php:4498
 msgid "more items to get"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4511
+#: includes/class-incv-product-gifts-v2.php:4498
 msgid "off!"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4735
+#: includes/class-incv-product-gifts-v2.php:4720
 msgctxt "picker"
 msgid "Switch gift"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4756
+#: includes/class-incv-product-gifts-v2.php:4741
 msgid "Choose a gift"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4780
+#: includes/class-incv-product-gifts-v2.php:4765
 msgid "Choose one or more:"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:4780
+#: includes/class-incv-product-gifts-v2.php:4765
 msgid "Choose one product:"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5041
+#: includes/class-incv-product-gifts-v2.php:5026
 #: includes/widgets/cart-gift-selection-widget.php:66
 msgid "Add to cart"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5117
-#: includes/class-mmd-product-gifts-v2.php:5121
+#: includes/class-incv-product-gifts-v2.php:5104
+#: includes/class-incv-product-gifts-v2.php:5108
 msgid "The selected variation is not available"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5156
+#: includes/class-incv-product-gifts-v2.php:5140
 msgid "Parent product not found"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5264
+#: includes/class-incv-product-gifts-v2.php:5248
 msgid "The product is not available"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5273
+#: includes/class-incv-product-gifts-v2.php:5257
 msgctxt "server"
 msgid "Error adding the gift to the cart"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5309
+#: includes/class-incv-product-gifts-v2.php:5297
 msgid "The gift was added to the cart!"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5346
+#: includes/class-incv-product-gifts-v2.php:5334
 msgid "No gift to remove"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5350
+#: includes/class-incv-product-gifts-v2.php:5338
 msgid "Gift removed"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5518
+#: includes/class-incv-product-gifts-v2.php:5499
 msgid "Selected products come with a free gift!"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5523
+#: includes/class-incv-product-gifts-v2.php:5504
 #: includes/widgets/cart-gift-selection-widget.php:30
 #: includes/widgets/gift-notice-widget.php:44
 #: includes/widgets/gift-selection-widget.php:31
@@ -1457,145 +1442,82 @@ msgstr ""
 msgid "Gift"
 msgstr ""
 
-#: includes/class-mmd-product-gifts-v2.php:5526
+#: includes/class-incv-product-gifts-v2.php:5507
 msgid "Buy now"
 msgstr ""
 
-#: includes/class-mmd-product-gifts.php:46
-msgid "🎁 Gifts/discounts for this product"
+#: includes/class-incv-rule-banner-elementor-widget.php:22
+msgid "Incentiv Rule Banner"
 msgstr ""
 
-#: includes/class-mmd-product-gifts.php:100
-msgctxt "classic"
-msgid "Enable gifts/discounts for this product"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:102
-msgid "When a customer buys this product, the products selected below are added automatically"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:106
-msgid "Benefit type"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:108
-msgid "Free product (gift)"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:110
-#: templates/admin-documentation.php:181
-#: templates/admin-gift-rule-edit.php:368
-msgid "Fixed amount discount"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:115
-msgctxt "classic"
-msgid "Discount rate"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:117
-msgid "Discount percentage (for example: 50 for 50%) or a fixed amount in shekels"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:121
-msgid "Choose products for the benefit"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:134
-msgid "Type to search for products. You can choose several products."
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:145
-msgid "Choose allowed variations"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:474
-msgid "🎁 A special gift!"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:475
-#: includes/widgets/gift-notice-widget.php:323
-#: includes/widgets/gift-notice-widget.php:356
-msgid "Buy this product and get"
-msgstr ""
-
-#: includes/class-mmd-product-gifts.php:475
-#: includes/widgets/gift-notice-widget.php:323
-msgid "on:"
-msgstr ""
-
-#: includes/class-mmd-rule-banner-elementor-widget.php:22
-msgid "MMD Rule Banner"
-msgstr ""
-
-#: includes/class-mmd-rule-banner-elementor-widget.php:40
+#: includes/class-incv-rule-banner-elementor-widget.php:40
 msgid "Banner"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:45
+#: includes/class-incv-rule-banner-elementor-widget.php:45
 msgid "-- First matching rule --"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:57
+#: includes/class-incv-rule-banner-elementor-widget.php:57
 #: templates/admin-dashboard.php:255
 msgid "Rule"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:61
+#: includes/class-incv-rule-banner-elementor-widget.php:61
 msgid "Leave blank to show the first rule that matches the current product."
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:65
+#: includes/class-incv-rule-banner-elementor-widget.php:65
 msgid "Product ID (optional)"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:68
+#: includes/class-incv-rule-banner-elementor-widget.php:68
 msgid "Override the current product. Leave blank to use the product on the page."
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:72
+#: includes/class-incv-rule-banner-elementor-widget.php:72
 msgid "Editor placeholder"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:78
+#: includes/class-incv-rule-banner-elementor-widget.php:78
 msgid "Show placeholder in Elementor editor"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:81
+#: includes/class-incv-rule-banner-elementor-widget.php:81
 msgid "Useful when previewing the widget on a page that has no qualifying product."
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:88
+#: includes/class-incv-rule-banner-elementor-widget.php:88
 #: includes/widgets/gift-notice-widget.php:118
 msgid "Style"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:93
+#: includes/class-incv-rule-banner-elementor-widget.php:93
 msgid "Alignment"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:96
+#: includes/class-incv-rule-banner-elementor-widget.php:96
 msgid "Left"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:97
+#: includes/class-incv-rule-banner-elementor-widget.php:97
 msgid "Center"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:98
+#: includes/class-incv-rule-banner-elementor-widget.php:98
 msgid "Right"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:107
+#: includes/class-incv-rule-banner-elementor-widget.php:107
 msgid "Max Width"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:121
+#: includes/class-incv-rule-banner-elementor-widget.php:121
 msgid "Border Radius"
 msgstr ""
 
-#: includes/class-mmd-rule-banner-elementor-widget.php:148
-msgid "MMD Rule Banner — no matching rule has a banner for this context. Configure a banner image on a rule, or assign this widget to a product page."
+#: includes/class-incv-rule-banner-elementor-widget.php:148
+msgid "Incentiv Rule Banner — no matching rule has a banner for this context. Configure a banner image on a rule, or assign this widget to a product page."
 msgstr ""
 
 #: includes/widgets/cart-gift-selection-widget.php:18
@@ -1664,7 +1586,7 @@ msgstr ""
 #: includes/widgets/gift-notice-widget.php:76
 #: includes/widgets/gift-notice-widget.php:88
 #: includes/widgets/gift-selection-widget.php:65
-#: templates/admin-rule-set-edit.php:1818
+#: templates/admin-rule-set-edit.php:1701
 msgid "No"
 msgstr ""
 
@@ -1751,6 +1673,15 @@ msgstr ""
 msgid "This product has no gift set up. Enable gifts on the product edit page."
 msgstr ""
 
+#: includes/widgets/gift-notice-widget.php:323
+#: includes/widgets/gift-notice-widget.php:356
+msgid "Buy this product and get"
+msgstr ""
+
+#: includes/widgets/gift-notice-widget.php:323
+msgid "on:"
+msgstr ""
+
 #: includes/widgets/gift-notice-widget.php:391
 msgid "Buy this product and get a free gift on the selected products!"
 msgstr ""
@@ -1807,7 +1738,7 @@ msgstr ""
 msgid "The interactive gift selection will be shown here when the customer qualifies for a gift"
 msgstr ""
 
-#: includes/widgets/gift-selection-widget.php:205
+#: includes/widgets/gift-selection-widget.php:206
 msgid "The interactive gift selection will be shown here"
 msgstr ""
 
@@ -2169,9 +2100,9 @@ msgstr ""
 #: templates/admin-documentation.php:168
 #: templates/admin-page.php:204
 #: templates/admin-rule-set-edit.php:510
-#: templates/admin-rule-set-edit.php:2402
-#: templates/admin-rule-set-edit.php:2434
-#: templates/admin-rule-set-edit.php:2664
+#: templates/admin-rule-set-edit.php:2286
+#: templates/admin-rule-set-edit.php:2318
+#: templates/admin-rule-set-edit.php:2548
 #: assets/admin-script.js:36
 #: assets/admin-script.js:179
 #: assets/admin-script.js:265
@@ -2183,14 +2114,14 @@ msgid "Example"
 msgstr ""
 
 #: templates/admin-documentation.php:175
-#: templates/admin-gift-rule-edit.php:1059
-#: templates/admin-gift-rule-edit.php:1552
-#: templates/admin-gift-rule-edit.php:1602
+#: templates/admin-gift-rule-edit.php:1053
+#: templates/admin-gift-rule-edit.php:1540
+#: templates/admin-gift-rule-edit.php:1590
 #: templates/admin-page.php:206
 #: templates/admin-rule-set-edit.php:512
-#: templates/admin-rule-set-edit.php:2404
-#: templates/admin-rule-set-edit.php:2434
-#: templates/admin-rule-set-edit.php:2664
+#: templates/admin-rule-set-edit.php:2288
+#: templates/admin-rule-set-edit.php:2318
+#: templates/admin-rule-set-edit.php:2548
 #: assets/admin-script.js:38
 #: assets/flow-builder.js:98
 msgid "Percentage (%)"
@@ -2208,6 +2139,11 @@ msgstr ""
 msgid "Fixed amount"
 msgstr ""
 
+#: templates/admin-documentation.php:181
+#: templates/admin-gift-rule-edit.php:368
+msgid "Fixed amount discount"
+msgstr ""
+
 #: templates/admin-documentation.php:182
 msgid "20 ₪ off = an item at 100 ₪ becomes 80 ₪"
 msgstr ""
@@ -2222,7 +2158,7 @@ msgstr ""
 
 #: templates/admin-documentation.php:191
 #: templates/admin-gift-rule-edit.php:794
-#: templates/admin-rule-set-edit.php:1818
+#: templates/admin-rule-set-edit.php:1701
 msgid "Coupon requirement"
 msgstr ""
 
@@ -2233,8 +2169,8 @@ msgstr ""
 #: templates/admin-documentation.php:194
 #: templates/admin-gift-rule-edit.php:733
 #: templates/admin-rule-set-edit.php:686
-#: templates/admin-rule-set-edit.php:1662
-#: templates/admin-rule-set-edit.php:1763
+#: templates/admin-rule-set-edit.php:1545
+#: templates/admin-rule-set-edit.php:1646
 msgid "Cart total conditions"
 msgstr ""
 
@@ -2251,8 +2187,8 @@ msgid "You can limit a discount to certain roles (for example, wholesale custome
 msgstr ""
 
 #: templates/admin-documentation.php:200
-#: templates/admin-gift-rule-edit.php:835
-#: templates/admin-rule-set-edit.php:1820
+#: templates/admin-gift-rule-edit.php:829
+#: templates/admin-rule-set-edit.php:1703
 msgid "Scheduling"
 msgstr ""
 
@@ -2262,8 +2198,8 @@ msgstr ""
 
 #: templates/admin-documentation.php:203
 #: templates/admin-rule-set-edit.php:887
-#: templates/admin-rule-set-edit.php:1677
-#: templates/admin-rule-set-edit.php:1763
+#: templates/admin-rule-set-edit.php:1560
+#: templates/admin-rule-set-edit.php:1646
 msgid "Usage limits"
 msgstr ""
 
@@ -2273,8 +2209,8 @@ msgstr ""
 
 #: templates/admin-documentation.php:206
 #: templates/admin-rule-set-edit.php:667
-#: templates/admin-rule-set-edit.php:1657
-#: templates/admin-rule-set-edit.php:1763
+#: templates/admin-rule-set-edit.php:1540
+#: templates/admin-rule-set-edit.php:1646
 msgid "Shipping method condition"
 msgstr ""
 
@@ -2383,28 +2319,28 @@ msgid "No flows yet. Create your first flow in the builder below, or start from 
 msgstr ""
 
 #: templates/admin-flows.php:48
-#: templates/admin-gift-rule-edit.php:2139
+#: templates/admin-gift-rule-edit.php:2127
 #: templates/admin-gift-rules-list.php:100
-#: templates/admin-rule-set-edit.php:1406
-#: templates/admin-rule-set-edit.php:1813
+#: templates/admin-rule-set-edit.php:1396
+#: templates/admin-rule-set-edit.php:1696
 #: templates/admin-rule-sets.php:61
-#: assets/admin-ui.js:181
+#: assets/admin-ui.js:196
 msgid "Active"
 msgstr ""
 
 #: templates/admin-flows.php:50
-#: templates/admin-gift-rule-edit.php:2139
+#: templates/admin-gift-rule-edit.php:2127
 #: templates/admin-gift-rules-list.php:102
-#: templates/admin-rule-set-edit.php:1813
+#: templates/admin-rule-set-edit.php:1696
 #: templates/admin-rule-sets.php:63
-#: assets/admin-ui.js:181
+#: assets/admin-ui.js:196
 msgid "Disabled"
 msgstr ""
 
 #: templates/admin-flows.php:54
-#: templates/admin-gift-rule-edit.php:2153
+#: templates/admin-gift-rule-edit.php:2141
 #: templates/admin-gift-rules-list.php:105
-#: templates/admin-rule-set-edit.php:1829
+#: templates/admin-rule-set-edit.php:1712
 #: templates/admin-rule-sets.php:198
 msgid "Edit"
 msgstr ""
@@ -2450,7 +2386,7 @@ msgid "Product quantity"
 msgstr ""
 
 #: templates/admin-flows.php:96
-#: templates/admin-rule-set-edit.php:1819
+#: templates/admin-rule-set-edit.php:1702
 #: assets/flow-builder.js:18
 msgid "Cart total"
 msgstr ""
@@ -2494,8 +2430,8 @@ msgid "Step settings"
 msgstr ""
 
 #: templates/admin-flows.php:123
-#: templates/admin-rule-set-edit.php:1467
-#: templates/admin-rule-set-edit.php:1506
+#: templates/admin-rule-set-edit.php:1457
+#: templates/admin-rule-set-edit.php:1496
 #: templates/admin-rule-sets.php:242
 msgid "Close"
 msgstr ""
@@ -2518,7 +2454,7 @@ msgid "Back to list"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:79
-#: templates/admin-gift-rule-edit.php:1136
+#: templates/admin-gift-rule-edit.php:1130
 #: templates/admin-gift-rules-list.php:47
 msgid "New gift rule"
 msgstr ""
@@ -2535,10 +2471,10 @@ msgid "🎁 Choose your gift!"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:109
-#: templates/admin-gift-rule-edit.php:2100
+#: templates/admin-gift-rule-edit.php:2088
 #: templates/admin-rule-set-edit.php:130
-#: templates/admin-rule-set-edit.php:1627
-#: templates/admin-rule-set-edit.php:1759
+#: templates/admin-rule-set-edit.php:1510
+#: templates/admin-rule-set-edit.php:1642
 msgid "Basic settings"
 msgstr ""
 
@@ -2567,18 +2503,18 @@ msgid "If enabled, this rule overrides the gift settings of individual products"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:152
-#: templates/admin-gift-rule-edit.php:2100
+#: templates/admin-gift-rule-edit.php:2088
 #: templates/admin-page.php:50
 #: templates/admin-rule-set-edit.php:229
-#: templates/admin-rule-set-edit.php:1632
-#: templates/admin-rule-set-edit.php:1759
+#: templates/admin-rule-set-edit.php:1515
+#: templates/admin-rule-set-edit.php:1642
 msgid "Product selection"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:157
 #: templates/admin-page.php:55
 #: templates/admin-rule-set-edit.php:234
-#: templates/admin-rule-set-edit.php:1815
+#: templates/admin-rule-set-edit.php:1698
 #: templates/admin-rule-sets.php:118
 msgid "Selection method"
 msgstr ""
@@ -2591,7 +2527,7 @@ msgstr ""
 #: templates/admin-gift-rules-list.php:20
 #: templates/admin-page.php:71
 #: templates/admin-rule-set-edit.php:250
-#: templates/admin-rule-set-edit.php:1816
+#: templates/admin-rule-set-edit.php:1699
 #: assets/admin-script.js:142
 #: assets/flow-builder.js:112
 msgid "Categories"
@@ -2652,7 +2588,7 @@ msgstr ""
 #: templates/admin-gift-rule-edit.php:288
 #: templates/admin-gift-rule-edit.php:292
 #: templates/admin-gift-rule-edit.php:569
-#: templates/admin-gift-rule-edit.php:1771
+#: templates/admin-gift-rule-edit.php:1759
 #: templates/admin-page.php:141
 #: templates/admin-rule-set-edit.php:412
 #: assets/admin-script.js:144
@@ -2661,7 +2597,7 @@ msgstr ""
 
 #: templates/admin-gift-rule-edit.php:296
 #: templates/admin-gift-rule-edit.php:571
-#: templates/admin-gift-rule-edit.php:1765
+#: templates/admin-gift-rule-edit.php:1753
 msgid "-- Choose an attribute --"
 msgstr ""
 
@@ -2686,12 +2622,12 @@ msgid "Choose values that are not eligible for gifts"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:336
-#: templates/admin-gift-rule-edit.php:2101
+#: templates/admin-gift-rule-edit.php:2089
 msgid "Gift settings"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:341
-#: templates/admin-gift-rule-edit.php:1224
+#: templates/admin-gift-rule-edit.php:1217
 msgctxt "summary"
 msgid "Gift type"
 msgstr ""
@@ -2710,7 +2646,7 @@ msgid "Discount amount"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:382
-#: templates/admin-gift-rule-edit.php:1473
+#: templates/admin-gift-rule-edit.php:1461
 msgid "Enter a discount percentage (0-100)"
 msgstr ""
 
@@ -2775,8 +2711,8 @@ msgid "A gift for each qualifying product"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:461
-#: templates/admin-gift-rule-edit.php:2146
-#: templates/admin-rule-set-edit.php:1819
+#: templates/admin-gift-rule-edit.php:2134
+#: templates/admin-rule-set-edit.php:1702
 msgid "Unlimited"
 msgstr ""
 
@@ -2822,21 +2758,21 @@ msgid "Additional filter attributes"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:580
-#: templates/admin-gift-rule-edit.php:1773
+#: templates/admin-gift-rule-edit.php:1761
 msgid "Values"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:586
-#: templates/admin-gift-rule-edit.php:1064
-#: templates/admin-gift-rule-edit.php:1554
-#: templates/admin-gift-rule-edit.php:1604
-#: templates/admin-gift-rule-edit.php:1775
+#: templates/admin-gift-rule-edit.php:1058
+#: templates/admin-gift-rule-edit.php:1542
+#: templates/admin-gift-rule-edit.php:1592
+#: templates/admin-gift-rule-edit.php:1763
 #: templates/admin-page.php:211
 #: templates/admin-rule-set-edit.php:517
-#: templates/admin-rule-set-edit.php:1994
-#: templates/admin-rule-set-edit.php:2407
-#: templates/admin-rule-set-edit.php:2435
-#: templates/admin-rule-set-edit.php:2665
+#: templates/admin-rule-set-edit.php:1878
+#: templates/admin-rule-set-edit.php:2291
+#: templates/admin-rule-set-edit.php:2319
+#: templates/admin-rule-set-edit.php:2549
 #: assets/admin-script.js:40
 #: assets/flow-builder.js:158
 msgid "Remove"
@@ -2888,8 +2824,8 @@ msgstr ""
 
 #: templates/admin-gift-rule-edit.php:689
 #: templates/admin-rule-set-edit.php:641
-#: templates/admin-rule-set-edit.php:1652
-#: templates/admin-rule-set-edit.php:1765
+#: templates/admin-rule-set-edit.php:1535
+#: templates/admin-rule-set-edit.php:1648
 msgid "Custom messages"
 msgstr ""
 
@@ -2921,9 +2857,9 @@ msgid "Limit to a shipping method"
 msgstr ""
 
 #: templates/admin-gift-rule-edit.php:722
-#: templates/admin-gift-rule-edit.php:1428
+#: templates/admin-gift-rule-edit.php:1416
 #: templates/admin-rule-set-edit.php:676
-#: templates/admin-rule-set-edit.php:2350
+#: templates/admin-rule-set-edit.php:2234
 msgid "No limit - all shipping methods"
 msgstr ""
 
@@ -2964,8 +2900,8 @@ msgstr ""
 
 #: templates/admin-gift-rule-edit.php:767
 #: templates/admin-rule-set-edit.php:721
-#: templates/admin-rule-set-edit.php:1667
-#: templates/admin-rule-set-edit.php:1763
+#: templates/admin-rule-set-edit.php:1550
+#: templates/admin-rule-set-edit.php:1646
 msgid "User role conditions"
 msgstr ""
 
@@ -2995,607 +2931,607 @@ msgstr ""
 msgid "Separate the coupons with commas. The gift is shown if at least one of the coupons is applied."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:839
+#: templates/admin-gift-rule-edit.php:833
 msgid "Start date"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:843
+#: templates/admin-gift-rule-edit.php:837
 msgid "The date and time when the gift becomes available. Leave empty to start immediately."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:848
+#: templates/admin-gift-rule-edit.php:842
 msgid "End date"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:852
+#: templates/admin-gift-rule-edit.php:846
 msgid "The date and time when the gift stops being available. Leave empty for no limit."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:866
+#: templates/admin-gift-rule-edit.php:860
 msgid "Choose one gift"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:867
+#: templates/admin-gift-rule-edit.php:861
 msgid "Choose several gifts"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:869
+#: templates/admin-gift-rule-edit.php:863
 msgid "Whether the customer can choose one gift or several gifts"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:882
+#: templates/admin-gift-rule-edit.php:876
 msgid "Let customers choose how many units of each gift"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:892
+#: templates/admin-gift-rule-edit.php:886
 msgid "Maximum quantity per gift (1-100)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:898
+#: templates/admin-gift-rule-edit.php:892
 msgid "Total gifts allowed"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:902
+#: templates/admin-gift-rule-edit.php:896
 msgid "Total gift units allowed (0 = unlimited; otherwise exactly this number must be chosen)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:910
-#: templates/admin-gift-rule-edit.php:2101
+#: templates/admin-gift-rule-edit.php:904
+#: templates/admin-gift-rule-edit.php:2089
 msgid "Default variations"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:911
+#: templates/admin-gift-rule-edit.php:905
 msgid "Set a default variation for each variable product. The customer can change the selection."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:917
-#: templates/admin-gift-rule-edit.php:2102
+#: templates/admin-gift-rule-edit.php:911
+#: templates/admin-gift-rule-edit.php:2090
 msgid "Promo message"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:918
+#: templates/admin-gift-rule-edit.php:912
 msgid "Set a promo message shown to customers on the site to promote the gift."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:922
+#: templates/admin-gift-rule-edit.php:916
 msgid "Enable promo message"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:929
+#: templates/admin-gift-rule-edit.php:923
 msgid "Show a promo message on the site to let customers know about the available gift"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:934
+#: templates/admin-gift-rule-edit.php:928
 msgid "Promo message text"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:937
+#: templates/admin-gift-rule-edit.php:931
 msgid "Buy selected products and get"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:939
+#: templates/admin-gift-rule-edit.php:933
 #: templates/admin-gift-styling.php:42
 msgid "Merge tags"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:941
+#: templates/admin-gift-rule-edit.php:935
 msgid "Click \"Merge tags\" to insert dynamic values. Leave empty for automatic text."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:946
+#: templates/admin-gift-rule-edit.php:940
 msgid "Pages to show on"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:950
+#: templates/admin-gift-rule-edit.php:944
 msgid "All pages"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:951
+#: templates/admin-gift-rule-edit.php:945
 msgid "Shop only"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:952
+#: templates/admin-gift-rule-edit.php:946
 msgid "Product pages only"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:953
+#: templates/admin-gift-rule-edit.php:947
 msgid "Shop + products"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:954
+#: templates/admin-gift-rule-edit.php:948
 msgid "Cart + checkout"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:960
+#: templates/admin-gift-rule-edit.php:954
 msgid "Link"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:964
+#: templates/admin-gift-rule-edit.php:958
 msgid "An optional link to a relevant page (product category, promotion, etc.)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:969
+#: templates/admin-gift-rule-edit.php:963
 msgid "Link text"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:980
+#: templates/admin-gift-rule-edit.php:974
 msgid "Combined quantity discount (optional)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:981
+#: templates/admin-gift-rule-edit.php:975
 msgid "Add quantity discounts on top of the gift: the customer gets both a discount and a gift in the same rule. <br> <em>The quantity discounts apply to the products matched by this rule, and the gift is given in addition.</em>"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:985
+#: templates/admin-gift-rule-edit.php:979
 msgid "Enable combined quantity discount"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:992
+#: templates/admin-gift-rule-edit.php:986
 msgid "When enabled, the customer gets both a quantity discount on the products and the gift"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1002
+#: templates/admin-gift-rule-edit.php:996
 #: templates/admin-rule-set-edit.php:172
-#: templates/admin-rule-set-edit.php:1814
+#: templates/admin-rule-set-edit.php:1697
 msgid "Discount mode"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1006
+#: templates/admin-gift-rule-edit.php:1000
 msgid "By quantity (buy X, get a discount on an item)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1007
+#: templates/admin-gift-rule-edit.php:1001
 msgid "Global (a discount on all matching products)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1010
+#: templates/admin-gift-rule-edit.php:1004
 msgid "<strong>By quantity:</strong> the discount applies to one item only (the cheapest/most expensive) when the customer buys a minimum quantity.<br> <strong>Global:</strong> the discount applies to all matching products in the cart."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1016
+#: templates/admin-gift-rule-edit.php:1010
 #: templates/admin-page.php:35
 #: templates/admin-rule-set-edit.php:187
 msgid "Apply discount to"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1020
+#: templates/admin-gift-rule-edit.php:1014
 msgid "The cheapest product"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1021
+#: templates/admin-gift-rule-edit.php:1015
 msgid "The most expensive product"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1022
+#: templates/admin-gift-rule-edit.php:1016
 msgid "All matching products"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1030
+#: templates/admin-gift-rule-edit.php:1024
 msgid "Quick fill:"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1032
+#: templates/admin-gift-rule-edit.php:1026
 #: templates/admin-rule-set-edit.php:464
 msgid "Buy 1 get 1 free"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1034
+#: templates/admin-gift-rule-edit.php:1028
 #: templates/admin-rule-set-edit.php:466
 msgid "Tiered discounts"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1035
+#: templates/admin-gift-rule-edit.php:1029
 #: templates/admin-rule-set-edit.php:467
 msgid "Buy 3 get 30%"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1049
-#: templates/admin-gift-rule-edit.php:1546
-#: templates/admin-gift-rule-edit.php:1596
+#: templates/admin-gift-rule-edit.php:1043
+#: templates/admin-gift-rule-edit.php:1534
+#: templates/admin-gift-rule-edit.php:1584
 msgctxt "tier"
 msgid "Minimum quantity"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1057
-#: templates/admin-gift-rule-edit.php:1550
-#: templates/admin-gift-rule-edit.php:1600
+#: templates/admin-gift-rule-edit.php:1051
+#: templates/admin-gift-rule-edit.php:1538
+#: templates/admin-gift-rule-edit.php:1588
 msgctxt "tier"
 msgid "Discount type"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1060
-#: templates/admin-gift-rule-edit.php:1553
-#: templates/admin-gift-rule-edit.php:1603
+#: templates/admin-gift-rule-edit.php:1054
+#: templates/admin-gift-rule-edit.php:1541
+#: templates/admin-gift-rule-edit.php:1591
 #: templates/admin-page.php:207
 #: templates/admin-rule-set-edit.php:513
-#: templates/admin-rule-set-edit.php:2405
-#: templates/admin-rule-set-edit.php:2434
-#: templates/admin-rule-set-edit.php:2664
+#: templates/admin-rule-set-edit.php:2289
+#: templates/admin-rule-set-edit.php:2318
+#: templates/admin-rule-set-edit.php:2548
 #: assets/admin-script.js:39
 #: assets/flow-builder.js:98
 msgid "Fixed amount (₪)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1072
+#: templates/admin-gift-rule-edit.php:1066
 msgid "Add discount row"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1075
+#: templates/admin-gift-rule-edit.php:1069
 msgid "Set different discounts for different quantities. The highest matching discount applies.<br> <em>Example: buy 2 get 10% off, buy 3 get 20% off, buy 5 get 1 free (100%)</em>"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1083
+#: templates/admin-gift-rule-edit.php:1077
 msgid "Show discount message"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1090
+#: templates/admin-gift-rule-edit.php:1084
 msgid "Show a message about the quantity discount on the product page and in the cart"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1095
+#: templates/admin-gift-rule-edit.php:1089
 #: templates/admin-page.php:241
 msgctxt "gift"
 msgid "Message title"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1103
+#: templates/admin-gift-rule-edit.php:1097
 #: templates/admin-page.php:260
 msgctxt "gift"
 msgid "Message colour"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1117
+#: templates/admin-gift-rule-edit.php:1111
 #: templates/admin-gift-rule-wizard.php:35
-#: templates/admin-rule-set-edit.php:1451
+#: templates/admin-rule-set-edit.php:1441
 #: templates/admin-rule-wizard.php:35
 msgid "Previous"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1119
+#: templates/admin-gift-rule-edit.php:1113
 #: templates/admin-gift-rule-wizard.php:39
-#: templates/admin-rule-set-edit.php:1453
+#: templates/admin-rule-set-edit.php:1443
 msgid "Next"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1122
-#: templates/admin-rule-set-edit.php:1456
-#: templates/admin-rule-set-edit.php:2786
+#: templates/admin-gift-rule-edit.php:1116
+#: templates/admin-rule-set-edit.php:1446
+#: templates/admin-rule-set-edit.php:2670
 msgid "Save draft"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1124
+#: templates/admin-gift-rule-edit.php:1118
 msgid "Publish gift"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1124
+#: templates/admin-gift-rule-edit.php:1118
 msgid "Save gift"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1126
-#: templates/admin-rule-set-edit.php:1458
+#: templates/admin-gift-rule-edit.php:1120
+#: templates/admin-rule-set-edit.php:1448
 #: templates/admin-rule-sets.php:288
 msgid "Cancel"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1133
+#: templates/admin-gift-rule-edit.php:1127
 msgid "Preview &middot; Live"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1140
+#: templates/admin-gift-rule-edit.php:1134
 #: templates/admin-storefront.php:149
 msgid "Ceramic mug"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1145
+#: templates/admin-gift-rule-edit.php:1139
 #: templates/admin-gift-rules-list.php:156
 #: templates/admin-gift-styling.php:329
 #: templates/admin-storefront.php:150
 msgid "Thermal jug 500 ml"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1146
+#: templates/admin-gift-rule-edit.php:1140
 #: templates/admin-gift-rules-list.php:157
 #: templates/admin-storefront.php:315
 msgid "Selected ✓"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1151
+#: templates/admin-gift-rule-edit.php:1145
 msgid "Edit the widget design"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1180
+#: templates/admin-gift-rule-edit.php:1173
 msgid "The selected item is added to the cart at no cost (100% off)."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1181
+#: templates/admin-gift-rule-edit.php:1174
 msgid "The selected item gets a percentage discount you set."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1182
+#: templates/admin-gift-rule-edit.php:1175
 msgid "Price / fixed discount"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1182
+#: templates/admin-gift-rule-edit.php:1175
 msgid "A fixed shekel amount off the selected item."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1185
+#: templates/admin-gift-rule-edit.php:1178
 #: templates/admin-gift-rules-list.php:81
 #: templates/admin-gift-rules-list.php:129
 msgid "Customer choice"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1185
+#: templates/admin-gift-rule-edit.php:1178
 msgid "The customer chooses the gift from a list on the product page."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1186
+#: templates/admin-gift-rule-edit.php:1179
 #: templates/admin-gift-rules-list.php:134
 msgid "Automatic"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1186
+#: templates/admin-gift-rule-edit.php:1179
 msgid "The gift is added to the cart automatically when the condition is met."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1192
+#: templates/admin-gift-rule-edit.php:1185
 msgid "What does the gift include?"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1192
+#: templates/admin-gift-rule-edit.php:1185
 msgid "Name the rule and choose the gift type."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1193
-#: templates/admin-gift-rule-edit.php:2138
-#: templates/admin-rule-set-edit.php:1812
+#: templates/admin-gift-rule-edit.php:1186
+#: templates/admin-gift-rule-edit.php:2126
+#: templates/admin-rule-set-edit.php:1695
 #: templates/admin-rule-sets.php:118
 #: templates/admin-rule-sets.php:259
 #: assets/admin-script.js:137
-#: assets/admin-ui.js:322
+#: assets/admin-ui.js:337
 msgid "Rule name"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1194
+#: templates/admin-gift-rule-edit.php:1187
 msgid "e.g. A gift over ₪200"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1195
-#: templates/admin-gift-rule-edit.php:2141
+#: templates/admin-gift-rule-edit.php:1188
+#: templates/admin-gift-rule-edit.php:2129
 #: templates/admin-gift-rule-wizard.php:23
-#: assets/admin-ui.js:320
+#: assets/admin-ui.js:335
 msgid "Gift type"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1201
+#: templates/admin-gift-rule-edit.php:1194
 #: assets/flow-builder.js:97
 msgid "Discount size"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1203
+#: templates/admin-gift-rule-edit.php:1196
 msgid "How is the gift given?"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1203
+#: templates/admin-gift-rule-edit.php:1196
 msgid "Choose how the customer gets the gift."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1211
+#: templates/admin-gift-rule-edit.php:1204
 msgid "When is the gift triggered?"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1211
+#: templates/admin-gift-rule-edit.php:1204
 msgid "Set threshold conditions (leave empty for no condition)."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1213
+#: templates/admin-gift-rule-edit.php:1206
 msgctxt "gift"
 msgid "Minimum cart total (₪)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1213
-#: templates/admin-gift-rule-edit.php:1214
-#: templates/admin-gift-rule-edit.php:1226
-#: templates/admin-gift-rule-edit.php:2144
-#: templates/admin-gift-rule-edit.php:2145
+#: templates/admin-gift-rule-edit.php:1206
+#: templates/admin-gift-rule-edit.php:1207
+#: templates/admin-gift-rule-edit.php:1219
+#: templates/admin-gift-rule-edit.php:2132
+#: templates/admin-gift-rule-edit.php:2133
 msgid "None"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1214
+#: templates/admin-gift-rule-edit.php:1207
 msgid "Minimum number of items"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1216
+#: templates/admin-gift-rule-edit.php:1209
 msgid "You choose the gift products themselves in the form after the wizard (\"Gift setup\" step)."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1220
+#: templates/admin-gift-rule-edit.php:1213
 #: templates/admin-gift-rule-wizard.php:26
 #: templates/admin-rule-wizard.php:26
 msgid "Summary"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1220
+#: templates/admin-gift-rule-edit.php:1213
 msgid "Check and click \"Create gift\" to fill in the form."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1223
+#: templates/admin-gift-rule-edit.php:1216
 #: assets/admin-script.js:178
 msgid "Name"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1223
-#: templates/admin-gift-rule-edit.php:2138
-#: templates/admin-rule-set-edit.php:1812
+#: templates/admin-gift-rule-edit.php:1216
+#: templates/admin-gift-rule-edit.php:2126
+#: templates/admin-rule-set-edit.php:1695
 #: assets/admin-script.js:178
 msgid "(no name)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1225
-#: templates/admin-gift-rule-edit.php:2142
+#: templates/admin-gift-rule-edit.php:1218
+#: templates/admin-gift-rule-edit.php:2130
 #: templates/admin-gift-rule-wizard.php:24
 msgid "How it's given"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1226
+#: templates/admin-gift-rule-edit.php:1219
 msgid "Condition"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1226
+#: templates/admin-gift-rule-edit.php:1219
 msgid "Cart ₪"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1226
+#: templates/admin-gift-rule-edit.php:1219
 msgid "and up"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1228
+#: templates/admin-gift-rule-edit.php:1221
 msgid "All set! Next, choose the gift products in the form."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1244
+#: templates/admin-gift-rule-edit.php:1237
 msgid "Gift rule wizard"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1476
+#: templates/admin-gift-rule-edit.php:1464
 msgid "Enter a fixed discount amount"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1532
+#: templates/admin-gift-rule-edit.php:1520
 msgid "In global mode, the discount applies to <strong>all</strong> matching products in the cart. You can add rows with a quantity to increase the discount."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1535
+#: templates/admin-gift-rule-edit.php:1523
 msgid "Set different discounts for different quantities. The highest matching discount applies.<br><em>Example: buy 2 get 10% off, buy 3 get 20% off, buy 5 get 1 free (100%)</em>"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1636
-#: templates/admin-rule-set-edit.php:2470
+#: templates/admin-gift-rule-edit.php:1624
+#: templates/admin-rule-set-edit.php:2354
 msgid "Search products or variations..."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1674
+#: templates/admin-gift-rule-edit.php:1662
 msgid "No default (the customer chooses)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1682
+#: templates/admin-gift-rule-edit.php:1670
 msgid "This variation will be preselected"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1774
-#: templates/admin-gift-rule-edit.php:1790
+#: templates/admin-gift-rule-edit.php:1762
+#: templates/admin-gift-rule-edit.php:1778
 #: templates/admin-page.php:145
 #: templates/admin-rule-set-edit.php:416
 msgid "Choose an attribute..."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:1794
+#: templates/admin-gift-rule-edit.php:1782
 msgid "Loading..."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2033
+#: templates/admin-gift-rule-edit.php:2021
 #: templates/admin-gift-styling.php:449
 msgid "Saving..."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2045
-#: templates/admin-gift-rule-edit.php:2052
+#: templates/admin-gift-rule-edit.php:2033
+#: templates/admin-gift-rule-edit.php:2040
 msgid "➕ Create gift rule"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2045
-#: templates/admin-gift-rule-edit.php:2052
+#: templates/admin-gift-rule-edit.php:2033
+#: templates/admin-gift-rule-edit.php:2040
 msgid "💾 Save changes"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2051
+#: templates/admin-gift-rule-edit.php:2039
 msgid "Server error:"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2063
-#: templates/admin-rule-set-edit.php:2814
+#: templates/admin-gift-rule-edit.php:2051
+#: templates/admin-rule-set-edit.php:2698
 msgid "Saving…"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2069
-#: templates/admin-gift-rule-edit.php:2085
-#: templates/admin-rule-set-edit.php:2823
-#: templates/admin-rule-set-edit.php:2842
+#: templates/admin-gift-rule-edit.php:2057
+#: templates/admin-gift-rule-edit.php:2073
+#: templates/admin-rule-set-edit.php:2707
+#: templates/admin-rule-set-edit.php:2726
 msgid "Save failed"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2083
-#: templates/admin-rule-set-edit.php:2840
+#: templates/admin-gift-rule-edit.php:2071
+#: templates/admin-rule-set-edit.php:2724
 msgid "Draft saved"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2100
-#: templates/admin-rule-set-edit.php:1758
+#: templates/admin-gift-rule-edit.php:2088
+#: templates/admin-rule-set-edit.php:1641
 msgid "Details and products"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2101
+#: templates/admin-gift-rule-edit.php:2089
 msgid "Gift setup"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2102
+#: templates/admin-gift-rule-edit.php:2090
 msgid "Promo and discount"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2102
+#: templates/admin-gift-rule-edit.php:2090
 msgid "Combined quantity discount"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2103
-#: templates/admin-rule-set-edit.php:1766
+#: templates/admin-gift-rule-edit.php:2091
+#: templates/admin-rule-set-edit.php:1649
 msgid "Summary and save"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2123
+#: templates/admin-gift-rule-edit.php:2111
 msgid "Gift summary"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2125
+#: templates/admin-gift-rule-edit.php:2113
 msgid "Check that everything is right, then save. You can go back to any step by clicking its number above."
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2133
+#: templates/admin-gift-rule-edit.php:2121
 msgid "Customer choice (on the product page)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2133
+#: templates/admin-gift-rule-edit.php:2121
 msgid "Automatic gift (in the cart)"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2139
-#: templates/admin-rule-set-edit.php:1813
+#: templates/admin-gift-rule-edit.php:2127
+#: templates/admin-rule-set-edit.php:1696
 #: templates/admin-rule-sets.php:118
 msgid "Status"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2140
+#: templates/admin-gift-rule-edit.php:2128
 msgid "Qualifying products"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2143
+#: templates/admin-gift-rule-edit.php:2131
 msgctxt "summary"
 msgid "Gift source"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2144
+#: templates/admin-gift-rule-edit.php:2132
 msgid "Min. cart total"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2145
+#: templates/admin-gift-rule-edit.php:2133
 msgid "Min. qualifying qty"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2146
+#: templates/admin-gift-rule-edit.php:2134
 msgid "Max. gifts"
 msgstr ""
 
-#: templates/admin-gift-rule-edit.php:2179
-#: templates/admin-rule-set-edit.php:1855
+#: templates/admin-gift-rule-edit.php:2167
+#: templates/admin-rule-set-edit.php:1738
 msgid "Step"
 msgstr ""
 
@@ -3609,7 +3545,7 @@ msgid "Gift rule wizard &middot; Create a gift rule step by step"
 msgstr ""
 
 #: templates/admin-gift-rule-wizard.php:25
-#: templates/admin-rule-set-edit.php:1762
+#: templates/admin-rule-set-edit.php:1645
 msgid "Conditions"
 msgstr ""
 
@@ -3655,7 +3591,7 @@ msgid "Gifts from %d categories"
 msgstr ""
 
 #: templates/admin-gift-rules-list.php:91
-#: templates/admin-rule-set-edit.php:2123
+#: templates/admin-rule-set-edit.php:2007
 msgid "Mode:"
 msgstr ""
 
@@ -3719,15 +3655,15 @@ msgstr ""
 msgid "All design settings"
 msgstr ""
 
-#: templates/admin-gift-rules-list.php:233
+#: templates/admin-gift-rules-list.php:228
 msgid "Are you sure you want to delete this rule?"
 msgstr ""
 
-#: templates/admin-gift-rules-list.php:254
+#: templates/admin-gift-rules-list.php:249
 msgid "Error deleting the rule:"
 msgstr ""
 
-#: templates/admin-gift-rules-list.php:279
+#: templates/admin-gift-rules-list.php:274
 msgid "Error duplicating the rule:"
 msgstr ""
 
@@ -4187,14 +4123,14 @@ msgstr ""
 
 #: templates/admin-page.php:218
 #: templates/admin-rule-set-edit.php:528
-#: templates/admin-rule-set-edit.php:2374
+#: templates/admin-rule-set-edit.php:2258
 msgid "Set different discounts for different quantities. The highest matching discount applies."
 msgstr ""
 
 #: templates/admin-page.php:223
 #: templates/admin-rule-set-edit.php:578
-#: templates/admin-rule-set-edit.php:1647
-#: templates/admin-rule-set-edit.php:1765
+#: templates/admin-rule-set-edit.php:1530
+#: templates/admin-rule-set-edit.php:1648
 msgid "Customer messages"
 msgstr ""
 
@@ -4411,13 +4347,13 @@ msgid "50% off"
 msgstr ""
 
 #: templates/admin-rule-set-edit.php:526
-#: templates/admin-rule-set-edit.php:2368
+#: templates/admin-rule-set-edit.php:2252
 msgid "In global mode, the first discount applies to all products. You can add more tiers with a quantity to increase the discount (for example: buy 3+ get 20% instead of 15%)."
 msgstr ""
 
 #: templates/admin-rule-set-edit.php:535
-#: templates/admin-rule-set-edit.php:1642
-#: templates/admin-rule-set-edit.php:1761
+#: templates/admin-rule-set-edit.php:1525
+#: templates/admin-rule-set-edit.php:1644
 msgid "Coupon settings"
 msgstr ""
 
@@ -4515,7 +4451,7 @@ msgid "Choose the user roles the discount applies to. Leave empty to apply it to
 msgstr ""
 
 #: templates/admin-rule-set-edit.php:754
-#: templates/admin-rule-set-edit.php:1763
+#: templates/admin-rule-set-edit.php:1646
 msgid "Profit guards and caps"
 msgstr ""
 
@@ -4568,8 +4504,8 @@ msgid "Exclusions are set in the <strong>Details and products</strong> step. Tha
 msgstr ""
 
 #: templates/admin-rule-set-edit.php:814
-#: templates/admin-rule-set-edit.php:1672
-#: templates/admin-rule-set-edit.php:1763
+#: templates/admin-rule-set-edit.php:1555
+#: templates/admin-rule-set-edit.php:1646
 msgid "Discount scheduling"
 msgstr ""
 
@@ -4631,8 +4567,8 @@ msgid "The maximum number of times each customer can use the discount. Leave emp
 msgstr ""
 
 #: templates/admin-rule-set-edit.php:913
-#: templates/admin-rule-set-edit.php:1682
-#: templates/admin-rule-set-edit.php:1765
+#: templates/admin-rule-set-edit.php:1565
+#: templates/admin-rule-set-edit.php:1648
 msgid "Discount badge"
 msgstr ""
 
@@ -4683,8 +4619,8 @@ msgid "Choose where to show the discount badge"
 msgstr ""
 
 #: templates/admin-rule-set-edit.php:973
-#: templates/admin-rule-set-edit.php:1687
-#: templates/admin-rule-set-edit.php:1765
+#: templates/admin-rule-set-edit.php:1570
+#: templates/admin-rule-set-edit.php:1648
 msgid "Sale price display"
 msgstr ""
 
@@ -4737,8 +4673,8 @@ msgid "When off (default): cart items, the mini cart and checkout show the regul
 msgstr ""
 
 #: templates/admin-rule-set-edit.php:1035
-#: templates/admin-rule-set-edit.php:1692
-#: templates/admin-rule-set-edit.php:1765
+#: templates/admin-rule-set-edit.php:1575
+#: templates/admin-rule-set-edit.php:1648
 msgid "Display banner"
 msgstr ""
 
@@ -4772,7 +4708,7 @@ msgid "Used as a fallback if no image is chosen"
 msgstr ""
 
 #: templates/admin-rule-set-edit.php:1069
-#: templates/admin-rule-set-edit.php:1320
+#: templates/admin-rule-set-edit.php:1310
 msgid "Link (optional)"
 msgstr ""
 
@@ -4804,704 +4740,704 @@ msgstr ""
 msgid "Use image"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1132
-#: templates/admin-rule-set-edit.php:1697
-#: templates/admin-rule-set-edit.php:1765
+#: templates/admin-rule-set-edit.php:1122
+#: templates/admin-rule-set-edit.php:1580
+#: templates/admin-rule-set-edit.php:1648
 msgid "Site-wide message"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1133
+#: templates/admin-rule-set-edit.php:1123
 msgid "When several rules have a site-wide message, the messages rotate automatically in a carousel"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1138
+#: templates/admin-rule-set-edit.php:1128
 msgid "Show message on the site"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1145
+#: templates/admin-rule-set-edit.php:1135
 msgid "Show a message bar (banner) to all visitors when the discount rule is active"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1151
+#: templates/admin-rule-set-edit.php:1141
 msgid "Message text"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1154
-#: templates/admin-rule-set-edit.php:1251
-#: templates/admin-rule-set-edit.php:2683
+#: templates/admin-rule-set-edit.php:1144
+#: templates/admin-rule-set-edit.php:1241
+#: templates/admin-rule-set-edit.php:2567
 msgid "🔥 Special offer! Buy 3 and get 30% off"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1155
+#: templates/admin-rule-set-edit.php:1145
 msgid "The text shown in the message bar. Use emoji to grab attention"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1161
+#: templates/admin-rule-set-edit.php:1151
 msgid "Icon"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1165
+#: templates/admin-rule-set-edit.php:1155
 msgid "Click to pick an icon"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1166
+#: templates/admin-rule-set-edit.php:1156
 msgid "Clear icon"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1175
+#: templates/admin-rule-set-edit.php:1165
 msgid "Search..."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1179
+#: templates/admin-rule-set-edit.php:1169
 msgid "Recommended for promotions"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1189
+#: templates/admin-rule-set-edit.php:1179
 msgid "Faces"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1199
+#: templates/admin-rule-set-edit.php:1189
 msgid "Arrows"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1209
+#: templates/admin-rule-set-edit.php:1199
 msgid "Symbols"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1238
+#: templates/admin-rule-set-edit.php:1228
 msgid "Choose an emoji or a Dashicons icon to show before the text"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1244
+#: templates/admin-rule-set-edit.php:1234
 msgid "Message colours"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1249
+#: templates/admin-rule-set-edit.php:1239
 msgid "Background / text"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1258
+#: templates/admin-rule-set-edit.php:1248
 msgid "Position"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1262
+#: templates/admin-rule-set-edit.php:1252
 msgid "Sticky Top Bar"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1263
+#: templates/admin-rule-set-edit.php:1253
 msgid "Sticky Bottom Bar"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1264
+#: templates/admin-rule-set-edit.php:1254
 msgid "Below Header (inline)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1265
+#: templates/admin-rule-set-edit.php:1255
 msgid "Above Footer (inline)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1266
+#: templates/admin-rule-set-edit.php:1256
 msgid "Floating Bottom-Left"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1267
+#: templates/admin-rule-set-edit.php:1257
 msgid "Floating Bottom-Right"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1274
+#: templates/admin-rule-set-edit.php:1264
 msgid "Mobile position"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1278
+#: templates/admin-rule-set-edit.php:1268
 msgid "Same as Desktop"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1279
+#: templates/admin-rule-set-edit.php:1269
 msgid "Sticky Top"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1280
+#: templates/admin-rule-set-edit.php:1270
 msgid "Sticky Bottom"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1281
+#: templates/admin-rule-set-edit.php:1271
 msgid "Below Header (inline, mobile)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1282
+#: templates/admin-rule-set-edit.php:1272
 msgid "Hidden on Mobile"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1284
+#: templates/admin-rule-set-edit.php:1274
 msgid "A different position on mobile devices. For example, floating in a corner doesn't always look good on mobile"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1290
+#: templates/admin-rule-set-edit.php:1280
 msgid "Design"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1294
+#: templates/admin-rule-set-edit.php:1284
 msgid "Standard Bar"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1295
+#: templates/admin-rule-set-edit.php:1285
 msgid "Slim Bar"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1296
+#: templates/admin-rule-set-edit.php:1286
 msgid "Bold Bar"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1297
+#: templates/admin-rule-set-edit.php:1287
 msgctxt "style"
 msgid "Gradient"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1298
+#: templates/admin-rule-set-edit.php:1288
 msgid "Scrolling Marquee"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1300
+#: templates/admin-rule-set-edit.php:1290
 msgid "With the \"Scrolling Marquee\" style, the text scrolls continuously from side to side"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1306
+#: templates/admin-rule-set-edit.php:1296
 msgid "Scroll direction"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1310
+#: templates/admin-rule-set-edit.php:1300
 msgid "Right to Left (RTL)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1311
+#: templates/admin-rule-set-edit.php:1301
 msgid "Left to Right (LTR)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1312
+#: templates/admin-rule-set-edit.php:1302
 msgid "Alternating (Bounce)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1314
+#: templates/admin-rule-set-edit.php:1304
 msgid "The direction the text moves in the \"Scrolling Marquee\" style"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1324
+#: templates/admin-rule-set-edit.php:1314
 msgid "To the shop →"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1325
+#: templates/admin-rule-set-edit.php:1315
 msgid "Add a button/link to the message (optional). First line: URL, second line: button text"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1331
+#: templates/admin-rule-set-edit.php:1321
 msgid "Show on pages"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1335
+#: templates/admin-rule-set-edit.php:1325
 msgid "All Pages"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1336
+#: templates/admin-rule-set-edit.php:1326
 msgid "Shop & Categories Only"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1337
+#: templates/admin-rule-set-edit.php:1327
 msgid "Product Pages Only"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1338
+#: templates/admin-rule-set-edit.php:1328
 msgid "Shop & Product Pages"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1339
+#: templates/admin-rule-set-edit.php:1329
 msgid "Homepage Only"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1340
+#: templates/admin-rule-set-edit.php:1330
 msgid "Everywhere except Checkout"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1347
+#: templates/admin-rule-set-edit.php:1337
 msgid "Rotation speed"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1350
+#: templates/admin-rule-set-edit.php:1340
 msgid "seconds"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1351
+#: templates/admin-rule-set-edit.php:1341
 msgid "How many seconds each message is shown before moving to the next one (when several messages are active)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1357
+#: templates/admin-rule-set-edit.php:1347
 msgid "Dismissible"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1364
+#: templates/admin-rule-set-edit.php:1354
 msgid "Let visitors close the message"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1370
+#: templates/admin-rule-set-edit.php:1360
 msgid "Show again after closing"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1374
+#: templates/admin-rule-set-edit.php:1364
 msgid "Unlimited - always reappear"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1375
+#: templates/admin-rule-set-edit.php:1365
 msgid "Once only - never show again"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1376
+#: templates/admin-rule-set-edit.php:1366
 msgid "Up to 2 times"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1377
+#: templates/admin-rule-set-edit.php:1367
 msgid "Up to 3 times"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1378
+#: templates/admin-rule-set-edit.php:1368
 msgid "Up to 5 times"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1379
+#: templates/admin-rule-set-edit.php:1369
 msgid "Up to 10 times"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1381
+#: templates/admin-rule-set-edit.php:1371
 msgid "How many times the message reappears after the visitor closes it"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1389
-#: templates/admin-rule-set-edit.php:1702
-#: templates/admin-rule-set-edit.php:1767
+#: templates/admin-rule-set-edit.php:1379
+#: templates/admin-rule-set-edit.php:1585
+#: templates/admin-rule-set-edit.php:1650
 msgid "Exclude based on other rules"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1394
+#: templates/admin-rule-set-edit.php:1384
 msgid "Don't apply this rule to products that get a discount from:"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1406
+#: templates/admin-rule-set-edit.php:1396
 msgid "Not active"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1411
+#: templates/admin-rule-set-edit.php:1401
 msgid "Choose other discount rules. If a product already gets a discount from one of the selected rules, this rule doesn't apply to it."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1412
+#: templates/admin-rule-set-edit.php:1402
 msgid "Example: set a discount for the whole category, but exclude products that already get a discount from another specific rule."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1424
+#: templates/admin-rule-set-edit.php:1414
 msgid "Live preview"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1429
+#: templates/admin-rule-set-edit.php:1419
 msgid "Quantity deal"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1432
-#: assets/admin-ui.js:392
+#: templates/admin-rule-set-edit.php:1422
+#: assets/admin-ui.js:407
 msgid "My rule"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1436
+#: templates/admin-rule-set-edit.php:1426
 #: templates/admin-storefront.php:222
 msgctxt "preview"
 msgid "Buy more, save more"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1457
+#: templates/admin-rule-set-edit.php:1447
 msgid "Publish rule"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1466
+#: templates/admin-rule-set-edit.php:1456
 msgid "Rule preview"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1472
+#: templates/admin-rule-set-edit.php:1462
 msgid "Choose one or more products to see how the rule affects them in the cart (before saving)."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1476
-#: templates/admin-rule-set-edit.php:1989
+#: templates/admin-rule-set-edit.php:1466
+#: templates/admin-rule-set-edit.php:1873
 msgid "Product"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1478
-#: templates/admin-rule-set-edit.php:1991
+#: templates/admin-rule-set-edit.php:1468
+#: templates/admin-rule-set-edit.php:1875
 msgid "Unit price"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1479
+#: templates/admin-rule-set-edit.php:1469
 msgid "Price after discount"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1486
+#: templates/admin-rule-set-edit.php:1476
 msgid "No products selected yet. Click \"Add product\" to start."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1491
+#: templates/admin-rule-set-edit.php:1481
 msgctxt "preview"
 msgid "Total"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1500
+#: templates/admin-rule-set-edit.php:1490
 msgid "Add product"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1628
+#: templates/admin-rule-set-edit.php:1511
 msgid "What is this?"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1629
+#: templates/admin-rule-set-edit.php:1512
 msgid "Set the rule name (so you can recognise it easily) and the discount mode: <strong>Quantity</strong> (a discount on one item out of X) or <strong>Global</strong> (a discount on all matching items)."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1633
+#: templates/admin-rule-set-edit.php:1516
 msgid "How do I choose products?"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1634
+#: templates/admin-rule-set-edit.php:1517
 msgid "The rule applies only to the products you choose here. You can choose by <strong>category</strong> (easy to maintain), <strong>specific products</strong> (full control) or <strong>attribute</strong> (for example \"Weight = 1 kg\")."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1638
+#: templates/admin-rule-set-edit.php:1521
 msgid "How do I build discount tiers?"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1639
+#: templates/admin-rule-set-edit.php:1522
 msgid "Add a row for each tier: quantity = minimum items, discount = % or a fixed ₪ amount. For example: 3 → 30%, 4 → 50%, 5 → free. <strong>Tip:</strong> in Quantity mode + \"on the cheapest\", the discount applies to one item only (the cheapest of the matching items)."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1643
+#: templates/admin-rule-set-edit.php:1526
 msgid "When should I use a coupon?"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1644
+#: templates/admin-rule-set-edit.php:1527
 msgid "Enable \"Requires a coupon\" so the rule only works after the customer enters a coupon code. Useful for targeted campaigns, clubs or exclusive discounts."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1648
+#: templates/admin-rule-set-edit.php:1531
 msgid "What does the customer see?"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1649
+#: templates/admin-rule-set-edit.php:1532
 msgid "The message appears on the product/category page to encourage adding to the cart. Use a short title (\"☕ Buy 3 and save!\") and content that briefly explains the offer."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1653
+#: templates/admin-rule-set-edit.php:1536
 msgid "Customise the cart and checkout"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1654
+#: templates/admin-rule-set-edit.php:1537
 msgid "If you want a different message in the cart than at checkout (for example: \"One more item for a bigger discount!\" in the cart, \"You're close to free shipping!\" at checkout), set them here."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1658
+#: templates/admin-rule-set-edit.php:1541
 msgid "When should I limit by shipping?"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1659
+#: templates/admin-rule-set-edit.php:1542
 msgid "If the rule should only apply with a certain shipping method (for example \"30% off for local pickup only\"), choose the relevant shipping methods. Leave empty to apply to all of them."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1663
+#: templates/admin-rule-set-edit.php:1546
 msgid "Discount by cart total"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1664
+#: templates/admin-rule-set-edit.php:1547
 msgid "Set a minimum and/or maximum cart total for the rule to apply. Useful for campaigns such as \"10% off over 300₪\"."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1668
+#: templates/admin-rule-set-edit.php:1551
 msgid "Limit to customer groups"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1669
+#: templates/admin-rule-set-edit.php:1552
 msgid "The rule only works for users in the roles you choose (for example \"Wholesale\", \"VIP\"). If you leave it empty, the rule applies to all users and guests."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1673
+#: templates/admin-rule-set-edit.php:1556
 msgid "Automatic scheduling"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1674
+#: templates/admin-rule-set-edit.php:1557
 msgid "Set a start and end date and time. The rule switches on and off automatically. <strong>Tip:</strong> the time zone comes from the WordPress settings. Leave empty to keep the rule always active."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1678
+#: templates/admin-rule-set-edit.php:1561
 msgid "Limits on the number of uses"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1679
+#: templates/admin-rule-set-edit.php:1562
 msgid "<strong>Total:</strong> how many times in total the rule can run before it switches off. <strong>Per user:</strong> how many times the same customer can trigger the rule. Useful for single-use coupons or limited campaigns."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1683
+#: templates/admin-rule-set-edit.php:1566
 msgid "Visual badge"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1684
+#: templates/admin-rule-set-edit.php:1567
 msgid "A small, colourful badge on the product image in the category and on the product page (\"30% off!\", \"Sale!\", etc.). It catches the eye and increases conversions."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1688
+#: templates/admin-rule-set-edit.php:1571
 msgid "Struck-through price + price after discount"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1689
+#: templates/admin-rule-set-edit.php:1572
 msgid "Shows the price in the WooCommerce sale format ("
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1689
+#: templates/admin-rule-set-edit.php:1572
 msgid "Regular price"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1689
+#: templates/admin-rule-set-edit.php:1572
 msgid "price after discount) on your products. <strong>Important:</strong> \"Show discount in cart\" controls whether this also appears in the cart/mini cart (off = only a message at the bottom of the cart)."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1693
+#: templates/admin-rule-set-edit.php:1576
 msgid "A visual banner on the product page"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1694
+#: templates/admin-rule-set-edit.php:1577
 msgid "Upload a banner image shown to the customer on the product page. Use the shortcode"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1694
+#: templates/admin-rule-set-edit.php:1577
 msgid "anywhere, or the Elementor widget."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1698
+#: templates/admin-rule-set-edit.php:1581
 msgid "A message for the whole site"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1699
+#: templates/admin-rule-set-edit.php:1582
 msgid "A floating message (at the top or bottom of the page) shown to everyone while the rule is active. Useful for big announcements such as \"30% off all weekend!\"."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1703
+#: templates/admin-rule-set-edit.php:1586
 msgid "When to exclude rules"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1704
+#: templates/admin-rule-set-edit.php:1587
 msgid "If a rule clashes with another rule (for example one for a narrow promotion and one for a broad promotion), choose here the rules that stop this rule from running <em>when</em> they are active."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1760
-#: templates/admin-rule-set-edit.php:1817
+#: templates/admin-rule-set-edit.php:1643
+#: templates/admin-rule-set-edit.php:1700
 msgctxt "step"
 msgid "Discount tiers"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1762
+#: templates/admin-rule-set-edit.php:1645
 msgid "Conditions and audiences"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1763
+#: templates/admin-rule-set-edit.php:1646
 msgid "Target audiences and segmentation"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1764
+#: templates/admin-rule-set-edit.php:1647
 msgid "Messages and display"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1790
+#: templates/admin-rule-set-edit.php:1673
 msgid "Rule summary"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1792
+#: templates/admin-rule-set-edit.php:1675
 msgctxt "rule"
 msgid "Check that everything is right, then save. You can go back to any step by clicking its number above."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1799
+#: templates/admin-rule-set-edit.php:1682
 msgid "Global: on all items"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1799
+#: templates/admin-rule-set-edit.php:1682
 msgid "Tiered: by quantity"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1809
+#: templates/admin-rule-set-edit.php:1692
 msgid "No end"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1818
+#: templates/admin-rule-set-edit.php:1701
 msgid "Yes ·"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1820
+#: templates/admin-rule-set-edit.php:1703
 msgid "Always active"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1821
+#: templates/admin-rule-set-edit.php:1704
 msgid "On"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1821
+#: templates/admin-rule-set-edit.php:1704
 msgid "Off"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1905
+#: templates/admin-rule-set-edit.php:1789
 msgid "Invalid response from the server"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1910
+#: templates/admin-rule-set-edit.php:1794
 msgid "AJAX error:"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1910
+#: templates/admin-rule-set-edit.php:1794
 #: templates/admin-rule-sets.php:125
 msgid "Unknown"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1969
-#: templates/admin-rule-set-edit.php:1979
+#: templates/admin-rule-set-edit.php:1853
+#: templates/admin-rule-set-edit.php:1863
 msgid "— Choose a product —"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1989
+#: templates/admin-rule-set-edit.php:1873
 msgid "— Loading products —"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:1992
+#: templates/admin-rule-set-edit.php:1876
 msgid "After discount"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2002
+#: templates/admin-rule-set-edit.php:1886
 msgid "Products could not be loaded"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2011
+#: templates/admin-rule-set-edit.php:1895
 msgid "No products selected yet."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2060
+#: templates/admin-rule-set-edit.php:1944
 msgid "No discount tiers are set. Add at least one tier in the \"Discounts\" tab."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2067
+#: templates/admin-rule-set-edit.php:1951
 msgid "The rule won't apply: minimum quantity required"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2067
+#: templates/admin-rule-set-edit.php:1951
 msgid "items, selected"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2077
+#: templates/admin-rule-set-edit.php:1961
 msgid "The rule won't apply: at least"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2077
+#: templates/admin-rule-set-edit.php:1961
 msgid "items are needed. Currently there are"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2112
+#: templates/admin-rule-set-edit.php:1996
 msgid "₪ (1 item)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2120
+#: templates/admin-rule-set-edit.php:2004
 msgid "Global (on all items)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2121
+#: templates/admin-rule-set-edit.php:2005
 msgid "Quantity ("
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2123
+#: templates/admin-rule-set-edit.php:2007
 msgid ". Active tier:"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2123
+#: templates/admin-rule-set-edit.php:2007
 msgid "+ items ="
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2124
+#: templates/admin-rule-set-edit.php:2008
 msgid "₪ off"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2159
+#: templates/admin-rule-set-edit.php:2043
 #: templates/admin-storefront.php:357
 msgctxt "preview"
 msgid "You saved"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2159
+#: templates/admin-rule-set-edit.php:2043
 msgid "Total to pay:"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2172
+#: templates/admin-rule-set-edit.php:2056
 msgid "Rule diagnostics tool"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2173
+#: templates/admin-rule-set-edit.php:2057
 msgid "A developer tool. Only enable it to troubleshoot problems."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2175
+#: templates/admin-rule-set-edit.php:2059
 msgid "Turn the diagnostics tool on/off"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2181
+#: templates/admin-rule-set-edit.php:2065
 msgid "If the rule causes a critical error on the site, click \"Run diagnostics\" to get a JSON with all the relevant information, and paste it when you report the problem."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2183
+#: templates/admin-rule-set-edit.php:2067
 msgid "Run diagnostics"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2184
+#: templates/admin-rule-set-edit.php:2068
 msgid "Copy JSON"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2189
+#: templates/admin-rule-set-edit.php:2073
 msgid "Test against a specific product"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2191
+#: templates/admin-rule-set-edit.php:2075
 msgid "Product ID"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2192
+#: templates/admin-rule-set-edit.php:2076
 msgid "Test product"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2194
+#: templates/admin-rule-set-edit.php:2078
 msgid "Enter a product ID to see whether the rule applies to it and what its price is."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2230
+#: templates/admin-rule-set-edit.php:2114
 msgid "Summary:"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2445
+#: templates/admin-rule-set-edit.php:2329
 msgid "There must be at least one discount tier"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2477
+#: templates/admin-rule-set-edit.php:2361
 msgid "Choose variations from the categories..."
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2555
-#: templates/admin-rule-set-edit.php:2569
+#: templates/admin-rule-set-edit.php:2439
+#: templates/admin-rule-set-edit.php:2453
 msgid "(out of stock)"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2586
+#: templates/admin-rule-set-edit.php:2470
 msgid "Error loading products"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2595
+#: templates/admin-rule-set-edit.php:2479
 msgid "Please choose categories first"
 msgstr ""
 
-#: templates/admin-rule-set-edit.php:2620
+#: templates/admin-rule-set-edit.php:2504
 msgid "Choose rules to exclude..."
 msgstr ""
 
@@ -5580,12 +5516,12 @@ msgid "Uses"
 msgstr ""
 
 #: templates/admin-rule-sets.php:193
-#: assets/admin-ui.js:170
+#: assets/admin-ui.js:185
 msgid "Pause"
 msgstr ""
 
 #: templates/admin-rule-sets.php:193
-#: assets/admin-ui.js:170
+#: assets/admin-ui.js:185
 msgid "Activate"
 msgstr ""
 
@@ -5679,7 +5615,7 @@ msgid "Free shipping over ₪250 · Buy in quantity and the cheapest is free! �
 msgstr ""
 
 #: templates/admin-storefront.php:159
-#: assets/admin-ui.js:382
+#: assets/admin-ui.js:397
 msgid "A discount of ₪"
 msgstr ""
 
@@ -5939,63 +5875,63 @@ msgstr ""
 msgid "Error - Try again"
 msgstr ""
 
-#: assets/admin-ui.js:234
+#: assets/admin-ui.js:249
 #, js-format
 msgid "Card %d"
 msgstr ""
 
 #. translators: %d: number of cards in this step.
-#: assets/admin-ui.js:243
+#: assets/admin-ui.js:258
 #, js-format
 msgid "%d cards"
 msgstr ""
 
 #. translators: 1: current card number, 2: number of cards in this step.
-#: assets/admin-ui.js:245
+#: assets/admin-ui.js:260
 #, js-format
 msgid "Card %1$d of %2$d"
 msgstr ""
 
-#: assets/admin-ui.js:252
+#: assets/admin-ui.js:267
 msgid "Skip to the next card"
 msgstr ""
 
-#: assets/admin-ui.js:252
+#: assets/admin-ui.js:267
 msgid "Skip"
 msgstr ""
 
-#: assets/admin-ui.js:253
+#: assets/admin-ui.js:268
 msgid "Show all cards together"
 msgstr ""
 
-#: assets/admin-ui.js:253
+#: assets/admin-ui.js:268
 msgid "Show all"
 msgstr ""
 
-#: assets/admin-ui.js:321
+#: assets/admin-ui.js:336
 msgid "Selection type (product/variation)"
 msgstr ""
 
-#: assets/admin-ui.js:382
+#: assets/admin-ui.js:397
 #: assets/flow-builder.js:120
 msgid "on the cheapest"
 msgstr ""
 
 #. translators: %s: discount percentage.
-#: assets/admin-ui.js:385
+#: assets/admin-ui.js:400
 #, js-format
 msgid "the cheapest at %s%% off"
 msgstr ""
 
-#: assets/admin-ui.js:436
+#: assets/admin-ui.js:451
 msgid "Buy"
 msgstr ""
 
-#: assets/admin-ui.js:436
+#: assets/admin-ui.js:451
 msgid "units and get"
 msgstr ""
 
-#: assets/admin-ui.js:443
+#: assets/admin-ui.js:458
 msgid "Buy more, save more!"
 msgstr ""
 
@@ -6142,144 +6078,144 @@ msgstr ""
 msgid "Connection error. Please try again."
 msgstr ""
 
-#: assets/gift-selection.js:91
+#: assets/gift-selection.js:93
 msgid "Selected"
 msgstr ""
 
-#: assets/gift-selection.js:169
-#: assets/gift-selection.js:225
+#: assets/gift-selection.js:171
+#: assets/gift-selection.js:227
 msgid "You can choose up to"
 msgstr ""
 
-#: assets/gift-selection.js:169
-#: assets/gift-selection.js:225
+#: assets/gift-selection.js:171
+#: assets/gift-selection.js:227
 msgid "gifts in total. Remaining:"
 msgstr ""
 
-#: assets/gift-selection.js:169
-#: assets/gift-selection.js:225
+#: assets/gift-selection.js:171
+#: assets/gift-selection.js:227
 msgid "units."
 msgstr ""
 
-#: assets/gift-selection.js:179
-#: assets/gift-selection.js:228
+#: assets/gift-selection.js:181
+#: assets/gift-selection.js:230
 msgid "You have reached the gift limit ("
 msgstr ""
 
-#: assets/gift-selection.js:256
+#: assets/gift-selection.js:258
 msgid "Please select a variation first"
 msgstr ""
 
-#: assets/gift-selection.js:349
-#: assets/gift-selection.js:366
-#: assets/gift-selection.js:415
-#: assets/gift-selection.js:432
-#: assets/gift-selection.js:448
-#: assets/gift-selection.js:465
-#: assets/gift-selection.js:622
-#: assets/gift-selection.js:772
-#: assets/gift-selection.js:789
+#: assets/gift-selection.js:351
+#: assets/gift-selection.js:368
+#: assets/gift-selection.js:417
+#: assets/gift-selection.js:434
+#: assets/gift-selection.js:450
+#: assets/gift-selection.js:467
+#: assets/gift-selection.js:624
+#: assets/gift-selection.js:774
+#: assets/gift-selection.js:791
 msgid "✓ Selected"
 msgstr ""
 
-#: assets/gift-selection.js:498
-#: assets/gift-selection.js:509
+#: assets/gift-selection.js:500
+#: assets/gift-selection.js:511
 msgid "No options are available for this product"
 msgstr ""
 
-#: assets/gift-selection.js:558
+#: assets/gift-selection.js:560
 msgid "Choose..."
 msgstr ""
 
-#: assets/gift-selection.js:625
-#: assets/gift-selection.js:806
-#: assets/gift-selection.js:811
+#: assets/gift-selection.js:627
+#: assets/gift-selection.js:808
+#: assets/gift-selection.js:813
 msgid "Confirm"
 msgstr ""
 
-#: assets/gift-selection.js:733
+#: assets/gift-selection.js:735
 msgid "This combination is not available"
 msgstr ""
 
-#: assets/gift-selection.js:738
+#: assets/gift-selection.js:740
 msgid "This variation is out of stock"
 msgstr ""
 
-#: assets/gift-selection.js:872
-#: assets/gift-selection.js:914
+#: assets/gift-selection.js:874
+#: assets/gift-selection.js:916
 msgid "Please choose a gift before adding to cart"
 msgstr ""
 
-#: assets/gift-selection.js:882
-#: assets/gift-selection.js:925
+#: assets/gift-selection.js:884
+#: assets/gift-selection.js:927
 msgid "Please choose"
 msgstr ""
 
-#: assets/gift-selection.js:882
-#: assets/gift-selection.js:925
+#: assets/gift-selection.js:884
+#: assets/gift-selection.js:927
 msgid "gifts. Selected:"
 msgstr ""
 
-#: assets/gift-selection.js:887
-#: assets/gift-selection.js:931
+#: assets/gift-selection.js:889
+#: assets/gift-selection.js:933
 msgid "Too many gifts selected ("
 msgstr ""
 
-#: assets/gift-selection.js:887
-#: assets/gift-selection.js:931
+#: assets/gift-selection.js:889
+#: assets/gift-selection.js:933
 msgid "). The maximum is"
 msgstr ""
 
-#: assets/gift-selection.js:1387
-#: assets/gift-selection.js:1397
+#: assets/gift-selection.js:1389
+#: assets/gift-selection.js:1399
 msgid "Error adding gift"
 msgstr ""
 
-#: assets/gift-selection.js:1387
+#: assets/gift-selection.js:1389
 msgid "to cart:"
 msgstr ""
 
-#: assets/gift-selection.js:1387
-#: assets/gift-selection.js:1454
+#: assets/gift-selection.js:1389
+#: assets/gift-selection.js:1456
 msgid "Unknown error"
 msgstr ""
 
-#: assets/gift-selection.js:1397
+#: assets/gift-selection.js:1399
 msgid "to cart."
 msgstr ""
 
-#: assets/gift-selection.js:1454
+#: assets/gift-selection.js:1456
 msgid "Error adding the gift to the cart:"
 msgstr ""
 
-#: assets/gift-selection.js:1463
+#: assets/gift-selection.js:1465
 msgid "Error adding the gift to the cart. Please try again or contact support."
 msgstr ""
 
-#: assets/gift-selection.js:1684
+#: assets/gift-selection.js:1686
 msgid "No matching variation found. Try a different combination."
 msgstr ""
 
-#: assets/gift-selection.js:1702
+#: assets/gift-selection.js:1704
 msgid "Adding..."
 msgstr ""
 
-#: assets/gift-selection.js:1757
+#: assets/gift-selection.js:1759
 msgid "Error adding the gift"
 msgstr ""
 
-#: assets/gift-selection.js:1776
+#: assets/gift-selection.js:1778
 msgid "Connection error. Try again."
 msgstr ""
 
-#: assets/gift-selection.js:1789
+#: assets/gift-selection.js:1791
 msgid "Removing..."
 msgstr ""
 
-#: assets/gift-selection.js:1805
+#: assets/gift-selection.js:1807
 msgid "Error"
 msgstr ""
 
-#: assets/gift-selection.js:1810
+#: assets/gift-selection.js:1812
 msgid "Connection error"
 msgstr ""

@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class MMD_Rule_Diagnostic {
+class INCV_Rule_Diagnostic {
 
     public function __construct() {
-        add_action( 'wp_ajax_mmd_rule_diagnostic_run', array( $this, 'ajax_run' ) );
-        add_action( 'wp_ajax_mmd_rule_diagnostic_product', array( $this, 'ajax_product_test' ) );
+        add_action( 'wp_ajax_incv_rule_diagnostic_run', array( $this, 'ajax_run' ) );
+        add_action( 'wp_ajax_incv_rule_diagnostic_product', array( $this, 'ajax_product_test' ) );
     }
 
     /**
@@ -38,7 +38,7 @@ class MMD_Rule_Diagnostic {
                 'php_max_stack_size' => function_exists( 'ini_get' ) ? ini_get( 'zend.max_allowed_stack_size' ) : null,
                 'wp_version'         => $wp_version,
                 'wc_version'         => defined( 'WC_VERSION' ) ? WC_VERSION : null,
-                'mmd_version'        => defined( 'MMD_VERSION' ) ? MMD_VERSION : null,
+                'incv_version'        => defined( 'INCV_VERSION' ) ? INCV_VERSION : null,
                 'site_url'           => home_url( '/' ),
                 'multisite'          => is_multisite(),
                 'object_cache'       => wp_using_ext_object_cache(),
@@ -365,8 +365,8 @@ class MMD_Rule_Diagnostic {
             'data'         => $product,
         );
 
-        if ( method_exists( 'MMD_Discount_Rules', 'get_qualifying_rule_sets' ) ) {
-            $qualifying = MMD_Discount_Rules::get_qualifying_rule_sets( $product, $cart_item );
+        if ( method_exists( 'INCV_Discount_Rules', 'get_qualifying_rule_sets' ) ) {
+            $qualifying = INCV_Discount_Rules::get_qualifying_rule_sets( $product, $cart_item );
             $rule_id    = isset( $rule_set['id'] ) ? $rule_set['id'] : '';
             $matched    = false;
             foreach ( $qualifying as $q ) {
@@ -416,14 +416,14 @@ class MMD_Rule_Diagnostic {
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             wp_send_json_error( array( 'message' => 'Forbidden' ), 403 );
         }
-        check_ajax_referer( 'mmd_rule_diagnostic', 'nonce' );
+        check_ajax_referer( 'incv_rule_diagnostic', 'nonce' );
 
         $rule_set_id = isset( $_POST['rule_set_id'] ) ? sanitize_text_field( wp_unslash( $_POST['rule_set_id'] ) ) : '';
         if ( empty( $rule_set_id ) ) {
             wp_send_json_error( array( 'message' => 'rule_set_id required' ), 400 );
         }
 
-        $rule_set = MMD_Discount_Rules::get_rule_set( $rule_set_id );
+        $rule_set = INCV_Discount_Rules::get_rule_set( $rule_set_id );
         if ( ! $rule_set ) {
             wp_send_json_error( array( 'message' => 'Rule not found' ), 404 );
         }
@@ -438,7 +438,7 @@ class MMD_Rule_Diagnostic {
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             wp_send_json_error( array( 'message' => 'Forbidden' ), 403 );
         }
-        check_ajax_referer( 'mmd_rule_diagnostic', 'nonce' );
+        check_ajax_referer( 'incv_rule_diagnostic', 'nonce' );
 
         $rule_set_id = isset( $_POST['rule_set_id'] ) ? sanitize_text_field( wp_unslash( $_POST['rule_set_id'] ) ) : '';
         $product_id  = isset( $_POST['product_id'] ) ? absint(wp_unslash($_POST['product_id'])) : 0;
@@ -446,7 +446,7 @@ class MMD_Rule_Diagnostic {
             wp_send_json_error( array( 'message' => 'rule_set_id and product_id required' ), 400 );
         }
 
-        $rule_set = MMD_Discount_Rules::get_rule_set( $rule_set_id );
+        $rule_set = INCV_Discount_Rules::get_rule_set( $rule_set_id );
         if ( ! $rule_set ) {
             wp_send_json_error( array( 'message' => 'Rule not found' ), 404 );
         }
@@ -455,4 +455,4 @@ class MMD_Rule_Diagnostic {
     }
 }
 
-new MMD_Rule_Diagnostic();
+new INCV_Rule_Diagnostic();

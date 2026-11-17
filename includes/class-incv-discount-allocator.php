@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Discount_Allocator {
+class INCV_Discount_Allocator {
 
     const DEFAULT_MODE = 'fee';
 
@@ -347,8 +347,8 @@ class MMD_Discount_Allocator {
             $new_price = max(0, $price - $per_unit_cut);
 
             // Never let an allocation breach the rule's margin floor.
-            if (class_exists('MMD_Margin_Guards')) {
-                $new_price = MMD_Margin_Guards::enforce_margin_floor($new_price, $product, $rule_set);
+            if (class_exists('INCV_Margin_Guards')) {
+                $new_price = INCV_Margin_Guards::enforce_margin_floor($new_price, $product, $rule_set);
             }
 
             $product->set_price($new_price);

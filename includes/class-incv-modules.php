@@ -5,24 +5,24 @@
  * Incentiv is complete on its own. Add-ons (for example Incentiv Pro) plug
  * extra modules in through the hooks below instead of the core loading them:
  *
- *  - `mmd_register_modules` (action, MMD_Modules $registry): call
+ *  - `incv_register_modules` (action, INCV_Modules $registry): call
  *    $registry->register( 'id', array( 'label' => ..., 'boot' => callable ) ).
  *    Each module's `boot` callback runs once, right after the core is loaded.
- *  - `mmd_loaded` (action): the core and every registered module are loaded.
- *  - `mmd_admin_tabs` (filter, array $tabs): tabs in the plugin's admin header.
- *  - `mmd_admin_screens` (filter, array $page_slugs): admin pages that use the
+ *  - `incv_loaded` (action): the core and every registered module are loaded.
+ *  - `incv_admin_tabs` (filter, array $tabs): tabs in the plugin's admin header.
+ *  - `incv_admin_screens` (filter, array $page_slugs): admin pages that use the
  *    plugin's admin chrome (body class, footer credit, scripts).
- *  - `mmd_promotions_blocked` (filter, bool $blocked, string $context): return
+ *  - `incv_promotions_blocked` (filter, bool $blocked, string $context): return
  *    true to give the current shopper no Incentiv promotions.
- *  - `mmd_rule_set_matches_audience` (filter, bool $matches, array $rule_set,
+ *  - `incv_rule_set_matches_audience` (filter, bool $matches, array $rule_set,
  *    WC_Cart|null $cart): audience/segment check for a discount rule.
- *  - `mmd_audience_rule_keys` (filter, array $keys): rule fields that hold
+ *  - `incv_audience_rule_keys` (filter, array $keys): rule fields that hold
  *    audience conditions set by an add-on.
- *  - `mmd_sanitize_rule_set` (filter, array $sanitized, array $input,
+ *  - `incv_sanitize_rule_set` (filter, array $sanitized, array $input,
  *    array|null $existing): add-on fields saved with a discount rule.
- *  - `mmd_rule_editor_cards` (action, array $rule_set): extra cards in the
+ *  - `incv_rule_editor_cards` (action, array $rule_set): extra cards in the
  *    discount rule editor.
- *  - `mmd_dashboard_sections` (action, int $period, array $stats): extra
+ *  - `incv_dashboard_sections` (action, int $period, array $stats): extra
  *    sections at the end of the dashboard.
  *
  * The core never deletes data that an add-on stored: fields of a discount
@@ -33,7 +33,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Modules {
+class INCV_Modules {
 
     private static $instance = null;
 
@@ -52,7 +52,7 @@ class MMD_Modules {
     private function __construct() {}
 
     /**
-     * Register a module. Call this from the `mmd_register_modules` action.
+     * Register a module. Call this from the `incv_register_modules` action.
      *
      * @param string $id   Unique module id, for example 'special_events'.
      * @param array  $args label (string), boot (callable), version (string).
@@ -80,7 +80,7 @@ class MMD_Modules {
         }
         $this->booted = true;
 
-        do_action('mmd_register_modules', $this);
+        do_action('incv_register_modules', $this);
 
         foreach ($this->modules as $id => $module) {
             if (is_callable($module['boot'])) {
@@ -88,7 +88,7 @@ class MMD_Modules {
             }
         }
 
-        do_action('mmd_loaded');
+        do_action('incv_loaded');
     }
 
     public static function is_active($id) {
@@ -100,21 +100,21 @@ class MMD_Modules {
     }
 
     /**
-     * Admin header tabs. Add-ons add theirs through `mmd_admin_tabs`.
+     * Admin header tabs. Add-ons add theirs through `incv_admin_tabs`.
      * Each tab: slug, label, icon (Material Symbols name), match (page slugs),
      * position (sort order, lower comes first).
      */
     public static function admin_tabs() {
         $tabs = array(
-            array('slug' => 'mmd-dashboard', 'label' => __( 'Dashboard', 'incentiv' ), 'icon' => 'insights', 'match' => array('mmd-dashboard'), 'position' => 10),
-            array('slug' => 'mix-match-discounts', 'label' => __( 'Discount rules', 'incentiv' ), 'icon' => 'sell', 'match' => array('mix-match-discounts'), 'position' => 20),
-            array('slug' => 'mmd-flows', 'label' => __( 'Flows', 'incentiv' ), 'icon' => 'account_tree', 'match' => array('mmd-flows'), 'position' => 40),
-            array('slug' => 'mmd-gift-rules', 'label' => __( 'Gifts', 'incentiv' ), 'icon' => 'redeem', 'match' => array('mmd-gift-rules', 'mmd-gift-styling'), 'position' => 50),
-            array('slug' => 'mmd-documentation', 'label' => __( 'Documentation', 'incentiv' ), 'icon' => 'menu_book', 'match' => array('mmd-documentation', 'mmd-github-sync'), 'position' => 80),
-            array('slug' => 'mmd-storefront', 'label' => __( 'Customer view', 'incentiv' ), 'icon' => 'smartphone', 'match' => array('mmd-storefront'), 'position' => 100),
+            array('slug' => 'incv-dashboard', 'label' => __( 'Dashboard', 'incentiv' ), 'icon' => 'insights', 'match' => array('incv-dashboard'), 'position' => 10),
+            array('slug' => 'incv-discount-rules', 'label' => __( 'Discount rules', 'incentiv' ), 'icon' => 'sell', 'match' => array('incv-discount-rules'), 'position' => 20),
+            array('slug' => 'incv-flows', 'label' => __( 'Flows', 'incentiv' ), 'icon' => 'account_tree', 'match' => array('incv-flows'), 'position' => 40),
+            array('slug' => 'incv-gift-rules', 'label' => __( 'Gifts', 'incentiv' ), 'icon' => 'redeem', 'match' => array('incv-gift-rules', 'incv-gift-styling'), 'position' => 50),
+            array('slug' => 'incv-documentation', 'label' => __( 'Documentation', 'incentiv' ), 'icon' => 'menu_book', 'match' => array('incv-documentation', 'incv-github-sync'), 'position' => 80),
+            array('slug' => 'incv-storefront', 'label' => __( 'Customer view', 'incentiv' ), 'icon' => 'smartphone', 'match' => array('incv-storefront'), 'position' => 100),
         );
 
-        $tabs = apply_filters('mmd_admin_tabs', $tabs);
+        $tabs = apply_filters('incv_admin_tabs', $tabs);
 
         $clean = array();
         foreach ((array) $tabs as $i => $tab) {
@@ -138,10 +138,10 @@ class MMD_Modules {
      */
     public static function admin_screens() {
         $screens = array(
-            'mix-match-discounts', 'mmd-dashboard', 'mmd-gift-rules', 'mmd-gift-styling',
-            'mmd-documentation', 'mmd-github-sync', 'mmd-storefront', 'mmd-flows',
+            'incv-discount-rules', 'incv-dashboard', 'incv-gift-rules', 'incv-gift-styling',
+            'incv-documentation', 'incv-github-sync', 'incv-storefront', 'incv-flows',
         );
-        return array_values(array_unique((array) apply_filters('mmd_admin_screens', $screens)));
+        return array_values(array_unique((array) apply_filters('incv_admin_screens', $screens)));
     }
 
     /**
@@ -151,7 +151,7 @@ class MMD_Modules {
      * @param string $context Where it is asked: 'discounts', 'gifts', 'gift_picker', ...
      */
     public static function promotions_blocked($context = 'discounts') {
-        return (bool) apply_filters('mmd_promotions_blocked', false, $context);
+        return (bool) apply_filters('incv_promotions_blocked', false, $context);
     }
 
     /**
@@ -164,7 +164,7 @@ class MMD_Modules {
             'segment_countries', 'segment_languages', 'segment_cart_categories',
             'segment_utm_source', 'segment_utm_medium', 'segment_utm_campaign', 'segment_referrer',
         );
-        return (array) apply_filters('mmd_audience_rule_keys', $keys);
+        return (array) apply_filters('incv_audience_rule_keys', $keys);
     }
 
     /**
@@ -198,7 +198,7 @@ class MMD_Modules {
      */
     public static function rule_matches_audience($rule_set, $cart = null) {
         $default = !self::rule_has_audience_conditions($rule_set);
-        return (bool) apply_filters('mmd_rule_set_matches_audience', $default, $rule_set, $cart);
+        return (bool) apply_filters('incv_rule_set_matches_audience', $default, $rule_set, $cart);
     }
 
     /**
@@ -211,8 +211,8 @@ class MMD_Modules {
      */
     public static function finalize_rule_set($sanitized, $input) {
         $existing = null;
-        if (!empty($sanitized['id']) && class_exists('MMD_Discount_Rules')) {
-            $existing = MMD_Discount_Rules::get_rule_set($sanitized['id']);
+        if (!empty($sanitized['id']) && class_exists('INCV_Discount_Rules')) {
+            $existing = INCV_Discount_Rules::get_rule_set($sanitized['id']);
         }
         if (is_array($existing)) {
             foreach ($existing as $key => $value) {
@@ -221,6 +221,6 @@ class MMD_Modules {
                 }
             }
         }
-        return (array) apply_filters('mmd_sanitize_rule_set', $sanitized, $input, $existing);
+        return (array) apply_filters('incv_sanitize_rule_set', $sanitized, $input, $existing);
     }
 }

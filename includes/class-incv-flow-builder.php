@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Flow_Builder {
+class INCV_Flow_Builder {
 
     private static $instance = null;
 
@@ -25,35 +25,35 @@ class MMD_Flow_Builder {
     private function __construct() {
         add_action('admin_menu', array($this, 'add_menu'), 14);
         add_action('admin_enqueue_scripts', array($this, 'enqueue'));
-        add_action('wp_ajax_mmd_create_flow', array($this, 'ajax_create_flow'));
+        add_action('wp_ajax_incv_create_flow', array($this, 'ajax_create_flow'));
     }
 
     public function add_menu() {
         add_submenu_page(
-            'mix-match-discounts',
+            'incv-discount-rules',
             __( 'Flows', 'incentiv' ),
             __( 'Flows', 'incentiv' ),
             'manage_woocommerce',
-            'mmd-flows',
+            'incv-flows',
             array($this, 'render_page')
         );
     }
 
     public function enqueue($hook) {
-        if (strpos($hook, 'mmd-flows') === false) {
+        if (strpos($hook, 'incv-flows') === false) {
             return;
         }
 
-        wp_enqueue_script('mmd-flow-builder', MMD_PLUGIN_URL . 'assets/flow-builder.js', array('jquery', 'wp-i18n'), MMD_VERSION, true);
-        wp_set_script_translations('mmd-flow-builder', 'incentiv', MMD_PLUGIN_DIR . 'languages');
-        wp_localize_script('mmd-flow-builder', 'mmdFlow', array(
+        wp_enqueue_script('incv-flow-builder', INCV_PLUGIN_URL . 'assets/flow-builder.js', array('jquery', 'wp-i18n'), INCV_VERSION, true);
+        wp_set_script_translations('incv-flow-builder', 'incentiv', INCV_PLUGIN_DIR . 'languages');
+        wp_localize_script('incv-flow-builder', 'incvFlow', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('mmd_create_flow'),
+            'nonce' => wp_create_nonce('incv_create_flow'),
             'categories' => $this->get_categories(),
             'products' => $this->get_products_sample(),
             'roles' => $this->get_roles(),
-            'rulesUrl' => admin_url('admin.php?page=mix-match-discounts'),
-            'giftsUrl' => admin_url('admin.php?page=mmd-gift-rules'),
+            'rulesUrl' => admin_url('admin.php?page=incv-discount-rules'),
+            'giftsUrl' => admin_url('admin.php?page=incv-gift-rules'),
         ));
     }
 
@@ -62,7 +62,7 @@ class MMD_Flow_Builder {
             return;
         }
 
-        include MMD_PLUGIN_DIR . 'templates/admin-flows.php';
+        include INCV_PLUGIN_DIR . 'templates/admin-flows.php';
     }
 
     private function get_categories() {
@@ -105,7 +105,7 @@ class MMD_Flow_Builder {
      * Payload: name, nodes (JSON array of {type, cfg}).
      */
     public function ajax_create_flow() {
-        check_ajax_referer('mmd_create_flow', 'nonce');
+        check_ajax_referer('incv_create_flow', 'nonce');
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error('forbidden');
         }
@@ -217,7 +217,7 @@ class MMD_Flow_Builder {
                 'notice_color' => '#7C3AED',
             );
 
-            MMD_Discount_Rules::save_rule_set($rule_set);
+            INCV_Discount_Rules::save_rule_set($rule_set);
             $result['discount_rule_id'] = $rule_id;
         }
 
@@ -246,8 +246,8 @@ class MMD_Flow_Builder {
                 'cart_gift_notice' => __( 'You have a gift! Choose a product from the list 🎁', 'incentiv' ),
             );
 
-            if (class_exists('MMD_Gift_Rules')) {
-                MMD_Gift_Rules::get_instance()->save_rule_set($gift_rule);
+            if (class_exists('INCV_Gift_Rules')) {
+                INCV_Gift_Rules::get_instance()->save_rule_set($gift_rule);
                 $result['gift_rule_id'] = $gift_rule_id;
             }
         }
@@ -269,23 +269,23 @@ class MMD_Flow_Builder {
             $coupon_id = $coupon->save();
 
             if ($coupon_id) {
-                update_post_meta($coupon_id, '_mmd_managed_by_plugin', 'yes');
+                update_post_meta($coupon_id, '_incv_managed_by_plugin', 'yes');
                 if ($result['discount_rule_id']) {
-                    update_post_meta($coupon_id, '_mmd_linked_rule_id', $result['discount_rule_id']);
+                    update_post_meta($coupon_id, '_incv_linked_rule_id', $result['discount_rule_id']);
                 }
                 if ($result['gift_rule_id']) {
-                    update_post_meta($coupon_id, '_mmd_linked_gift_rule_id', $result['gift_rule_id']);
+                    update_post_meta($coupon_id, '_incv_linked_gift_rule_id', $result['gift_rule_id']);
                 }
                 $result['coupon_id'] = $coupon_id;
-                $result['auto_apply_url'] = home_url('/?mmd_coupon=' . rawurlencode($coupon_lower));
+                $result['auto_apply_url'] = home_url('/?incv_coupon=' . rawurlencode($coupon_lower));
             }
         }
 
         $result['edit_rule_url'] = $result['discount_rule_id']
-            ? admin_url('admin.php?page=mix-match-discounts&action=edit&rule_set_id=' . urlencode($result['discount_rule_id']))
+            ? admin_url('admin.php?page=incv-discount-rules&action=edit&rule_set_id=' . urlencode($result['discount_rule_id']))
             : '';
         $result['edit_gift_url'] = $result['gift_rule_id']
-            ? admin_url('admin.php?page=mmd-gift-rules&action=edit&rule_id=' . urlencode($result['gift_rule_id']))
+            ? admin_url('admin.php?page=incv-gift-rules&action=edit&rule_id=' . urlencode($result['gift_rule_id']))
             : '';
 
         wp_send_json_success($result);
@@ -306,7 +306,7 @@ class MMD_Flow_Builder {
         );
 
         // Discount rules
-        foreach ((array) MMD_Discount_Rules::get_all_rule_sets() as $rs) {
+        foreach ((array) INCV_Discount_Rules::get_all_rule_sets() as $rs) {
             $nodes = array();
             $method = isset($rs['selection_method']) ? $rs['selection_method'] : 'all';
             $tiers = isset($rs['discount_rules']) ? $rs['discount_rules'] : array();
@@ -337,14 +337,14 @@ class MMD_Flow_Builder {
                 'kind' => 'quantity',
                 'name' => $rs['name'],
                 'enabled' => isset($rs['enabled']) && $rs['enabled'] === 'yes',
-                'edit_url' => admin_url('admin.php?page=mix-match-discounts&action=edit&rule_set_id=' . urlencode($rs['id'])),
+                'edit_url' => admin_url('admin.php?page=incv-discount-rules&action=edit&rule_set_id=' . urlencode($rs['id'])),
                 'nodes' => $nodes,
             );
         }
 
         // Gift rules
-        if (class_exists('MMD_Gift_Rules')) {
-            foreach ((array) MMD_Gift_Rules::get_instance()->get_rule_sets() as $gr) {
+        if (class_exists('INCV_Gift_Rules')) {
+            foreach ((array) INCV_Gift_Rules::get_instance()->get_rule_sets() as $gr) {
                 $nodes = array();
                 if (!empty($gr['min_cart_total'])) {
                     $nodes[] = array('payments', 'neutral', ( __( 'Cart over', 'incentiv' ) . ' ' ) . wp_strip_all_tags(wc_price($gr['min_cart_total'])), __( 'Threshold', 'incentiv' ));
@@ -366,15 +366,15 @@ class MMD_Flow_Builder {
                     'kind' => 'gift',
                     'name' => $gr['name'],
                     'enabled' => isset($gr['enabled']) && $gr['enabled'] === 'yes',
-                    'edit_url' => admin_url('admin.php?page=mmd-gift-rules&action=edit&rule_id=' . urlencode($gr['id'])),
+                    'edit_url' => admin_url('admin.php?page=incv-gift-rules&action=edit&rule_id=' . urlencode($gr['id'])),
                     'nodes' => $nodes,
                 );
             }
         }
 
-        // Add-on journeys (for example special events) through `mmd_flow_builder_flows`.
-        return apply_filters('mmd_flow_builder_flows', $flows);
+        // Add-on journeys (for example special events) through `incv_flow_builder_flows`.
+        return apply_filters('incv_flow_builder_flows', $flows);
     }
 }
 
-MMD_Flow_Builder::instance();
+INCV_Flow_Builder::instance();

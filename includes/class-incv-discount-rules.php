@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Discount_Rules {
+class INCV_Discount_Rules {
 
     /**
      * Get all discount rule sets
@@ -31,12 +31,12 @@ class MMD_Discount_Rules {
     }
 
     public static function get_all_rule_sets() {
-        $rule_sets = get_option('mmd_discount_rule_sets', array());
+        $rule_sets = get_option('incv_discount_rule_sets', array());
 
         // Ensure we always have at least the default rule set
         if (empty($rule_sets)) {
             $rule_sets = array(self::get_default_rule_set());
-            update_option('mmd_discount_rule_sets', $rule_sets);
+            update_option('incv_discount_rule_sets', $rule_sets);
         }
 
         return $rule_sets;
@@ -122,7 +122,7 @@ class MMD_Discount_Rules {
             }
         }
 
-        return update_option('mmd_discount_rule_sets', $rule_sets);
+        return update_option('incv_discount_rule_sets', $rule_sets);
     }
 
     /**
@@ -141,7 +141,7 @@ class MMD_Discount_Rules {
         // Re-index array
         $rule_sets = array_values($rule_sets);
 
-        return update_option('mmd_discount_rule_sets', $rule_sets);
+        return update_option('incv_discount_rule_sets', $rule_sets);
     }
 
     /**

@@ -3,7 +3,7 @@
  * Analytics engine for the admin dashboard.
  *
  * Aggregates real order data: revenue attributed to discount rules
- * (negative fee lines + `_mmd_applied_discount_rules` meta), gifts
+ * (negative fee lines + `_incv_applied_discount_rules` meta), gifts
  * redeemed, special-event orders and per-rule performance.
  *
  * Also persists gift markers onto order line items at checkout so gift
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Analytics {
+class INCV_Analytics {
 
     const CACHE_TTL = 900; // 15 minutes
     const ORDER_SCAN_LIMIT = 600;
@@ -41,10 +41,10 @@ class MMD_Analytics {
      * Copy gift flags from the cart item into order item meta.
      */
     public function persist_gift_item_meta($item, $cart_item_key, $values, $order) {
-        if (!empty($values['mmd_is_gift']) || !empty($values['mmd_cart_based_gift'])) {
-            $item->update_meta_data('_mmd_is_gift', 'yes');
-            if (!empty($values['mmd_gift_rule_id'])) {
-                $item->update_meta_data('_mmd_gift_rule_id', sanitize_text_field($values['mmd_gift_rule_id']));
+        if (!empty($values['incv_is_gift']) || !empty($values['incv_cart_based_gift'])) {
+            $item->update_meta_data('_incv_is_gift', 'yes');
+            if (!empty($values['incv_gift_rule_id'])) {
+                $item->update_meta_data('_incv_gift_rule_id', sanitize_text_field($values['incv_gift_rule_id']));
             }
         }
     }
@@ -57,7 +57,7 @@ class MMD_Analytics {
      */
     public function get_stats($days = 30) {
         $days = max(1, intval($days));
-        $cache_key = 'mmd_analytics_v2_' . $days;
+        $cache_key = 'incv_analytics_v2_' . $days;
         $cached = get_transient($cache_key);
         if (is_array($cached)) {
             return $cached;
@@ -168,7 +168,7 @@ class MMD_Analytics {
             $bucket = min($bucket_count - 1, max(0, (int) floor((($created_ts - $from_ts) / $window) * $bucket_count)));
 
             // --- Rule attribution -------------------------------------------------
-            $applied_rules = $order->get_meta('_mmd_applied_discount_rules');
+            $applied_rules = $order->get_meta('_incv_applied_discount_rules');
             $applied_rules = is_array($applied_rules) ? $applied_rules : array();
 
             // Negative fee lines = discount amount
@@ -180,7 +180,7 @@ class MMD_Analytics {
 
                     // Prefer the rule id stamped on the fee — exact, and immune
                     // to the merchant renaming the label.
-                    $tagged = $fee->get_meta('_mmd_rule_id');
+                    $tagged = $fee->get_meta('_incv_rule_id');
                     if ($tagged && !in_array($tagged, $applied_rules, true)) {
                         $applied_rules[] = $tagged;
                         continue;
@@ -201,7 +201,7 @@ class MMD_Analytics {
             foreach ($order->get_coupon_codes() as $code) {
                 $coupon_id = wc_get_coupon_id_by_code($code);
                 if ($coupon_id) {
-                    $linked = get_post_meta($coupon_id, '_mmd_linked_rule_id', true);
+                    $linked = get_post_meta($coupon_id, '_incv_linked_rule_id', true);
                     if ($linked && !in_array($linked, $applied_rules, true)) {
                         $applied_rules[] = $linked;
                     }
@@ -211,7 +211,7 @@ class MMD_Analytics {
             // --- Gift detection ---------------------------------------------------
             $gift_qty = 0;
             foreach ($order->get_items() as $item) {
-                if ($item->get_meta('_mmd_is_gift') === 'yes') {
+                if ($item->get_meta('_incv_is_gift') === 'yes') {
                     $gift_qty += max(1, (int) $item->get_quantity());
                 } elseif ((float) $item->get_total() <= 0 && (!empty($applied_rules) || $order_discount > 0)) {
                     // Legacy fallback: zero-priced line inside a discounted order
@@ -220,7 +220,7 @@ class MMD_Analytics {
             }
 
             // --- Event attribution ------------------------------------------------
-            $event_id = $order->get_meta('_mmd_event_id');
+            $event_id = $order->get_meta('_incv_event_id');
             $is_event_order = !empty($event_id);
 
             // --- Eligibility (funnel stage) ---------------------------------------
@@ -267,7 +267,7 @@ class MMD_Analytics {
             // across the rules that applied.
             $tagged_discount = array();
             foreach ($order->get_items('fee') as $fee) {
-                $fee_rule = $fee->get_meta('_mmd_rule_id');
+                $fee_rule = $fee->get_meta('_incv_rule_id');
                 if ($fee_rule) {
                     $tagged_discount[$fee_rule] = (isset($tagged_discount[$fee_rule]) ? $tagged_discount[$fee_rule] : 0)
                         + abs(floatval($fee->get_total()));
@@ -280,8 +280,8 @@ class MMD_Analytics {
             $cogs_known = true;
             foreach ($order->get_items() as $line) {
                 $product = $line->get_product();
-                $cost = ($product && class_exists('MMD_Margin_Guards'))
-                    ? MMD_Margin_Guards::get_product_cost($product)
+                $cost = ($product && class_exists('INCV_Margin_Guards'))
+                    ? INCV_Margin_Guards::get_product_cost($product)
                     : null;
                 if (is_null($cost)) {
                     $cogs_known = false;
@@ -345,10 +345,10 @@ class MMD_Analytics {
      */
     private function get_rule_label_map() {
         $map = array();
-        if (class_exists('MMD_Discount_Rules')) {
-            foreach ((array) MMD_Discount_Rules::get_all_rule_sets() as $rule_set) {
+        if (class_exists('INCV_Discount_Rules')) {
+            foreach ((array) INCV_Discount_Rules::get_all_rule_sets() as $rule_set) {
                 if (!empty($rule_set['id'])) {
-                    $map[$rule_set['id']] = MMD_Discount_Rules::get_cart_label($rule_set);
+                    $map[$rule_set['id']] = INCV_Discount_Rules::get_cart_label($rule_set);
                 }
             }
         }
@@ -357,8 +357,8 @@ class MMD_Analytics {
 
     public function get_rule_name_map() {
         $map = array();
-        if (class_exists('MMD_Discount_Rules')) {
-            foreach ((array) MMD_Discount_Rules::get_all_rule_sets() as $rule_set) {
+        if (class_exists('INCV_Discount_Rules')) {
+            foreach ((array) INCV_Discount_Rules::get_all_rule_sets() as $rule_set) {
                 if (!empty($rule_set['id'])) {
                     $map[$rule_set['id']] = isset($rule_set['name']) ? $rule_set['name'] : $rule_set['id'];
                 }
@@ -372,8 +372,8 @@ class MMD_Analytics {
      */
     public function get_rule_meta_map() {
         $map = array();
-        if (class_exists('MMD_Discount_Rules')) {
-            foreach ((array) MMD_Discount_Rules::get_all_rule_sets() as $rule_set) {
+        if (class_exists('INCV_Discount_Rules')) {
+            foreach ((array) INCV_Discount_Rules::get_all_rule_sets() as $rule_set) {
                 if (empty($rule_set['id'])) {
                     continue;
                 }
@@ -394,11 +394,11 @@ class MMD_Analytics {
     private function build_eligibility_index() {
         $index = array('all' => false, 'products' => array(), 'categories' => array());
 
-        if (!class_exists('MMD_Discount_Rules')) {
+        if (!class_exists('INCV_Discount_Rules')) {
             return $index;
         }
 
-        foreach ((array) MMD_Discount_Rules::get_all_rule_sets() as $rule_set) {
+        foreach ((array) INCV_Discount_Rules::get_all_rule_sets() as $rule_set) {
             if (empty($rule_set['enabled']) || $rule_set['enabled'] !== 'yes') {
                 continue;
             }

@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Admin {
+class INCV_Admin {
 
     public function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
@@ -18,11 +18,11 @@ class MMD_Admin {
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_filter('admin_body_class', array($this, 'add_admin_body_class'));
         add_filter('admin_footer_text', array($this, 'admin_footer_credit'));
-        add_action('wp_ajax_mmd_import_example_rule', array($this, 'ajax_import_example_rule'));
-        add_action('wp_ajax_mmd_preview_products_search', array($this, 'ajax_preview_products_search'));
-        add_action('wp_ajax_mmd_toggle_rule', array($this, 'ajax_toggle_rule'));
-        add_action('wp_ajax_mmd_save_rule_draft', array($this, 'ajax_save_rule_draft'));
-        add_action('wp_ajax_mmd_quick_create_rule', array($this, 'ajax_quick_create_rule'));
+        add_action('wp_ajax_incv_import_example_rule', array($this, 'ajax_import_example_rule'));
+        add_action('wp_ajax_incv_preview_products_search', array($this, 'ajax_preview_products_search'));
+        add_action('wp_ajax_incv_toggle_rule', array($this, 'ajax_toggle_rule'));
+        add_action('wp_ajax_incv_save_rule_draft', array($this, 'ajax_save_rule_draft'));
+        add_action('wp_ajax_incv_quick_create_rule', array($this, 'ajax_quick_create_rule'));
     }
 
     /**
@@ -36,7 +36,7 @@ class MMD_Admin {
         if (!$hook) {
             return false;
         }
-        $needles = MMD_Modules::admin_screens();
+        $needles = INCV_Modules::admin_screens();
         foreach ($needles as $needle) {
             if (strpos($hook, $needle) !== false) {
                 return true;
@@ -51,7 +51,7 @@ class MMD_Admin {
      */
     public function add_admin_body_class($classes) {
         if (self::is_plugin_screen()) {
-            $classes .= ' mmd-admin-body';
+            $classes .= ' incv-admin-body';
         }
         return $classes;
     }
@@ -81,7 +81,7 @@ class MMD_Admin {
             /* translators: Plugin brand name in the admin menu. Keep it as is unless the brand has a localized name. */
             _x( 'Incentiv', 'admin menu label (brand name)', 'incentiv' ),
             'manage_woocommerce',
-            'mix-match-discounts',
+            'incv-discount-rules',
             array($this, 'render_admin_page'),
             $menu_icon,
             56
@@ -89,21 +89,21 @@ class MMD_Admin {
 
         // Rename the auto-created first submenu to be clear
         add_submenu_page(
-            'mix-match-discounts',
+            'incv-discount-rules',
             __( 'Quantity discounts', 'incentiv' ),
             __( 'Quantity discounts', 'incentiv' ),
             'manage_woocommerce',
-            'mix-match-discounts',
+            'incv-discount-rules',
             array($this, 'render_admin_page')
         );
 
         // Analytics dashboard
         add_submenu_page(
-            'mix-match-discounts',
+            'incv-discount-rules',
             __( 'Dashboard', 'incentiv' ),
             __( 'Dashboard', 'incentiv' ),
             'manage_woocommerce',
-            'mmd-dashboard',
+            'incv-dashboard',
             array($this, 'render_dashboard_page')
         );
     }
@@ -113,11 +113,11 @@ class MMD_Admin {
      */
     public function add_storefront_menu() {
         add_submenu_page(
-            'mix-match-discounts',
+            'incv-discount-rules',
             __( 'Customer view', 'incentiv' ),
             __( 'Customer view', 'incentiv' ),
             'manage_woocommerce',
-            'mmd-storefront',
+            'incv-storefront',
             array($this, 'render_storefront_page')
         );
     }
@@ -127,11 +127,11 @@ class MMD_Admin {
      */
     public function add_documentation_menu() {
         add_submenu_page(
-            'mix-match-discounts',
+            'incv-discount-rules',
             __( 'Documentation', 'incentiv' ),
             __( 'Documentation', 'incentiv' ),
             'manage_woocommerce',
-            'mmd-documentation',
+            'incv-documentation',
             array($this, 'render_documentation_page')
         );
     }
@@ -140,7 +140,7 @@ class MMD_Admin {
      * Register settings
      */
     public function register_settings() {
-        register_setting('mmd_settings_group', 'mmd_settings', array($this, 'sanitize_settings'));
+        register_setting('incv_settings_group', 'incv_settings', array($this, 'sanitize_settings'));
     }
 
     /**
@@ -230,25 +230,27 @@ class MMD_Admin {
         }
 
         // Admin design system — fonts are self-hosted via @font-face in the CSS
-        wp_enqueue_style('mmd-admin-style', MMD_PLUGIN_URL . 'assets/admin-style.css', array(), MMD_VERSION);
+        wp_enqueue_style('incv-admin-style', INCV_PLUGIN_URL . 'assets/admin-style.css', array(), INCV_VERSION);
+        // Rule set editor styles (scoped to .incv-rule-set-editor, loaded on every screen for PJAX).
+        wp_enqueue_style('incv-admin-rule-editor', INCV_PLUGIN_URL . 'assets/admin-rule-editor.css', array('incv-admin-style'), INCV_VERSION);
 
         // Shared light UI behaviors (header search, PJAX nav, FAQ accordion, chips)
-        wp_enqueue_script('mmd-admin-ui', MMD_PLUGIN_URL . 'assets/admin-ui.js', array('jquery', 'wp-i18n'), MMD_VERSION, true);
-        wp_set_script_translations('mmd-admin-ui', 'incentiv', MMD_PLUGIN_DIR . 'languages');
-        wp_localize_script('mmd-admin-ui', 'mmdUi', array(
+        wp_enqueue_script('incv-admin-ui', INCV_PLUGIN_URL . 'assets/admin-ui.js', array('jquery', 'wp-i18n'), INCV_VERSION, true);
+        wp_set_script_translations('incv-admin-ui', 'incentiv', INCV_PLUGIN_DIR . 'languages');
+        wp_localize_script('incv-admin-ui', 'incvUi', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('mmd-admin-nonce'),
+            'nonce' => wp_create_nonce('incv-admin-nonce'),
         ));
 
         // Editor autosave / draft recovery (rule, gift, event editors)
-        wp_enqueue_script('mmd-admin-autosave', MMD_PLUGIN_URL . 'assets/admin-autosave.js', array('jquery', 'wp-i18n'), MMD_VERSION, true);
-        wp_set_script_translations('mmd-admin-autosave', 'incentiv', MMD_PLUGIN_DIR . 'languages');
+        wp_enqueue_script('incv-admin-autosave', INCV_PLUGIN_URL . 'assets/admin-autosave.js', array('jquery', 'wp-i18n'), INCV_VERSION, true);
+        wp_set_script_translations('incv-admin-autosave', 'incentiv', INCV_PLUGIN_DIR . 'languages');
 
         // Enqueue the full asset set on every plugin page so PJAX navigation
         // between screens always has its dependencies loaded.
         // Select2 is bundled locally (no CDN dependency).
-        wp_enqueue_script('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'), '4.0.13', true);
-        wp_enqueue_style('select2', MMD_PLUGIN_URL . 'assets/vendor/select2/select2.min.css', array(), '4.0.13');
+        wp_enqueue_script('select2', INCV_PLUGIN_URL . 'assets/vendor/select2/select2.min.js', array('jquery'), '4.0.13', true);
+        wp_enqueue_style('select2', INCV_PLUGIN_URL . 'assets/vendor/select2/select2.min.css', array(), '4.0.13');
 
         wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker');
@@ -256,12 +258,15 @@ class MMD_Admin {
         // Media library for banner image uploader
         wp_enqueue_media();
 
-        wp_enqueue_script('mmd-admin-script', MMD_PLUGIN_URL . 'assets/admin-script.js', array('jquery', 'wp-color-picker', 'wp-i18n'), MMD_VERSION, true);
-        wp_set_script_translations('mmd-admin-script', 'incentiv', MMD_PLUGIN_DIR . 'languages');
+        wp_enqueue_script('incv-admin-script', INCV_PLUGIN_URL . 'assets/admin-script.js', array('jquery', 'wp-color-picker', 'wp-i18n'), INCV_VERSION, true);
+        wp_set_script_translations('incv-admin-script', 'incentiv', INCV_PLUGIN_DIR . 'languages');
 
-        wp_localize_script('mmd-admin-script', 'mmdAdmin', array(
+        // Small page behaviors that used to be inline scripts (delegated, PJAX-safe).
+        wp_enqueue_script('incv-admin-pages', INCV_PLUGIN_URL . 'assets/admin-pages.js', array('jquery'), INCV_VERSION, true);
+
+        wp_localize_script('incv-admin-script', 'incvAdmin', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('mmd-admin-nonce'),
+            'nonce' => wp_create_nonce('incv-admin-nonce'),
         ));
     }
 
@@ -280,35 +285,35 @@ class MMD_Admin {
         // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
         // Handle save (publish)
-        if (isset($_POST['mmd_save_rule_set']) && check_admin_referer('mmd_save_rule_set')) {
+        if (isset($_POST['incv_save_rule_set']) && check_admin_referer('incv_save_rule_set')) {
             $rule_set_data = $this->sanitize_rule_set($_POST);
             $rule_set_data['status'] = 'active'; // publishing clears any draft flag
-            MMD_Discount_Rules::save_rule_set($rule_set_data);
+            INCV_Discount_Rules::save_rule_set($rule_set_data);
 
             wp_safe_redirect(add_query_arg(array(
-                'page' => 'mix-match-discounts',
+                'page' => 'incv-discount-rules',
                 'message' => 'saved'
             ), admin_url('admin.php')));
             exit;
         }
 
         // Handle delete
-        if ($action === 'delete' && !empty($rule_set_id) && check_admin_referer('mmd_delete_rule')) {
-            MMD_Discount_Rules::delete_rule_set($rule_set_id);
+        if ($action === 'delete' && !empty($rule_set_id) && check_admin_referer('incv_delete_rule')) {
+            INCV_Discount_Rules::delete_rule_set($rule_set_id);
 
             wp_safe_redirect(add_query_arg(array(
-                'page' => 'mix-match-discounts',
+                'page' => 'incv-discount-rules',
                 'message' => 'deleted'
             ), admin_url('admin.php')));
             exit;
         }
 
         // Handle duplicate
-        if ($action === 'duplicate' && !empty($rule_set_id) && check_admin_referer('mmd_duplicate_rule')) {
-            MMD_Discount_Rules::duplicate_rule_set($rule_set_id);
+        if ($action === 'duplicate' && !empty($rule_set_id) && check_admin_referer('incv_duplicate_rule')) {
+            INCV_Discount_Rules::duplicate_rule_set($rule_set_id);
 
             wp_safe_redirect(add_query_arg(array(
-                'page' => 'mix-match-discounts',
+                'page' => 'incv-discount-rules',
                 'message' => 'duplicated'
             ), admin_url('admin.php')));
             exit;
@@ -322,7 +327,7 @@ class MMD_Admin {
      * same draft instead of creating duplicates.
      */
     public function ajax_save_rule_draft() {
-        check_ajax_referer('mmd-admin-nonce', 'nonce');
+        check_ajax_referer('incv-admin-nonce', 'nonce');
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error(array('message' => 'forbidden'), 403);
         }
@@ -335,7 +340,7 @@ class MMD_Admin {
             $data['id'] = 'rule_' . time() . '_' . wp_rand(1000, 9999);
         }
 
-        MMD_Discount_Rules::save_rule_set($data);
+        INCV_Discount_Rules::save_rule_set($data);
         wp_send_json_success(array('id' => $data['id']));
     }
 
@@ -467,7 +472,7 @@ class MMD_Admin {
      * AJAX: create a working rule from a quick preset in one step.
      */
     public function ajax_quick_create_rule() {
-        check_ajax_referer('mmd-admin-nonce', 'nonce');
+        check_ajax_referer('incv-admin-nonce', 'nonce');
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error(array('message' => 'forbidden'), 403);
         }
@@ -498,12 +503,12 @@ class MMD_Admin {
             wp_send_json_error(array('message' => __( 'No discount set', 'incentiv' )));
         }
 
-        MMD_Discount_Rules::save_rule_set($rule);
+        INCV_Discount_Rules::save_rule_set($rule);
 
         wp_send_json_success(array(
             'id' => $rule['id'],
             'name' => $rule['name'],
-            'edit_url' => admin_url('admin.php?page=mix-match-discounts&action=edit&rule_set_id=' . urlencode($rule['id'])),
+            'edit_url' => admin_url('admin.php?page=incv-discount-rules&action=edit&rule_set_id=' . urlencode($rule['id'])),
         ));
     }
 
@@ -512,7 +517,7 @@ class MMD_Admin {
      * Returns a list of products (id, name, price) for the preview modal.
      */
     public function ajax_preview_products_search() {
-        check_ajax_referer('mmd_preview_products_search', 'nonce');
+        check_ajax_referer('incv_preview_products_search', 'nonce');
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error('forbidden', 403);
         }
@@ -565,7 +570,7 @@ class MMD_Admin {
      * AJAX: toggle a discount rule enabled/disabled (play/pause).
      */
     public function ajax_toggle_rule() {
-        check_ajax_referer('mmd-admin-nonce', 'nonce');
+        check_ajax_referer('incv-admin-nonce', 'nonce');
 
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error(array('message' => 'forbidden'), 403);
@@ -576,14 +581,14 @@ class MMD_Admin {
             wp_send_json_error(array('message' => 'missing rule id'));
         }
 
-        $rule_set = MMD_Discount_Rules::get_rule_set($rule_id);
+        $rule_set = INCV_Discount_Rules::get_rule_set($rule_id);
         if (!$rule_set) {
             wp_send_json_error(array('message' => 'rule not found'));
         }
 
         $new_state = (isset($rule_set['enabled']) && $rule_set['enabled'] === 'yes') ? 'no' : 'yes';
         $rule_set['enabled'] = $new_state;
-        MMD_Discount_Rules::save_rule_set($rule_set);
+        INCV_Discount_Rules::save_rule_set($rule_set);
 
         wp_send_json_success(array('enabled' => $new_state));
     }
@@ -592,7 +597,7 @@ class MMD_Admin {
      * AJAX handler for importing example rules
      */
     public function ajax_import_example_rule() {
-        check_ajax_referer('mmd_import_example', 'nonce');
+        check_ajax_referer('incv_import_example', 'nonce');
 
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error(array('message' => 'Permission denied'));
@@ -604,7 +609,7 @@ class MMD_Admin {
             wp_send_json_error(array('message' => 'No example specified'));
         }
 
-        $result = MMD_Example_Rules::import_example($example_key);
+        $result = INCV_Example_Rules::import_example($example_key);
 
         if ($result) {
             wp_send_json_success(array('message' => __( 'Rule imported successfully', 'incentiv' )));
@@ -763,14 +768,14 @@ class MMD_Admin {
         $sanitized['usage_limit_total'] = isset($input['usage_limit_total']) && $input['usage_limit_total'] !== '' ? intval($input['usage_limit_total']) : '';
         $sanitized['usage_limit_per_user'] = isset($input['usage_limit_per_user']) && $input['usage_limit_per_user'] !== '' ? intval($input['usage_limit_per_user']) : '';
 
-        // Audience/segment fields are an add-on's (filter `mmd_sanitize_rule_set`).
-        // Stored values are kept as they are by MMD_Modules::finalize_rule_set().
+        // Audience/segment fields are an add-on's (filter `incv_sanitize_rule_set`).
+        // Stored values are kept as they are by INCV_Modules::finalize_rule_set().
 
         // ---- Discount allocation ---------------------------------------
         $allocation = isset($input['discount_allocation']) ? sanitize_text_field($input['discount_allocation']) : '';
-        $sanitized['discount_allocation'] = (class_exists('MMD_Discount_Allocator') && MMD_Discount_Allocator::is_valid_mode($allocation))
+        $sanitized['discount_allocation'] = (class_exists('INCV_Discount_Allocator') && INCV_Discount_Allocator::is_valid_mode($allocation))
             ? $allocation
-            : MMD_Discount_Allocator::DEFAULT_MODE;
+            : INCV_Discount_Allocator::DEFAULT_MODE;
 
         // ---- Margin guards & limits ------------------------------------
         foreach (array('max_discount_amount', 'max_discount_percent', 'budget_cap', 'margin_floor_percent') as $key) {
@@ -821,7 +826,7 @@ class MMD_Admin {
         $sanitized['global_notice_mobile_position'] = isset($input['global_notice_mobile_position']) ? sanitize_text_field($input['global_notice_mobile_position']) : 'same';
 
         // Keep fields stored by add-ons, then let active add-ons sanitize theirs.
-        return MMD_Modules::finalize_rule_set($sanitized, $input);
+        return INCV_Modules::finalize_rule_set($sanitized, $input);
     }
 
     /**
@@ -847,7 +852,7 @@ class MMD_Admin {
             }
         }
 
-        include MMD_PLUGIN_DIR . 'templates/admin-rule-sets.php';
+        include INCV_PLUGIN_DIR . 'templates/admin-rule-sets.php';
     }
 
     /**
@@ -858,7 +863,7 @@ class MMD_Admin {
             return;
         }
 
-        include MMD_PLUGIN_DIR . 'templates/admin-documentation.php';
+        include INCV_PLUGIN_DIR . 'templates/admin-documentation.php';
     }
 
     /**
@@ -869,7 +874,7 @@ class MMD_Admin {
             return;
         }
 
-        include MMD_PLUGIN_DIR . 'templates/admin-dashboard.php';
+        include INCV_PLUGIN_DIR . 'templates/admin-dashboard.php';
     }
 
     /**
@@ -880,6 +885,6 @@ class MMD_Admin {
             return;
         }
 
-        include MMD_PLUGIN_DIR . 'templates/admin-storefront.php';
+        include INCV_PLUGIN_DIR . 'templates/admin-storefront.php';
     }
 }

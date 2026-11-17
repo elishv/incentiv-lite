@@ -13,14 +13,14 @@
      * in-place (with the design's rise animation) instead of reloading.
      * ====================================================================== */
 
-    var PJAX_PATTERN = /admin\.php\?page=(mix-match-discounts|mmd-)/;
+    var PJAX_PATTERN = /admin\.php\?page=(incv-discount-rules|incv-)/;
 
     // Screens that ship their own footer-enqueued EXTERNAL JS (flow builder,
     // smart builder, and the special-events editor's admin-events.js + chart).
-    // PJAX only swaps .mmd-admin-wrap and cannot pull in external <script src>
+    // PJAX only swaps .incv-admin-wrap and cannot pull in external <script src>
     // files, so these must full-load. Editors/wizards whose logic is INLINE
     // (rules, gifts, coupons + their wizards) run fine on swap and stay PJAX.
-    var PJAX_EXCLUDE = /(mmd-flows|mmd-smart-builder|mmd-special-events&action|event_id=)/;
+    var PJAX_EXCLUDE = /(incv-flows|incv-smart-builder|incv-special-events&action|event_id=)/;
 
     function isPluginUrl(href) {
         return typeof href === 'string'
@@ -31,46 +31,45 @@
 
     // Interval registry so page-specific timers (autosave, draft) don't leak
     // when the same editor is loaded again via PJAX. Editors register with
-    // window.mmdSetInterval; every registered timer is cleared before a swap.
-    window.mmdPjaxIntervals = window.mmdPjaxIntervals || [];
-    window.mmdSetInterval = function (fn, ms) {
+    // window.incvSetInterval; every registered timer is cleared before a swap.
+    window.incvPjaxIntervals = window.incvPjaxIntervals || [];
+    window.incvSetInterval = function (fn, ms) {
         var id = setInterval(fn, ms);
-        window.mmdPjaxIntervals.push(id);
+        window.incvPjaxIntervals.push(id);
         return id;
     };
 
     function pjaxTeardown() {
-        window.mmdPjaxIntervals.forEach(clearInterval);
-        window.mmdPjaxIntervals = [];
+        window.incvPjaxIntervals.forEach(clearInterval);
+        window.incvPjaxIntervals = [];
         // Drop page-scoped delegated/window handlers; they re-bind on the next
         // page's inline script. Global handlers here are un-namespaced and stay.
-        $(document).off('.mmdpjax');
-        $(window).off('.mmdpjax');
+        $(document).off('.incvpjax');
+        $(window).off('.incvpjax');
     }
 
     function pjaxLoad(url, push) {
-        var $wrap = $('.mmd-admin-wrap');
+        var $wrap = $('.incv-admin-wrap');
         if (!$wrap.length) {
             window.location.href = url;
             return;
         }
 
         pjaxTeardown();
-        $(document).trigger('mmd:pjax:before');
+        $(document).trigger('incv:pjax:before');
         $wrap.css({ opacity: .45, pointerEvents: 'none', transition: 'opacity .15s ease' });
 
-        fetch(url, { credentials: 'same-origin', headers: { 'X-MMD-PJAX': '1' } })
+        fetch(url, { credentials: 'same-origin', headers: { 'X-INCV-PJAX': '1' } })
             .then(function (res) {
                 if (!res.ok) { throw new Error('HTTP ' + res.status); }
                 return res.text();
             })
             .then(function (html) {
                 var doc = new DOMParser().parseFromString(html, 'text/html');
-                var fresh = doc.querySelector('.mmd-admin-wrap');
+                var fresh = doc.querySelector('.incv-admin-wrap');
                 if (!fresh) { throw new Error('no wrap'); }
 
-                // Collect the wrap plus its trailing sibling scripts/styles that
-                // templates print after the wrap (list-page inline handlers).
+                // Collect the wrap plus any trailing sibling scripts/styles.
                 var parts = [fresh.outerHTML];
                 var sib = fresh.nextElementSibling;
                 while (sib && (sib.tagName === 'SCRIPT' || sib.tagName === 'STYLE')) {
@@ -79,7 +78,7 @@
                 }
 
                 // Drop old trailing scripts/styles between the wrap and #wpfooter
-                var old = document.querySelector('.mmd-admin-wrap');
+                var old = document.querySelector('.incv-admin-wrap');
                 var next = old.nextElementSibling;
                 while (next && (next.tagName === 'SCRIPT' || next.tagName === 'STYLE')) {
                     var toRemove = next;
@@ -90,10 +89,26 @@
                 var $new = $($.parseHTML(parts.join('\n'), document, true));
                 $(old).replaceWith($new);
 
+                // Page-specific CSS/JS is queued through wp_add_inline_style() /
+                // wp_add_inline_script() (handles incv-inline-css-* / incv-inline-N),
+                // so WordPress prints it in <head>/footer rather than inside the wrap.
+                // Swap those styles and run the new page's inline scripts.
+                $('style[id^="incv-inline-css-"]').remove();
+                doc.querySelectorAll('style[id^="incv-inline-css-"]').forEach(function (st) {
+                    document.head.appendChild(document.importNode(st, true));
+                });
+                $('script[id^="incv-inline-"][id$="-js-after"]').remove();
+                doc.querySelectorAll('script[id^="incv-inline-"][id$="-js-after"]').forEach(function (sc) {
+                    var run = document.createElement('script');
+                    run.id = sc.id;
+                    run.text = sc.textContent;
+                    document.body.appendChild(run);
+                });
+
                 if (doc.title) { document.title = doc.title; }
-                if (push !== false) { history.pushState({ mmdPjax: true }, '', url); }
+                if (push !== false) { history.pushState({ incvPjax: true }, '', url); }
                 window.scrollTo({ top: 0 });
-                $(document).trigger('mmd:pjax:after');
+                $(document).trigger('incv:pjax:after');
             })
             .catch(function () {
                 window.location.href = url;
@@ -101,7 +116,7 @@
     }
 
     // Expose a soft reload for action handlers (replaces location.reload())
-    window.mmdPjaxReload = function () {
+    window.incvPjaxReload = function () {
         pjaxLoad(window.location.href, false);
     };
 
@@ -111,13 +126,13 @@
         var href = this.getAttribute('href') || '';
         if (this.target && this.target !== '_self') { return; }
         if (!isPluginUrl(href)) { return; }
-        if (!$('.mmd-admin-wrap').length) { return; }
+        if (!$('.incv-admin-wrap').length) { return; }
         e.preventDefault();
         pjaxLoad(this.href);
     });
 
     window.addEventListener('popstate', function () {
-        if ($('.mmd-admin-wrap').length && isPluginUrl(window.location.href)) {
+        if ($('.incv-admin-wrap').length && isPluginUrl(window.location.href)) {
             pjaxLoad(window.location.href, false);
         }
     });
@@ -127,9 +142,9 @@
      * ====================================================================== */
 
     // Global header search — client-side filter of list rows on the page
-    $(document).on('input', '#mmd-global-search', function () {
+    $(document).on('input', '#incv-global-search', function () {
         var q = $(this).val().toLowerCase().trim();
-        var $rows = $('.mmd-tablecard-row, .mmd-rules-table tbody tr, .mmd-admin-wrap .wp-list-table tbody tr, .mmd-rule-card');
+        var $rows = $('.incv-tablecard-row, .incv-rules-table tbody tr, .incv-admin-wrap .wp-list-table tbody tr, .incv-rule-card');
         $rows.each(function () {
             var text = $(this).text().toLowerCase();
             $(this).toggle(!q || text.indexOf(q) !== -1);
@@ -137,30 +152,30 @@
     });
 
     // FAQ accordion (docs page)
-    $(document).on('click', '.mmd-faq-q', function () {
-        $(this).closest('.mmd-faq-item').toggleClass('open');
+    $(document).on('click', '.incv-faq-q', function () {
+        $(this).closest('.incv-faq-item').toggleClass('open');
     });
 
-    // Filter chips (rules list) — filter rows by data-mmd-status
-    $(document).on('click', '.mmd-filter-chips .mmd-chip[data-filter]', function () {
+    // Filter chips (rules list) — filter rows by data-incv-status
+    $(document).on('click', '.incv-filter-chips .incv-chip[data-filter]', function () {
         var filter = $(this).data('filter');
-        $(this).addClass('mmd-chip-active').siblings().removeClass('mmd-chip-active');
-        $('[data-mmd-status]').each(function () {
-            var status = String($(this).data('mmd-status'));
+        $(this).addClass('incv-chip-active').siblings().removeClass('incv-chip-active');
+        $('[data-incv-status]').each(function () {
+            var status = String($(this).data('incv-status'));
             $(this).toggle(filter === 'all' || status === filter);
         });
     });
 
     // Rules list — play/pause a rule inline (no reload)
-    $(document).on('click', '.mmd-toggle-rule', function () {
+    $(document).on('click', '.incv-toggle-rule', function () {
         var $btn = $(this);
         if ($btn.prop('disabled')) { return; }
         var ruleId = $btn.data('rule-id');
         $btn.prop('disabled', true);
 
-        $.post((window.mmdUi && mmdUi.ajaxurl) || ajaxurl, {
-            action: 'mmd_toggle_rule',
-            nonce: (window.mmdUi && mmdUi.nonce) || '',
+        $.post((window.incvUi && incvUi.ajaxurl) || ajaxurl, {
+            action: 'incv_toggle_rule',
+            nonce: (window.incvUi && incvUi.nonce) || '',
             rule_id: ruleId
         }).done(function (resp) {
             $btn.prop('disabled', false);
@@ -168,23 +183,23 @@
             var on = resp.data.enabled === 'yes';
             $btn.attr('data-enabled', resp.data.enabled)
                 .attr('title', on ? __( 'Pause', 'incentiv' ) : __( 'Activate', 'incentiv' ))
-                .toggleClass('mmd-icon-btn-active', on)
+                .toggleClass('incv-icon-btn-active', on)
                 .find('.msr').text(on ? 'pause' : 'play_arrow');
 
             // Update the status pill + row dimming in the same row
-            var $row = $btn.closest('[data-mmd-status]');
-            $row.attr('data-mmd-status', on ? 'active' : 'disabled')
-                .toggleClass('mmd-row-disabled', !on);
-            var $pill = $row.find('.mmd-pill').first();
+            var $row = $btn.closest('[data-incv-status]');
+            $row.attr('data-incv-status', on ? 'active' : 'disabled')
+                .toggleClass('incv-row-disabled', !on);
+            var $pill = $row.find('.incv-pill').first();
             if ($pill.length) {
-                $pill.attr('class', 'mmd-pill ' + (on ? 'mmd-pill-success' : 'mmd-pill-muted'))
-                    .html('<span class="mmd-pill-dot"></span>' + (on ? __( 'Active', 'incentiv' ) : __( 'Disabled', 'incentiv' )));
+                $pill.attr('class', 'incv-pill ' + (on ? 'incv-pill-success' : 'incv-pill-muted'))
+                    .html('<span class="incv-pill-dot"></span>' + (on ? __( 'Active', 'incentiv' ) : __( 'Disabled', 'incentiv' )));
             }
         }).fail(function () { $btn.prop('disabled', false); });
     });
 
     // Coupon editor — random code generator
-    $(document).on('click', '#mmd-generate-coupon-code', function (e) {
+    $(document).on('click', '#incv-generate-coupon-code', function (e) {
         e.preventDefault();
         var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         var code = '';
@@ -204,37 +219,37 @@
     var substepEnterAtLast = false;
 
     function substepActiveCards() {
-        return $('.mmd-admin-container > .mmd-card.is-step-active[data-mmd-step]');
+        return $('.incv-admin-container > .incv-card.is-step-active[data-incv-step]');
     }
     function cardIsOptional($card) {
         return $card.find('[required]').length === 0;
     }
-    function mainNextBtn() { return $('#mmd-step-next:visible, #mmd-gift-step-next:visible').first(); }
+    function mainNextBtn() { return $('#incv-step-next:visible, #incv-gift-step-next:visible').first(); }
 
     function refreshSubsteps() {
         var $active = substepActiveCards();
-        $('.mmd-substep-bar').remove();
+        $('.incv-substep-bar').remove();
         if (!$active.length) { return; }
 
         // Reset position when the parent step changes (last card first if we
         // arrived by going back a step).
-        var stepId = $active.first().attr('data-mmd-step');
+        var stepId = $active.first().attr('data-incv-step');
         if (stepId !== substepStepId) {
             substepStepId = stepId;
             substepIdx = substepEnterAtLast ? ($active.length - 1) : 0;
         }
         substepEnterAtLast = false;
 
-        if ($active.length < 2) { $active.removeClass('mmd-substep-hidden'); return; }
+        if ($active.length < 2) { $active.removeClass('incv-substep-hidden'); return; }
         if (substepIdx >= $active.length) { substepIdx = $active.length - 1; }
         if (substepIdx < 0) { substepIdx = 0; }
 
         var pills = '';
         $active.each(function (i) {
-            var raw = ($(this).find('.mmd-card-title').first().text() || wp.i18n.sprintf( __( 'Card %d', 'incentiv' ), i + 1 )).trim();
+            var raw = ($(this).find('.incv-card-title').first().text() || wp.i18n.sprintf( __( 'Card %d', 'incentiv' ), i + 1 )).trim();
             var state = substepRevealAll ? '' : (i === substepIdx ? ' active' : (i < substepIdx ? ' done' : ''));
-            pills += '<button type="button" class="mmd-substep-pill' + state + '" data-i="' + i + '">' +
-                '<span class="mmd-substep-num">' + (i + 1) + '</span>' + $('<i>').text(raw).html() + '</button>';
+            pills += '<button type="button" class="incv-substep-pill' + state + '" data-i="' + i + '">' +
+                '<span class="incv-substep-num">' + (i + 1) + '</span>' + $('<i>').text(raw).html() + '</button>';
         });
 
         var optional = !substepRevealAll && cardIsOptional($active.eq(substepIdx));
@@ -245,24 +260,24 @@
             wp.i18n.sprintf( __( 'Card %1$d of %2$d', 'incentiv' ), substepIdx + 1, $active.length );
 
         var bar =
-            '<div class="mmd-substep-bar">' +
-            '<div class="mmd-substep-lead"><span class="msr">list_alt</span>' + pos + '</div>' +
-            '<div class="mmd-substep-pills">' + pills + '</div>' +
-            '<div class="mmd-substep-actions">' +
-            (optional ? ( '<button type="button" class="mmd-substep-skip" title="' + __( 'Skip to the next card', 'incentiv' ) + '">' + __( 'Skip', 'incentiv' ) + ' <span class="msr">skip_next</span></button>' ) : '') +
-            ( '<label class="mmd-substep-toggle" title="' + __( 'Show all cards together', 'incentiv' ) + '"><input type="checkbox" class="mmd-substep-revealall"' ) + (substepRevealAll ? ' checked' : '') + ( '> ' + __( 'Show all', 'incentiv' ) + '</label>' ) +
+            '<div class="incv-substep-bar">' +
+            '<div class="incv-substep-lead"><span class="msr">list_alt</span>' + pos + '</div>' +
+            '<div class="incv-substep-pills">' + pills + '</div>' +
+            '<div class="incv-substep-actions">' +
+            (optional ? ( '<button type="button" class="incv-substep-skip" title="' + __( 'Skip to the next card', 'incentiv' ) + '">' + __( 'Skip', 'incentiv' ) + ' <span class="msr">skip_next</span></button>' ) : '') +
+            ( '<label class="incv-substep-toggle" title="' + __( 'Show all cards together', 'incentiv' ) + '"><input type="checkbox" class="incv-substep-revealall"' ) + (substepRevealAll ? ' checked' : '') + ( '> ' + __( 'Show all', 'incentiv' ) + '</label>' ) +
             '</div>' +
             '</div>';
         $active.first().before(bar);
 
         if (substepRevealAll) {
-            $active.removeClass('mmd-substep-hidden');
+            $active.removeClass('incv-substep-hidden');
         } else {
-            $active.each(function (i) { $(this).toggleClass('mmd-substep-hidden', i !== substepIdx); });
+            $active.each(function (i) { $(this).toggleClass('incv-substep-hidden', i !== substepIdx); });
         }
     }
 
-    $(document).on('mmd:substep', function () { setTimeout(refreshSubsteps, 0); });
+    $(document).on('incv:substep', function () { setTimeout(refreshSubsteps, 0); });
     // A required field can live in a sub-hidden card; reveal all on validation
     // failure so the native error is visible and submission isn't silently blocked.
     document.addEventListener('invalid', function () {
@@ -271,17 +286,17 @@
             setTimeout(refreshSubsteps, 0);
         }
     }, true);
-    $(document).on('click', '.mmd-substep-pill', function () {
+    $(document).on('click', '.incv-substep-pill', function () {
         substepRevealAll = false;
         substepIdx = parseInt($(this).data('i'), 10) || 0;
         refreshSubsteps();
     });
-    $(document).on('change', '.mmd-substep-revealall', function () {
+    $(document).on('change', '.incv-substep-revealall', function () {
         substepRevealAll = $(this).is(':checked');
         refreshSubsteps();
     });
     // Skip an optional card — same as pressing Next
-    $(document).on('click', '.mmd-substep-skip', function () {
+    $(document).on('click', '.incv-substep-skip', function () {
         var b = mainNextBtn();
         if (b.length) { b.trigger('click'); }
     });
@@ -289,7 +304,7 @@
     // The main Prev/Next walk the sub-cards first, then change step. Bound
     // before the editors' own handlers (this script loads first) so we can
     // stop the step change while sub-cards remain.
-    $(document).on('click', '#mmd-step-next, #mmd-gift-step-next', function (e) {
+    $(document).on('click', '#incv-step-next, #incv-gift-step-next', function (e) {
         var $active = substepActiveCards();
         if (!substepRevealAll && $active.length > 1 && substepIdx < $active.length - 1) {
             e.stopImmediatePropagation();
@@ -299,7 +314,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     });
-    $(document).on('click', '#mmd-step-prev, #mmd-gift-step-prev', function (e) {
+    $(document).on('click', '#incv-step-prev, #incv-gift-step-prev', function (e) {
         var $active = substepActiveCards();
         if (!substepRevealAll && $active.length > 1 && substepIdx > 0) {
             e.stopImmediatePropagation();
@@ -335,21 +350,21 @@
     }
 
     // Toggle the tag menu
-    $(document).on('click', '.mmd-mergetag-btn', function (e) {
+    $(document).on('click', '.incv-mergetag-btn', function (e) {
         e.preventDefault();
         e.stopPropagation();
         var $btn = $(this);
-        var $open = $btn.siblings('.mmd-mergetag-menu');
-        $('.mmd-mergetag-menu').not($open).remove();
+        var $open = $btn.siblings('.incv-mergetag-menu');
+        $('.incv-mergetag-menu').not($open).remove();
         if ($open.length) { $open.remove(); return; }
 
         var target = $btn.data('target');
         var tags = String($btn.data('tags') || '').split(',');
-        var html = '<div class="mmd-mergetag-menu">';
+        var html = '<div class="incv-mergetag-menu">';
         tags.forEach(function (t) {
             t = t.trim();
             if (!t) { return; }
-            html += '<button type="button" class="mmd-mergetag-item" data-tag="' + t + '" data-target="' + target + '">' +
+            html += '<button type="button" class="incv-mergetag-item" data-tag="' + t + '" data-target="' + target + '">' +
                 '<code>{' + t + '}</code><span>' + (MERGE_TAG_LABELS[t] || t) + '</span></button>';
         });
         html += '</div>';
@@ -357,18 +372,18 @@
     });
 
     // Insert the chosen tag
-    $(document).on('click', '.mmd-mergetag-item', function (e) {
+    $(document).on('click', '.incv-mergetag-item', function (e) {
         e.preventDefault();
         var $target = $('#' + $(this).data('target'));
         insertAtCursor($target[0], '{' + $(this).data('tag') + '}');
         $target.trigger('input').trigger('change');
-        $(this).closest('.mmd-mergetag-menu').remove();
+        $(this).closest('.incv-mergetag-menu').remove();
     });
 
     // Close the menu on outside click
     $(document).on('click', function (e) {
-        if (!$(e.target).closest('.mmd-mergetag-btn, .mmd-mergetag-menu').length) {
-            $('.mmd-mergetag-menu').remove();
+        if (!$(e.target).closest('.incv-mergetag-btn, .incv-mergetag-menu').length) {
+            $('.incv-mergetag-menu').remove();
         }
     });
 
@@ -386,15 +401,15 @@
     }
 
     function refreshPreview() {
-        var $preview = $('#mmd-live-preview');
+        var $preview = $('#incv-live-preview');
         if (!$preview.length) { return; }
 
         var name = $('#rule_name').val() || __( 'My rule', 'incentiv' );
-        $preview.find('.mmd-lp-rule-name').text(name);
+        $preview.find('.incv-lp-rule-name').text(name);
 
-        var $tbody = $preview.find('.mmd-lp-tiers-body');
+        var $tbody = $preview.find('.incv-lp-tiers-body');
         var rows = [];
-        $('#discount_rules_container .mmd-discount-rule').each(function () {
+        $('#discount_rules_container .incv-discount-rule').each(function () {
             var qty = $(this).find('input[name*="[quantity]"]').val();
             var disc = $(this).find('input[name*="[discount]"]').val();
             var type = $(this).find('select[name*="[type]"]').val() || 'percentage';
@@ -408,21 +423,21 @@
             $tbody.empty();
             $.each(rows, function (i, row) {
                 var best = (i === rows.length - 1);
-                var $row = $('<div class="mmd-preview-tier-row' + (best ? ' mmd-tier-best' : '') + '">')
-                    .append($('<span class="mmd-tier-qty">').text(row.qty + ( ' ' + __( 'units', 'incentiv' ) )))
-                    .append($('<span class="mmd-tier-val">').text(tierLabel(row.disc, row.type)));
+                var $row = $('<div class="incv-preview-tier-row' + (best ? ' incv-tier-best' : '') + '">')
+                    .append($('<span class="incv-tier-qty">').text(row.qty + ( ' ' + __( 'units', 'incentiv' ) )))
+                    .append($('<span class="incv-tier-val">').text(tierLabel(row.disc, row.type)));
                 $tbody.append($row);
             });
-            $preview.find('.mmd-lp-tiers-wrap').show();
+            $preview.find('.incv-lp-tiers-wrap').show();
         } else {
-            $preview.find('.mmd-lp-tiers-wrap').hide();
+            $preview.find('.incv-lp-tiers-wrap').hide();
         }
 
         var badgeOn = $('#badge_enabled').is(':checked');
         var badgeText = $('#badge_text').val() || __( 'Promotion', 'incentiv' );
         var badgeBg = $('#badge_bg_color').val() || '#e53935';
         var badgeColor = $('#badge_text_color').val() || '#ffffff';
-        $preview.find('.mmd-preview-badge')
+        $preview.find('.incv-preview-badge')
             .toggle(badgeOn)
             .text(badgeText)
             .css({ background: badgeBg, color: badgeColor });
@@ -435,14 +450,14 @@
         if (!noticeText && rows.length) {
             noticeText = ( __( 'Buy', 'incentiv' ) + ' ' ) + rows[0].qty + ( ' ' + __( 'units and get', 'incentiv' ) + ' ' ) + tierLabel(rows[0].disc, rows[0].type);
         }
-        var $box = $preview.find('.mmd-lp-cartmsg-box').css('background', noticeColor).html('');
+        var $box = $preview.find('.incv-lp-cartmsg-box').css('background', noticeColor).html('');
         if (noticeTitle && noticeContent) {
             $box.append($('<strong style="display:block;margin-bottom:3px;">').text(noticeTitle))
                 .append($('<span>').text(noticeContent));
         } else {
             $box.text(noticeText || __( 'Buy more, save more!', 'incentiv' ));
         }
-        $preview.find('.mmd-lp-cartmsg').toggle(noticeOn && !!noticeText);
+        $preview.find('.incv-lp-cartmsg').toggle(noticeOn && !!noticeText);
     }
 
     $(document).on(
@@ -452,13 +467,13 @@
         '#notice_enabled, #discount_rules_container input, #discount_rules_container select',
         refreshPreview
     );
-    $(document).on('click', '.mmd-remove-rule, #add_discount_rule, .mmd-preset-btn, .mmd-global-preset-btn, #mmd-wizard-finish', function () {
+    $(document).on('click', '.incv-remove-rule, #add_discount_rule, .incv-preset-btn, .incv-global-preset-btn, #incv-wizard-finish', function () {
         setTimeout(refreshPreview, 80);
     });
 
     // Gift editor — mirror rule name into the preview
     $(document).on('input change', 'input[name="rule_name"]', function () {
-        $('#mmd-gift-live-preview .mmd-glp-rule-name').text($(this).val() || '');
+        $('#incv-gift-live-preview .incv-glp-rule-name').text($(this).val() || '');
     });
 
     /* ======================================================================
@@ -469,5 +484,5 @@
     }
 
     $(init);
-    $(document).on('mmd:pjax:after', init);
+    $(document).on('incv:pjax:after', init);
 })(jQuery);

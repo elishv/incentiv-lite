@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class MMD_Example_Rules {
+class INCV_Example_Rules {
 
     /**
      * Get all example rule definitions
@@ -330,6 +330,6 @@ class MMD_Example_Rules {
         $rule_data = $example['rule'];
         $rule_data['id'] = '';  // Will be auto-generated
 
-        return MMD_Discount_Rules::save_rule_set($rule_data);
+        return INCV_Discount_Rules::save_rule_set($rule_data);
     }
 }
