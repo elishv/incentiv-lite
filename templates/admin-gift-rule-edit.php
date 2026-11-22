@@ -1149,9 +1149,9 @@ $rule_set = wp_parse_args($rule_set, array(
     </div><!-- /.incv-editor-grid -->
 </div>
 
-<?php ob_start(); ?>
+<?php $incv_inline_js = INCV_Helpers::capture( function () use ( $rule_set, $combined_rules, $attributes, $is_new ) { ?>
 jQuery(document).ready(function($) {
-    var ruleSet = <?php echo json_encode($rule_set); ?>;
+    var ruleSet = <?php echo wp_json_encode($rule_set); ?>;
 
 
     // ==========================================
@@ -2005,7 +2005,7 @@ jQuery(document).ready(function($) {
     }
 
     // ---- Publish + draft (server-side) ----
-    var giftDraftInitialStatus = <?php echo json_encode(isset($rule_set['status']) ? $rule_set['status'] : ''); ?>;
+    var giftDraftInitialStatus = <?php echo wp_json_encode(isset($rule_set['status']) ? $rule_set['status'] : ''); ?>;
     var giftDraftContext = <?php echo $is_new ? 'true' : 'false'; ?> || giftDraftInitialStatus === 'draft';
     var $giftForm = $('[data-incv-autosave="gift"]').first();
     if (giftDraftContext) { $giftForm.data('incvServerDraftActive', true); }
@@ -2077,9 +2077,9 @@ jQuery(document).ready(function($) {
     $('#incv-gift-save-draft').on('click', function() { saveGiftDraft(true); });
     (window.incvSetInterval || setInterval)(function() { saveGiftDraft(false); }, 12000);
 });
-<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+<?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
 
-<?php ob_start(); ?>
+<?php $incv_inline_js = INCV_Helpers::capture( function () { ?>
 jQuery(function($) {
     // ==========================================================================
     // STEPPED GIFT EDITOR — navigable steps, every step freely clickable
@@ -2183,4 +2183,4 @@ jQuery(function($) {
         showStep(m ? parseInt(m[1], 10) : 1, false);
     })();
 });
-<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+<?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>

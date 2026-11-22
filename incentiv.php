@@ -3,7 +3,7 @@
  * Plugin Name: Incentiv – Advanced Promotions for WooCommerce
  * Plugin URI: https://a-in.co.il/plugins/incentiv/
  * Description: Incentiv is a promotions engine for WooCommerce: quantity and mix & match discounts, automatic gifts and BOGO, margin guards and a visual flow builder. Every reason to buy more.
- * Version: 2.2.0
+ * Version: 2.2.1
  * Author: Eli Shvarzman
  * Author URI: https://a-in.co.il/
  * Text Domain: incentiv
@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('INCV_VERSION', '2.2.0');
+define('INCV_VERSION', '2.2.1');
 define('INCV_PLUGIN_FILE', __FILE__);
 define('INCV_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('INCV_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -87,9 +87,6 @@ class INCV_Plugin {
      * Initialize plugin
      */
     public function init() {
-        // Load text domain
-        load_plugin_textdomain('incentiv', false, dirname(INCV_PLUGIN_BASENAME) . '/languages'); // phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound -- Loads the bundled translations shipped in /languages until WordPress.org language packs exist.
-        
         // Include required files
         $this->includes();
         

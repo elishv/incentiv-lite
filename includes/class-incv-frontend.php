@@ -1194,7 +1194,7 @@ class INCV_Frontend {
             <?php endif; ?>
         </div>
 
-        <?php ob_start(); ?>
+        <?php $incv_inline_css = INCV_Helpers::capture( function () use ( $mobile_position, $container_id ) { ?>
             @keyframes incv-marquee-rtl {
                 0% { transform: translateX(100%); }
                 100% { transform: translateX(-100%); }
@@ -1227,9 +1227,9 @@ class INCV_Frontend {
                 }
             }
             <?php endif; ?>
-        <?php INCV_Helpers::add_inline_style( ob_get_clean() ); ?>
+        <?php } ); INCV_Helpers::add_inline_style( $incv_inline_css ); ?>
 
-        <?php ob_start(); ?>
+        <?php $incv_inline_js = INCV_Helpers::capture( function () use ( $container_id, $position, $is_fixed, $mobile_position, $dismiss_limit, $layout, $rotate_speed ) { ?>
         (function(){
             var id = '<?php echo esc_js($container_id); ?>';
             var pos = '<?php echo esc_js($position); ?>';
@@ -1344,7 +1344,7 @@ class INCV_Frontend {
             }
             <?php endif; ?>
         })();
-        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+        <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
         <?php
     }
 
@@ -3566,9 +3566,7 @@ class INCV_Frontend {
             WC()->cart->calculate_totals();
         }
 
-        ob_start();
-        woocommerce_mini_cart();
-        $mini_cart = ob_get_clean();
+        $mini_cart = INCV_Helpers::capture('woocommerce_mini_cart');
 
         $fragments['div.widget_shopping_cart_content'] = '<div class="widget_shopping_cart_content">' . $mini_cart . '</div>';
 
@@ -3609,6 +3607,8 @@ class INCV_Frontend {
      * Handle AJAX refreshed fragments
      */
     public function handle_refreshed_fragments() {
+        check_ajax_referer('incv_gift_nonce', 'nonce');
+
         if (WC()->cart) {
             WC()->cart->calculate_fees();
             WC()->cart->calculate_totals();
@@ -3653,7 +3653,7 @@ class INCV_Frontend {
 
         // Always output the override script for product pages and cart
         ?>
-        <?php ob_start(); ?>
+        <?php $incv_inline_js = INCV_Helpers::capture( function () use ( $override_data ) { ?>
         var incvOverrideData = <?php echo wp_json_encode( $override_data, INCV_Helpers::JSON_INLINE ); ?>;
 
         // Provide display_modal_message stub if not defined (prevents JS errors from theme)
@@ -4060,7 +4060,7 @@ class INCV_Frontend {
                 });
             }
         });
-        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+        <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
         <?php
     }
 
@@ -4071,7 +4071,7 @@ class INCV_Frontend {
         // Check if override is active to add price hiding CSS
         $override_active = $this->is_override_active();
         ?>
-        <?php ob_start(); ?>
+        <?php $incv_inline_css = INCV_Helpers::capture( function () use ( $override_active ) { ?>
             .incv-discount-notice {
                 animation: incv-fade-in 0.3s ease-in;
             }
@@ -4177,7 +4177,7 @@ class INCV_Frontend {
             .woocommerce div.product div.images {
                 position: relative;
             }
-        <?php INCV_Helpers::add_inline_style( ob_get_clean() ); ?>
+        <?php } ); INCV_Helpers::add_inline_style( $incv_inline_css ); ?>
         <?php
     }
 

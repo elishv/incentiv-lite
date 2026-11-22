@@ -104,6 +104,42 @@ class INCV_Flow_Builder {
      * Compile a node flow into real mechanics.
      * Payload: name, nodes (JSON array of {type, cfg}).
      */
+    /**
+     * Sanitize decoded flow nodes: each node keeps a sanitized type and a cfg array
+     * whose keys go through sanitize_key() and whose values are sanitized text
+     * (or arrays of sanitized text). Numbers are cast where they are read.
+     *
+     * @param mixed $nodes Decoded JSON.
+     * @return array
+     */
+    private static function sanitize_nodes($nodes) {
+        $clean = array();
+        if (!is_array($nodes)) {
+            return $clean;
+        }
+        foreach (array_slice($nodes, 0, 50) as $node) {
+            if (!is_array($node)) {
+                continue;
+            }
+            $cfg = array();
+            if (isset($node['cfg']) && is_array($node['cfg'])) {
+                foreach ($node['cfg'] as $key => $value) {
+                    $key = sanitize_key($key);
+                    if (is_array($value)) {
+                        $cfg[$key] = array_map('sanitize_text_field', array_filter($value, 'is_scalar'));
+                    } elseif (is_scalar($value)) {
+                        $cfg[$key] = sanitize_text_field((string) $value);
+                    }
+                }
+            }
+            $clean[] = array(
+                'type' => isset($node['type']) && is_scalar($node['type']) ? sanitize_key($node['type']) : '',
+                'cfg'  => $cfg,
+            );
+        }
+        return $clean;
+    }
+
     public function ajax_create_flow() {
         check_ajax_referer('incv_create_flow', 'nonce');
         if (!current_user_can('manage_woocommerce')) {
@@ -111,8 +147,12 @@ class INCV_Flow_Builder {
         }
 
         $name = sanitize_text_field(isset($_POST['name']) ? wp_unslash($_POST['name']) : '');
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; every node field is sanitized (sanitize_text_field / intval / floatval) where it is read below.
-        $nodes = json_decode(isset($_POST['nodes']) ? wp_unslash($_POST['nodes']) : '[]', true);
+        // The nodes arrive as one JSON string; decoded and sanitized key by key right away.
+        $nodes = array();
+        if (isset($_POST['nodes']) && is_string($_POST['nodes'])) {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON string; json_decode() output is sanitized by sanitize_nodes() on the same line.
+            $nodes = self::sanitize_nodes(json_decode(wp_unslash($_POST['nodes']), true));
+        }
 
         if (!$name) {
             wp_send_json_error(__( 'Please give the flow a name', 'incentiv' ));

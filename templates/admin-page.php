@@ -338,7 +338,7 @@ if (!defined('ABSPATH')) {
                                 <?php esc_html_e( 'Any product selected here is never offered as a gift option, no matter which gift rule runs, which coupon is active, or which category it comes from.', 'incentiv' ); ?><br>
                                 Any product picked here will never appear as a gift option — no matter which gift rule fires, which coupon is active, or which category sourced it.
                             </p>
-                            <?php ob_start(); ?>
+                            <?php $incv_inline_js = INCV_Helpers::capture( function () { ?>
                             jQuery(function($) {
                                 if (typeof $.fn.select2 !== 'function') return;
                                 $('#global_gift_excluded_products').select2({
@@ -360,7 +360,7 @@ if (!defined('ABSPATH')) {
                                     }
                                 });
                             });
-                            <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+                            <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
                         </td>
                     </tr>
                 </table>

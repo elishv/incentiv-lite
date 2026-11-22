@@ -136,6 +136,11 @@ class INCV_Ajax {
     public function get_product_variations() {
         check_ajax_referer('incv_variations_nonce', 'nonce');
 
+        // Used by the gift box on the product edit screen.
+        if (!current_user_can('edit_products')) {
+            wp_send_json_error('Unauthorized', 403);
+        }
+
         $product_ids = isset($_POST['product_ids']) && is_array($_POST['product_ids'])
             ? array_map('intval', $_POST['product_ids'])
             : array();

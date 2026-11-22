@@ -5,7 +5,7 @@ Tags: discounts, quantity discounts, gifts, promotions
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 WC requires at least: 4.0
 WC tested up to: 11.2
 License: GPLv2 or later
@@ -94,6 +94,16 @@ Incentiv does not contact any external service.
 
 == Changelog ==
 
+= 2.2.1 =
+* Security: every value posted by the gift picker (gift product, variation and attributes JSON) is sanitized as soon as it is received, before it is logged or added to the cart. Attribute keys are matched against the product's own attributes.
+* Security: a gift is only added when it is one of the gifts the product offers, and the product itself is in the cart.
+* Security: a cart gift can only be claimed when the cart qualifies for it; its type and discount always come from the gift rule, not from the browser.
+* Security: gift rule sets and gift design settings are validated field by field (types, allowed values, number ranges, text and HTML sanitizing) before they are saved.
+* Security: the gift fields sent with the add-to-cart form now carry a nonce; the fragments and product-variations AJAX actions check a nonce and a capability.
+* Security: debug logging never writes raw request data.
+* Code: inline scripts and styles are captured with a helper that opens and closes its output buffer in the same scope.
+* Code: translations are loaded by WordPress.org language packs; the plugin no longer calls load_plugin_textdomain() and the zip no longer ships .po/.mo files.
+
 = 2.2.0 =
 * Code: every function, class, constant, option, hook, shortcode, AJAX action and script handle now uses the `incv` / `INCV_` prefix (the old `mmd` prefix was too short for WordPress.org). A one-time migration copies existing `mmd_*` options and `_mmd_*` / `mmd_*` meta to the new names on update, and leaves the old data in place. On sites that had the old data, the `[mmd_gift_selection]` and `[mmd_rule_banner]` shortcodes and the old Elementor widgets keep working.
 * Code: all inline scripts and styles are now loaded through the WordPress script and style APIs (`wp_enqueue_script`, `wp_add_inline_script`, `wp_add_inline_style`), and inline `onclick` handlers were replaced with script files.
@@ -139,6 +149,9 @@ Incentiv does not contact any external service.
 * Initial release: quantity discounts, flexible product selection, custom messages, debug mode.
 
 == Upgrade Notice ==
+
+= 2.2.1 =
+Security hardening from the WordPress.org review: input sanitizing, nonces and capability checks. No settings change.
 
 = 2.2.0 =
 Internal prefix change from mmd to incv for WordPress.org. Your settings, rules and gift data are copied to the new names automatically on update. Update Incentiv Pro to a version that supports 2.2.0 at the same time.

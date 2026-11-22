@@ -37,6 +37,24 @@ class INCV_Helpers {
      * @param string[] $deps Script dependencies.
      * @return bool Whether the code was queued.
      */
+    /**
+     * Run a callback that prints markup and return what it printed.
+     * The output buffer is opened and closed here, in the same scope.
+     *
+     * @param callable $callback Prints the inline CSS or JS.
+     * @return string
+     */
+    public static function capture($callback) {
+        ob_start();
+        try {
+            call_user_func($callback);
+        } catch (\Throwable $e) {
+            ob_end_clean();
+            throw $e;
+        }
+        return (string) ob_get_clean();
+    }
+
     public static function add_inline_script($js, $deps = array('jquery')) {
         $js = trim((string) $js);
         if ('' === $js) {

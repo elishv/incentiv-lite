@@ -293,7 +293,7 @@ if ($action === 'edit' || $action === 'new') {
         </div>
     </div>
 
-    <?php ob_start(); ?>
+    <?php $incv_inline_js = INCV_Helpers::capture( function () { ?>
     jQuery(function ($) {
         var $overlay = $('#incv-quick-create');
 
@@ -346,7 +346,7 @@ if ($action === 'edit' || $action === 'new') {
                 });
         });
     });
-    <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+    <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
     <?php
 }
 ?>

@@ -67,7 +67,7 @@ class INCV_Cart_Notes {
         $focus_border = isset($styling['cart_note_focus_border']) ? $styling['cart_note_focus_border'] : '#7c3aed';
 
         ?>
-        <?php ob_start(); ?>
+        <?php $incv_inline_css = INCV_Helpers::capture( function () use ( $placeholder_color, $focus_border ) { ?>
             .incv-cart-note-container #incv-cart-note::placeholder {
                 color: <?php echo esc_attr($placeholder_color); ?>;
             }
@@ -75,7 +75,7 @@ class INCV_Cart_Notes {
                 border-color: <?php echo esc_attr($focus_border); ?> !important;
                 outline: none;
             }
-        <?php INCV_Helpers::add_inline_style( ob_get_clean() ); ?>
+        <?php } ); INCV_Helpers::add_inline_style( $incv_inline_css ); ?>
         <div class="incv-cart-note-container" style="margin-top: 20px;">
             <h3 style="font-size: <?php echo esc_attr($label_size); ?>px; color: <?php echo esc_attr($text_color); ?>;"><?php esc_html_e( 'Order note', 'incentiv' ); ?></h3>
             <p class="description" style="font-size: <?php echo esc_attr($input_size); ?>px; color: <?php echo esc_attr($text_color); ?>;"><?php esc_html_e( 'Add a special note to your order (optional)', 'incentiv' ); ?></p>
