@@ -6,6 +6,10 @@ jQuery(document).ready(function($) {
     var __ = wp.i18n.__;
     // Debug output only when the site runs with WP_DEBUG and INCENTIV_DEBUG on.
     var incvLog = (window.incvGiftData && window.incvGiftData.debug && window.console) ? console.log.bind(console) : function() {};
+    // Nonce the server requires before it uses any gift field sent with an add-to-cart request.
+    var incvGiftNonce = function() {
+        return (window.incvGiftData && window.incvGiftData.nonce) ? window.incvGiftData.nonce : ($('form.cart input[name="incv_gift_nonce"]').val() || '');
+    };
     // Prevent modal/popup initialization on gift selection container
     const container = $('.incv-gift-selection-container');
 
@@ -57,6 +61,10 @@ jQuery(document).ready(function($) {
         }
         if (!form.find('#incv_selected_gifts_container').length) {
             form.append('<div id="incv_selected_gifts_container"></div>');
+        }
+        // The server only uses the gift fields when this nonce is present and valid.
+        if (!form.find('input[name="incv_gift_nonce"]').length && typeof incvGiftData !== 'undefined' && incvGiftData.nonce) {
+            form.append($('<input type="hidden" name="incv_gift_nonce">').val(incvGiftData.nonce));
         }
     }
 
@@ -994,6 +1002,9 @@ jQuery(document).ready(function($) {
                 data.incv_selected_gift_attributes = window.incvGiftSelectionData.attributes;
                 incvLog('INCV Gift: Added gift attributes to AJAX data');
             }
+            if (incvGiftNonce()) {
+                data.incv_gift_nonce = incvGiftNonce();
+            }
 
             // Also add individual gift attributes for compatibility
                     const attributesJson = window.incvGiftSelectionData.attributes;
@@ -1062,6 +1073,9 @@ jQuery(document).ready(function($) {
                         if (window.incvGiftSelectionData.attributes && !options.data.has('incv_selected_gift_attributes')) {
                             options.data.append('incv_selected_gift_attributes', window.incvGiftSelectionData.attributes);
                         }
+                        if (incvGiftNonce() && !options.data.has('incv_gift_nonce')) {
+                            options.data.append('incv_gift_nonce', incvGiftNonce());
+                        }
                         incvLog('INCV Gift: AJAX prefilter - Added gift data to FormData');
                         return; // Exit early for FormData
                     }
@@ -1079,6 +1093,9 @@ jQuery(document).ready(function($) {
                         if (window.incvGiftSelectionData.attributes) {
                             dataString += (dataString && !dataString.endsWith('&') ? '&' : '') + 'incv_selected_gift_attributes=' + encodeURIComponent(window.incvGiftSelectionData.attributes);
                         }
+                        if (incvGiftNonce() && dataString.indexOf('incv_gift_nonce=') === -1) {
+                            dataString += (dataString && !dataString.endsWith('&') ? '&' : '') + 'incv_gift_nonce=' + encodeURIComponent(incvGiftNonce());
+                        }
 
                         options.data = dataString;
                         incvLog('INCV Gift: Converted data to query string');
@@ -1095,6 +1112,9 @@ jQuery(document).ready(function($) {
                             dataObj.incv_selected_gift_attributes = window.incvGiftSelectionData.attributes;
                             incvLog('INCV Gift: Added gift attributes to AJAX data');
                             incvLog('INCV Gift: Attributes value:', window.incvGiftSelectionData.attributes);
+                        }
+                        if (incvGiftNonce()) {
+                            dataObj.incv_gift_nonce = incvGiftNonce();
                         }
 
                         options.data = dataObj;

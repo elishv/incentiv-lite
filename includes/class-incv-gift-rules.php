@@ -111,9 +111,293 @@ class INCV_Gift_Rules {
     }
 
     /**
+     * Validate and sanitize one gift rule set, field by field.
+     *
+     * Only known fields are kept. Each one is cast to its type, enums are checked
+     * against an allow-list, numbers are clamped to a range and text is sanitized.
+     *
+     * @param mixed $input Decoded rule set.
+     * @return array Clean rule set.
+     */
+    public static function sanitize_rule_set($input) {
+        $input = is_array($input) ? $input : array();
+        $out   = array();
+
+        $text = function ($key, $default = '') use ($input) {
+            return isset($input[$key]) && is_scalar($input[$key]) ? sanitize_text_field((string) $input[$key]) : $default;
+        };
+        $textarea = function ($key) use ($input) {
+            return isset($input[$key]) && is_scalar($input[$key]) ? sanitize_textarea_field((string) $input[$key]) : '';
+        };
+        $yes_no = function ($key, $default) use ($input) {
+            if (!isset($input[$key]) || !is_scalar($input[$key])) {
+                return $default;
+            }
+            return in_array($input[$key], array('yes', '1', 1, true), true) ? 'yes' : 'no';
+        };
+        $enum = function ($key, array $allowed, $default) use ($input) {
+            $value = isset($input[$key]) && is_scalar($input[$key]) ? (string) $input[$key] : '';
+            return in_array($value, $allowed, true) ? $value : $default;
+        };
+        // Number kept as a string ('' = not set), clamped to [min, max].
+        $number = function ($key, $min, $max, $default = '') use ($input) {
+            if (!isset($input[$key]) || !is_scalar($input[$key]) || '' === trim((string) $input[$key])) {
+                return $default;
+            }
+            if (!is_numeric($input[$key])) {
+                return $default;
+            }
+            $value = max($min, min($max, (float) $input[$key]));
+            return (string) (floor($value) == $value ? (int) $value : round($value, 4));
+        };
+        $ids = function ($key) use ($input) {
+            if (!isset($input[$key]) || !is_array($input[$key])) {
+                return array();
+            }
+            $values = array_map('intval', array_filter($input[$key], 'is_numeric'));
+            return array_values(array_unique(array_filter($values, function ($v) { return $v > 0; })));
+        };
+        $slug = function ($value) {
+            return is_scalar($value) ? substr(sanitize_title((string) $value), 0, 200) : '';
+        };
+        // Attribute taxonomy names (pa_color, or non-Latin names such as pa_צבע).
+        $taxonomy = function ($value) {
+            if (!is_scalar($value)) {
+                return '';
+            }
+            $value = function_exists('wc_sanitize_taxonomy_name') ? wc_sanitize_taxonomy_name((string) $value) : sanitize_key((string) $value);
+            return substr(sanitize_text_field($value), 0, 200);
+        };
+
+        $id = $text('id');
+        $out['id']      = preg_match('/^[A-Za-z0-9_\-]{1,100}$/', $id) ? $id : '';
+        $out['name']    = substr($text('name'), 0, 200);
+        $out['enabled'] = $yes_no('enabled', 'yes');
+        if (isset($input['status'])) {
+            $out['status'] = $enum('status', array('active', 'draft'), 'active');
+        }
+
+        // Which products trigger the gift.
+        $out['selection_method']                  = $enum('selection_method', array('all', 'product_ids', 'category', 'attribute'), 'all');
+        $out['included_categories']               = $ids('included_categories');
+        $out['excluded_categories']               = $ids('excluded_categories');
+        $out['included_products']                 = $ids('included_products');
+        $out['excluded_products']                 = $ids('excluded_products');
+        $out['excluded_products_from_categories'] = $ids('excluded_products_from_categories');
+        $out['attribute_slug']                    = isset($input['attribute_slug']) ? $taxonomy($input['attribute_slug']) : '';
+        $out['attribute_values']                  = $ids('attribute_values');
+        $out['attribute_excluded_values']         = $ids('attribute_excluded_values');
+
+        // The gift itself.
+        $out['gift_type']              = $enum('gift_type', array('free', 'discount', 'fixed_discount'), 'free');
+        $gift_discount_max             = 'discount' === $out['gift_type'] ? 100 : 1000000;
+        $out['gift_discount']          = $number('gift_discount', 0, $gift_discount_max, '0');
+        $out['gift_mode']              = $enum('gift_mode', array('product_page', 'cart_based'), 'product_page');
+        $out['cart_gift_notice']       = substr($text('cart_gift_notice'), 0, 500);
+        $out['cart_gift_display_mode'] = $enum('cart_gift_display_mode', array('inline', 'modal'), 'inline');
+        $out['show_gift_selection']    = $yes_no('show_gift_selection', 'yes');
+        $out['gift_limit_type']        = $enum('gift_limit_type', array('per_cart', 'per_product', 'unlimited'), 'per_cart');
+        $out['gift_source']            = $enum('gift_source', array('specific', 'category'), 'specific');
+        $out['gift_products']          = $ids('gift_products');
+        $out['gift_categories']        = $ids('gift_categories');
+        $out['gift_excluded_categories'] = $ids('gift_excluded_categories');
+        $out['gift_excluded_tags']     = $ids('gift_excluded_tags');
+        $out['gift_excluded_products'] = $ids('gift_excluded_products');
+        $out['gift_attribute_slug']    = isset($input['gift_attribute_slug']) ? $taxonomy($input['gift_attribute_slug']) : '';
+        $out['gift_attribute_values']  = $ids('gift_attribute_values');
+
+        $out['gift_additional_attributes'] = array();
+        if (isset($input['gift_additional_attributes']) && is_array($input['gift_additional_attributes'])) {
+            foreach ($input['gift_additional_attributes'] as $row) {
+                if (!is_array($row) || empty($row['slug']) || !is_scalar($row['slug'])) {
+                    continue;
+                }
+                $row_slug = $taxonomy($row['slug']);
+                if ('' === $row_slug) {
+                    continue;
+                }
+                $values = isset($row['values']) && is_array($row['values']) ? $row['values'] : array();
+                $out['gift_additional_attributes'][] = array(
+                    'slug'   => $row_slug,
+                    'values' => array_values(array_filter(array_map('intval', array_filter($values, 'is_numeric')), function ($v) { return $v > 0; })),
+                );
+                if (count($out['gift_additional_attributes']) >= 20) {
+                    break;
+                }
+            }
+        }
+
+        $out['gift_selection_type']       = $enum('gift_selection_type', array('single', 'multiple'), 'single');
+        $out['override_product_settings'] = $yes_no('override_product_settings', 'no');
+        $out['allow_quantity']            = $yes_no('allow_quantity', 'no');
+        $out['max_quantity']              = $number('max_quantity', 1, 1000, '5');
+        $out['total_quantity_limit']      = $number('total_quantity_limit', 0, 1000, '0');
+        $out['gift_products_limit']       = $number('gift_products_limit', 0, 1000, '0');
+
+        // product_id => variation_id
+        $out['gift_default_variations'] = array();
+        if (isset($input['gift_default_variations']) && is_array($input['gift_default_variations'])) {
+            foreach ($input['gift_default_variations'] as $product_id => $variation_id) {
+                $product_id   = absint($product_id);
+                $variation_id = is_scalar($variation_id) ? absint($variation_id) : 0;
+                if ($product_id && $variation_id) {
+                    $out['gift_default_variations'][$product_id] = $variation_id;
+                }
+            }
+        }
+        if (isset($input['gift_default_attr_slug'])) {
+            $out['gift_default_attr_slug'] = $taxonomy($input['gift_default_attr_slug']);
+        }
+        if (isset($input['gift_default_attr_value'])) {
+            $out['gift_default_attr_value'] = $slug($input['gift_default_attr_value']);
+        }
+        if (isset($input['gift_display_location'])) {
+            $out['gift_display_location'] = $enum('gift_display_location', array('both', 'cart', 'checkout', 'mini_cart'), 'both');
+        }
+
+        // Conditions.
+        $out['cart_message']              = wp_kses_post(isset($input['cart_message']) && is_scalar($input['cart_message']) ? (string) $input['cart_message'] : '');
+        $out['checkout_message']          = wp_kses_post(isset($input['checkout_message']) && is_scalar($input['checkout_message']) ? (string) $input['checkout_message'] : '');
+        $shipping                         = $text('shipping_method_condition');
+        $out['shipping_method_condition'] = preg_match('/^[A-Za-z0-9_\-:]{0,100}$/', $shipping) ? $shipping : '';
+        $out['min_cart_total']            = $number('min_cart_total', 0, 100000000, '');
+        $out['max_cart_total']            = $number('max_cart_total', 0, 100000000, '');
+        $out['allowed_user_roles']        = array();
+        if (isset($input['allowed_user_roles']) && is_array($input['allowed_user_roles'])) {
+            $out['allowed_user_roles'] = array_values(array_filter(array_map('sanitize_key', array_filter($input['allowed_user_roles'], 'is_scalar'))));
+        }
+        foreach (array('schedule_start', 'schedule_end') as $date_key) {
+            $date = $text($date_key);
+            // datetime-local value: YYYY-MM-DDTHH:MM (seconds optional), or a date.
+            $out[$date_key] = preg_match('/^\d{4}-\d{2}-\d{2}([T ]\d{2}:\d{2}(:\d{2})?)?$/', $date) ? $date : '';
+        }
+        $out['min_quantity_trigger']  = $number('min_quantity_trigger', 0, 100000, '');
+        $out['coupon_required']       = $yes_no('coupon_required', 'no');
+        $out['required_coupon_codes'] = array();
+        if (isset($input['required_coupon_codes'])) {
+            $codes = is_array($input['required_coupon_codes']) ? $input['required_coupon_codes'] : explode(',', is_scalar($input['required_coupon_codes']) ? (string) $input['required_coupon_codes'] : '');
+            foreach ($codes as $code) {
+                if (!is_scalar($code)) {
+                    continue;
+                }
+                $code = function_exists('wc_format_coupon_code') ? wc_format_coupon_code(sanitize_text_field((string) $code)) : strtolower(sanitize_text_field((string) $code));
+                if ('' !== $code) {
+                    $out['required_coupon_codes'][] = strtolower($code);
+                }
+            }
+            $out['required_coupon_codes'] = array_values(array_unique($out['required_coupon_codes']));
+        }
+
+        // Promo notice.
+        $out['promo_notice_enabled']   = $yes_no('promo_notice_enabled', 'no');
+        $out['promo_notice_text']      = substr($textarea('promo_notice_text'), 0, 1000);
+        $out['promo_notice_pages']     = $enum('promo_notice_pages', array('all', 'cart_checkout', 'product_only', 'shop_only', 'shop_product'), 'all');
+        $out['promo_notice_link']      = isset($input['promo_notice_link']) && is_scalar($input['promo_notice_link']) ? esc_url_raw((string) $input['promo_notice_link']) : '';
+        $out['promo_notice_link_text'] = substr($text('promo_notice_link_text'), 0, 200);
+
+        // Quantity discounts on top of the gift.
+        $out['combined_discount_enabled'] = $yes_no('combined_discount_enabled', 'no');
+        $out['combined_discount_rules']   = array();
+        if (isset($input['combined_discount_rules']) && is_array($input['combined_discount_rules'])) {
+            foreach ($input['combined_discount_rules'] as $tier) {
+                if (!is_array($tier) || !isset($tier['quantity'], $tier['discount']) || !is_numeric($tier['quantity']) || !is_numeric($tier['discount'])) {
+                    continue;
+                }
+                $type = isset($tier['type']) && 'fixed' === $tier['type'] ? 'fixed' : 'percentage';
+                $out['combined_discount_rules'][] = array(
+                    'quantity' => max(1, min(100000, (int) $tier['quantity'])),
+                    'discount' => max(0, min('percentage' === $type ? 100 : 100000000, (float) $tier['discount'])),
+                    'type'     => $type,
+                );
+                if (count($out['combined_discount_rules']) >= 50) {
+                    break;
+                }
+            }
+        }
+        $out['combined_discount_mode']           = $enum('combined_discount_mode', array('quantity', 'global'), 'quantity');
+        $out['combined_discount_apply_to']       = $enum('combined_discount_apply_to', array('cheapest', 'most_expensive', 'all'), 'cheapest');
+        $out['combined_discount_notice_enabled'] = $yes_no('combined_discount_notice_enabled', 'yes');
+        $out['combined_discount_notice_title']   = substr($text('combined_discount_notice_title'), 0, 200);
+        $color                                   = isset($input['combined_discount_notice_color']) && is_scalar($input['combined_discount_notice_color']) ? sanitize_hex_color((string) $input['combined_discount_notice_color']) : '';
+        $out['combined_discount_notice_color']   = $color ? $color : '#4CAF50';
+
+        /**
+         * Lets an add-on keep (and sanitize) its own gift rule fields.
+         *
+         * @param array $out   Sanitized rule set.
+         * @param array $input Decoded, unsanitized input. Sanitize anything you read from it.
+         */
+        return (array) apply_filters('incv_sanitize_gift_rule_set', $out, $input);
+    }
+
+    /**
+     * Validate and sanitize gift styling options against the styling schema.
+     * Unknown keys are dropped; invalid values are left out so the stored value stays.
+     *
+     * @param mixed $input Decoded styling options (may be partial).
+     * @return array Clean options.
+     */
+    public static function sanitize_styling_options($input) {
+        $input = is_array($input) ? $input : array();
+        $colors = array(
+            'gift_box_bg_color_1', 'gift_box_bg_color_2', 'gift_box_text_color', 'gift_box_border_color',
+            'gift_button_bg_color', 'gift_button_text_color', 'gift_button_hover_bg', 'gift_button_hover_text',
+            'cart_note_bg_color', 'cart_note_text_color', 'cart_note_border_color', 'cart_note_placeholder_color', 'cart_note_focus_border',
+        );
+        // key => array(min, max) in px.
+        $sizes = array(
+            'gift_box_title_size'     => array(8, 100),
+            'gift_box_subtitle_size'  => array(8, 100),
+            'gift_box_border_radius'  => array(0, 100),
+            'gift_box_padding'        => array(0, 200),
+            'gift_box_margin'         => array(0, 200),
+            'gift_box_border_width'   => array(0, 50),
+            'cart_note_label_size'    => array(8, 100),
+            'cart_note_input_size'    => array(8, 100),
+            'cart_note_border_width'  => array(0, 50),
+            'cart_note_border_radius' => array(0, 100),
+            'cart_note_padding'       => array(0, 200),
+        );
+        $texts = array('gift_box_title_text', 'gift_box_subtitle_text', 'gift_badge_text');
+        $enums = array(
+            'gift_box_shadow'   => array('none', 'small', 'medium', 'large'),
+            'gift_display_hook' => array('before_add_to_cart', 'after_add_to_cart', 'before_summary', 'after_summary', 'after_product_meta', 'before_tabs', 'elementor_widget_only'),
+            'debug_mode'        => array('yes', 'no'),
+        );
+
+        $out = array();
+        foreach ($input as $key => $value) {
+            if (!is_string($key) || !is_scalar($value)) {
+                continue;
+            }
+            $value = (string) $value;
+            if (in_array($key, $colors, true)) {
+                $color = sanitize_hex_color($value);
+                if ($color) {
+                    $out[$key] = $color;
+                }
+            } elseif (isset($sizes[$key])) {
+                if (is_numeric($value)) {
+                    $out[$key] = (string) max($sizes[$key][0], min($sizes[$key][1], (int) $value));
+                }
+            } elseif (in_array($key, $texts, true)) {
+                $out[$key] = substr(sanitize_text_field($value), 0, 300);
+            } elseif (isset($enums[$key])) {
+                if (in_array($value, $enums[$key], true)) {
+                    $out[$key] = $value;
+                }
+            }
+        }
+        return $out;
+    }
+
+    /**
      * Save a rule set
      */
     public function save_rule_set($rule_set) {
+        // Every field is validated and sanitized against the rule schema before it can be stored.
+        $rule_set = self::sanitize_rule_set($rule_set);
+
         $rule_sets = $this->get_rule_sets();
 
         // Generate ID if new
@@ -124,7 +408,13 @@ class INCV_Gift_Rules {
         // Find and update or add new
         $found = false;
         foreach ($rule_sets as $key => $existing) {
-            if ($existing['id'] === $rule_set['id']) {
+            if (isset($existing['id']) && $existing['id'] === $rule_set['id']) {
+                // Keep stored fields this schema does not know (e.g. written by an add-on). They come from the database, not the request.
+                foreach ((array) $existing as $existing_key => $existing_value) {
+                    if (!array_key_exists($existing_key, $rule_set)) {
+                        $rule_set[$existing_key] = $existing_value;
+                    }
+                }
                 $rule_sets[$key] = $rule_set;
                 $found = true;
                 break;
@@ -135,8 +425,9 @@ class INCV_Gift_Rules {
             $rule_sets[] = $rule_set;
         }
 
-        // update_option returns false if value hasn't changed, so we verify by reading back
-        update_option($this->option_name, $rule_sets);
+        // update_option returns false if value hasn't changed, so we verify by reading back.
+        // $rule_set was sanitized field by field above; stored rules were sanitized when they were saved.
+        update_option($this->option_name, array_values($rule_sets));
 
         // Verify the save by checking if the rule exists
         $saved_rules = get_option($this->option_name, array());
@@ -216,7 +507,7 @@ class INCV_Gift_Rules {
         if (!is_array($existing)) {
             $existing = array();
         }
-        $merged = array_merge($existing, (array) $options);
+        $merged = array_merge($existing, self::sanitize_styling_options((array) $options));
         update_option($this->styling_option_name, $merged);
         return true; // update_option returns false when unchanged — treat persisted state as success
     }
@@ -355,8 +646,14 @@ class INCV_Gift_Rules {
             return;
         }
 
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; the decoded rule is sanitized field by field in save_rule_set().
-        $rule_set = isset($_POST['rule_set']) ? json_decode(wp_unslash($_POST['rule_set']), true) : array();
+        // The rule arrives as one JSON string. It is decoded and then every field is
+        // validated and sanitized against the rule schema (sanitize_rule_set()) right away.
+        $rule_set = array();
+        if (isset($_POST['rule_set']) && is_string($_POST['rule_set'])) {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON string; json_decode() output is sanitized key by key on the next line.
+            $decoded  = json_decode(wp_unslash($_POST['rule_set']), true);
+            $rule_set = is_array($decoded) ? self::sanitize_rule_set($decoded) : array();
+        }
         $is_draft = !empty($_POST['is_draft']);
 
         if (empty($rule_set) || !is_array($rule_set)) {
@@ -381,7 +678,7 @@ class INCV_Gift_Rules {
             }
         }
 
-        self::debug_log('INCV Gift Rules: Attempting to save rule: ' . wp_json_encode($rule_set));
+        self::debug_log('INCV Gift Rules: Attempting to save rule: ' . (isset($rule_set['id']) && $rule_set['id'] !== '' ? $rule_set['id'] : '(new)'));
 
         $result = $this->save_rule_set($rule_set);
 
@@ -469,22 +766,21 @@ class INCV_Gift_Rules {
             return;
         }
 
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; every value is sanitized below before it is saved.
-        $styling = isset($_POST['styling']) ? json_decode(wp_unslash($_POST['styling']), true) : array();
+        // The styling arrives as one JSON string. It is decoded and every known key is
+        // validated against the styling schema right away; unknown keys are dropped.
+        $styling = array();
+        if (isset($_POST['styling']) && is_string($_POST['styling'])) {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON string; json_decode() output is sanitized key by key on the next line.
+            $decoded = json_decode(wp_unslash($_POST['styling']), true);
+            $styling = is_array($decoded) ? self::sanitize_styling_options($decoded) : array();
+        }
 
-        if (empty($styling) || !is_array($styling)) {
+        if (empty($styling)) {
             wp_send_json_error('Invalid styling data');
             return;
         }
 
-        // Sanitize every scalar value before persisting.
-        $clean = array();
-        foreach ($styling as $key => $value) {
-            $key = sanitize_key($key);
-            $clean[$key] = is_scalar($value) ? sanitize_text_field((string) $value) : '';
-        }
-
-        $result = $this->save_styling_options($clean);
+        $result = $this->save_styling_options($styling);
 
         if ($result) {
             wp_send_json_success('Styling saved successfully');

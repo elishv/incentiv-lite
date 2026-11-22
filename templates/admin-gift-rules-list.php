@@ -193,7 +193,7 @@ $gift_type_labels = array(
 
 
 
-<?php ob_start(); ?>
+<?php $incv_inline_js = INCV_Helpers::capture( function () { ?>
 jQuery(document).ready(function($) {
     // Widget background colour swatches — apply to preview + save (merged)
     function applyGwSwatch($sw) {
@@ -279,4 +279,4 @@ jQuery(document).ready(function($) {
         });
     });
 });
-<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+<?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>

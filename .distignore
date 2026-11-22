@@ -10,3 +10,7 @@ README.md
 node_modules
 build
 *.zip
+# Translations come from WordPress.org language packs; keep the .pot only.
+languages/*.po
+languages/*.mo
+languages/*.json

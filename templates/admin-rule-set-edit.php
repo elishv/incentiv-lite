@@ -1087,7 +1087,7 @@ $attributes = wc_get_attribute_taxonomies();
                     </tr>
                 </table>
 
-                <?php ob_start(); ?>
+                <?php $incv_inline_js = INCV_Helpers::capture( function () { ?>
                 jQuery(function($) {
                     var frame;
                     $('#banner_image_upload_btn').on('click', function(e) {
@@ -1113,7 +1113,7 @@ $attributes = wc_get_attribute_taxonomies();
                         $(this).hide();
                     });
                 });
-                <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+                <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
             </div>
 
             
@@ -1501,7 +1501,7 @@ $attributes = wc_get_attribute_taxonomies();
 
         
 
-        <?php ob_start(); ?>
+        <?php $incv_inline_js = INCV_Helpers::capture( function () { ?>
         jQuery(function($) {
             // ====================================================================
             // Tips per section (matched by title keyword)
@@ -2046,7 +2046,7 @@ $attributes = wc_get_attribute_taxonomies();
                 $('.incv-preview-summary').html(html);
             }
         });
-        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+        <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
     </form>
 
     <?php if ( ! $is_new && class_exists( 'INCV_Rule_Diagnostic' ) ) : ?>
@@ -2085,7 +2085,7 @@ $attributes = wc_get_attribute_taxonomies();
         </div>
     </div>
 
-    <?php ob_start(); ?>
+    <?php $incv_inline_js = INCV_Helpers::capture( function () use ( $rule_set ) { ?>
     (function ($) {
         var ruleSetId = <?php echo wp_json_encode( $rule_set['id'] ); ?>;
         var nonce     = <?php echo wp_json_encode( wp_create_nonce( 'incv_rule_diagnostic' ) ); ?>;
@@ -2212,11 +2212,11 @@ $attributes = wc_get_attribute_taxonomies();
             }
         }
     })(jQuery);
-    <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+    <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
     <?php endif; ?>
 </div>
 
-<?php ob_start(); ?>
+<?php $incv_inline_js = INCV_Helpers::capture( function () use ( $rule_set ) { ?>
 jQuery(document).ready(function($) {
     // Load shipping methods dynamically
     (function() {
@@ -2663,10 +2663,10 @@ jQuery(document).ready(function($) {
         });
     })();
 });
-<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+<?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
 
 
-<?php ob_start(); ?>
+<?php $incv_inline_js = INCV_Helpers::capture( function () use ( $rule_set ) { ?>
 // ====================================================================
 // Server-side drafts — "<?php echo esc_js( __( 'Save draft', 'incentiv' ) ); ?>" + automatic draft save for new /
 // draft rules. Publishing (the green button) clears the draft flag.
@@ -2675,7 +2675,7 @@ jQuery(function ($) {
     var $form = $('form[data-incv-autosave="rule"]').first();
     if (!$form.length) { return; }
 
-    var initialStatus = <?php echo json_encode(isset($rule_set['status']) ? $rule_set['status'] : ''); ?>;
+    var initialStatus = <?php echo wp_json_encode(isset($rule_set['status']) ? $rule_set['status'] : ''); ?>;
     var isNew = !$('input[name="rule_set_id"]').val();
     // Auto-draft only when nothing live is at stake: a brand-new rule or one
     // already in draft. Editing a live rule keeps the localStorage safety net.
@@ -2736,4 +2736,4 @@ jQuery(function ($) {
     (window.incvSetInterval || setInterval)(function () { saveDraft(false); }, 12000);
     $(window).on('beforeunload.incvpjax', function () { if (draftContext) { saveDraft(false); } });
 });
-<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+<?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>

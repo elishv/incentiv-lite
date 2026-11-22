@@ -151,8 +151,8 @@ class INCV_Admin {
 
         // Basic settings
         $sanitized['enabled'] = isset($input['enabled']) ? 'yes' : 'no';
-        $sanitized['selection_method'] = sanitize_text_field($input['selection_method']);
-        $sanitized['apply_to'] = sanitize_text_field($input['apply_to']);
+        $sanitized['selection_method'] = isset($input['selection_method']) ? sanitize_text_field($input['selection_method']) : 'all';
+        $sanitized['apply_to'] = isset($input['apply_to']) ? sanitize_text_field($input['apply_to']) : 'cheapest';
         $sanitized['discount_mode'] = isset($input['discount_mode']) ? sanitize_text_field($input['discount_mode']) : 'quantity';
 
         // Categories
@@ -177,7 +177,7 @@ class INCV_Admin {
         }
 
         // Attributes
-        $sanitized['attribute_slug'] = sanitize_text_field($input['attribute_slug']);
+        $sanitized['attribute_slug'] = isset($input['attribute_slug']) ? sanitize_text_field($input['attribute_slug']) : '';
         $sanitized['attribute_values'] = array();
         if (!empty($input['attribute_values'])) {
             $values = explode(',', $input['attribute_values']);
@@ -286,7 +286,8 @@ class INCV_Admin {
 
         // Handle save (publish)
         if (isset($_POST['incv_save_rule_set']) && check_admin_referer('incv_save_rule_set')) {
-            $rule_set_data = $this->sanitize_rule_set($_POST);
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Unslashed here; every field is sanitized one by one in sanitize_rule_set().
+            $rule_set_data = $this->sanitize_rule_set(wp_unslash($_POST));
             $rule_set_data['status'] = 'active'; // publishing clears any draft flag
             INCV_Discount_Rules::save_rule_set($rule_set_data);
 
@@ -332,7 +333,8 @@ class INCV_Admin {
             wp_send_json_error(array('message' => 'forbidden'), 403);
         }
 
-        $data = $this->sanitize_rule_set($_POST);
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Unslashed here; every field is sanitized one by one in sanitize_rule_set().
+        $data = $this->sanitize_rule_set(wp_unslash($_POST));
         $data['enabled'] = 'no';       // a draft is never live
         $data['status']  = 'draft';
 
@@ -628,8 +630,8 @@ class INCV_Admin {
         $sanitized['name'] = isset($input['rule_name']) ? sanitize_text_field($input['rule_name']) : '';
         $sanitized['cart_label'] = isset($input['cart_label']) ? sanitize_text_field($input['cart_label']) : '';
         $sanitized['enabled'] = isset($input['enabled']) ? 'yes' : 'no';
-        $sanitized['selection_method'] = sanitize_text_field($input['selection_method']);
-        $sanitized['apply_to'] = sanitize_text_field($input['apply_to']);
+        $sanitized['selection_method'] = isset($input['selection_method']) ? sanitize_text_field($input['selection_method']) : 'all';
+        $sanitized['apply_to'] = isset($input['apply_to']) ? sanitize_text_field($input['apply_to']) : 'cheapest';
         $sanitized['discount_mode'] = isset($input['discount_mode']) ? sanitize_text_field($input['discount_mode']) : 'quantity';
 
         // Categories
@@ -685,7 +687,7 @@ class INCV_Admin {
         }
 
         // Attributes
-        $sanitized['attribute_slug'] = sanitize_text_field($input['attribute_slug']);
+        $sanitized['attribute_slug'] = isset($input['attribute_slug']) ? sanitize_text_field($input['attribute_slug']) : '';
         $sanitized['attribute_values'] = array();
         if (!empty($input['attribute_values'])) {
             $values = explode(',', $input['attribute_values']);

@@ -67,6 +67,168 @@ class INCV_Product_Gifts_V2 {
         INCV_Helpers::log($message);
     }
 
+    /** @var bool|null Result of the gift nonce check for this request (null = not checked yet). */
+    private $gift_request_verified = null;
+
+    /**
+     * Whether the gift fields sent with a WooCommerce add-to-cart request carry a valid
+     * incv_gift_nonce. The result is computed once per request, on the validation filter
+     * that runs before the main product is added.
+     *
+     * @return bool
+     */
+    private function gift_request_nonce_ok() {
+        if (null === $this->gift_request_verified) {
+            $nonce = isset($_REQUEST['incv_gift_nonce']) ? sanitize_text_field(wp_unslash($_REQUEST['incv_gift_nonce'])) : '';
+            $this->gift_request_verified = '' !== $nonce && false !== wp_verify_nonce($nonce, 'incv_gift_nonce');
+        }
+        return $this->gift_request_verified;
+    }
+
+    /**
+     * Clean one attribute key or value sent by the shopper.
+     *
+     * sanitize_text_field() is not used here on purpose: it deletes "%xx" sequences,
+     * and WooCommerce stores non-Latin term slugs URL-encoded (e.g. "100-%d7%92%d7%a8%d7%9d").
+     * This strips tags, line breaks, control characters and invalid UTF-8, and caps the length.
+     *
+     * @param mixed $value Raw key or value.
+     * @return string
+     */
+    private static function clean_attribute_text($value) {
+        if (!is_scalar($value)) {
+            return '';
+        }
+        $value = wp_check_invalid_utf8((string) $value);
+        $value = wp_strip_all_tags($value, true);
+        $value = preg_replace('/[\x00-\x1F\x7F]/u', '', $value);
+        return substr(trim((string) $value), 0, 200);
+    }
+
+    /**
+     * Decode and sanitize a posted gift-attributes payload.
+     *
+     * @param mixed $raw         JSON string (optionally URL-encoded), or an array. Already unslashed.
+     * @param bool  $urldecode   Also URL-decode keys and values (the chained AJAX request sends them encoded).
+     * @return array<string,string> attribute key => value, each cleaned with clean_attribute_text().
+     */
+    private static function sanitize_gift_attributes($raw, $urldecode = false) {
+        $decoded = array();
+        if (is_array($raw)) {
+            $decoded = $raw;
+        } elseif (is_string($raw) && '' !== $raw) {
+            $raw     = substr($raw, 0, 10000);
+            $decoded = json_decode($raw, true);
+            if (!is_array($decoded) && $raw !== urldecode($raw)) {
+                $decoded = json_decode(urldecode($raw), true);
+            }
+            if (!is_array($decoded)) {
+                $decoded = array();
+            }
+        }
+
+        $clean = array();
+        foreach ($decoded as $key => $value) {
+            if (count($clean) >= 50 || !is_scalar($value)) {
+                continue;
+            }
+            $key   = self::clean_attribute_text($urldecode ? urldecode((string) $key) : $key);
+            $value = self::clean_attribute_text($urldecode ? urldecode((string) $value) : $value);
+            if ('' === $key) {
+                continue;
+            }
+            $clean[$key] = $value;
+        }
+        return $clean;
+    }
+
+    /**
+     * Merge shopper-picked attributes into a variation's own attributes.
+     * Only attribute keys the variation really has are accepted (allow-list); WooCommerce
+     * then validates the values against the product's terms/options in add_to_cart().
+     *
+     * @param array $variation_attributes From WC_Product_Variation::get_variation_attributes().
+     * @param array $picked               Output of sanitize_gift_attributes().
+     * @param bool  $only_empty           Only fill attributes the variation leaves open ("any").
+     * @return array
+     */
+    private static function merge_gift_attributes(array $variation_attributes, array $picked, $only_empty = true) {
+        $key_map = array();
+        foreach ($variation_attributes as $orig_key => $orig_val) {
+            $key_map[$orig_key] = $orig_key;
+            $decoded_key        = urldecode($orig_key);
+            $key_map[$decoded_key] = $orig_key;
+            if (0 === strpos($decoded_key, 'attribute_')) {
+                $key_map[substr($decoded_key, 10)] = $orig_key;
+            }
+        }
+        foreach ($picked as $key => $value) {
+            $lookup = isset($key_map[$key]) ? $key : urldecode($key);
+            if (!isset($key_map[$lookup])) {
+                continue; // Not an attribute of this product.
+            }
+            $target = $key_map[$lookup];
+            if ($only_empty && '' !== (string) $variation_attributes[$target]) {
+                continue;
+            }
+            $variation_attributes[$target] = $value;
+        }
+        return $variation_attributes;
+    }
+
+    /**
+     * Whether a product (or variation) is one of the gifts the parent product's gift settings offer.
+     *
+     * @param array|null $gift_settings From get_gift_settings().
+     * @param int        $product_id    Gift product ID (may itself be a variation ID).
+     * @param int        $variation_id  Gift variation ID, or 0.
+     * @return bool
+     */
+    private function is_allowed_gift($gift_settings, $product_id, $variation_id = 0) {
+        if (empty($gift_settings) || empty($gift_settings['gift_products'])) {
+            return false;
+        }
+        $allowed    = array_map('absint', (array) $gift_settings['gift_products']);
+        $candidates = array(absint($product_id), absint($variation_id));
+        foreach (array($product_id, $variation_id) as $id) {
+            if ($id && 'product_variation' === get_post_type($id)) {
+                $candidates[] = (int) wp_get_post_parent_id($id);
+            }
+        }
+        foreach (array_filter($candidates) as $candidate) {
+            if (in_array($candidate, $allowed, true)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Read the multiple-gift selection posted with the product form.
+     *
+     * @return array<int,array{product_id:int,variation_id:int,attributes:array}>
+     */
+    private static function get_posted_selected_gifts() {
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce checked by gift_request_nonce_ok() before this is called.
+        if (!isset($_POST['incv_selected_gift_products']) || !is_array($_POST['incv_selected_gift_products'])) {
+            return array();
+        }
+        $gifts = array();
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each entry is sanitized field by field inside the loop.
+        foreach (wp_unslash($_POST['incv_selected_gift_products']) as $entry) {
+            if (!is_array($entry) || count($gifts) >= 50) {
+                continue;
+            }
+            $gifts[] = array(
+                'product_id'   => isset($entry['product_id']) && is_scalar($entry['product_id']) ? absint($entry['product_id']) : 0,
+                'variation_id' => isset($entry['variation_id']) && is_scalar($entry['variation_id']) ? absint($entry['variation_id']) : 0,
+                'attributes'   => isset($entry['attributes']) ? self::sanitize_gift_attributes($entry['attributes']) : array(),
+            );
+        }
+        // phpcs:enable WordPress.Security.NonceVerification.Missing
+        return $gifts;
+    }
+
     /**
      * Get singleton instance
      */
@@ -547,7 +709,7 @@ class INCV_Product_Gifts_V2 {
             </div>
         </div>
 
-        <?php ob_start(); ?>
+        <?php $incv_inline_js = INCV_Helpers::capture( function () use ( $gift_attribute_values, $gift_attribute_slug, $allowed_variations, $limit_variations ) { ?>
         jQuery(document).ready(function($) {
             // Toggle discount field based on type
             $('input[name="incv_gift_type"]').on('change', function() {
@@ -610,7 +772,7 @@ class INCV_Product_Gifts_V2 {
             });
 
             // Gift attribute filter
-            var currentGiftAttributeValues = <?php echo json_encode($gift_attribute_values); ?>;
+            var currentGiftAttributeValues = <?php echo wp_json_encode($gift_attribute_values); ?>;
 
             $('#incv_gift_attribute_slug').on('change', function() {
                 var slug = $(this).val();
@@ -734,7 +896,7 @@ class INCV_Product_Gifts_V2 {
                     data: {
                         action: 'incv_get_product_variations',
                         product_ids: productIds,
-                        selected_variations: <?php echo json_encode($allowed_variations); ?>,
+                        selected_variations: <?php echo wp_json_encode($allowed_variations); ?>,
                         nonce: '<?php echo esc_attr( wp_create_nonce('incv_variations_nonce') ); ?>'
                     },
                     beforeSend: function() {
@@ -758,7 +920,7 @@ class INCV_Product_Gifts_V2 {
             loadVariations();
             <?php endif; ?>
         });
-        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+        <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
         <?php
     }
 
@@ -2040,11 +2202,14 @@ class INCV_Product_Gifts_V2 {
 
         </div>
 
-        <?php ob_start(); ?>
+        <?php $incv_inline_js = INCV_Helpers::capture( function () use ( $gift_selection_type ) { ?>
         jQuery(document).ready(function($) {
             // Ensure hidden fields are in the correct form
             var form = $('form.cart');
             if (form.length) {
+                if (!form.find('input[name="incv_gift_nonce"]').length) {
+                    form.append('<input type="hidden" name="incv_gift_nonce" value="<?php echo esc_attr( wp_create_nonce('incv_gift_nonce') ); ?>">');
+                }
                 <?php if ($gift_selection_type === 'multiple'): ?>
                     if (!form.find('#incv_selected_gifts_container').length) {
                         form.append('<div id="incv_selected_gifts_container"></div>');
@@ -2062,7 +2227,7 @@ class INCV_Product_Gifts_V2 {
                 <?php endif; ?>
             }
         });
-        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+        <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
         <?php
     }
 
@@ -2497,73 +2662,38 @@ class INCV_Product_Gifts_V2 {
      * This ensures gift data is available even during AJAX add to cart
      */
     public function capture_ajax_gift_data($passed, $product_id, $quantity) {
-        // Runs inside WooCommerce's add-to-cart request (the product form posts to WooCommerce, which has no nonce, by design, so cached product pages keep working). Values are cast or sanitized where read.
-        // phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
-        self::debug_log('INCV Gift: capture_ajax_gift_data called for product ' . $product_id);
-        self::debug_log('INCV Gift: Is AJAX: ' . (defined('DOING_AJAX') && DOING_AJAX ? 'YES' : 'NO'));
-
-        // Check all gift-related keys in the request
-        if (INCV_Helpers::debug_enabled()) {
-            $gift_keys_found = array();
-            foreach (array_keys(array_merge($_POST, $_REQUEST)) as $key) {
-                $key = sanitize_key($key);
-                if (strpos($key, 'incv_') === 0 || strpos($key, 'gift_') === 0) {
-                    $gift_keys_found[] = $key;
-                }
+        // Runs inside WooCommerce's add-to-cart request. The gift fields are only used
+        // when they carry a valid incv_gift_nonce (added to the form/AJAX data by gift-selection.js).
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- Verified by gift_request_nonce_ok().
+        $has_gift_data = isset($_POST['incv_selected_gift_product']) || isset($_POST['incv_selected_gift_products']);
+        if (!$has_gift_data) {
+            return $passed;
+        }
+        if (!$this->gift_request_nonce_ok()) {
+            self::debug_log('INCV Gift: gift fields ignored (missing or invalid incv_gift_nonce) for product ' . absint($product_id));
+            if (function_exists('wc_add_notice')) {
+                wc_add_notice(__( 'Your gift could not be added. Please reload the page and choose it again.', 'incentiv' ), 'notice');
             }
-            self::debug_log('INCV Gift: Gift-related keys in request: ' . wp_json_encode($gift_keys_found));
+            return $passed;
         }
 
-        // Check if this is an AJAX request
-        if (defined('DOING_AJAX') && DOING_AJAX) {
-            // Check if gift data is present in the request (try both $_REQUEST and $_POST)
-            $gift_product = '';
-            $gift_variation = '';
-            $gift_attributes = '';
+        if (defined('DOING_AJAX') && DOING_AJAX && WC()->session) {
+            $gift_product   = isset($_POST['incv_selected_gift_product']) ? absint($_POST['incv_selected_gift_product']) : 0;
+            $gift_variation = isset($_POST['incv_selected_gift_variation']) ? absint($_POST['incv_selected_gift_variation']) : 0;
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; decoded and sanitized key by key by sanitize_gift_attributes() on the same line.
+            $gift_attributes = isset($_POST['incv_selected_gift_attributes']) ? self::sanitize_gift_attributes(wp_unslash($_POST['incv_selected_gift_attributes'])) : array();
 
-            // Try to get gift product ID
-            if (isset($_POST['incv_selected_gift_product'])) {
-                $gift_product = sanitize_text_field(wp_unslash($_POST['incv_selected_gift_product']));
-            } elseif (isset($_REQUEST['incv_selected_gift_product'])) {
-                $gift_product = sanitize_text_field(wp_unslash($_REQUEST['incv_selected_gift_product']));
-            }
-
-            // Try to get gift variation ID
-            if (isset($_POST['incv_selected_gift_variation'])) {
-                $gift_variation = sanitize_text_field(wp_unslash($_POST['incv_selected_gift_variation']));
-            } elseif (isset($_REQUEST['incv_selected_gift_variation'])) {
-                $gift_variation = sanitize_text_field(wp_unslash($_REQUEST['incv_selected_gift_variation']));
-            }
-
-            // Try to get gift attributes JSON
-            if (isset($_POST['incv_selected_gift_attributes'])) {
-                $gift_attributes = sanitize_text_field(wp_unslash($_POST['incv_selected_gift_attributes']));
-            } elseif (isset($_REQUEST['incv_selected_gift_attributes'])) {
-                $gift_attributes = sanitize_text_field(wp_unslash($_REQUEST['incv_selected_gift_attributes']));
-            }
-
-            if (!empty($gift_product)) {
+            if ($gift_product) {
                 self::debug_log('INCV Gift: AJAX gift data captured - Product: ' . $gift_product . ', Variation: ' . $gift_variation);
-                self::debug_log('INCV Gift: Attributes JSON length: ' . strlen($gift_attributes));
-
                 // Store in session for use in handle_gift_selection
                 WC()->session->set('incv_temp_gift_product', $gift_product);
                 WC()->session->set('incv_temp_gift_variation', $gift_variation);
-                WC()->session->set('incv_temp_gift_attributes', $gift_attributes);
-                self::debug_log('INCV Gift: Stored gift data in session successfully');
-            } else {
-                self::debug_log('INCV Gift: WARNING - No gift product found in AJAX request, but this product may have gifts enabled');
-                self::debug_log('INCV Gift: This could be because:');
-                self::debug_log('INCV Gift: 1. User did not select a gift');
-                self::debug_log('INCV Gift: 2. Gift data was lost during AJAX transmission');
-                self::debug_log('INCV Gift: 3. This product does not have gifts enabled');
+                WC()->session->set('incv_temp_gift_attributes', wp_json_encode($gift_attributes));
             }
-        } else {
-            self::debug_log('INCV Gift: Not an AJAX request - gift data will be read directly from POST in handle_gift_selection');
         }
 
         return $passed;
-        // phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
+        // phpcs:enable WordPress.Security.NonceVerification.Missing
     }
 
     /**
@@ -2600,10 +2730,16 @@ class INCV_Product_Gifts_V2 {
      * For AJAX scenarios, the chained ajax_add_gift_to_cart method handles it
      */
     public function handle_gift_selection($cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data) {
-        // Runs inside WooCommerce's add-to-cart request (the product form posts to WooCommerce, which has no nonce, by design, so cached product pages keep working). Values are cast or sanitized where read.
-        // phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
+        // Runs inside WooCommerce's add-to-cart request. Gift fields are only used with a
+        // valid incv_gift_nonce (gift_request_nonce_ok()); every value is sanitized where it is read.
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- Verified by gift_request_nonce_ok().
         // Skip if this item IS a gift (prevent recursion)
         if (isset($cart_item_data['incv_is_gift']) || isset($cart_item_data['incv_cart_based_gift'])) {
+            return;
+        }
+
+        $has_gift_data = isset($_POST['incv_selected_gift_product']) || isset($_POST['incv_selected_gift_products']);
+        if (!$has_gift_data || !$this->gift_request_nonce_ok()) {
             return;
         }
 
@@ -2638,10 +2774,8 @@ class INCV_Product_Gifts_V2 {
 
         if ($selection_type === 'multiple') {
             // Handle multiple gift selection
-            $selected_gifts = array();
-            if (isset($_POST['incv_selected_gift_products']) && is_array($_POST['incv_selected_gift_products'])) {
-                $selected_gifts = wp_unslash($_POST['incv_selected_gift_products']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each entry's product_id/variation_id go through intval() and its URL-encoded attributes JSON is decoded and validated below.
-            }
+            // Sanitized on receipt: IDs through absint(), attributes decoded and cleaned key by key.
+            $selected_gifts = self::get_posted_selected_gifts();
 
             self::debug_log('INCV Gift: Multiple selection - gifts: ' . wp_json_encode($selected_gifts));
 
@@ -2652,26 +2786,20 @@ class INCV_Product_Gifts_V2 {
             }
 
             foreach ($selected_gifts as $gift_data) {
-                $gift_product_id = isset($gift_data['product_id']) ? intval($gift_data['product_id']) : 0;
-                $gift_variation_id = isset($gift_data['variation_id']) ? intval($gift_data['variation_id']) : 0;
-                $gift_attributes_json = isset($gift_data['attributes']) ? $gift_data['attributes'] : '';
+                $gift_product_id = $gift_data['product_id'];
+                $gift_variation_id = $gift_data['variation_id'];
+                $gift_attributes = $gift_data['attributes'];
 
                 if (!$gift_product_id) {
                     continue;
                 }
 
-                self::debug_log('INCV Gift: Adding gift - Product: ' . $gift_product_id . ', Variation: ' . $gift_variation_id);
-
-                // Parse attributes from JSON if present
-                $gift_attributes = array();
-                if (!empty($gift_attributes_json)) {
-                    $decoded = json_decode(urldecode($gift_attributes_json), true);
-                    if (is_array($decoded)) {
-                        // Attribute values are already decoded in JS, use them as-is
-                        $gift_attributes = $decoded;
-                        self::debug_log('INCV Gift: Parsed gift attributes: ' . wp_json_encode($gift_attributes));
-                    }
+                if (!$this->is_allowed_gift($gift_settings, $gift_product_id, $gift_variation_id)) {
+                    self::debug_log('INCV Gift: Rejected gift that is not offered for product ' . $product_id . ': ' . $gift_product_id . '/' . $gift_variation_id);
+                    continue;
                 }
+
+                self::debug_log('INCV Gift: Adding gift - Product: ' . $gift_product_id . ', Variation: ' . $gift_variation_id);
 
                 $gift_cart_data = array(
                     'incv_is_gift' => true,
@@ -2690,15 +2818,8 @@ class INCV_Product_Gifts_V2 {
                     // CRITICAL: Merge variation attributes with selected attributes
                     // The variation may have "any" attributes (empty values), which need to be filled
                     // with the actual selected values from the frontend to pass WooCommerce validation
-                    $variation_attributes = $variation_product->get_variation_attributes();
-
-                    // Merge with selected attributes - selected attributes take precedence for empty variation attributes
-                    foreach ($gift_attributes as $attr_key => $attr_value) {
-                        // If the variation has an "any" value (empty) for this attribute, use the selected value
-                        if (!isset($variation_attributes[$attr_key]) || $variation_attributes[$attr_key] === '') {
-                            $variation_attributes[$attr_key] = $attr_value;
-                        }
-                    }
+                    // Fill the variation's "any" attributes with the (sanitized, allow-listed) selected values.
+                    $variation_attributes = self::merge_gift_attributes($variation_product->get_variation_attributes(), $gift_attributes);
 
                     self::debug_log('INCV Gift: Selected attributes from frontend: ' . wp_json_encode($gift_attributes));
                     self::debug_log('INCV Gift: Variation product attributes: ' . wp_json_encode($variation_product->get_variation_attributes()));
@@ -2719,13 +2840,14 @@ class INCV_Product_Gifts_V2 {
             }
         } else {
             // Handle single gift selection
-            $selected_gift = isset($_POST['incv_selected_gift_product']) ? intval($_POST['incv_selected_gift_product']) : 0;
-            $selected_variation = isset($_POST['incv_selected_gift_variation']) ? intval($_POST['incv_selected_gift_variation']) : 0;
-            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; decoded and validated against the product's attributes below.
-            $selected_attributes_json = isset($_POST['incv_selected_gift_attributes']) ? wp_unslash($_POST['incv_selected_gift_attributes']) : '';
+            // Sanitized on receipt: IDs through absint(), the attributes JSON decoded and cleaned key by key.
+            $selected_gift = isset($_POST['incv_selected_gift_product']) ? absint($_POST['incv_selected_gift_product']) : 0;
+            $selected_variation = isset($_POST['incv_selected_gift_variation']) ? absint($_POST['incv_selected_gift_variation']) : 0;
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; decoded and sanitized key by key by sanitize_gift_attributes() on the same line.
+            $selected_attributes = isset($_POST['incv_selected_gift_attributes']) ? self::sanitize_gift_attributes(wp_unslash($_POST['incv_selected_gift_attributes'])) : array();
 
             self::debug_log('INCV Gift: Single selection - product: ' . $selected_gift . ', variation: ' . $selected_variation);
-            self::debug_log('INCV Gift: Attributes JSON: ' . $selected_attributes_json);
+            self::debug_log('INCV Gift: Sanitized attributes: ' . wp_json_encode($selected_attributes));
 
             if (!$selected_gift) {
                 self::debug_log('INCV Gift: No gift product selected in single mode - POST incv_selected_gift_product is missing or 0');
@@ -2733,28 +2855,9 @@ class INCV_Product_Gifts_V2 {
                 return;
             }
 
-            // Parse attributes from JSON
-            $selected_attributes = array();
-            if (!empty($selected_attributes_json)) {
-                self::debug_log('INCV Gift: Raw attributes JSON from POST: ' . $selected_attributes_json);
-
-                // URL-decode the JSON string first (it was URL-encoded in JS to preserve special characters)
-                $decoded_json = urldecode($selected_attributes_json);
-                self::debug_log('INCV Gift: URL-decoded JSON string: ' . $decoded_json);
-
-                $decoded = json_decode($decoded_json, true);
-                if (is_array($decoded)) {
-                    // Attribute values are already decoded in JS, use them as-is
-                    $selected_attributes = $decoded;
-                    self::debug_log('INCV Gift: Successfully parsed attributes: ' . wp_json_encode($selected_attributes));
-                } else {
-                    self::debug_log('INCV Gift: ERROR - Failed to JSON-decode attributes.');
-                    self::debug_log('INCV Gift: - Raw JSON: ' . $selected_attributes_json);
-                    self::debug_log('INCV Gift: - Decoded JSON: ' . $decoded_json);
-                    self::debug_log('INCV Gift: - JSON decode error: ' . json_last_error_msg());
-                }
-            } else {
-                self::debug_log('INCV Gift: WARNING - No attributes JSON in POST (incv_selected_gift_attributes is empty or not set)');
+            if (!$this->is_allowed_gift($gift_settings, $selected_gift, $selected_variation)) {
+                self::debug_log('INCV Gift: Rejected gift that is not offered for product ' . $product_id . ': ' . $selected_gift . '/' . $selected_variation);
+                return;
             }
 
             self::debug_log('INCV Gift: Adding gift to cart - product: ' . $selected_gift . ', variation: ' . $selected_variation);
@@ -2783,40 +2886,12 @@ class INCV_Product_Gifts_V2 {
                 self::debug_log('INCV Gift: BEFORE MERGE - Variation product attributes: ' . wp_json_encode($variation_attributes));
                 self::debug_log('INCV Gift: BEFORE MERGE - Count of selected attributes: ' . count($selected_attributes));
 
-                // Check if selected_attributes is empty
-                if (empty($selected_attributes) && INCV_Helpers::debug_enabled()) {
+                if (empty($selected_attributes)) {
                     self::debug_log('INCV Gift: WARNING - Selected attributes is EMPTY! This will cause validation failure.');
-                    self::debug_log('INCV Gift: Checking if attributes are in POST with different keys...');
-
-                    // Check for attributes with 'gift_' prefix
-                    foreach (array_keys($_POST) as $key) {
-                        $key = sanitize_key($key);
-                        if (strpos($key, 'gift_attribute_') === 0 || strpos($key, 'gift_attr') === 0) {
-                            self::debug_log('INCV Gift: Found POST key: ' . $key);
-                        }
-                    }
-
-                    // Try to reconstruct attributes from variation if possible
-                    // This is a fallback - ideally we should have the selected attributes
-                    $all_post_attrs = array();
-                    foreach (wp_unslash($_POST) as $key => $value) {
-                        if (strpos($key, 'attribute_') === 0 && is_scalar($value)) {
-                            $all_post_attrs[sanitize_key($key)] = sanitize_text_field($value);
-                        }
-                    }
-                    self::debug_log('INCV Gift: All attribute_* keys in POST: ' . wp_json_encode($all_post_attrs));
                 }
 
-                // Merge with selected attributes - selected attributes take precedence for empty variation attributes
-                foreach ($selected_attributes as $attr_key => $attr_value) {
-                    // If the variation has an "any" value (empty) for this attribute, use the selected value
-                    if (!isset($variation_attributes[$attr_key]) || $variation_attributes[$attr_key] === '') {
-                        $variation_attributes[$attr_key] = $attr_value;
-                        self::debug_log('INCV Gift: Merged attribute ' . $attr_key . ' = ' . $attr_value);
-                    } else {
-                        self::debug_log('INCV Gift: Skipped merging ' . $attr_key . ' (variation already has value: ' . $variation_attributes[$attr_key] . ')');
-                    }
-                }
+                // Fill the variation's "any" attributes with the (sanitized, allow-listed) selected values.
+                $variation_attributes = self::merge_gift_attributes($variation_attributes, $selected_attributes);
 
                 self::debug_log('INCV Gift: AFTER MERGE - Adding variation to cart - Parent: ' . $variation_product->get_parent_id() . ', Variation: ' . $selected_variation);
                 self::debug_log('INCV Gift: AFTER MERGE - Final merged attributes for cart: ' . wp_json_encode($variation_attributes));
@@ -2862,14 +2937,8 @@ class INCV_Product_Gifts_V2 {
                     $actual_variation_id = $selected_gift;
                     $actual_parent_id = $variation_product->get_parent_id();
 
-                    $variation_attributes = $variation_product->get_variation_attributes();
-
-                    // Merge with any selected attributes from POST
-                    foreach ($selected_attributes as $attr_key => $attr_value) {
-                        if (!isset($variation_attributes[$attr_key]) || $variation_attributes[$attr_key] === '') {
-                            $variation_attributes[$attr_key] = $attr_value;
-                        }
-                    }
+                    // Merge with any (sanitized, allow-listed) selected attributes from POST
+                    $variation_attributes = self::merge_gift_attributes($variation_product->get_variation_attributes(), $selected_attributes);
 
                     self::debug_log('INCV Gift: Adding variation via parent route - Parent: ' . $actual_parent_id . ', Variation: ' . $actual_variation_id);
                     $result = WC()->cart->add_to_cart(
@@ -2889,7 +2958,7 @@ class INCV_Product_Gifts_V2 {
         }
 
         self::debug_log('===== INCV Gift: handle_gift_selection END (completed) =====');
-        // phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
+        // phpcs:enable WordPress.Security.NonceVerification.Missing
     }
 
     /**
@@ -3099,26 +3168,30 @@ class INCV_Product_Gifts_V2 {
                 return;
             }
 
-            // Get parameters
-            $parent_product_id = isset($_POST['parent_product_id']) ? intval($_POST['parent_product_id']) : 0;
-            $gift_product_id = isset($_POST['gift_product_id']) ? intval($_POST['gift_product_id']) : 0;
-            $gift_variation_id = isset($_POST['gift_variation_id']) ? intval($_POST['gift_variation_id']) : 0;
-            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; decoded and validated against the variation's attributes below.
-            $gift_attributes_json = isset($_POST['gift_attributes']) ? wp_unslash($_POST['gift_attributes']) : '';
+            // Get parameters, sanitized on receipt.
+            $parent_product_id = isset($_POST['parent_product_id']) ? absint($_POST['parent_product_id']) : 0;
+            $gift_product_id = isset($_POST['gift_product_id']) ? absint($_POST['gift_product_id']) : 0;
+            $gift_variation_id = isset($_POST['gift_variation_id']) ? absint($_POST['gift_variation_id']) : 0;
 
-            // Fallback to the standard field name used elsewhere if the dedicated one is missing
-            if (empty($gift_attributes_json) && isset($_POST['incv_selected_gift_attributes'])) {
-                $gift_attributes_json = wp_unslash($_POST['incv_selected_gift_attributes']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; validated below.
+            // Attributes JSON (URL-encoded keys/values): decoded and cleaned key by key right away.
+            $gift_attributes = array();
+            if (!empty($_POST['gift_attributes'])) {
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; decoded and sanitized key by key by sanitize_gift_attributes() on the same line.
+                $gift_attributes = self::sanitize_gift_attributes(wp_unslash($_POST['gift_attributes']), true);
+            } elseif (!empty($_POST['incv_selected_gift_attributes'])) {
+                // Fallback to the standard field name used elsewhere if the dedicated one is missing.
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; decoded and sanitized key by key by sanitize_gift_attributes() on the same line.
+                $gift_attributes = self::sanitize_gift_attributes(wp_unslash($_POST['incv_selected_gift_attributes']), true);
                 $log('INCV Gift AJAX: gift_attributes missing, using incv_selected_gift_attributes fallback');
             }
 
-            $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
+            $quantity = isset($_POST['quantity']) ? max(1, min(100, absint($_POST['quantity']))) : 1;
 
             $log('INCV Gift AJAX: Parent product ID: ' . $parent_product_id);
             $log('INCV Gift AJAX: Gift product ID: ' . $gift_product_id);
             $log('INCV Gift AJAX: Gift variation ID: ' . $gift_variation_id);
             $log('INCV Gift AJAX: Quantity: ' . $quantity);
-            $log('INCV Gift AJAX: Attributes JSON: ' . $gift_attributes_json);
+            $log('INCV Gift AJAX: Sanitized attributes: ' . wp_json_encode($gift_attributes));
 
             if (!$gift_product_id || !$parent_product_id) {
                 $log('INCV Gift AJAX: Missing required parameters');
@@ -3140,41 +3213,22 @@ class INCV_Product_Gifts_V2 {
             }
 
             if (!$parent_cart_item_key) {
+                // A gift is only given with its product: the product must already be in the cart.
                 $log('INCV Gift AJAX: Parent product not found in cart');
-                // Continue anyway - the gift will still be added, just without parent association
-                $parent_cart_item_key = 'unknown';
+                wp_send_json_error(array('message' => 'Parent product is not in the cart'));
+                return;
             }
 
             $log('INCV Gift AJAX: Found parent cart key: ' . $parent_cart_item_key);
 
             // Get gift settings - use get_gift_settings to support both product meta and gift rules
             $gift_settings = $this->get_gift_settings($parent_product_id);
-            $gift_type = $gift_settings ? $gift_settings['gift_type'] : get_post_meta($parent_product_id, '_incv_gift_type', true);
-            if (empty($gift_type)) {
-                $gift_type = 'free'; // Default to free if not set
+            if (!$this->is_allowed_gift($gift_settings, $gift_product_id, $gift_variation_id)) {
+                $log('INCV Gift AJAX: Gift ' . $gift_product_id . '/' . $gift_variation_id . ' is not offered for product ' . $parent_product_id);
+                wp_send_json_error(array('message' => 'This gift is not available for this product'));
+                return;
             }
-
-            // Parse attributes
-            $gift_attributes = array();
-            if (!empty($gift_attributes_json)) {
-                $decoded = json_decode($gift_attributes_json, true);
-
-                // Handle cases where the JSON payload was URL encoded before reaching PHP
-                if (!is_array($decoded) && $gift_attributes_json !== urldecode($gift_attributes_json)) {
-                    $log('INCV Gift AJAX: First JSON decode failed, attempting urldecode fallback');
-                    $decoded = json_decode(urldecode($gift_attributes_json), true);
-                }
-
-                if (is_array($decoded)) {
-                    $gift_attributes = $decoded;
-                    $log('INCV Gift AJAX: Parsed attributes: ' . wp_json_encode($gift_attributes));
-                    $log('INCV Gift AJAX: Raw JSON received: ' . $gift_attributes_json);
-                } else {
-                    $log('INCV Gift AJAX: Failed to parse attributes JSON');
-                    $log('INCV Gift AJAX: JSON error: ' . json_last_error_msg());
-                    $log('INCV Gift AJAX: Raw JSON: ' . $gift_attributes_json);
-                }
-            }
+            $gift_type = !empty($gift_settings['gift_type']) ? $gift_settings['gift_type'] : 'free';
 
             // Prepare cart item data
             $gift_cart_data = array(
@@ -3202,45 +3256,10 @@ class INCV_Product_Gifts_V2 {
                 $log('INCV Gift AJAX: Original variation attributes (from product): ' . wp_json_encode($original_variation_attributes));
                 $log('INCV Gift AJAX: Gift attributes to merge (from user): ' . wp_json_encode($gift_attributes));
 
-                // Create a mapping of decoded keys to original (potentially encoded) keys
-                // We need to pass the KEYS exactly as they appear in $original_variation_attributes for WooCommerce to validate them
-                $key_map = array();
-                foreach ($original_variation_attributes as $orig_key => $orig_val) {
-                    $decoded_key = urldecode($orig_key);
-                    $key_map[$decoded_key] = $orig_key;
-                    // Also handle the case where the key might be "attribute_" prefixed or not
-                    if (strpos($decoded_key, 'attribute_') === 0) {
-                        $short_key = substr($decoded_key, 10); // remove 'attribute_'
-                        $key_map[$short_key] = $orig_key;
-                    }
-                }
-
-                // Prepare final attributes array starting with defaults
-                $final_variation_attributes = $original_variation_attributes;
-
-                // Merge user attributes using the map to find correct keys
-                foreach ($gift_attributes as $user_key => $user_val) {
-                    $decoded_user_key = urldecode($user_key);
-                    $decoded_user_val = urldecode($user_val);
-
-                    $log('INCV Gift AJAX: Processing user attribute: ' . $user_key . ' => ' . $decoded_user_key . ' = ' . $decoded_user_val);
-
-                    if (isset($key_map[$decoded_user_key])) {
-                        $correct_key = $key_map[$decoded_user_key];
-                        $final_variation_attributes[$correct_key] = $decoded_user_val;
-                        $log('INCV Gift AJAX: Mapped to correct key: ' . $correct_key . ' = ' . $decoded_user_val);
-                    } else {
-                        // Fallback: if we can't map it, just use the key as provided (maybe it's a new custom attribute)
-                        // But first try to add 'attribute_' prefix if missing
-                        if (strpos($decoded_user_key, 'attribute_') === false) {
-                            $final_variation_attributes['attribute_' . $decoded_user_key] = $decoded_user_val;
-                            $log('INCV Gift AJAX: Unmapped key, adding with prefix: attribute_' . $decoded_user_key);
-                        } else {
-                            $final_variation_attributes[$decoded_user_key] = $decoded_user_val;
-                            $log('INCV Gift AJAX: Unmapped key, using as is: ' . $decoded_user_key);
-                        }
-                    }
-                }
+                // Map the user's (sanitized) attributes onto the variation's own keys, exactly as they
+                // appear in $original_variation_attributes, so WooCommerce can validate them. Keys the
+                // product does not have are dropped (allow-list).
+                $final_variation_attributes = self::merge_gift_attributes($original_variation_attributes, $gift_attributes, false);
 
                 $log('INCV Gift AJAX: Final attributes for add_to_cart: ' . wp_json_encode($final_variation_attributes));
 
@@ -4599,9 +4618,7 @@ class INCV_Product_Gifts_V2 {
         }
 
         // Render gift selection HTML
-        ob_start();
-        $this->display_gift_selection();
-        $gift_html = ob_get_clean();
+        $gift_html = INCV_Helpers::capture(array($this, 'display_gift_selection'));
 
         if (empty($gift_html)) {
             return;
@@ -4610,7 +4627,7 @@ class INCV_Product_Gifts_V2 {
         $gift_html_escaped = wp_json_encode($gift_html);
 
         ?>
-        <?php ob_start(); ?>
+        <?php $incv_inline_js = INCV_Helpers::capture( function () use ( $gift_html_escaped ) { ?>
         jQuery(document).ready(function($) {
             // Skip if already injected
             if ($('.incv-gift-selection-container').length) return;
@@ -4673,7 +4690,7 @@ class INCV_Product_Gifts_V2 {
             }
 
         });
-        <?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+        <?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
         <?php
     }
 
@@ -5058,40 +5075,62 @@ class INCV_Product_Gifts_V2 {
             return;
         }
 
-        $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
-        $variation_id = isset($_POST['variation_id']) ? intval($_POST['variation_id']) : 0;
-        $trigger_product_id = isset($_POST['trigger_product_id']) ? intval($_POST['trigger_product_id']) : 0;
-        $gift_type = isset($_POST['gift_type']) ? sanitize_text_field(wp_unslash($_POST['gift_type'])) : 'free';
-        $gift_discount = isset($_POST['gift_discount']) ? floatval($_POST['gift_discount']) : 0;
+        $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+        $variation_id = isset($_POST['variation_id']) ? absint($_POST['variation_id']) : 0;
+        $trigger_product_id = isset($_POST['trigger_product_id']) ? absint($_POST['trigger_product_id']) : 0;
+        $gift_type = isset($_POST['gift_type']) ? sanitize_key(wp_unslash($_POST['gift_type'])) : 'free';
+        if (!in_array($gift_type, array('free', 'discount', 'fixed_discount'), true)) {
+            $gift_type = 'free';
+        }
+        // Overwritten below from the eligible server-side rule.
+        $gift_discount = isset($_POST['gift_discount']) ? max(0, (float) $_POST['gift_discount']) : 0;
         $rule_id = isset($_POST['rule_id']) ? sanitize_text_field(wp_unslash($_POST['rule_id'])) : '';
 
         // Attributes the client picked (visible dropdowns + pre-selected from
         // the rule). Keys are full WC attribute keys, e.g. attribute_pa_weight.
         //
-        // CRITICAL: do NOT run sanitize_text_field() on these values. That
-        // helper strips every URL-encoded sequence ("%XX") from the string.
-        // Hebrew taxonomy slugs are stored as URL-encoded ("100-%d7%92%d7%a8%d7%9d"),
-        // so sanitize_text_field would gut "100-%d7%92%d7%a8%d7%9d" down to
-        // "100-", which then fails WC's term-slug check and renders as
-        // "X is a required field" / "Invalid value posted for X".
-        // We accept the value as-is (forced to string + invalid-UTF8 check)
-        // and let WC handle whatever sanitization it needs.
+        // Sanitized on receipt with clean_attribute_text() (tags, control characters and
+        // invalid UTF-8 removed). sanitize_text_field() is not used because it deletes "%XX"
+        // sequences, and Hebrew taxonomy slugs are stored URL-encoded ("100-%d7%92%d7%a8%d7%9d").
+        // Each value is then matched against the product's own attribute options below.
         $client_attrs = array();
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- See above: keys/values are checked with wp_check_invalid_utf8() and WooCommerce validates them as attribute slugs.
-        $posted_attrs = isset($_POST['attributes']) && is_array($_POST['attributes']) ? wp_unslash($_POST['attributes']) : array();
-        if ($posted_attrs) {
-            foreach ($posted_attrs as $k => $v) {
-                if (!is_scalar($k) || !is_scalar($v)) continue;
-                $clean_key = wp_check_invalid_utf8((string) $k);
-                $clean_val = wp_check_invalid_utf8((string) $v);
-                if ($clean_key === '' || $clean_val === '') continue;
-                $client_attrs[$clean_key] = $clean_val;
-            }
+        if (isset($_POST['attributes']) && is_array($_POST['attributes'])) {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Array; every key and value is sanitized by sanitize_gift_attributes() on the same line.
+            $client_attrs = array_filter(self::sanitize_gift_attributes(wp_unslash($_POST['attributes'])), 'strlen');
         }
 
         if (!$product_id) {
             wp_send_json_error(array('message' => 'Missing product ID'));
             return;
+        }
+
+        // Only a gift the current cart is eligible for can be claimed. Type, discount and
+        // rule come from the server-side rule, never from the request.
+        $eligible = null;
+        foreach ((array) $this->get_cart_based_gift_eligibility() as $gift_info) {
+            if (!is_array($gift_info) || !$this->is_allowed_gift($gift_info, $product_id, $variation_id)) {
+                continue;
+            }
+            if (null === $eligible) {
+                $eligible = $gift_info;
+            }
+            // Prefer the rule the picker was shown for.
+            if ($rule_id !== '' && isset($gift_info['rule_id']) && (string) $gift_info['rule_id'] === $rule_id) {
+                $eligible = $gift_info;
+                break;
+            }
+        }
+        if (null === $eligible) {
+            wp_send_json_error(array('message' => __( 'This gift is not available for your cart', 'incentiv' )));
+            return;
+        }
+        $gift_type = isset($eligible['gift_type']) && in_array($eligible['gift_type'], array('free', 'discount', 'fixed_discount'), true) ? $eligible['gift_type'] : 'free';
+        $gift_discount = isset($eligible['gift_discount']) ? (float) $eligible['gift_discount'] : 0;
+        if (isset($eligible['rule_id'])) {
+            $rule_id = (string) $eligible['rule_id'];
+        }
+        if (!empty($eligible['trigger_product_id'])) {
+            $trigger_product_id = absint($eligible['trigger_product_id']);
         }
 
         // Prepare cart item data
@@ -5232,7 +5271,6 @@ class INCV_Product_Gifts_V2 {
             }
 
             $dbg('variations (WC-style)', $variations);
-            $dbg('_REQUEST after population', array_intersect_key($_REQUEST, array_flip(array_keys($variations) + array('add-to-cart', 'variation_id', 'quantity'))));
 
             $cart_item_key = WC()->cart->add_to_cart(
                 $variation_product->get_parent_id(),

@@ -353,7 +353,7 @@ if (!defined('ABSPATH')) {
     </div>
 </div>
 
-<?php ob_start(); ?>
+<?php $incv_inline_js = INCV_Helpers::capture( function () { ?>
 jQuery(document).ready(function($) {
     // Initialize color pickers
     $('.incv-color-picker').wpColorPicker({
@@ -544,4 +544,4 @@ jQuery(document).ready(function($) {
         updatePreviews();
     });
 });
-<?php INCV_Helpers::add_inline_script( ob_get_clean() ); ?>
+<?php } ); INCV_Helpers::add_inline_script( $incv_inline_js ); ?>
